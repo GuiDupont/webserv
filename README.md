@@ -1,5 +1,5 @@
 # webserv
-This project aims to build a HTTP sever in C++. Team members: gdupont and https://github.com/Ade-garr
+This project aims to build a HTTP sever in C++98. Team members: gdupont and https://github.com/Ade-garr
 
 Documentation used for this project:
 
