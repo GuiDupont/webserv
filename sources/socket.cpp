@@ -71,7 +71,7 @@ int main(void)
 				epfd = epoll_create(1024);
 				
 				static struct epoll_event ev;
-				ev.events = EPOLLIN | EPOLLPRI | EPOLLERR | EPOLLHUP | EPOLLOUT;
+				ev.events = EPOLLIN | EPOLLHUP | EPOLLOUT;
 				ev.data.fd = csock;
 				epoll_ctl(epfd, EPOLL_CTL_ADD, csock, &ev);
 				struct epoll_event *events;
@@ -84,14 +84,27 @@ int main(void)
 					// for each ready socket
 					for(int i = 0; i < nfds; i++) {
 						int fd = events[i].data.fd;
-						char buffer[2000];
-						bzero(buffer, 1999);
-						int ret = recv(fd, &buffer, sizeof(buffer), 0);
-						std::cout << ret << std::endl;
-						buffer[1999] = '\0';
-						std::cout << buffer << std::endl;
+						if ((events[i].events & EPOLLIN))
+							std::cout << "flag epollin\n";
+						if (events[i].events & EPOLLOUT)
+						{
+							std::cout << "flag epollout\n";
+							char buffer[2000];
+							bzero(buffer, 1999);
+							int ret = recv(fd, &buffer, sizeof(buffer), 0);
+							std::cout << ret << std::endl;
+							buffer[1999] = '\0';
+							std::cout << buffer << std::endl;
+							send(fd, "HTTP/1.1 400 Bad Request", 24, 0);
+						}
+						if (events[i].events & EPOLLHUP)
+						{
+							std::cout << "TIME TO CLOSE\n";
+							close(fd);
+							break;
+						}
+						
 						// std::cout << strerror(errno) << std::endl;
-						send(fd, "HTTP/1.1 400 Bad Request", 24, 0);
 						// close(fd);
 					}
 
