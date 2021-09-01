@@ -7,7 +7,8 @@
 #include <stdlib.h>
 #include <iostream>
 #include <string.h>
-
+#include <fstream>
+#include <errno.h>
 #define INVALID_SOCKET -1
 #define SOCKET_ERROR -1
 #define closesocket(param) close(param)
@@ -71,7 +72,8 @@ int main(void)
     
     int sock_err;
     
-    
+    std::fstream logfile;
+	logfile.open("logfile", std::ios::out);
     if(!erreur)
     {
         /* Création d'une socket */
@@ -93,17 +95,27 @@ int main(void)
             {
                 /* Démarrage du listage (mode server) */
                 sock_err = listen(sock, 5);
-                printf("Listage du port %d...\n", PORT);
+                logfile << "Listage du port " << PORT << std::endl;
                 
                 /* Si la socket fonctionne */
                 if(sock_err != SOCKET_ERROR)
                 {
                     /* Attente pendant laquelle le client se connecte */
-                    printf("Patientez pendant que le client se connecte sur le port %d...\n", PORT);
+                    logfile << "Patientez pendant que le client se connecte sur le port " << PORT << std::endl;
                     csock = accept(sock, (SOCKADDR*)&csin, &crecsize);
-                    printf("Un client se connecte avec la socket %d de %s:%d\n", csock, inet_ntoa(csin.sin_addr), htons(csin.sin_port));
-					int a = 124;
-					send(csock, &a, sizeof(a), 0);
+                    logfile << "Un client se connecte avec la socket " << csock << " de " <<  inet_ntoa(csin.sin_addr) << " : " << htons(csin.sin_port);
+
+					char buffer[2000];
+					bzero(buffer, 1999);
+					int ret;
+					while ((ret = recv(csock, &buffer, sizeof(buffer), 0)) == 0)
+					 	std::cout << "null\n";
+					buffer[1999] = '\0';
+					for (int i =0; i != 1999; i++)
+						std::cout << buffer[i];
+					std::cout << std::endl;
+					std::cout << strerror(errno) << std::endl;
+					send(csock, "HTTP/1.1 400 Bad Request", 24, 0);
 					closesocket(csock);
 			    }
                 else
