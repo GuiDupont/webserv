@@ -6,7 +6,7 @@
 #    By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/07 11:26:53 by gdupont           #+#    #+#              #
-#    Updated: 2021/09/01 11:14:17 by gdupont          ###   ########.fr        #
+#    Updated: 2021/09/02 18:27:43 by gdupont          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ FLAGS = -Wall -Wextra -Werror
 
 PATH_SRCS = sources
 
-SRCS_FILES = socket.cpp
+SRCS_FILES = socket2.cpp
 
 SRCS = $(addprefix ${PATH_SRCS}/, ${SRCS_FILES})
 
