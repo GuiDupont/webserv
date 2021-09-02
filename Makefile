@@ -3,16 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+         #
+#    By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/07 11:26:53 by gdupont           #+#    #+#              #
-#    Updated: 2021/09/02 18:27:43 by gdupont          ###   ########.fr        #
+#    Updated: 2021/09/02 22:41:43 by ade-garr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = webserver
 
-CXX = /usr/lib/llvm-12/bin/clang++
+CXX = clang++
+# CXX = /usr/lib/llvm-12/bin/clang++
 
 FLAGS = -Wall -Wextra -Werror
 

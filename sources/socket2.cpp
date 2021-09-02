@@ -55,55 +55,34 @@ int main(void)
 	int sock_err = bind(sock, (SOCKADDR*)&sin, recsize);
 	if(sock_err == SOCKET_ERROR)
 		std::cout << "Pb avec ft bind\n" << std::endl;
+	sock_err = listen(sock, 5);
+	if(sock_err == SOCKET_ERROR)
+		std::cout << "Pb avec ft listen\n" << std::endl;
 	int epfd = epoll_create(1);
 	static struct epoll_event ev;
-	ev.events = EPOLLIN;
+	ev.events = EPOLLIN | EPOLLOUT;
 	ev.data.fd = sock;
 	epoll_ctl(epfd, EPOLL_CTL_ADD, sock, &ev);
 	struct epoll_event *events;
 	events = (struct epoll_event *)calloc(64, sizeof(ev));
 	while (1)
 	{
-		//int nfds = 
-		epoll_wait(epfd, events, 64, -1);
-		//std::cout << nfds << std::endl;
-		csock = accept(sock, (SOCKADDR*)&csin, &crecsize);
-		if (csock == -1)
-			std::cout << csock << std::endl;
-		else
-			sleep(1000);
-		if (events[0].events & EPOLLIN) {
-			std::cout << "EPOLLIN\n";
-			
-			break;
+		int nsfd = epoll_wait(epfd, events, 64, -1);
+		std::cout << nsfd << " évènements de capté(s)" << std::endl;
+		for (int i = 0; i < nsfd; i++) {
+			if (events[i].events & EPOLLIN) {
+				std::cout << "EPOLLIN\n";
+				csock = accept(sock, (SOCKADDR*)&csin, &crecsize);
+				std::cout << "send_serv = " << send(csock, "salut", 6, 0) << std::endl;
+			}
+			if (events[i].events & EPOLLHUP)
+				std::cout << "EPOLLHUP\n";
+			if (events[i].events & EPOLLOUT)
+				std::cout << "EPOLLOUT\n";
 		}
-		if (events[0].events & EPOLLHUP)
-			std::cout << "EPOLLHUP\n";
-		// if (events[0].events & EPOLLOUT)
-		// 	std::cout << "EPOLLOUT\n";
-		// else if (events[0].events & EPOLLOUT) {
-		// 	//std::cout << "EPOLLOUT\n";
-		// 	continue;
-		// }
 	}
-	// for(int i = 0; i < nfds; i++) {
-	// 	// int fd = events[i].data.fd;
-	// 	if (events[i].events & EPOLLIN)
-	// 		std::cout << "EPOLLIN\n";
-	// 	if (events[i].events & EPOLLERR)
-	// 		std::cout << "EPOLLERR\n";
-	// 	if (events[i].events & EPOLLHUP)
-	// 		std::cout << "EPOLLHUP\n";
-	// 	if (events[i].events & EPOLLOUT)
-	// 		std::cout << "EPOLLOUT\n";
-	// 	csock = accept(sock, (SOCKADDR*)&csin, &crecsize);
-	// }
 	free(events);
 	close(epfd);
 	close(csock);
 	close(sock);
-
 }
-
-
-
