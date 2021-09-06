@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/06 18:23:15 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/06 18:36:55 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	webserv::set_config(std::ifstream & config_file) {
 	
 	config_file.clear();
 	config_file.seekg(0);
-		std::cout << "dalut" <<  std::endl;
 
 	while (!config_file.eof())
 	{
@@ -51,9 +50,8 @@ void	webserv::set_config(std::ifstream & config_file) {
 			;
 		else if (first_word == "}")
 			;
-		else
-		{
-			if (first_word == "{")
+		else if (first_word.size() != 0) {
+			if (first_word[0] == 123) // ascii value for {, it fixes issue at compilation
 				throw (wrong_brackets_conf());
 			else
 				throw (bad_directive());
