@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/06 15:46:18 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/06 17:47:04 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,30 +37,53 @@ bool	webserv::check_brackets(const std::string & config) {
 	while (1) {
 		position = config.find('{', position);
 		if (position == std::string::npos)
-			return (true);
-		position = get_next_bracket(config, position + 1);
+			break ;
+		position = get_next_closing_bracket(config, position + 1);
 		if (position == std::string::npos)
 			return (false);
 	}
-	return (true);
+	return (check_closing_brackets(config));
 }
 
-size_t	webserv::get_next_bracket(const std::string & config, size_t position) {
+size_t	webserv::get_next_closing_bracket(const std::string & config, size_t position) {
 	size_t next_open_bracket = config.find('{', position);
 	size_t next_closing_bracket = config.find('}', position);
 	
 	if (next_closing_bracket == std::string::npos)
 		return (std::string::npos);
-
-	
 	if (next_open_bracket < next_closing_bracket)
 	{
-		position = get_next_bracket(config, next_open_bracket + 1);
-		position = get_next_bracket(config, position + 1);
+		position = get_next_closing_bracket(config, next_open_bracket + 1);
 		if (position == std::string::npos)
 			return (std::string::npos);
+		position = config.find('}', position + 1);
+		if (position == std::string::npos)
+			return (std::string::npos);
+		else
+			return (position);
 	}
 	return (next_closing_bracket);
+}
+
+bool webserv::check_closing_brackets(const std::string & config) {
+	
+	int open_count = 0;
+	int close_count = 0;
+	int position = 0;
+
+	while (config.find('{', position) != std::string::npos) {
+		position = config.find('{', position) + 1;
+		open_count++;
+	}
+	position = 0;
+	while (config.find('}', position) != std::string::npos) {
+		position = config.find('}', position) + 1;
+		close_count++;
+	}
+	if (close_count != open_count)
+		return (false);
+	else
+		return (true);	
 }
 
 webserv::webserv(void) {
