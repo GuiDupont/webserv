@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/06 17:36:02 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/06 18:22:30 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ class webserv {
 		bool	check_brackets(const std::string & config);
 		size_t	get_next_closing_bracket(const std::string & config, size_t current);
 		bool	check_closing_brackets(const std::string & config);
-
+		void	import_config(std::ifstream infile);
+		void	set_config(std::ifstream & config_file);
 
 
 };

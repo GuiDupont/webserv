@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/06 17:47:04 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/06 18:23:15 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,49 @@ webserv::webserv(const std::string & path_config) {
 	std::string		all_file;
 	
 	config_file.open(path_config, std::ios_base::in);
-	
 	if (!config_file.is_open())
 		throw (config_file_not_open());
 	std::getline(config_file, all_file, '\0');
-	if (this->check_brackets(all_file))
-		std::cout << "config good\n";
-	else
-		std::cout << "config wrong\n";
+	if (!this->check_brackets(all_file))
+		throw (wrong_brackets_conf());
+	this->set_config(config_file);
 }
+
+void	webserv::set_config(std::ifstream & config_file) {
+	std::string		line;
+	std::string		first_word;
+	
+	config_file.clear();
+	config_file.seekg(0);
+		std::cout << "dalut" <<  std::endl;
+
+	while (!config_file.eof())
+	{
+		std::getline(config_file, line, '\n');
+		int i = 0;
+		while (isspace(line[i])) 
+			i++;
+		first_word = line.substr(i, line.find_first_of(" \t\n\v\f\r", i) - i);
+		if (first_word == "server")
+			;
+		else if (first_word == "client_max_body_size" || first_word == "error_page")
+			;
+		else if (first_word == "}")
+			;
+		else
+		{
+			if (first_word == "{")
+				throw (wrong_brackets_conf());
+			else
+				throw (bad_directive());
+		}
+	}
+}
+
+/* 
+	client_max_body_size
+	error_page
+	*/
 
 bool	webserv::check_brackets(const std::string & config) {
 	size_t 	position = 0;

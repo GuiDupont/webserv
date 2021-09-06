@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/06 12:36:44 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/06 18:00:44 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 typedef int unknown;
 
 #include <string>
+
+
+
 
 struct location {
 	int			max_body_size;
