@@ -13,8 +13,12 @@
 #include "vhost.hpp"
 #include <list>
 #include <string>
+#include "utils.hpp"
+#include <cstdlib>
+
 //#include <sys/epoll.h>
 
+#define  WHITESPACE " \t\n\v\f\r"
 
 class webserv {
 	
@@ -26,7 +30,7 @@ class webserv {
 	private:
 		std::list<vHost> 	vhosts;
 		bool				auto_index;
-		int					max_body_size;
+		int					client_max_body_size;
 		unknown				error_pages;
 		unknown				upload;
 		std::string 		root;

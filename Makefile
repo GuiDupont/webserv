@@ -12,7 +12,8 @@
 
 NAME = webserver
 
-CXX = clang++
+CXX = clang++-9
+#CXX = clang++
 #CXX = /usr/lib/llvm-12/bin/clang++
 
 FLAGS =
@@ -20,7 +21,7 @@ FLAGS =
 
 PATH_SRCS = sources
 
-SRCS_FILES = exceptions.cpp main.cpp webserv.cpp
+SRCS_FILES = exceptions.cpp main.cpp webserv.cpp utils.cpp
 
 SRCS = $(addprefix ${PATH_SRCS}/, ${SRCS_FILES})
 
