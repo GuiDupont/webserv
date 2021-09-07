@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/07 11:31:52 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/07 13:50:55 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,11 @@ void	webserv::set_config(std::ifstream & config_file) {
 		int i = 0;
 		while (isspace(line[i])) 
 			i++;
-<<<<<<< HEAD
 		first_word = line.substr(i, line.find_first_of(" \t\n\v\f\r", i) - i);
 		if (first_word == "server") {
 			this->vhosts.push_back(vHost());
 			param_server(config_file, this->vhosts.back());
 		}
-=======
-		first_word = line.substr(i, line.find_first_of(WHITESPACE, i) - i);
-		if (first_word == "server")
-			;
->>>>>>> fbc3b4e5b9af2f85129bfc7ecc46b429538f4b7c
 		else if (first_word == "client_max_body_size")
 			set_max_body_size(line);
 		else if (first_word == "error_page")
@@ -81,11 +75,9 @@ size_t	get_max_body_size(std::string & line) {
 	return (atoi(max_size.c_str()));
 }
 
-<<<<<<< HEAD
-void	webserv::param_server(std::ifstream & config_file, vHost &host) {
-	
+void	webserv::param_server(std::ifstream & config_file, vHost &host) {}
 
-=======
+
 void	webserv::set_max_body_size(std::string & line) {
 	client_max_body_size = get_max_body_size(line);
 	std::cout << client_max_body_size << std::endl;
@@ -95,7 +87,6 @@ void	webserv::set_error_page(std::string & line){
 	int i = go_to_next_word(line, 0);
 	std::string size = line.substr(i, line.find_first_of(WHITESPACE, i) - i);
 	std::cout << size << std::endl;
->>>>>>> fbc3b4e5b9af2f85129bfc7ecc46b429538f4b7c
 }
 
 bool	webserv::check_brackets(const std::string & config) {
