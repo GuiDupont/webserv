@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/07 17:15:39 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/07 17:18:44 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 //#include <sys/epoll.h>
 
 
-#define  WHITESPACE " \t\n\v\f\r"
+#define WHITESPACE " \t\n\v\f\r"
 
 #define GET 1
 #define POST 2
@@ -31,10 +31,9 @@
 
 class vHost;
 
-//size_t g_line;
-
 extern size_t g_line;
 
+typedef int unknown;
 
 class webserv {
 	

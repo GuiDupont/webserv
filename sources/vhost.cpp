@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 11:18:29 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/07 17:15:25 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/07 17:28:49 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ vHost::vHost() : port(0) {
 vHost::vHost(std::ifstream &config_file, std::string &line) {
 
 	std::string	sub_line;
+	std::string	first_word;
+	
 
 	check_server_line(line);
 	while (!config_file.eof())
@@ -35,10 +37,11 @@ vHost::vHost(std::ifstream &config_file, std::string &line) {
 			i++;
 		first_word = line.substr(i, line.find_first_of(" \t\n\v\f\r", i) - i);
 		if (first_word == "client_max_body_size") {
-			host.
+			// host.
+			;
 		}
 	}
-	if (host.getPort() == 0) {
+	if (getPort() == 0) {
 		throw (no_port_associated());
 	}
 }
