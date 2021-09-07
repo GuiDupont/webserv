@@ -3,12 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/07 16:07:29 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/07 17:15:39 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
+#ifndef WEBSERV_HPP
+#define WEBSERV_HPP
 
 #include "vhost.hpp"
 #include <list>
@@ -18,7 +22,19 @@
 
 //#include <sys/epoll.h>
 
+
 #define  WHITESPACE " \t\n\v\f\r"
+
+#define GET 1
+#define POST 2
+#define DELETE 4
+
+class vHost;
+
+//size_t g_line;
+
+extern size_t g_line;
+
 
 class webserv {
 	
@@ -49,3 +65,8 @@ class webserv {
 		void	set_error_page(std::string & line);
 
 };
+extern webserv g_webserv;
+
+
+
+#endif

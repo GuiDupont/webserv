@@ -3,16 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   vhost.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 11:18:29 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/07 16:13:06 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/07 17:15:25 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vhost.hpp"
 #include "utils.hpp"
+#include "webserv.hpp"
+#include "exceptions.hpp"
 #include <fstream>
+
 
 vHost::vHost() : port(0) {
 
@@ -54,7 +57,7 @@ vHost::vHost(vHost const & cpy) {
 vHost & vHost::operator=(vHost const & rhs) {
 
 	this->locations = rhs.locations;
-	this->auto_index = auto_index;
+	this->auto_index = rhs.auto_index;
 	this->max_body_size = rhs.max_body_size;
 	this->allowed_methods = rhs.allowed_methods;
 	this->error_pages = rhs.error_pages;

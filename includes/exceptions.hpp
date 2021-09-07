@@ -3,18 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   exceptions.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:09:27 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/07 16:30:34 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/07 17:16:40 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef EXCEPTIONS_HPP
+#define EXCEPTIONS_HPP
 
 #include <exception>
 #include <string>
 
 class config_file_error : public std::exception {
-	
+	public:
+		virtual const char* what() const throw();
 };
 
 class config_file_not_open : public std::exception {
@@ -55,3 +59,9 @@ private:
 
 	std::string _directive;
 };
+class bad_location_declaration : public std::exception {
+	public:
+		virtual const char* what() const throw();
+};
+
+#endif

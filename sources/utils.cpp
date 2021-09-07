@@ -1,8 +1,14 @@
 
 
 #include "../includes/utils.hpp"
+<<<<<<< HEAD
 #include <string>
 #include "exceptions.hpp"
+=======
+#include "webserv.hpp"
+
+#include <iostream>
+>>>>>>> config
 
 int		go_to_next_word(const std::string & line, int index) {
 	while (isspace(line[index])) index++;
@@ -16,7 +22,7 @@ int		ft_string_is_alpha(const std::string & s)
 	int i = 0;
 	while (s[i])
 	{
-		if (!ft_isalpha(s[i]))
+		if (!isalpha(s[i]))
 			return (0);
 		i++;
 	}
@@ -28,13 +34,14 @@ int		ft_string_is_digit(const std::string & s)
 	int i = 0;
 	while (s[i])
 	{
-		if (!ft_isdigit(s[i]))
+		if (!isdigit(s[i]))
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
+<<<<<<< HEAD
 int	ft_isalpha(int c)
 {
 	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
@@ -58,4 +65,8 @@ void check_server_line(std::string &line) {
 int count_words(std::string &line) {
 
 	
+=======
+std::string get_word(std::string line, int i) {
+	return (line.substr(i, line.find_first_of(WHITESPACE, i) - i));
+>>>>>>> config
 }
