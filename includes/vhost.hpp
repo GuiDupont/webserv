@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vhost.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 16:02:01 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/06 14:48:21 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/07 11:20:50 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,15 @@
 
 class vHost {
 
+public:
+
+	vHost();
+	~vHost();
+	vHost(vHost const & cpy);
+
+	vHost &operator=(vHost const & rhs);
+
+private:
 	std::list<location> locations;
 
 	bool		auto_index;

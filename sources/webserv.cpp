@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/07 10:18:50 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/07 11:31:52 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/webserv.hpp"
+#include "../includes/vhost.hpp"
 #include <string>
 #include <fstream>
 #include "../includes/exceptions.hpp"
@@ -44,8 +45,10 @@ void	webserv::set_config(std::ifstream & config_file) {
 		while (isspace(line[i])) 
 			i++;
 		first_word = line.substr(i, line.find_first_of(" \t\n\v\f\r", i) - i);
-		if (first_word == "server")
-			;
+		if (first_word == "server") {
+			this->vhosts.push_back(vHost());
+			param_server(config_file, this->vhosts.back());
+		}
 		else if (first_word == "client_max_body_size")
 			set_max_body_size(line);
 		else if (first_word == "error_page")
@@ -78,7 +81,10 @@ void	webserv::set_max_body_size(std::string & line){
 
 }
 
+void	webserv::param_server(std::ifstream & config_file, vHost &host) {
+	
 
+}
 
 bool	webserv::check_brackets(const std::string & config) {
 	size_t 	position = 0;
