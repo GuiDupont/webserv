@@ -1,6 +1,9 @@
 
 
 #include "../includes/utils.hpp"
+#include "webserv.hpp"
+
+#include <iostream>
 
 int		go_to_next_word(const std::string & line, int index) {
 	while (isspace(line[index])) index++;
@@ -14,7 +17,7 @@ int		ft_string_is_alpha(const std::string & s)
 	int i = 0;
 	while (s[i])
 	{
-		if (!ft_isalpha(s[i]))
+		if (!isalpha(s[i]))
 			return (0);
 		i++;
 	}
@@ -26,23 +29,13 @@ int		ft_string_is_digit(const std::string & s)
 	int i = 0;
 	while (s[i])
 	{
-		if (!ft_isdigit(s[i]))
+		if (!isdigit(s[i]))
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-int	ft_isalpha(int c)
-{
-	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
-		return (1);
-	return (0);
-}
-
-int	ft_isdigit(int c)
-{
-	if (c >= '0' && c <= '9')
-		return (1);
-	return (0);
+std::string get_word(std::string line, int i) {
+	return (line.substr(i, line.find_first_of(WHITESPACE, i) - i));
 }

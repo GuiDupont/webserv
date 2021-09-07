@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/07 13:50:55 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/07 17:11:29 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <fstream>
 #include "../includes/exceptions.hpp"
 #include <iostream>
+
 
 
 webserv::webserv(const std::string & path_config) : auto_index(false), client_max_body_size(1) {
@@ -34,28 +35,29 @@ webserv::webserv(const std::string & path_config) : auto_index(false), client_ma
 void	webserv::set_config(std::ifstream & config_file) {
 	std::string		line;
 	std::string		first_word;
-	
+
+	g_line = 0;
 	config_file.clear();
 	config_file.seekg(0);
 	while (!config_file.eof())
 	{
 		std::getline(config_file, line, '\n');
+		g_line++;
 		int i = 0;
 		while (isspace(line[i])) 
 			i++;
 		first_word = line.substr(i, line.find_first_of(" \t\n\v\f\r", i) - i);
 		if (first_word == "server") {
 			this->vhosts.push_back(vHost());
-			param_server(config_file, this->vhosts.back());
 		}
 		else if (first_word == "client_max_body_size")
 			set_max_body_size(line);
 		else if (first_word == "error_page")
-			set_error_page(line);	 
+			set_error_page(line); 
 		else if (first_word == "}")
 			;
 		else if (first_word.size() != 0) {
-			if (first_word[0] == 123) // ascii value for {, it fixes issue at compilation
+			if (first_word[0] == 123) // ascii value for {, it fixes issue at compilation with '{'
 				throw (bad_brackets_conf());
 			else
 				throw (bad_directive());
@@ -63,10 +65,6 @@ void	webserv::set_config(std::ifstream & config_file) {
 	}
 }
 
-/* 
-	client_max_body_size
-	error_page
-	*/
 size_t	get_max_body_size(std::string & line) {
 	int i = go_to_next_word(line, 0);
 	std::string max_size = line.substr(i, line.find_first_of(WHITESPACE, i) - i);
@@ -74,9 +72,6 @@ size_t	get_max_body_size(std::string & line) {
 		throw (bad_client_max_body_size());
 	return (atoi(max_size.c_str()));
 }
-
-void	webserv::param_server(std::ifstream & config_file, vHost &host) {}
-
 
 void	webserv::set_max_body_size(std::string & line) {
 	client_max_body_size = get_max_body_size(line);
