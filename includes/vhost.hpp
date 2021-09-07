@@ -6,23 +6,30 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 16:02:01 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/07 11:20:50 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/07 16:07:22 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "config.hpp"
-#include <list>
+#ifndef VHOST_H
+# define VHOST_H
 
+# include "config.hpp"
+# include <list>
+# include <fstream>
+# include <string>
 
 class vHost {
 
 public:
 
 	vHost();
+	vHost(std::ifstream &config_file, std::string &line);
 	~vHost();
 	vHost(vHost const & cpy);
 
 	vHost &operator=(vHost const & rhs);
+	size_t getPort() const ;
+	size_t setMax() const ;
 
 private:
 	std::list<location> locations;
@@ -39,3 +46,5 @@ private:
 	std::string root;
 	unknown		cgi;
 };
+
+#endif

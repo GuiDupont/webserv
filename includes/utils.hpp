@@ -6,5 +6,7 @@ int		ft_string_is_alpha(const std::string & s);
 int		ft_string_is_digit(const std::string & s);
 int     ft_isalpha(int c);
 int     ft_isdigit(int c);
+void    check_server_line(std::string &line);
+int     count_words(std::string &line);
 
 

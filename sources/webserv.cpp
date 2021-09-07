@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2021/09/07 13:55:00 by ade-garr         ###   ########.fr       */
-=======
-/*   Updated: 2021/09/07 13:50:55 by gdupont          ###   ########.fr       */
->>>>>>> main
+/*   Updated: 2021/09/07 16:09:28 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +45,7 @@ void	webserv::set_config(std::ifstream & config_file) {
 			i++;
 		first_word = line.substr(i, line.find_first_of(" \t\n\v\f\r", i) - i);
 		if (first_word == "server") {
-			this->vhosts.push_back(vHost());
-			param_server(config_file, this->vhosts.back());
+			this->vhosts.push_back(vHost(config_file, first_word));
 		}
 		else if (first_word == "client_max_body_size")
 			set_max_body_size(line);
@@ -78,13 +73,6 @@ size_t	get_max_body_size(std::string & line) {
 		throw (bad_client_max_body_size());
 	return (atoi(max_size.c_str()));
 }
-
-<<<<<<< HEAD
-void	webserv::param_server(std::ifstream & config_file, vHost &host) {
-=======
-void	webserv::param_server(std::ifstream & config_file, vHost &host) {}
-
->>>>>>> main
 
 void	webserv::set_max_body_size(std::string & line) {
 	client_max_body_size = get_max_body_size(line);

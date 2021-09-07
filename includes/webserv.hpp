@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/07 11:31:17 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/07 16:07:29 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,5 @@ class webserv {
 		void	set_config(std::ifstream & config_file);
 		void	set_max_body_size(std::string & line);
 		void	set_error_page(std::string & line);
-		void	param_server(std::ifstream & config_file, vHost &host);
 
 };

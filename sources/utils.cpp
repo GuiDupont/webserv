@@ -1,6 +1,8 @@
 
 
 #include "../includes/utils.hpp"
+#include <string>
+#include "exceptions.hpp"
 
 int		go_to_next_word(const std::string & line, int index) {
 	while (isspace(line[index])) index++;
@@ -45,4 +47,15 @@ int	ft_isdigit(int c)
 	if (c >= '0' && c <= '9')
 		return (1);
 	return (0);
+}
+
+void check_server_line(std::string &line) {
+
+	if (count_words(line) != 2)
+		throw (bad_nb_argument("server"));
+}
+
+int count_words(std::string &line) {
+
+	
 }
