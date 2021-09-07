@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/06 18:36:55 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/07 10:18:50 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,10 @@ void	webserv::set_config(std::ifstream & config_file) {
 		first_word = line.substr(i, line.find_first_of(" \t\n\v\f\r", i) - i);
 		if (first_word == "server")
 			;
-		else if (first_word == "client_max_body_size" || first_word == "error_page")
-			;
+		else if (first_word == "client_max_body_size")
+			set_max_body_size(line);
+		else if (first_word == "error_page")
+			set_error_page(line);	 
 		else if (first_word == "}")
 			;
 		else if (first_word.size() != 0) {
@@ -63,6 +65,20 @@ void	webserv::set_config(std::ifstream & config_file) {
 	client_max_body_size
 	error_page
 	*/
+
+void	webserv::set_max_body_size(std::string & line){
+	int i = 0;
+	
+	while (isspace(line[i])) i++;
+	while (!isspace(line[i])) i++;
+	while (isspace(line[i])) i++;
+	std::cout << &line[i] << std::endl;
+	
+
+
+}
+
+
 
 bool	webserv::check_brackets(const std::string & config) {
 	size_t 	position = 0;
