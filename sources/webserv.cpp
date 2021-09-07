@@ -17,16 +17,16 @@
 #include <iostream>
 
 
-webserv::webserv(const std::string & path_config) {
+webserv::webserv(const std::string & path_config) : auto_index(false), client_max_body_size(1) {
 	std::ifstream	config_file;
 	std::string		all_file;
 	
-	config_file.open(path_config, std::ios_base::in);
+	config_file.open(path_config.c_str(), std::ios_base::in);
 	if (!config_file.is_open())
 		throw (config_file_not_open());
 	std::getline(config_file, all_file, '\0');
 	if (!this->check_brackets(all_file))
-		throw (wrong_brackets_conf());
+		throw (bad_brackets_conf());
 	this->set_config(config_file);
 }
 
@@ -36,14 +36,13 @@ void	webserv::set_config(std::ifstream & config_file) {
 	
 	config_file.clear();
 	config_file.seekg(0);
-
 	while (!config_file.eof())
 	{
 		std::getline(config_file, line, '\n');
 		int i = 0;
 		while (isspace(line[i])) 
 			i++;
-		first_word = line.substr(i, line.find_first_of(" \t\n\v\f\r", i) - i);
+		first_word = line.substr(i, line.find_first_of(WHITESPACE, i) - i);
 		if (first_word == "server")
 			;
 		else if (first_word == "client_max_body_size")
@@ -54,7 +53,7 @@ void	webserv::set_config(std::ifstream & config_file) {
 			;
 		else if (first_word.size() != 0) {
 			if (first_word[0] == 123) // ascii value for {, it fixes issue at compilation
-				throw (wrong_brackets_conf());
+				throw (bad_brackets_conf());
 			else
 				throw (bad_directive());
 		}
@@ -65,20 +64,24 @@ void	webserv::set_config(std::ifstream & config_file) {
 	client_max_body_size
 	error_page
 	*/
-
-void	webserv::set_max_body_size(std::string & line){
-	int i = 0;
-	
-	while (isspace(line[i])) i++;
-	while (!isspace(line[i])) i++;
-	while (isspace(line[i])) i++;
-	std::cout << &line[i] << std::endl;
-	
-
-
+size_t	get_max_body_size(std::string & line) {
+	int i = go_to_next_word(line, 0);
+	std::string max_size = line.substr(i, line.find_first_of(WHITESPACE, i) - i);
+	if (!ft_string_is_digit(max_size) || (line.find_first_of(WHITESPACE, i) != line.npos) )
+		throw (bad_client_max_body_size());
+	return (atoi(max_size.c_str()));
 }
 
+void	webserv::set_max_body_size(std::string & line) {
+	client_max_body_size = get_max_body_size(line);
+	std::cout << client_max_body_size << std::endl;
+}
 
+void	webserv::set_error_page(std::string & line){
+	int i = go_to_next_word(line, 0);
+	std::string size = line.substr(i, line.find_first_of(WHITESPACE, i) - i);
+	std::cout << size << std::endl;
+}
 
 bool	webserv::check_brackets(const std::string & config) {
 	size_t 	position = 0;

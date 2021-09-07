@@ -16,10 +16,14 @@ const char* config_file_not_open::what() const throw() {
 	return ("We can't open the config file");
 }
 
-const char* wrong_brackets_conf::what() const throw() {
+const char* bad_brackets_conf::what() const throw() {
 	return ("There is an issue with the bracket disposition");
 }
 
 const char* bad_directive::what() const throw() {
 	return ("You asked for a directive that doesn't exist");
+}
+
+const char* bad_client_max_body_size::what() const throw() {
+	return ("You can not initialized such value for client_max_body_size");
 }
