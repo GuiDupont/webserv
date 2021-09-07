@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2021/09/07 13:55:00 by ade-garr         ###   ########.fr       */
+=======
+/*   Updated: 2021/09/07 13:50:55 by gdupont          ###   ########.fr       */
+>>>>>>> main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +79,12 @@ size_t	get_max_body_size(std::string & line) {
 	return (atoi(max_size.c_str()));
 }
 
+<<<<<<< HEAD
 void	webserv::param_server(std::ifstream & config_file, vHost &host) {
+=======
+void	webserv::param_server(std::ifstream & config_file, vHost &host) {}
+
+>>>>>>> main
 
 void	webserv::set_max_body_size(std::string & line) {
 	client_max_body_size = get_max_body_size(line);
