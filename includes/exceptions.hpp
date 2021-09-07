@@ -21,12 +21,17 @@ class config_file_not_open : public std::exception {
 		virtual const char* what() const throw();
 };
 
-class wrong_brackets_conf : public std::exception {
+class bad_brackets_conf : public std::exception {
 	public:
 		virtual const char* what() const throw();
 };
 
 class bad_directive : public std::exception {
+	public:
+		virtual const char* what() const throw();
+};
+
+class bad_client_max_body_size : public std::exception {
 	public:
 		virtual const char* what() const throw();
 };
