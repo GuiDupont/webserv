@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 11:18:29 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/07 17:28:49 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/08 14:57:02 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ vHost & vHost::operator=(vHost const & rhs) {
 
 	this->locations = rhs.locations;
 	this->auto_index = rhs.auto_index;
-	this->max_body_size = rhs.max_body_size;
+	this->_client_max_body_size = rhs._client_max_body_size;
 	this->allowed_methods = rhs.allowed_methods;
 	this->error_pages = rhs.error_pages;
 	this->redirection = rhs.redirection;

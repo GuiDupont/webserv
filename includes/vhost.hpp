@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 16:02:01 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/07 17:30:15 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/08 14:53:30 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <list>
 # include <fstream>
 # include <string>
+
+class location;
 
 class vHost {
 
@@ -36,7 +38,7 @@ private:
 	std::list<location> locations;
 
 	bool		auto_index;
-	int			max_body_size;
+	int			_client_max_body_size;
 	int			allowed_methods; // defined using bitwise operations
 	unknown		error_pages;
 	unknown		redirection;

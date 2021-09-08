@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/07 17:23:42 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/08 14:55:51 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 int		go_to_next_word(const std::string & line, int index) {
 	while (isspace(line[index])) index++;
-	while (!isspace(line[index])) index++;
+	while (line[index] && !isspace(line[index])) index++;
 	while (isspace(line[index])) index++;
 	return (index);
 }
@@ -51,12 +51,41 @@ int		ft_string_is_digit(const std::string & s)
 void check_server_line(std::string &line) {
 
 	if (count_words(line) != 2)
-		throw (bad_nb_argument("server"));
+		;//throw (bad_nb_argument("server"));
 }
 
-int count_words(std::string &line) {
+int count_words(std::string &line) { return (0);}
 
 	
 std::string get_word(std::string line, int i) {
 	return (line.substr(i, line.find_first_of(WHITESPACE, i) - i));
+}
+
+std::pair<int, std::string> parse_error_page(std::string & line) {
+	int i = go_to_next_word(line, 0);
+	if (!line[i])
+		throw (empty_error_page_declaration());
+	std::string code_str = get_word(line, i);
+	if (!ft_string_is_digit(code_str))
+		throw (bad_error_page_value());
+	int code = atoi(code_str.c_str());
+	if (code < 300 || code > 599 )
+		throw (bad_error_page_value());
+	i = go_to_next_word(line, i);
+	std::string path = get_word(line, i);
+	if (path.empty())
+		throw (empty_error_page_path());
+	i = go_to_next_word(line, i);
+	if (line[i])
+		throw (empty_disabled_methods_declaration()); //change bad nb argument;
+	return (std::pair<int, std::string>(code, path));	
+	
+}
+
+size_t	get_max_body_size(std::string & line) {
+	int i = go_to_next_word(line, 0);
+	std::string max_size = line.substr(i, line.find_first_of(WHITESPACE, i) - i);
+	if (!ft_string_is_digit(max_size) || (line.find_first_of(WHITESPACE, i) != line.npos) )
+		throw (bad_client_max_body_size());
+	return (atoi(max_size.c_str()));
 }

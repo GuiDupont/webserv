@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/07 17:30:03 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/08 15:00:01 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 
 
-webserv::webserv(const std::string & path_config) : auto_index(false), client_max_body_size(1) {
+webserv::webserv(const std::string & path_config) : auto_index(false), _client_max_body_size(0) {
 	std::ifstream	config_file;
 	std::string		all_file;
 	
@@ -54,6 +54,8 @@ void	webserv::set_config(std::ifstream & config_file) {
 			set_max_body_size(line);
 		else if (first_word == "error_page")
 			set_error_page(line); 
+		// else if (first_word == "location")
+		// 	location loc = location(config_file, line);
 		else if (first_word == "}")
 			;
 		else if (first_word.size() != 0) {
@@ -65,17 +67,8 @@ void	webserv::set_config(std::ifstream & config_file) {
 	}
 }
 
-size_t	get_max_body_size(std::string & line) {
-	int i = go_to_next_word(line, 0);
-	std::string max_size = line.substr(i, line.find_first_of(WHITESPACE, i) - i);
-	if (!ft_string_is_digit(max_size) || (line.find_first_of(WHITESPACE, i) != line.npos) )
-		throw (bad_client_max_body_size());
-	return (atoi(max_size.c_str()));
-}
-
 void	webserv::set_max_body_size(std::string & line) {
-	client_max_body_size = get_max_body_size(line);
-	std::cout << client_max_body_size << std::endl;
+	_client_max_body_size = get_max_body_size(line);
 }
 
 void	webserv::set_error_page(std::string & line){
