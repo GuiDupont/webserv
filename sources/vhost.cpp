@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 11:18:29 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/09 10:28:39 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/09 11:02:22 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,16 @@ vHost::vHost(std::ifstream &config_file, std::string &line) : port(0) {
 	while (!config_file.eof())
 	{
 		std::getline(config_file, line, '\n');
+		g_line++;
 		int i = 0;
 		while (std::isspace(line[i])) 
 			i++;
 		first_word = line.substr(i, line.find_first_of(" \t\n\v\f\r", i) - i);
 		if (first_word == "client_max_body_size") {
-			; // à voir avec Guillaume
+			this->_client_max_body_size = get_max_body_size(line);
 		}
 		if (first_word == "error_pages") {
-			; // à voir avec Guillaume
+			parse_error_page(line); // a retoucher selon suite
 		}
 		if (first_word == "return") {
 			; // à voir avec Guillaume
@@ -48,6 +49,7 @@ vHost::vHost(std::ifstream &config_file, std::string &line) : port(0) {
 	}
 	if (getPort() == 0) {
 		throw (no_port_associated());
+	}
 }
 
 vHost::~vHost() {

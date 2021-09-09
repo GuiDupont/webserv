@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/08 15:00:01 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/09 11:00:51 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	webserv::set_config(std::ifstream & config_file) {
 			i++;
 		first_word = line.substr(i, line.find_first_of(" \t\n\v\f\r", i) - i);
 		if (first_word == "server") {
-			this->vhosts.push_back(vHost(config_file, first_word));
+			this->vhosts.push_back(vHost(config_file, line));
 		}
 		else if (first_word == "client_max_body_size")
 			set_max_body_size(line);

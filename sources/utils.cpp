@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/09 10:26:01 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/09 11:01:34 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,11 @@ int		ft_string_is_digit(const std::string & s)
 void check_server_line(std::string &line) {
 
 	std::string	sd_word;
+	int	i;
 
 	if (count_words(line) != 2)
 		throw (bad_nb_argument("server"));
-	for (int i = 0; i < line.size() && isspace(line[i]) == 1; i++) {}
+	for (i = 0; i < line.size() && isspace(line[i]) == 1; i++) {}
 	for (; i < line.size() && isspace(line[i]) == 0; i++) {}
 	for (; i < line.size() && isspace(line[i]) == 1; i++) {}
 	sd_word = line.substr(i, line.find_first_of(" \t\n\v\f\r", i) - i);
@@ -63,11 +64,12 @@ void check_server_line(std::string &line) {
 		throw bad_nb_argument("server");
 }
 
-int count_words(std::string &line) { return (0);}
+int count_words(std::string &line) {
 
 	int count = 0;
+	int i;
 
-	for (int i = 0; i < line.size(); i++) {
+	for (i = 0; i < line.size(); i++) {
 		if (isspace(line[i]) == 1) {}
 		else {
 			count++;
@@ -98,7 +100,7 @@ std::pair<int, std::string> parse_error_page(std::string & line) {
 		throw (empty_error_page_path());
 	i = go_to_next_word(line, i);
 	if (line[i])
-		throw (empty_disabled_methods_declaration()); //change bad nb argument;
+		throw (bad_nb_argument("error_page"));
 	return (std::pair<int, std::string>(code, path));	
 	
 }

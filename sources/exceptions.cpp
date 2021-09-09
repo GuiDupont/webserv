@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:36:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/09 10:28:11 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/09 10:48:16 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ const char* bad_error_page_value::what() const throw() {
 }
 
 const char* bad_nb_argument::what() const throw() {
+	
 	return ("Bad number of argument for the directive: ");
 }
 
@@ -77,10 +78,10 @@ const char* empty_error_page_path::what() const throw() {
 	return ("For the error_page directive, you did not specify any path at line: ");
 }
 
-// bad_nb_argument::bad_nb_argument(std::string &directive) : _directive(directive) {
+bad_nb_argument::bad_nb_argument(std::string directive) : _directive(directive) {
 
-// 	return ;
-// }
+	return ;
+}
 
 // const char* bad_nb_argument::what() const throw() {
 
