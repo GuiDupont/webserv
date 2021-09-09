@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exceptions.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:09:27 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/07 17:27:46 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/08 22:47:43 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,11 @@ class bad_nb_argument : public std::exception {
 
 public:
 
-	bad_nb_argument(std::string &directive);
+	bad_nb_argument(std::string directive);
+	virtual ~bad_nb_argument() throw () {}
 	
 	virtual const char* what() const throw();
+	virtual std::string obj();
 
 private:
 

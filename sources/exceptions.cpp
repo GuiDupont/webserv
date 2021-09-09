@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exceptions.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:36:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/07 17:27:42 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/08 22:49:23 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,17 @@ const char* no_port_associated::what() const throw() {
 	return ("No port associated to the host server");
 }
 
-bad_nb_argument::bad_nb_argument(std::string &directive) : _directive(directive) {
+bad_nb_argument::bad_nb_argument(std::string directive) : _directive(directive) {
 
 	return ;
 }
 
 const char* bad_nb_argument::what() const throw() {
 
-	std::string ret;
+	return ("Bad number of argument for the directive: ");
+}
 
-	ret = "Bad number of argument for the directive: " + _directive;
-	return (ret.c_str());
+std::string bad_nb_argument::obj() {
+
+	return (this->_directive);
 }

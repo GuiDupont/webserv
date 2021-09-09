@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vhost.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 16:02:01 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/07 17:30:15 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/08 23:12:42 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ public:
 	size_t setMax() const ;
 
 private:
-	std::list<location> locations;
 
+	std::list<location> locations;
 	bool		auto_index;
 	int			max_body_size;
 	int			allowed_methods; // defined using bitwise operations
