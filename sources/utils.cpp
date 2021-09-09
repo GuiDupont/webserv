@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/09 12:52:12 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/09 14:56:24 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void check_server_line(std::string &line) {
 	for (; i < line.size() && isspace(line[i]) == 1; i++) {}
 	sd_word = line.substr(i, line.find_first_of(WHITESPACE, i) - i);
 	if (sd_word != "{")
-		throw bad_nb_argument("server");
+		throw bad_server_declaration();
 }
 
 int count_words(std::string &line) {
@@ -154,12 +154,12 @@ void	parse_listen(std::string &line, vHost &host) {
 		parse_ip(str, host);
 		str = str.substr(str.find(':', 0) + 1, (str.size() - str.find(':', 0) + 1));
 	}
-	reti = regcomp(&regex, "^[0-9]{0, 5}$", 0);
+	reti = regcomp(&regex, "^[0-9]\\{0,5\\}$", 0);
     reti = regexec(&regex, str.c_str(), 0, NULL, 0);
-	if( !reti ){
+	if( !reti )
         host.setPort(std::atoi(str.c_str()));
-    }
     else {
+    	regfree(&regex);
 		throw (bad_port());
     }
     regfree(&regex);
@@ -177,12 +177,13 @@ void	parse_ip(std::string str, vHost &host) {
         regex_t regex;
         int reti;
 
-        reti = regcomp(&regex, "^[0-9]{0, 3}.[0-9]{0, 3}.[0-9]{0, 3}.[0-9]{0, 3}:", 0);
+        reti = regcomp(&regex, "^[0-9]\\{1,3\\}[.][0-9]\\{1,3\\}[.][0-9]\\{1,3\\}[.][0-9]\\{1,3\\}:", 0);
         reti = regexec(&regex, str.c_str(), 0, NULL, 0);
         if( !reti ){
             host.setHost(str.substr(0, str.find(':', 0)));
         }
         else {
+			regfree(&regex);
 			throw (bad_ip_address());
         }
     	regfree(&regex);

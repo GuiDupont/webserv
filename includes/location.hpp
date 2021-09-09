@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/09 12:16:39 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/09 14:50:54 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef int unknown;
 #include "exceptions.hpp"
 #include "location.hpp"
 #include <fstream>
+#include <list>
 
 
 class location {
@@ -38,11 +39,12 @@ class location {
 
 		int			_client_max_body_size;
 		bool		_auto_index;
-		size_t		_disabled_methods; // defined using bitwise operations
-		unknown		_error_pages;
+		size_t		_disable_methods; // defined using bitwise operations
+		std::list< std::pair<int, std::string> >		_error_pages;
 		unknown		_redirection;
-		unknown		_upload;
+		std::string		_upload_pass;
 		std::string _root;
+		std::string _index;
 		unknown		_cgi;
 		std::string _path;
 };

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:36:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/09 13:47:14 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/09 14:54:45 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,10 @@ const char* bad_port::what() const throw() {
 	return ("Bad port given at line: ");
 }
 
+const char* bad_server_declaration::what() const throw() {
+
+	return ("Bad declaration of a server at line: ");
+}
 
 // const char* bad_nb_argument::what() const throw() {
 

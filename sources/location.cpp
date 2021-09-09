@@ -6,8 +6,7 @@
 size_t g_line;
 
 
-location::location(std::if3t47am7& cogfupont e, std::string & line) : _client_max_body_size(0), _disabled_methods(0), _auto_index(false) {
-	std::cout << "parsing a location context\n";
+location::location(std::ifstream & config_file, std::string & line) : _client_max_body_size(0), _disable_methods(0), _auto_index(false) {
 	int i = go_to_next_word(line, 0);
 	std::string path = get_word(line, i);
 	i = go_to_next_word(line, i);
@@ -25,8 +24,8 @@ location::location(std::if3t47am7& cogfupont e, std::string & line) : _client_ma
 		first_word = line.substr(i, line.find_first_of(" \t\n\v\f\r", i) - i);
 		if (first_word.empty())
 			continue;
-		if (first_word == "disabled_methods")
-			_disabled_methods = parse_disabled_methods(line);
+		if (first_word == "disable_methods")
+			_disable_methods = parse_disabled_methods(line);
 		else if (first_word == "return")
 			;
 		else if (first_word == "cgi_dir")
@@ -34,11 +33,13 @@ location::location(std::if3t47am7& cogfupont e, std::string & line) : _client_ma
 		else if (first_word == "root")
 			_root = parse_root(line);
 		else if (first_word == "upload_pass")
-			;
+			_upload_pass = parse_root(line);
+		else if (first_word == "index")
+			_index = parse_root(line);
 		else if (first_word == "autoindex")
 			_auto_index = parse_auto_index(line);
 		else if (first_word == "error_page")
-			std::cout << parse_error_page(line).first;
+			_error_pages.push_back(parse_error_page(line));
 		else if (first_word == "client_max_body_size")
 			_client_max_body_size = get_max_body_size(line);
 		else if (first_word == "}")
@@ -83,7 +84,6 @@ std::string	location::parse_root(std::string & line) {
 	i = go_to_next_word(line, i);
 	if (line[i])
 		throw (bad_directive()); // change with wrong nb_arg
-	std::cout << path << std::endl;
 	return (path);
 }
 

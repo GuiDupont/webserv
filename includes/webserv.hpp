@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/09 12:18:59 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/09 13:52:38 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,11 @@ class webserv {
 		~webserv();
 
 	private:
-		std::list<vHost> 	vhosts;
-		bool				auto_index;
-		int					_client_max_body_size;
-		unknown				error_pages;
-		unknown				upload;
+		std::list<vHost> 							vhosts;
+		bool										auto_index;
+		int											_client_max_body_size;
+		std::list< std::pair<int, std::string> >	_error_pages;
+		std::string									upload;
 		std::string 		root;
 		unknown				cgi;
 		

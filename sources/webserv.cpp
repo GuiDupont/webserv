@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/09 12:18:34 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/09 13:55:15 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	webserv::set_config(std::ifstream & config_file) {
 		else if (first_word == "client_max_body_size")
 			_client_max_body_size = get_max_body_size(line);
 		else if (first_word == "error_page")
-			_error_pages.push_back(set_error_page(line)); 
+			_error_pages.push_back(parse_error_page(line)); 
 		else if (first_word == "}")
 			;
 		else if (first_word.size() != 0) {

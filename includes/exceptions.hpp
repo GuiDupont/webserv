@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:09:27 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/09 13:47:09 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/09 14:53:56 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,11 @@ class bad_ip_address : public std::exception {
 };
 
 class bad_port : public std::exception {
+	public:
+		virtual const char* what() const throw();
+};
+
+class bad_server_declaration : public std::exception {
 	public:
 		virtual const char* what() const throw();
 };
