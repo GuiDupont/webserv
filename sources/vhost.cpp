@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vhost.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 11:18:29 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/08 14:57:02 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/09 10:28:39 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ vHost::vHost() : port(0) {
 	return ;
 }
 
-vHost::vHost(std::ifstream &config_file, std::string &line) {
+vHost::vHost(std::ifstream &config_file, std::string &line) : port(0) {
 
 	std::string	sub_line;
 	std::string	first_word;
@@ -37,13 +37,17 @@ vHost::vHost(std::ifstream &config_file, std::string &line) {
 			i++;
 		first_word = line.substr(i, line.find_first_of(" \t\n\v\f\r", i) - i);
 		if (first_word == "client_max_body_size") {
-			// host.
-			;
+			; // à voir avec Guillaume
+		}
+		if (first_word == "error_pages") {
+			; // à voir avec Guillaume
+		}
+		if (first_word == "return") {
+			; // à voir avec Guillaume
 		}
 	}
 	if (getPort() == 0) {
 		throw (no_port_associated());
-	}
 }
 
 vHost::~vHost() {

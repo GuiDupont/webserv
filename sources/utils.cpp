@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/08 14:55:51 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/09 10:26:01 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <string>
 #include "exceptions.hpp"
 #include "webserv.hpp"
+#include <cctype>
 
 #include <iostream>
 
@@ -50,11 +51,31 @@ int		ft_string_is_digit(const std::string & s)
 
 void check_server_line(std::string &line) {
 
+	std::string	sd_word;
+
 	if (count_words(line) != 2)
-		;//throw (bad_nb_argument("server"));
+		throw (bad_nb_argument("server"));
+	for (int i = 0; i < line.size() && isspace(line[i]) == 1; i++) {}
+	for (; i < line.size() && isspace(line[i]) == 0; i++) {}
+	for (; i < line.size() && isspace(line[i]) == 1; i++) {}
+	sd_word = line.substr(i, line.find_first_of(" \t\n\v\f\r", i) - i);
+	if (sd_word != "{")
+		throw bad_nb_argument("server");
 }
 
 int count_words(std::string &line) { return (0);}
+
+	int count = 0;
+
+	for (int i = 0; i < line.size(); i++) {
+		if (isspace(line[i]) == 1) {}
+		else {
+			count++;
+			for (; i < line.size() && isspace(line[i]) == 0; i++) {}
+		}
+	}
+	return (count);
+}
 
 	
 std::string get_word(std::string line, int i) {
