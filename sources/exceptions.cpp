@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exceptions.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:36:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/09 14:54:45 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/09 17:33:57 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,11 @@ bad_nb_argument::bad_nb_argument(std::string directive) : _directive(directive) 
 
 const char* bad_ip_address::what() const throw() {
 
+	return ("Bad IP address given in config file");
+}
+
+const char* bad_ip_address_config::what() const throw() {
+
 	return ("Bad IP address given at line: ");
 }
 
@@ -82,11 +87,17 @@ const char* bad_server_declaration::what() const throw() {
 	return ("Bad declaration of a server at line: ");
 }
 
-// const char* bad_nb_argument::what() const throw() {
+const char* cant_create_socket::what() const throw() {
 
-// 	std::string ret;
+	return ("Impossible to create server socket");
+}
 
-// 	ret = "Bad number of argument for the directive: " + _directive;
-// 	return (ret.c_str());
-// }
+const char* cant_bind_address::what() const throw() {
 
+	return ("Impossible to bind address");
+}
+
+const char* cant_listen::what() const throw() {
+
+	return ("Impossible to operate listen");
+}

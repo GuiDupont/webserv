@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/09 14:56:24 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/09 17:50:58 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,24 +145,29 @@ void	parse_listen(std::string &line, vHost &host) {
 
     regex_t regex;
     int reti;
+	int port;
+	std::string addr;
 
 	if (count_words(line) != 2)
 		throw (bad_nb_argument("listen"));
 	int i = go_to_next_word(line, 0);
 	std::string str = get_word(line, i);
 	if (is_ip(str) == 1) {
-		parse_ip(str, host);
+		addr = parse_ip(str, host);
 		str = str.substr(str.find(':', 0) + 1, (str.size() - str.find(':', 0) + 1));
 	}
 	reti = regcomp(&regex, "^[0-9]\\{0,5\\}$", 0);
     reti = regexec(&regex, str.c_str(), 0, NULL, 0);
 	if( !reti )
-        host.setPort(std::atoi(str.c_str()));
+        //host.setPort(std::atoi(str.c_str()));
+		port = std::atoi(str.c_str());
     else {
     	regfree(&regex);
 		throw (bad_port());
     }
+	
     regfree(&regex);
+	host.getHost_Port().push_back(std::pair<std::string, int>(addr, port));
 	return ;
 }
 
@@ -172,20 +177,56 @@ bool	is_ip(std::string str) {
 	return (1);
 }
 
-void	parse_ip(std::string str, vHost &host) {
+std::string	parse_ip(std::string str, vHost &host) {
 
         regex_t regex;
         int reti;
+		std::string addr;
 
         reti = regcomp(&regex, "^[0-9]\\{1,3\\}[.][0-9]\\{1,3\\}[.][0-9]\\{1,3\\}[.][0-9]\\{1,3\\}:", 0);
         reti = regexec(&regex, str.c_str(), 0, NULL, 0);
-        if( !reti ){
-            host.setHost(str.substr(0, str.find(':', 0)));
-        }
+        if( !reti )
+            addr = str.substr(0, str.find(':', 0));
         else {
 			regfree(&regex);
 			throw (bad_ip_address());
         }
     	regfree(&regex);
-        return ;
+        return (addr);
+}
+
+void param_socket_server(vHost &host) { // a midif boucle sur les ports
+
+    SOCKADDR_IN sin;
+    SOCKET sock;
+    socklen_t recsize = sizeof(sin);
+
+	std::cout << "host = " << host.getHost() << std::endl;
+	std::cout << "port = " << host.getPort() << std::endl;
+	sock = socket(AF_INET, SOCK_STREAM, 0);
+	if (sock == INVALID_SOCKET)
+		throw (cant_create_socket());
+	sin.sin_addr.s_addr = inet_addr(host.getHost().c_str());
+	if (sin.sin_addr.s_addr == INADDR_NONE && host.getHost() != "255.255.255.255")
+		throw (bad_ip_address());
+	sin.sin_family = AF_INET;
+	sin.sin_port = htons(host.getPort());
+	int sock_err = bind(sock, (SOCKADDR*)&sin, recsize);
+	if(sock_err == SOCKET_ERROR && errno != 48) {
+		throw (cant_bind_address());
+	}
+	else if (sock_err == SOCKET_ERROR && errno == 48) {
+		close(sock);
+	}
+	else {
+		sock_err = listen(sock, 5); // 5 ? quel chiffre mettre ??
+		if(sock_err == SOCKET_ERROR)
+			throw (cant_listen());
+		// static struct epoll_event ev;
+		// ev.events = EPOLLIN | EPOLLET;
+		// ev.data.fd = sock;
+		// epoll_ctl(epfd, EPOLL_CTL_ADD, sock, &ev);
+	}
+
+
 }

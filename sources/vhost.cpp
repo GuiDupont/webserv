@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vhost.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 11:18:29 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/09 14:40:41 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/09 17:48:16 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@
 #include <fstream>
 
 
-vHost::vHost() : _port(0) {
+vHost::vHost() : _port(0), _host("0.0.0.0") {
 
 	return ;
 }
 
-vHost::vHost(std::ifstream &config_file, std::string &line) : _port(0) {
+vHost::vHost(std::ifstream &config_file, std::string &line) : _port(0), _host("0.0.0.0") {
 
 	std::string	sub_line;
 	std::string	first_word;
@@ -105,6 +105,11 @@ size_t	vHost::getPort() const {
 	return (this->_port);
 }
 
+std::string	vHost::getHost() const {
+
+	return (this->_host);
+}
+
 void vHost::setHost(std::string host) {
 
 	this->_host = host;
@@ -115,4 +120,8 @@ void vHost::setPort(int port) {
 
 	this->_port = port;
 	return ;
+}
+
+std::list< std::pair< std::string, size_t> >  vHost::getHost_Port() const {
+	return (this->_host_port);
 }

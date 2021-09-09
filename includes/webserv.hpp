@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/09 13:52:38 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/09 16:32:09 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ class webserv {
 		webserv();
 		~webserv();
 
+		void set_hosts();
+
 	private:
 		std::list<vHost> 							vhosts;
 		bool										auto_index;
@@ -50,8 +52,7 @@ class webserv {
 		std::string									upload;
 		std::string 		root;
 		unknown				cgi;
-		
-
+		int											_epfd;
 	
 	private:
 		/* PARSING */

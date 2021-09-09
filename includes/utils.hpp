@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 12:51:13 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/09 12:52:35 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/09 17:30:54 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,20 @@
 # include <regex.h>
 # include <iostream>
 # include <string>
+# include <sys/types.h>
+# include <sys/socket.h>
+# include <netinet/in.h>
+# include <arpa/inet.h>
+// # include <sys/epoll.h>
+# include <unistd.h>
+
+
+# define INVALID_SOCKET -1 // a bouger ?
+# define SOCKET_ERROR -1 // a bouger ?
+
+typedef int SOCKET; // a bouger ?
+typedef struct sockaddr_in SOCKADDR_IN; // a bouger ?
+typedef struct sockaddr SOCKADDR; // a bouger ?
 
 class vHost;
 
@@ -37,5 +51,6 @@ std::string parse_server_name(std::string &line);
 void	parse_listen(std::string &line, vHost &host);
 bool	is_ip(std::string str);
 void	parse_ip(std::string str, vHost &host);
+void	param_socket_server(vHost &host);
 
 #endif

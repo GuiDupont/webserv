@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vhost.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 16:02:01 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/09 14:02:45 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/09 17:47:22 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ public:
 
 	vHost &operator=(vHost const & rhs);
 	size_t getPort() const ;
+	std::string getHost() const ;
+	std::list< std::pair< std::string, size_t> >  getHost_Port() const ;
 	size_t setMax() const ;
 	void setHost(std::string host);
 	void setPort(int port);
@@ -47,6 +49,7 @@ private:
 	std::list< std::pair<int, std::string> >	_error_pages;
 	std::list< std::pair<int, std::string> >	_return;
 	std::string									_upload_pass;
+	std::list< std::pair< std::string, size_t> >				_host_port;
 	std::string 								_host;
 	size_t										_port;
 	std::string 								_server_name;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/09 13:55:15 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/09 17:02:32 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ void	webserv::set_config(std::ifstream & config_file) {
 				throw (bad_directive());
 		}
 	}
+	if (vhosts.empty() == 1)
+		throw (no_port_associated()); // changer par la suite par une vraie exception pour vhost, comme recommande par Guillaume.
 }
 
 void	webserv::set_error_page(std::string & line){
@@ -121,6 +123,15 @@ bool webserv::check_closing_brackets(const std::string & config) {
 		return (false);
 	else
 		return (true);	
+}
+
+void webserv::set_hosts() {
+	
+	// _epfd = epoll_create(1);
+	std::list<vHost>::iterator it = vhosts.begin();
+	for (; it != vhosts.end(); it++) {
+		param_socket_server(*it);
+	}
 }
 
 webserv::webserv(void) {

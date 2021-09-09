@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exceptions.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:09:27 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/09 14:53:56 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/09 17:33:27 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,13 @@ class empty_error_page_path : public std::exception {
 		virtual const char* what() const throw();
 };
 
+class bad_ip_address_config : public std::exception {
+
+	public:
+
+		virtual const char* what() const throw();
+};
+
 class bad_ip_address : public std::exception {
 
 	public:
@@ -107,6 +114,21 @@ class bad_port : public std::exception {
 };
 
 class bad_server_declaration : public std::exception {
+	public:
+		virtual const char* what() const throw();
+};
+
+class cant_create_socket : public std::exception {
+	public:
+		virtual const char* what() const throw();
+};
+
+class cant_bind_address : public std::exception {
+	public:
+		virtual const char* what() const throw();
+};
+
+class cant_listen : public std::exception {
 	public:
 		virtual const char* what() const throw();
 };
