@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:09:27 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/09 10:30:35 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/09 12:46:40 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,5 +109,16 @@ class empty_error_page_path : public std::exception {
 		virtual const char* what() const throw();
 };
 
+class bad_ip_address : public std::exception {
+
+	public:
+
+		virtual const char* what() const throw();
+};
+
+class bad_port : public std::exception {
+	public:
+		virtual const char* what() const throw();
+};
 
 #endif

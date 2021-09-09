@@ -6,17 +6,11 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/09 11:01:34 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/09 12:52:12 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/utils.hpp"
-#include <string>
-#include "exceptions.hpp"
-#include "webserv.hpp"
-#include <cctype>
-
-#include <iostream>
+#include "utils.hpp"
 
 int		go_to_next_word(const std::string & line, int index) {
 	while (isspace(line[index])) index++;
@@ -111,4 +105,86 @@ size_t	get_max_body_size(std::string & line) {
 	if (!ft_string_is_digit(max_size) || (line.find_first_of(WHITESPACE, i) != line.npos) )
 		throw (bad_client_max_body_size());
 	return (atoi(max_size.c_str()));
+}
+
+std::pair<int, std::string> parse_return(std::string &line) {
+
+	if (count_words(line) != 3)
+		throw (bad_nb_argument("return"));
+	int i = go_to_next_word(line, 0);
+	std::string code_str = get_word(line, i);
+	if (!ft_string_is_digit(code_str))
+		throw (bad_error_page_value());
+	int code = atoi(code_str.c_str());
+	if (code < 0 || code > 999 )
+		throw (bad_error_page_value());
+	i = go_to_next_word(line, i);
+	std::string path = get_word(line, i);
+	return (std::pair<int, std::string>(code, path));
+}
+
+std::string parse_upload_pass(std::string &line) {
+
+	if (count_words(line) != 2)
+		throw (bad_nb_argument("upload_pass"));
+	int i = go_to_next_word(line, 0);
+	std::string str = get_word(line, i);
+	return (str);
+}
+
+std::string parse_server_name(std::string &line) {
+
+	if (count_words(line) != 2)
+		throw (bad_nb_argument("server_name"));
+	int i = go_to_next_word(line, 0);
+	std::string str = get_word(line, i);
+	return (str);
+}
+
+void	parse_listen(std::string &line, vHost &host) {
+
+    regex_t regex;
+    int reti;
+
+	if (count_words(line) != 2)
+		throw (bad_nb_argument("listen"));
+	int i = go_to_next_word(line, 0);
+	std::string str = get_word(line, i);
+	if (is_ip(str) == 1) {
+		parse_ip(str, host);
+		str = str.substr(str.find(':', 0) + 1, (str.size() - str.find(':', 0) + 1));
+	}
+	reti = regcomp(&regex, "^[0-9]{0, 5}$", 0);
+    reti = regexec(&regex, str.c_str(), 0, NULL, 0);
+	if( !reti ){
+        host.setPort(std::atoi(str.c_str()));
+    }
+    else {
+		throw (bad_port());
+    }
+    regfree(&regex);
+	return ;
+}
+
+bool	is_ip(std::string str) {
+	if (str.find('.', 0) == std::string::npos)
+		return (0);
+	return (1);
+}
+
+void	parse_ip(std::string str, vHost &host) {
+
+        regex_t regex;
+        int reti;
+
+        reti = regcomp(&regex, "^[0-9]{0, 3}.[0-9]{0, 3}.[0-9]{0, 3}.[0-9]{0, 3}:", 0);
+        reti = regexec(&regex, str.c_str(), 0, NULL, 0);
+        if( !reti ){
+            host.setHost(str.substr(0, str.find(':', 0)));
+        }
+        else {
+			throw (bad_ip_address());
+        }
+    	regfree(&regex);
+        return ;
 }

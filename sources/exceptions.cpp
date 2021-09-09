@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:36:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/09 10:48:16 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/09 12:47:03 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,17 @@ bad_nb_argument::bad_nb_argument(std::string directive) : _directive(directive) 
 
 	return ;
 }
+
+const char* bad_ip_address::what() const throw() {
+
+	return ("Bad IP address given at line: ");
+}
+
+const char* bad_port::what() const throw() {
+
+	return ("Bad port given at line: ");
+}
+
 
 // const char* bad_nb_argument::what() const throw() {
 

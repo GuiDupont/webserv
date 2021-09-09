@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 11:18:29 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/09 11:02:22 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/09 12:49:44 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,19 @@ vHost::vHost(std::ifstream &config_file, std::string &line) : port(0) {
 			this->_client_max_body_size = get_max_body_size(line);
 		}
 		if (first_word == "error_pages") {
-			parse_error_page(line); // a retoucher selon suite
+			error_pages.push_back(parse_error_page(line)); // a retoucher selon suite
 		}
 		if (first_word == "return") {
-			; // à voir avec Guillaume
+			this->_return.push_back(parse_return(line));
+		}
+		if (first_word == "upload_pass") {
+			this->upload_pass = parse_upload_pass(line);
+		}
+		if (first_word == "server_name") {
+			this->server_name = parse_server_name(line);
+		}
+		if (first_word == "listen") {
+			parse_listen(line, *this);
 		}
 	}
 	if (getPort() == 0) {
@@ -70,8 +79,8 @@ vHost & vHost::operator=(vHost const & rhs) {
 	this->_client_max_body_size = rhs._client_max_body_size;
 	this->allowed_methods = rhs.allowed_methods;
 	this->error_pages = rhs.error_pages;
-	this->redirection = rhs.redirection;
-	this->upload = rhs.upload;
+	this->_return = rhs._return;
+	this->upload_pass = rhs.upload_pass;
 	this->host = rhs.host;
 	this->port = rhs.port;
 	this->server_name = rhs.server_name;
@@ -83,4 +92,16 @@ vHost & vHost::operator=(vHost const & rhs) {
 size_t	vHost::getPort() const {
 
 	return (this->port);
+}
+
+void vHost::setHost(std::string host) {
+
+	this->host = host;
+	return ;
+}
+
+void vHost::setPort(int port) {
+
+	this->port = port;
+	return ;
 }
