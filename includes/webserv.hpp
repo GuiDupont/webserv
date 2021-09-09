@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/08 14:53:37 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/09 12:18:59 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ class webserv {
 		bool	check_closing_brackets(const std::string & config);
 		void	import_config(std::ifstream infile);
 		void	set_config(std::ifstream & config_file);
-		void	set_max_body_size(std::string & line);
 		void	set_error_page(std::string & line);
 
 };

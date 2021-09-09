@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vhost.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 11:18:29 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/09 11:02:22 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/09 12:07:38 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ vHost::vHost(std::ifstream &config_file, std::string &line) : port(0) {
 	std::string	sub_line;
 	std::string	first_word;
 	
-
 	check_server_line(line);
 	while (!config_file.eof())
 	{
@@ -36,7 +35,7 @@ vHost::vHost(std::ifstream &config_file, std::string &line) : port(0) {
 		int i = 0;
 		while (std::isspace(line[i])) 
 			i++;
-		first_word = line.substr(i, line.find_first_of(" \t\n\v\f\r", i) - i);
+		first_word = line.substr(i, line.find_first_of(WHITESPACE, i) - i);
 		if (first_word == "client_max_body_size") {
 			this->_client_max_body_size = get_max_body_size(line);
 		}

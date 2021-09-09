@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/09 11:00:51 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/09 12:18:34 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 #include <fstream>
 #include "../includes/exceptions.hpp"
 #include <iostream>
-
-
 
 webserv::webserv(const std::string & path_config) : auto_index(false), _client_max_body_size(0) {
 	std::ifstream	config_file;
@@ -51,24 +49,18 @@ void	webserv::set_config(std::ifstream & config_file) {
 			this->vhosts.push_back(vHost(config_file, line));
 		}
 		else if (first_word == "client_max_body_size")
-			set_max_body_size(line);
+			_client_max_body_size = get_max_body_size(line);
 		else if (first_word == "error_page")
-			set_error_page(line); 
-		// else if (first_word == "location")
-		// 	location loc = location(config_file, line);
+			_error_pages.push_back(set_error_page(line)); 
 		else if (first_word == "}")
 			;
 		else if (first_word.size() != 0) {
-			if (first_word[0] == 123) // ascii value for {, it fixes issue at compilation with '{'
+			if (first_word[0] == 123) 				// ascii value for {, it fixes issue at compilation with '{'
 				throw (bad_brackets_conf());
 			else
 				throw (bad_directive());
 		}
 	}
-}
-
-void	webserv::set_max_body_size(std::string & line) {
-	_client_max_body_size = get_max_body_size(line);
 }
 
 void	webserv::set_error_page(std::string & line){

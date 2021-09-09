@@ -54,7 +54,7 @@ location::location(std::ifstream & config_file, std::string & line) : _client_ma
 size_t	location::parse_disabled_methods(std::string & line) {
 	int i = go_to_next_word(line, 0);
 	if (!line[i])
-		throw (empty_disabled_methods_declaration());
+		throw (empty_declaration());
 	std::string method;
 	size_t disabled_methods = 0;
 	while (1) {
@@ -78,7 +78,7 @@ size_t	location::parse_disabled_methods(std::string & line) {
 std::string	location::parse_root(std::string & line) {
 	int i = go_to_next_word(line, 0);
 	if (!line[i])
-		throw (empty_root_declaration());// change with empty 
+		throw (empty_declaration());// change with empty 
 	std::string path = get_word(line, i);
 	i = go_to_next_word(line, i);
 	if (line[i])
@@ -91,7 +91,7 @@ std::string	location::parse_root(std::string & line) {
 bool	location::parse_auto_index(std::string & line) {
 	int i = go_to_next_word(line, 0);
 	if (!line[i])
-		throw (empty_auto_index_declaration());
+		throw (empty_declaration());
 	std::string on_off = get_word(line, i);
 	i = go_to_next_word(line, i);
 	if (line[i])
