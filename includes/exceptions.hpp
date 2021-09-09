@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exceptions.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:09:27 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/09 12:46:40 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/09 13:47:09 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,33 +68,18 @@ class bad_location_declaration : public std::exception {
 		virtual const char* what() const throw();
 };
 
-class empty_disabled_methods_declaration : public std::exception {
-	public:
-		virtual const char* what() const throw();
-};
 
 class non_existing_disabled_methods : public std::exception {
 	public:
 		virtual const char* what() const throw();
 };
 
-
-class empty_root_declaration : public std::exception {
+class empty_declaration : public std::exception {
 	public:
 		virtual const char* what() const throw();
 };
 
 class bad_auto_index_value : public std::exception {
-	public:
-		virtual const char* what() const throw();
-};
- 
-class empty_auto_index_declaration : public std::exception {
-	public:
-		virtual const char* what() const throw();
-};
-
-class empty_error_page_declaration : public std::exception {
 	public:
 		virtual const char* what() const throw();
 };

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/08 14:53:26 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/09 12:16:39 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,13 @@ class location {
 	public:
 		location();
 		location(std::ifstream & config_file, std::string & line);
-		
+
 		size_t			parse_disabled_methods(std::string & line);
 		std::string		parse_root(std::string & line);
 		bool			parse_auto_index(std::string & line);
 
-	
-		
 	private:
-	
+
 		int			_client_max_body_size;
 		bool		_auto_index;
 		size_t		_disabled_methods; // defined using bitwise operations
