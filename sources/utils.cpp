@@ -238,9 +238,9 @@ void param_socket_server(vHost &host) {
 				throw (epoll_ctl_add_error());
 		}
 	}
-	std::map< int, std::pair< std::string, size_t> >::iterator it2 = host.get_sock_list().begin();
-	for (; it2 != host.get_sock_list().end(); it2++)
-	{
-		std::cout << "Sock : " << it2->first << " : Host : " << it2->second.first << " : PORT : " << it2->second.second << std::endl;
-	}
+	// std::map< int, std::pair< std::string, size_t> >::iterator it2 = host.get_sock_list().begin();
+	// for (; it2 != host.get_sock_list().end(); it2++)
+	// {
+	// 	std::cout << "Sock : " << it2->first << " : Host : " << it2->second.first << " : PORT : " << it2->second.second << std::endl;
+	// }
 }
