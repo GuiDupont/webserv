@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vhost.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 16:02:01 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/10 11:44:16 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/10 18:14:48 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,14 @@ public:
 private:
 
 	std::list<location>									_locations;
-	bool												_auto_index;
 	int													_client_max_body_size;
-	int													_allowed_methods; // defined using bitwise operations
 	std::list< std::pair<int, std::string> >			_error_pages;
-	std::list< std::pair<int, std::string> >			_return;
-	std::string											_upload_pass;
 	std::list< std::pair< std::string, size_t> >		_host_port;
 	std::list<std::string>								_server_name;
-	std::string 										_root;
-	unknown												_cgi;
 	std::map< int, std::pair< std::string, size_t> >	_sock_list;
-	std::list< int >									_csock_list; 
+	std::list< int >									_csock_list;
+	std::string 										_root;
+	
 };
 
 #endif

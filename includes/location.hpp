@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/09 14:50:54 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/10 18:06:37 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,22 @@ class location {
 		size_t			parse_disabled_methods(std::string & line);
 		std::string		parse_root(std::string & line);
 		bool			parse_auto_index(std::string & line);
+		std::string		parse_one_word(std::string & line);
+		void			parse_cgi_extension(std::string & line);
+		
 
 	private:
 
-		int			_client_max_body_size;
-		bool		_auto_index;
-		size_t		_disable_methods; // defined using bitwise operations
+		int												_client_max_body_size;
+		bool											_auto_index;
+		size_t											_disable_methods; // defined using bitwise operations
 		std::list< std::pair<int, std::string> >		_error_pages;
-		unknown		_redirection;
-		std::string		_upload_pass;
-		std::string _root;
-		std::string _index;
-		unknown		_cgi;
-		std::string _path;
+		std::string										_upload_pass;
+		std::string 									_root;
+		std::string 									_index;
+		std::list< std::pair<int, std::string> >		_return;
+		std::list< std::string >						_cgi_ext;
+		std::string 									_path;
 };
 
 

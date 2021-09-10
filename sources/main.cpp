@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:42:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/09 16:20:09 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/10 18:17:55 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int main(int ac, char **av) {
 	}
 	catch (std::exception & e) {
 		std::cout << e.what() << g_line << std::endl;
+		return (1);
 		//rajouter une ligne pour l'exception bad_nb_arg
 	}
 	try {
@@ -34,5 +35,6 @@ int main(int ac, char **av) {
 	}
 	catch (std::exception & e) {
 		std::cout << e.what() << std::endl;
+		
 	}
 }

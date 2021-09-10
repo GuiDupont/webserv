@@ -1,10 +1,19 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   location.cpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/10 17:55:12 by gdupont           #+#    #+#             */
+/*   Updated: 2021/09/10 18:13:21 by gdupont          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "location.hpp"
 #include <iostream>
 
 size_t g_line;
-
 
 location::location(std::ifstream & config_file, std::string & line) : _client_max_body_size(0), _disable_methods(0), _auto_index(false) {
 	int i = go_to_next_word(line, 0);
@@ -26,16 +35,18 @@ location::location(std::ifstream & config_file, std::string & line) : _client_ma
 			continue;
 		if (first_word == "disable_methods")
 			_disable_methods = parse_disabled_methods(line);
+		else if (first_word == "cgi_dir") // a finir
+			;
+		else if (first_word == "cgi_ext") // a finir
+			parse_cgi_extension(line);
 		else if (first_word == "return")
-			;
-		else if (first_word == "cgi_dir")
-			;
+			_return.push_back(parse_return(line)); // only one necessary so no need for a list
 		else if (first_word == "root")
-			_root = parse_root(line);
+			_root = parse_one_word(line);
 		else if (first_word == "upload_pass")
-			_upload_pass = parse_root(line);
+			_upload_pass = parse_one_word(line);
 		else if (first_word == "index")
-			_index = parse_root(line);
+			_index = parse_one_word(line);
 		else if (first_word == "autoindex")
 			_auto_index = parse_auto_index(line);
 		else if (first_word == "error_page")
@@ -76,7 +87,7 @@ size_t	location::parse_disabled_methods(std::string & line) {
 	return (disabled_methods);
 }
 
-std::string	location::parse_root(std::string & line) {
+std::string	location::parse_one_word(std::string & line) {
 	int i = go_to_next_word(line, 0);
 	if (!line[i])
 		throw (empty_declaration());// change with empty 
@@ -102,5 +113,14 @@ bool	location::parse_auto_index(std::string & line) {
 		return false;
 	else
 		throw (bad_auto_index_value()); //change with wrong nb argument
+}
 
+void	location::parse_cgi_extension(std::string & line) {
+	int i = go_to_next_word(line, 0);
+	if (!line[i])
+		throw (empty_declaration());
+	while (line[i]) {
+		this->_cgi_ext.push_back(get_word(line, i));
+		i = go_to_next_word(line, i);
+	}
 }
