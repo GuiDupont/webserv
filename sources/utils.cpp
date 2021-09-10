@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/09 17:50:58 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/10 11:55:52 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ void	parse_listen(std::string &line, vHost &host) {
     regex_t regex;
     int reti;
 	int port;
-	std::string addr;
+	std::string addr("0.0.0.0");
 
 	if (count_words(line) != 2)
 		throw (bad_nb_argument("listen"));
@@ -159,13 +159,11 @@ void	parse_listen(std::string &line, vHost &host) {
 	reti = regcomp(&regex, "^[0-9]\\{0,5\\}$", 0);
     reti = regexec(&regex, str.c_str(), 0, NULL, 0);
 	if( !reti )
-        //host.setPort(std::atoi(str.c_str()));
 		port = std::atoi(str.c_str());
     else {
     	regfree(&regex);
 		throw (bad_port());
     }
-	
     regfree(&regex);
 	host.getHost_Port().push_back(std::pair<std::string, int>(addr, port));
 	return ;
@@ -195,38 +193,43 @@ std::string	parse_ip(std::string str, vHost &host) {
         return (addr);
 }
 
-void param_socket_server(vHost &host) { // a midif boucle sur les ports
+void param_socket_server(vHost &host) {
 
     SOCKADDR_IN sin;
     SOCKET sock;
     socklen_t recsize = sizeof(sin);
-
-	std::cout << "host = " << host.getHost() << std::endl;
-	std::cout << "port = " << host.getPort() << std::endl;
-	sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (sock == INVALID_SOCKET)
-		throw (cant_create_socket());
-	sin.sin_addr.s_addr = inet_addr(host.getHost().c_str());
-	if (sin.sin_addr.s_addr == INADDR_NONE && host.getHost() != "255.255.255.255")
-		throw (bad_ip_address());
-	sin.sin_family = AF_INET;
-	sin.sin_port = htons(host.getPort());
-	int sock_err = bind(sock, (SOCKADDR*)&sin, recsize);
-	if(sock_err == SOCKET_ERROR && errno != 48) {
-		throw (cant_bind_address());
+	std::list< std::pair< std::string, size_t> >::iterator it = host.getHost_Port().begin();
+	
+	for (; it != host.getHost_Port().end(); it++) {
+		sock = socket(AF_INET, SOCK_STREAM, 0);
+		if (sock == INVALID_SOCKET)
+			throw (cant_create_socket());
+		sin.sin_addr.s_addr = inet_addr(it->first.c_str());
+		if (sin.sin_addr.s_addr == INADDR_NONE && it->first != "255.255.255.255") {
+			close(sock);
+			throw (bad_ip_address());
+		}
+		sin.sin_family = AF_INET;
+		sin.sin_port = htons(it->second);
+		int sock_err = bind(sock, (SOCKADDR*)&sin, recsize);
+		if(sock_err == SOCKET_ERROR && errno != 48) {
+			close(sock);
+			throw (cant_bind_address());
+		}
+		else if (sock_err == SOCKET_ERROR && errno == 48) {
+			close(sock);
+		}
+		else {
+			sock_err = listen(sock, 5); // 5 ? quel chiffre mettre ??
+			if(sock_err == SOCKET_ERROR) {
+				close(sock);
+				throw (cant_listen());
+			}
+			host.map_sock_to_hostport(sock, *it); // tester avec config mm port/dif address..
+			// static struct epoll_event ev;
+			// ev.events = EPOLLIN; // a voir si EPOLLET necessaire
+			// ev.data.fd = sock;
+			// epoll_ctl(epfd, EPOLL_CTL_ADD, sock, &ev);
+		}
 	}
-	else if (sock_err == SOCKET_ERROR && errno == 48) {
-		close(sock);
-	}
-	else {
-		sock_err = listen(sock, 5); // 5 ? quel chiffre mettre ??
-		if(sock_err == SOCKET_ERROR)
-			throw (cant_listen());
-		// static struct epoll_event ev;
-		// ev.events = EPOLLIN | EPOLLET;
-		// ev.data.fd = sock;
-		// epoll_ctl(epfd, EPOLL_CTL_ADD, sock, &ev);
-	}
-
-
 }

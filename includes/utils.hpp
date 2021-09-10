@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 12:51:13 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/09 17:30:54 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/10 11:19:10 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ std::string parse_upload_pass(std::string &line);
 std::string parse_server_name(std::string &line);
 void	parse_listen(std::string &line, vHost &host);
 bool	is_ip(std::string str);
-void	parse_ip(std::string str, vHost &host);
+std::string	parse_ip(std::string str, vHost &host);
 void	param_socket_server(vHost &host);
 
 #endif

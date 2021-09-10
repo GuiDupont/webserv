@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 11:18:29 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/09 17:48:16 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/10 11:55:07 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@
 #include <fstream>
 
 
-vHost::vHost() : _port(0), _host("0.0.0.0") {
+vHost::vHost() {
 
 	return ;
 }
 
-vHost::vHost(std::ifstream &config_file, std::string &line) : _port(0), _host("0.0.0.0") {
+vHost::vHost(std::ifstream &config_file, std::string &line) {
 
 	std::string	sub_line;
 	std::string	first_word;
@@ -49,9 +49,9 @@ vHost::vHost(std::ifstream &config_file, std::string &line) : _port(0), _host("0
 			_upload_pass = parse_upload_pass(line);
 		}
 		else if (first_word == "server_name") {
-			_server_name = parse_server_name(line);
+			_server_name.push_back(parse_server_name(line));
 		}
-		else if (first_word == "cgi_dir")
+		else if (first_word == "cgi_dir") // a finir
 			;
 		else if (first_word == "listen") {
 			parse_listen(line, *this);
@@ -67,7 +67,7 @@ vHost::vHost(std::ifstream &config_file, std::string &line) : _port(0), _host("0
 				throw (bad_directive());
 		}
 	}
-	if (getPort() == 0) {
+	if (_host_port.empty() == 1) {
 		throw (no_port_associated());
 	}
 }
@@ -92,36 +92,42 @@ vHost & vHost::operator=(vHost const & rhs) {
 	this->_error_pages = rhs._error_pages;
 	this->_return = rhs._return;
 	this->_upload_pass = rhs._upload_pass;
-	this->_host = rhs._host;
-	this->_port = rhs._port;
+	// this->_host = rhs._host;
+	// this->_port = rhs._port;
+	this->_host_port = rhs._host_port;
 	this->_server_name = rhs._server_name;
 	this->_root = rhs._root;
 	this->_cgi = rhs._cgi;
 	return (*this);
 }
 
-size_t	vHost::getPort() const {
+// size_t	vHost::getPort() const {
 
-	return (this->_port);
-}
+// 	return (this->_port);
+// }
 
-std::string	vHost::getHost() const {
+// std::string	vHost::getHost() const {
 
-	return (this->_host);
-}
+// 	return (this->_host);
+// }
 
-void vHost::setHost(std::string host) {
+// void vHost::setHost(std::string host) {
 
-	this->_host = host;
-	return ;
-}
+// 	this->_host = host;
+// 	return ;
+// }
 
-void vHost::setPort(int port) {
+// void vHost::setPort(int port) {
 
-	this->_port = port;
-	return ;
-}
+// 	this->_port = port;
+// 	return ;
+// }
 
-std::list< std::pair< std::string, size_t> >  vHost::getHost_Port() const {
+std::list< std::pair< std::string, size_t> > & vHost::getHost_Port() {
 	return (this->_host_port);
+}
+
+void vHost::map_sock_to_hostport(int sock, std::pair< std::string, size_t> host_port) {
+
+	this->_sock_list.insert(std::pair<int, std::pair< std::string, size_t> >(sock, host_port));
 }
