@@ -20,7 +20,7 @@
 #include "utils.hpp"
 #include <cstdlib>
 
-//#include <sys/epoll.h>
+#include <sys/epoll.h>
 
 
 #define WHITESPACE " \t\n\v\f\r"
@@ -42,7 +42,18 @@ class webserv {
 		webserv();
 		~webserv();
 
-		void set_hosts();
+		void 	set_hosts();
+		int		get_epfd() const ;
+		void	wait_for_connection();
+		bool	ft_is_ssock(int fd);
+		void	ft_add_csock_to_vhost(int sock, int csock);
+		int		get_sock_by_matching_host_ip(std::pair< std::string, size_t> host_port);
+		void	display_sock();
+
+
+
+
+
 
 	private:
 		std::list<vHost> 							vhosts;
@@ -50,8 +61,8 @@ class webserv {
 		int											_client_max_body_size;
 		std::list< std::pair<int, std::string> >	_error_pages;
 		std::string									upload;
-		std::string 		root;
-		unknown				cgi;
+		std::string 								root;
+		unknown										cgi;
 		int											_epfd;
 	
 	private:

@@ -35,7 +35,10 @@ public:
 	vHost &operator=(vHost const & rhs);
 	// size_t getPort() const ;
 	// std::string getHost() const ;
-	std::list< std::pair< std::string, size_t> > & getHost_Port();
+	std::list< std::pair< std::string, size_t> > 		& getHost_Port();
+	std::map< int, std::pair< std::string, size_t> > 	& get_sock_list();
+	std::list<int> 										& get_csock_list();
+
 	void map_sock_to_hostport(int sock, std::pair< std::string, size_t> host_port);
 	size_t setMax() const ;
 	// void setHost(std::string host);
@@ -43,20 +46,19 @@ public:
 
 private:
 
-	std::list<location>							_locations;
-	bool										_auto_index;
-	int											_client_max_body_size;
-	int											_allowed_methods; // defined using bitwise operations
-	std::list< std::pair<int, std::string> >	_error_pages;
-	std::list< std::pair<int, std::string> >	_return;
-	std::string									_upload_pass;
-	std::list< std::pair< std::string, size_t> >				_host_port;
-	// std::string 								_host;
-	// size_t										_port;
-	std::list<std::string>						_server_name;
-	std::string 								_root;
-	unknown										_cgi;
+	std::list<location>									_locations;
+	bool												_auto_index;
+	int													_client_max_body_size;
+	int													_allowed_methods; // defined using bitwise operations
+	std::list< std::pair<int, std::string> >			_error_pages;
+	std::list< std::pair<int, std::string> >			_return;
+	std::string											_upload_pass;
+	std::list< std::pair< std::string, size_t> >		_host_port;
+	std::list<std::string>								_server_name;
+	std::string 										_root;
+	unknown												_cgi;
 	std::map< int, std::pair< std::string, size_t> >	_sock_list;
+	std::list< int >									_csock_list; 
 };
 
 #endif

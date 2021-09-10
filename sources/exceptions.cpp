@@ -83,7 +83,7 @@ const char* bad_port::what() const throw() {
 }
 
 const char* bad_server_declaration::what() const throw() {
-
+	
 	return ("Bad declaration of a server at line: ");
 }
 
@@ -100,4 +100,9 @@ const char* cant_bind_address::what() const throw() {
 const char* cant_listen::what() const throw() {
 
 	return ("Impossible to operate listen");
+}
+
+const char* epoll_ctl_add_error::what() const throw() {
+
+	return ("Impossible to add sock to epoll");
 }

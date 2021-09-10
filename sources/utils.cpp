@@ -50,10 +50,10 @@ void check_server_line(std::string &line) {
 
 	if (count_words(line) != 2)
 		throw (bad_nb_argument("server"));
-	for (i = 0; i < line.size() && isspace(line[i]) == 1; i++) {}
-	for (; i < line.size() && isspace(line[i]) == 0; i++) {}
-	for (; i < line.size() && isspace(line[i]) == 1; i++) {}
-	sd_word = line.substr(i, line.find_first_of(WHITESPACE, i) - i);
+	for (i = 0; i < line.size() && std::isspace(line[i]) != 0; i++) {}
+	for (; i < line.size() && std::isspace(line[i]) == 0; i++) {}
+	for (; i < line.size() && std::isspace(line[i]) != 0; i++) {}
+	sd_word = line.substr(i, line.size() - i);
 	if (sd_word != "{")
 		throw bad_server_declaration();
 }
@@ -64,7 +64,7 @@ int count_words(std::string &line) {
 	int i;
 
 	for (i = 0; i < line.size(); i++) {
-		if (isspace(line[i]) == 1) {}
+		if (isspace(line[i]) != 0) {}
 		else {
 			count++;
 			for (; i < line.size() && isspace(line[i]) == 0; i++) {}
@@ -212,24 +212,35 @@ void param_socket_server(vHost &host) {
 		sin.sin_family = AF_INET;
 		sin.sin_port = htons(it->second);
 		int sock_err = bind(sock, (SOCKADDR*)&sin, recsize);
-		if(sock_err == SOCKET_ERROR && errno != 48) {
+		if(sock_err == SOCKET_ERROR && errno != EADDRINUSE) {
 			close(sock);
 			throw (cant_bind_address());
 		}
-		else if (sock_err == SOCKET_ERROR && errno == 48) {
+		else if (sock_err == SOCKET_ERROR && errno == EADDRINUSE) {
 			close(sock);
+			sock = g_webserv.get_sock_by_matching_host_ip(std::pair< std::string, size_t> (*it));
+			if (sock == -1)
+				;// throw
+			else
+				host.map_sock_to_hostport(sock, *it);
 		}
 		else {
 			sock_err = listen(sock, 5); // 5 ? quel chiffre mettre ??
-			if(sock_err == SOCKET_ERROR) {
+			if (sock_err == SOCKET_ERROR) {
 				close(sock);
 				throw (cant_listen());
 			}
 			host.map_sock_to_hostport(sock, *it); // tester avec config mm port/dif address..
-			// static struct epoll_event ev;
-			// ev.events = EPOLLIN; // a voir si EPOLLET necessaire
-			// ev.data.fd = sock;
-			// epoll_ctl(epfd, EPOLL_CTL_ADD, sock, &ev);
+			static struct epoll_event ev;
+			ev.events = EPOLLIN | EPOLLET | EPOLLOUT; // a voir si EPOLLET necessaire
+			ev.data.fd = sock;
+			if (epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_ADD, sock, &ev) != 0)
+				throw (epoll_ctl_add_error());
 		}
+	}
+	std::map< int, std::pair< std::string, size_t> >::iterator it2 = host.get_sock_list().begin();
+	for (; it2 != host.get_sock_list().end(); it2++)
+	{
+		std::cout << "Sock : " << it2->first << " : Host : " << it2->second.first << " : PORT : " << it2->second.second << std::endl;
 	}
 }

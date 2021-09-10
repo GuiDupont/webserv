@@ -17,6 +17,106 @@
 #include "../includes/exceptions.hpp"
 #include <iostream>
 
+
+void webserv::set_hosts() {
+	
+	_epfd = epoll_create(1);
+	std::list<vHost>::iterator it = vhosts.begin();
+	for (; it != vhosts.end(); it++) {
+		param_socket_server(*it);
+	}
+	//epoll get ready to accept
+
+}
+
+void	webserv::wait_for_connection() {
+	struct epoll_event *revents;
+	SOCKADDR_IN csin;
+	socklen_t crecsize = sizeof(csin);
+	revents = (struct epoll_event *)calloc(64, sizeof(*revents)); // verifier quelle valeur mettre
+	char buffer[100] = "";
+	struct epoll_event ev;
+	while (1)
+	{
+		sleep(100); // a supprimer
+
+		int nsfd = epoll_wait(this->_epfd, revents, 64, 0);
+		if (nsfd)
+			std::cout << nsfd << " évènements de capté(s)" << std::endl;
+		else if (nsfd == -1)
+			std::cout << strerror(errno) << std::endl;
+		else
+			std::cout << "pas dev" << std::endl;
+			
+		for (int i = 0; i < nsfd; i++) {
+			if (revents[i].events & EPOLLIN && ft_is_ssock(revents[i].data.fd)) {
+				// add new socket client to epoll
+				SOCKET csock = accept(revents[i].data.fd, (SOCKADDR*)&csin, &crecsize);
+				std::cout << csock << std::endl;
+				std::cout << "On a accepté un client\n";
+				ft_add_csock_to_vhost(revents[i].data.fd, csock);
+				ev.events = EPOLLIN | EPOLLOUT | EPOLLET;
+				ev.data.fd = csock;
+				if (epoll_ctl(_epfd, EPOLL_CTL_ADD, csock, &ev))
+					;
+			}
+		}
+	}
+}
+
+void	webserv::ft_add_csock_to_vhost(int sock, int csock) {
+	std::list<vHost>::iterator it = this->vhosts.begin();
+
+	for (; it != this->vhosts.end(); it++) {
+		std::map< int, std::pair< std::string, size_t> >::iterator it_sock = it->get_sock_list().begin();
+		for (; it_sock != it->get_sock_list().end(); it_sock++) {
+			if (sock == it_sock->first)
+				it->get_csock_list().push_back(csock);	
+		}
+	}
+}
+
+bool	webserv::ft_is_ssock(int fd) {
+	std::list<vHost>::iterator it = this->vhosts.begin();
+
+	for (; it != this->vhosts.end(); it++) {
+		std::map< int, std::pair< std::string, size_t> >::iterator it_sock = it->get_sock_list().begin();
+		for (; it_sock != it->get_sock_list().end(); it_sock++) {
+			if (fd == it_sock->first)
+				return (true);
+		}
+	}
+	return (false);
+}
+
+int		webserv::get_sock_by_matching_host_ip(std::pair< std::string, size_t> host_port) {
+	std::list<vHost>::iterator it = this->vhosts.begin();
+
+	for (; it != this->vhosts.end(); it++) {
+		std::map< int, std::pair< std::string, size_t> >::iterator it_sock = it->get_sock_list().begin();
+		for (; it_sock != it->get_sock_list().end(); it_sock++) {
+			if (host_port == it_sock->second)
+				return (it_sock->first);
+		}
+	}
+	return (-1);
+}
+
+void	webserv::display_sock() {
+	std::list<vHost>::iterator it = this->vhosts.begin();
+	int i = 1;
+
+	for (; it != this->vhosts.end(); it++) {
+		std::cout << "SERVER " << i++ << std::endl;
+		std::map< int, std::pair< std::string, size_t> >::iterator it_sock = it->get_sock_list().begin();
+		for (; it_sock != it->get_sock_list().end(); it_sock++) {
+			std::cout << it_sock->second.first << ":" << it_sock->second.second << "is bind to sock: " << it_sock->first << std::endl;
+		}
+	}
+}
+
+
+
 webserv::webserv(const std::string & path_config) : auto_index(false), _client_max_body_size(0) {
 	std::ifstream	config_file;
 	std::string		all_file;
@@ -125,14 +225,7 @@ bool webserv::check_closing_brackets(const std::string & config) {
 		return (true);	
 }
 
-void webserv::set_hosts() {
-	
-	// _epfd = epoll_create(1);
-	std::list<vHost>::iterator it = vhosts.begin();
-	for (; it != vhosts.end(); it++) {
-		param_socket_server(*it);
-	}
-}
+
 
 webserv::webserv(void) {
 	
@@ -141,3 +234,8 @@ webserv::webserv(void) {
 webserv::~webserv(void) {
 	
 }
+
+int		webserv::get_epfd() const {
+	return (this->_epfd);
+}
+

@@ -29,6 +29,8 @@ int main(int ac, char **av) {
 	}
 	try {
 		g_webserv.set_hosts();
+		g_webserv.wait_for_connection();
+		
 	}
 	catch (std::exception & e) {
 		std::cout << e.what() << std::endl;

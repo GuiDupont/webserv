@@ -131,3 +131,11 @@ void vHost::map_sock_to_hostport(int sock, std::pair< std::string, size_t> host_
 
 	this->_sock_list.insert(std::pair<int, std::pair< std::string, size_t> >(sock, host_port));
 }
+
+std::map< int, std::pair< std::string, size_t> > & vHost::get_sock_list() {
+		return (this->_sock_list);
+}
+
+std::list<int> 										& vHost::get_csock_list() {
+	return (this->_csock_list);
+}

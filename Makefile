@@ -12,8 +12,8 @@
 
 NAME = webserver
 
-#CXX = clang++-9
-CXX = clang++
+CXX = clang++-9
+#CXX = clang++
 #CXX = /usr/lib/llvm-12/bin/clang++
 
 FLAGS =

@@ -133,4 +133,9 @@ class cant_listen : public std::exception {
 		virtual const char* what() const throw();
 };
 
+class epoll_ctl_add_error : public std::exception {
+	public:
+		virtual const char* what() const throw();
+};
+
 #endif

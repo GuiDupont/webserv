@@ -24,8 +24,10 @@
 # include <sys/socket.h>
 # include <netinet/in.h>
 # include <arpa/inet.h>
-// # include <sys/epoll.h>
+# include <sys/epoll.h>
 # include <unistd.h>
+# include <cerrno>
+# include <cstring>
 
 
 # define INVALID_SOCKET -1 // a bouger ?
