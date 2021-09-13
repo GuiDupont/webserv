@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/12 15:44:19 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/13 15:49:13 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,26 +17,31 @@
 # include "parser.hpp"
 # include "vhost.hpp"
 # include "utils.hpp"
+# include "request.hpp"
+# include "exceptions.hpp"
 
 # include <list>
+# include <map>
 # include <string>
 # include <cstdlib>
 # include <sys/epoll.h>
+# include <fstream>
+# include <iostream>
+# include <fcntl.h>
 
 
-#define WHITESPACE " \t\n\v\f\r"
 
-#define GET 1
-#define POST 2
-#define DELETE 4
+# define WHITESPACE " \t\n\v\f\r"
+
+# define GET 1
+# define POST 2
+# define DELETE 4
 
 class vHost;
 
 
 typedef int unknown;
 extern class webserv_parser g_parser;
-
-
 
 class webserv {
 	friend class webserv_parser;
@@ -52,6 +57,7 @@ class webserv {
 		std::string 								_root;
 		unknown										_cgi;
 		int											_epfd;
+		std::map<int, request>						_pending_requests; 
 	
 	public:
 		webserv(const std::string & path_config);
@@ -67,6 +73,8 @@ class webserv {
 		void	ft_add_csock_to_vhost(int sock, int csock);
 		int		get_sock_by_matching_host_ip(std::pair< std::string, size_t> host_port);
 		void	display_sock();
+		bool	is_pending_request(int csock);
+		void	handle_new_request(int csock);
 
 
 	

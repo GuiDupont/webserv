@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:10 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/12 15:43:53 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/13 14:05:54 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,11 @@
 # include "webserv.hpp"
 # include "vhost.hpp"
 
-
 extern size_t g_line;
 class webserv;
 class vHost;
+
+# define tchar "!#$%&'*+-.^_`|~/"
 
 class webserv_parser {
 	private:

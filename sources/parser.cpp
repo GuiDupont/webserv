@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/12 15:47:52 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/13 11:28:41 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,6 @@ bool 		webserv_parser::check_closing_brackets(const std::string & config) {
 }
 
 /* END BRACKETS */
-
-/* END WEBSERV 		*/
-
 
 /* 		UTILS		*/
 

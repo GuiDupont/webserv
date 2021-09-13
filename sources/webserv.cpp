@@ -6,17 +6,11 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/12 15:48:20 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/13 17:19:16 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
-#include "../includes/vhost.hpp"
-#include <string>
-#include <fstream>
-#include "../includes/exceptions.hpp"
-#include <iostream>
-#include "parser.hpp"
 
 void webserv::set_hosts() {
 	
@@ -38,7 +32,7 @@ void	webserv::wait_for_connection() {
 	struct epoll_event ev;
 	while (1)
 	{
-		sleep(5); // a supprimer
+		sleep(3); // a supprimer
 
 		int nsfd = epoll_wait(this->_epfd, revents, 64, 0);
 		if (nsfd)
@@ -57,11 +51,48 @@ void	webserv::wait_for_connection() {
 				ft_add_csock_to_vhost(revents[i].data.fd, csock);
 				ev.events = EPOLLIN | EPOLLOUT | EPOLLET;
 				ev.data.fd = csock;
-				if (epoll_ctl(_epfd, EPOLL_CTL_ADD, csock, &ev))
+				fcntl(csock, F_SETFL, O_NONBLOCK);
+				if (epoll_ctl(_epfd, EPOLL_CTL_ADD, csock, &ev) == -1)
+					std::cout << errno << strerror(errno) << std::endl; // add an exception
+			}
+			else if (revents[i].events & EPOLLOUT && revents[i].events & EPOLLIN && !ft_is_ssock(revents[i].data.fd)) { 
+				// a voir si eppollout direct 
+				if (is_pending_request(revents[i].data.fd))
 					;
+				else
+					handle_new_request(revents[i].data.fd);
 			}
 		}
 	}
+}
+
+void	webserv::handle_new_request(int csock) {
+	request 	new_request;
+	int			ret;
+	
+	char c_buffer[20000];
+	ret = recv(csock, c_buffer, 19999, 0);
+	std::cout << strlen(c_buffer) << std::endl;
+	c_buffer[19999] = '\0';
+	std::string buff(c_buffer);
+	std::cout << buff << std::endl;
+	int index = buff.find(" ", 0);
+	new_request._method = buff.substr(0, index);
+	std::cout << "-" << new_request._method << "-" << std::endl;
+	if (buff != "GET" && buff != "DELETE" && buff != "POST")
+		;// BAD REQUEST
+	int index2 = buff.find(" ", index + 1);
+	new_request._request_target = buff.substr(index + 1, index2 - (index + 1));
+	std::cout << "-" << new_request._request_target << "-" << std::endl;
+	if (new_request._request_target.empty() || new_request._request_target[0] != '\\' )  // test nginx with charset of segment wrong https://datatracker.ietf.org/doc/html/rfc3986#section-3.3
+		;// BAD stuff check error to send
+
+}
+
+bool	webserv::is_pending_request(int csock) {
+	if (_pending_requests.find(csock) != _pending_requests.end())
+		return (true);
+	return (false);
 }
 
 void	webserv::ft_add_csock_to_vhost(int sock, int csock) {
