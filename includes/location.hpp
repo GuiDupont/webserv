@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/10 18:06:37 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/12 15:17:41 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,6 @@ class location {
 	public:
 		location();
 		location(std::ifstream & config_file, std::string & line);
-
-		size_t			parse_disabled_methods(std::string & line);
-		std::string		parse_root(std::string & line);
-		bool			parse_auto_index(std::string & line);
-		std::string		parse_one_word(std::string & line);
-		void			parse_cgi_extension(std::string & line);
-		
 
 	private:
 

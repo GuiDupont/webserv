@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 11:18:29 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/10 18:16:08 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/12 15:40:20 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ vHost::vHost(std::ifstream &config_file, std::string &line) : _root("/") {
 	std::string	sub_line;
 	std::string	first_word;
 	
-	check_server_line(line);
+	g_parser.check_server_line(line);
 	while (!config_file.eof())
 	{
 		std::getline(config_file, line, '\n');
@@ -36,16 +36,16 @@ vHost::vHost(std::ifstream &config_file, std::string &line) : _root("/") {
 			i++;
 		first_word = line.substr(i, line.find_first_of(WHITESPACE, i) - i);
 		if (first_word == "client_max_body_size") {
-			this->_client_max_body_size = get_max_body_size(line);
+			this->_client_max_body_size = g_parser.get_max_body_size(line);
 		}
 		else if (first_word == "error_page") {
-			_error_pages.push_back(parse_error_page(line)); // a retoucher selon suite
+			_error_pages.push_back(g_parser.parse_error_page(line)); // a retoucher selon suite
 		}
 		else if (first_word == "server_name") {
-			_server_name.push_back(parse_server_name(line));
+			_server_name.push_back(g_parser.parse_server_name(line));
 		}
 		else if (first_word == "listen") {
-			parse_listen(line, *this);
+			g_parser.parse_listen(line, *this);
 		}
 		else if (first_word == "location")
 			_locations.push_back(location(config_file, line));

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 17:55:12 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/10 18:13:21 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/12 15:23:54 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,25 +34,25 @@ location::location(std::ifstream & config_file, std::string & line) : _client_ma
 		if (first_word.empty())
 			continue;
 		if (first_word == "disable_methods")
-			_disable_methods = parse_disabled_methods(line);
+			_disable_methods = g_parser.parse_disabled_methods(line);
 		else if (first_word == "cgi_dir") // a finir
 			;
 		else if (first_word == "cgi_ext") // a finir
-			parse_cgi_extension(line);
+			g_parser.parse_cgi_extension(_cgi_ext, line);
 		else if (first_word == "return")
-			_return.push_back(parse_return(line)); // only one necessary so no need for a list
+			_return.push_back(g_parser.parse_return(line)); // only one necessary so no need for a list
 		else if (first_word == "root")
-			_root = parse_one_word(line);
+			_root = g_parser.parse_one_word(line);
 		else if (first_word == "upload_pass")
-			_upload_pass = parse_one_word(line);
+			_upload_pass = g_parser.parse_one_word(line);
 		else if (first_word == "index")
-			_index = parse_one_word(line);
+			_index = g_parser.parse_one_word(line);
 		else if (first_word == "autoindex")
-			_auto_index = parse_auto_index(line);
+			_auto_index = g_parser.parse_auto_index(line);
 		else if (first_word == "error_page")
-			_error_pages.push_back(parse_error_page(line));
+			_error_pages.push_back(g_parser.parse_error_page(line));
 		else if (first_word == "client_max_body_size")
-			_client_max_body_size = get_max_body_size(line);
+			_client_max_body_size = g_parser.get_max_body_size(line);
 		else if (first_word == "}")
 			return ;
 		else
@@ -63,64 +63,3 @@ location::location(std::ifstream & config_file, std::string & line) : _client_ma
 	}
 }
 
-size_t	location::parse_disabled_methods(std::string & line) {
-	int i = go_to_next_word(line, 0);
-	if (!line[i])
-		throw (empty_declaration());
-	std::string method;
-	size_t disabled_methods = 0;
-	while (1) {
-		method = get_word(line, i);
-		if (method == "GET")
-			disabled_methods |= GET;
-		else if (method == "POST")
-			disabled_methods |= POST;
-		else if (method == "DELETE")
-			disabled_methods |= DELETE;
-		else
-			throw (non_existing_disabled_methods());
-		i = go_to_next_word(line, i);
-		if (!line[i])
-			return (disabled_methods);
-	}
-	
-	return (disabled_methods);
-}
-
-std::string	location::parse_one_word(std::string & line) {
-	int i = go_to_next_word(line, 0);
-	if (!line[i])
-		throw (empty_declaration());// change with empty 
-	std::string path = get_word(line, i);
-	i = go_to_next_word(line, i);
-	if (line[i])
-		throw (bad_directive()); // change with wrong nb_arg
-	return (path);
-}
-
-
-bool	location::parse_auto_index(std::string & line) {
-	int i = go_to_next_word(line, 0);
-	if (!line[i])
-		throw (empty_declaration());
-	std::string on_off = get_word(line, i);
-	i = go_to_next_word(line, i);
-	if (line[i])
-		throw (bad_directive()); //change with wrong nb argument
-	if (on_off == "on")
-		return true;
-	if (on_off == "off")
-		return false;
-	else
-		throw (bad_auto_index_value()); //change with wrong nb argument
-}
-
-void	location::parse_cgi_extension(std::string & line) {
-	int i = go_to_next_word(line, 0);
-	if (!line[i])
-		throw (empty_declaration());
-	while (line[i]) {
-		this->_cgi_ext.push_back(get_word(line, i));
-		i = go_to_next_word(line, i);
-	}
-}

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:42:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/10 18:17:55 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/12 14:46:46 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "utils.hpp"
 
 webserv g_webserv;
+webserv_parser	g_parser;
 
 int main(int ac, char **av) {
 

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 16:02:01 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/10 18:14:48 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/12 15:47:01 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,12 @@ public:
 	vHost(vHost const & cpy);
 
 	vHost &operator=(vHost const & rhs);
-	// size_t getPort() const ;
-	// std::string getHost() const ;
 	std::list< std::pair< std::string, size_t> > 		& getHost_Port();
 	std::map< int, std::pair< std::string, size_t> > 	& get_sock_list();
 	std::list<int> 										& get_csock_list();
 
-	void map_sock_to_hostport(int sock, std::pair< std::string, size_t> host_port);
-	size_t setMax() const ;
-	// void setHost(std::string host);
-	// void setPort(int port);
+	void 			map_sock_to_hostport(int sock, std::pair< std::string, size_t> host_port);
+	size_t 			setMax() const ;
 
 private:
 

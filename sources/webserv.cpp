@@ -3,26 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/09 17:02:32 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/12 15:48:20 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/webserv.hpp"
+#include "webserv.hpp"
 #include "../includes/vhost.hpp"
 #include <string>
 #include <fstream>
 #include "../includes/exceptions.hpp"
 #include <iostream>
-
+#include "parser.hpp"
 
 void webserv::set_hosts() {
 	
 	_epfd = epoll_create(1);
-	std::list<vHost>::iterator it = vhosts.begin();
-	for (; it != vhosts.end(); it++) {
+	std::list<vHost>::iterator it = _vhosts.begin();
+	for (; it != _vhosts.end(); it++) {
 		param_socket_server(*it);
 	}
 	//epoll get ready to accept
@@ -38,7 +38,7 @@ void	webserv::wait_for_connection() {
 	struct epoll_event ev;
 	while (1)
 	{
-		sleep(100); // a supprimer
+		sleep(5); // a supprimer
 
 		int nsfd = epoll_wait(this->_epfd, revents, 64, 0);
 		if (nsfd)
@@ -65,9 +65,9 @@ void	webserv::wait_for_connection() {
 }
 
 void	webserv::ft_add_csock_to_vhost(int sock, int csock) {
-	std::list<vHost>::iterator it = this->vhosts.begin();
+	std::list<vHost>::iterator it = this->_vhosts.begin();
 
-	for (; it != this->vhosts.end(); it++) {
+	for (; it != this->_vhosts.end(); it++) {
 		std::map< int, std::pair< std::string, size_t> >::iterator it_sock = it->get_sock_list().begin();
 		for (; it_sock != it->get_sock_list().end(); it_sock++) {
 			if (sock == it_sock->first)
@@ -77,9 +77,9 @@ void	webserv::ft_add_csock_to_vhost(int sock, int csock) {
 }
 
 bool	webserv::ft_is_ssock(int fd) {
-	std::list<vHost>::iterator it = this->vhosts.begin();
+	std::list<vHost>::iterator it = this->_vhosts.begin();
 
-	for (; it != this->vhosts.end(); it++) {
+	for (; it != this->_vhosts.end(); it++) {
 		std::map< int, std::pair< std::string, size_t> >::iterator it_sock = it->get_sock_list().begin();
 		for (; it_sock != it->get_sock_list().end(); it_sock++) {
 			if (fd == it_sock->first)
@@ -90,9 +90,9 @@ bool	webserv::ft_is_ssock(int fd) {
 }
 
 int		webserv::get_sock_by_matching_host_ip(std::pair< std::string, size_t> host_port) {
-	std::list<vHost>::iterator it = this->vhosts.begin();
+	std::list<vHost>::iterator it = this->_vhosts.begin();
 
-	for (; it != this->vhosts.end(); it++) {
+	for (; it != this->_vhosts.end(); it++) {
 		std::map< int, std::pair< std::string, size_t> >::iterator it_sock = it->get_sock_list().begin();
 		for (; it_sock != it->get_sock_list().end(); it_sock++) {
 			if (host_port == it_sock->second)
@@ -103,10 +103,10 @@ int		webserv::get_sock_by_matching_host_ip(std::pair< std::string, size_t> host_
 }
 
 void	webserv::display_sock() {
-	std::list<vHost>::iterator it = this->vhosts.begin();
+	std::list<vHost>::iterator it = this->_vhosts.begin();
 	int i = 1;
 
-	for (; it != this->vhosts.end(); it++) {
+	for (; it != this->_vhosts.end(); it++) {
 		std::cout << "SERVER " << i++ << std::endl;
 		std::map< int, std::pair< std::string, size_t> >::iterator it_sock = it->get_sock_list().begin();
 		for (; it_sock != it->get_sock_list().end(); it_sock++) {
@@ -115,9 +115,9 @@ void	webserv::display_sock() {
 	}
 }
 
+/* CONSTRUCTOR */
 
-
-webserv::webserv(const std::string & path_config) : auto_index(false), _client_max_body_size(0) {
+webserv::webserv(const std::string & path_config) : _auto_index(false), _client_max_body_size(0) {
 	std::ifstream	config_file;
 	std::string		all_file;
 	
@@ -125,12 +125,12 @@ webserv::webserv(const std::string & path_config) : auto_index(false), _client_m
 	if (!config_file.is_open())
 		throw (config_file_not_open());
 	std::getline(config_file, all_file, '\0');
-	if (!this->check_brackets(all_file))
+	if (!g_parser.check_brackets(all_file))
 		throw (bad_brackets_conf());
-	this->set_config(config_file);
+	set_config(config_file);
 }
 
-void	webserv::set_config(std::ifstream & config_file) {
+void		webserv::set_config(std::ifstream & config_file) {
 	std::string		line;
 	std::string		first_word;
 
@@ -146,12 +146,12 @@ void	webserv::set_config(std::ifstream & config_file) {
 			i++;
 		first_word = line.substr(i, line.find_first_of(" \t\n\v\f\r", i) - i);
 		if (first_word == "server") {
-			this->vhosts.push_back(vHost(config_file, line));
+			this->_vhosts.push_back(vHost(config_file, line));
 		}
 		else if (first_word == "client_max_body_size")
-			_client_max_body_size = get_max_body_size(line);
+			this->_client_max_body_size = g_parser.get_max_body_size(line);
 		else if (first_word == "error_page")
-			_error_pages.push_back(parse_error_page(line)); 
+			this->_error_pages.push_back(g_parser.parse_error_page(line)); 
 		else if (first_word == "}")
 			;
 		else if (first_word.size() != 0) {
@@ -161,71 +161,9 @@ void	webserv::set_config(std::ifstream & config_file) {
 				throw (bad_directive());
 		}
 	}
-	if (vhosts.empty() == 1)
+	if (this->_vhosts.empty() == 1)
 		throw (no_port_associated()); // changer par la suite par une vraie exception pour vhost, comme recommande par Guillaume.
 }
-
-void	webserv::set_error_page(std::string & line){
-	int i = go_to_next_word(line, 0);
-	std::string size = line.substr(i, line.find_first_of(WHITESPACE, i) - i);
-	std::cout << size << std::endl;
-}
-
-bool	webserv::check_brackets(const std::string & config) {
-	size_t 	position = 0;
-	while (1) {
-		position = config.find('{', position);
-		if (position == std::string::npos)
-			break ;
-		position = get_next_closing_bracket(config, position + 1);
-		if (position == std::string::npos)
-			return (false);
-	}
-	return (check_closing_brackets(config));
-}
-
-size_t	webserv::get_next_closing_bracket(const std::string & config, size_t position) {
-	size_t next_open_bracket = config.find('{', position);
-	size_t next_closing_bracket = config.find('}', position);
-	
-	if (next_closing_bracket == std::string::npos)
-		return (std::string::npos);
-	if (next_open_bracket < next_closing_bracket)
-	{
-		position = get_next_closing_bracket(config, next_open_bracket + 1);
-		if (position == std::string::npos)
-			return (std::string::npos);
-		position = config.find('}', position + 1);
-		if (position == std::string::npos)
-			return (std::string::npos);
-		else
-			return (position);
-	}
-	return (next_closing_bracket);
-}
-
-bool webserv::check_closing_brackets(const std::string & config) {
-	
-	int open_count = 0;
-	int close_count = 0;
-	int position = 0;
-
-	while (config.find('{', position) != std::string::npos) {
-		position = config.find('{', position) + 1;
-		open_count++;
-	}
-	position = 0;
-	while (config.find('}', position) != std::string::npos) {
-		position = config.find('}', position) + 1;
-		close_count++;
-	}
-	if (close_count != open_count)
-		return (false);
-	else
-		return (true);	
-}
-
-
 
 webserv::webserv(void) {
 	
