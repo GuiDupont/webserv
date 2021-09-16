@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/13 17:19:16 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/16 10:14:12 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,13 @@ void	webserv::handle_new_request(int csock) {
 	std::cout << "-" << new_request._request_target << "-" << std::endl;
 	if (new_request._request_target.empty() || new_request._request_target[0] != '\\' )  // test nginx with charset of segment wrong https://datatracker.ietf.org/doc/html/rfc3986#section-3.3
 		;// BAD stuff check error to send
-
+	index = buff.find("\r\n", index2 + 1);
+	new_request._HTTP_version = buff.substr(index2 + 1, index - (index2 + 1));
+	std::cout << "-" << new_request._HTTP_version << "-" << std::endl;
+	if (new_request._HTTP_version != "HTTP/1.1")
+		std::cout << "not HTTP/1.1\n"; // check what to so in this case;
+	
+		
 }
 
 bool	webserv::is_pending_request(int csock) {

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/12 15:38:40 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/16 10:13:14 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,4 +118,14 @@ void param_socket_server(vHost &host) {
 	// {
 	// 	std::cout << "Sock : " << it2->first << " : Host : " << it2->second.first << " : PORT : " << it2->second.second << std::endl;
 	// }
+}
+
+std::string get_word(std::string & line, int &start_index, std::string & delim) {
+	if (line.size() == 0)
+		return ("");
+
+	int delim_index = line.find(delim, start_index);
+	std::string word = line.substr(start_index, delim_index - start_index);
+	start_index = delim_index;
+	return (word);
 }
