@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/16 10:14:12 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/16 16:45:09 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ void	webserv::wait_for_connection() {
 		else if (nsfd == -1)
 			std::cout << strerror(errno) << std::endl;
 		else
-			std::cout << "pas dev" << std::endl;
+			std::cout << "Pas d'événement" << std::endl;
 			
 		for (int i = 0; i < nsfd; i++) {
 			if (revents[i].events & EPOLLIN && ft_is_ssock(revents[i].data.fd)) {
 				// add new socket client to epoll
 				SOCKET csock = accept(revents[i].data.fd, (SOCKADDR*)&csin, &crecsize);
-				std::cout << csock << std::endl;
+				//std::cout << csock << std::endl;
 				std::cout << "On a accepté un client\n";
 				ft_add_csock_to_vhost(revents[i].data.fd, csock);
 				ev.events = EPOLLIN | EPOLLOUT | EPOLLET;
@@ -69,30 +69,15 @@ void	webserv::wait_for_connection() {
 void	webserv::handle_new_request(int csock) {
 	request 	new_request;
 	int			ret;
-	
-	char c_buffer[20000];
-	ret = recv(csock, c_buffer, 19999, 0);
-	std::cout << strlen(c_buffer) << std::endl;
-	c_buffer[19999] = '\0';
-	std::string buff(c_buffer);
-	std::cout << buff << std::endl;
-	int index = buff.find(" ", 0);
-	new_request._method = buff.substr(0, index);
-	std::cout << "-" << new_request._method << "-" << std::endl;
-	if (buff != "GET" && buff != "DELETE" && buff != "POST")
-		;// BAD REQUEST
-	int index2 = buff.find(" ", index + 1);
-	new_request._request_target = buff.substr(index + 1, index2 - (index + 1));
-	std::cout << "-" << new_request._request_target << "-" << std::endl;
-	if (new_request._request_target.empty() || new_request._request_target[0] != '\\' )  // test nginx with charset of segment wrong https://datatracker.ietf.org/doc/html/rfc3986#section-3.3
-		;// BAD stuff check error to send
-	index = buff.find("\r\n", index2 + 1);
-	new_request._HTTP_version = buff.substr(index2 + 1, index - (index2 + 1));
-	std::cout << "-" << new_request._HTTP_version << "-" << std::endl;
-	if (new_request._HTTP_version != "HTTP/1.1")
-		std::cout << "not HTTP/1.1\n"; // check what to so in this case;
-	
-		
+	std::pair<std::string, std::string> header_body;
+	int index = 0;
+
+	header_body = g_parser.get_header_begin_body(csock);
+	new_request._body = header_body.second;
+	g_parser.parse_header(header_body.first, new_request);
+	std::cout << new_request;
+
+	// parse msg body
 }
 
 bool	webserv::is_pending_request(int csock) {

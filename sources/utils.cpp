@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/16 10:13:14 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/16 18:37:31 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,12 +120,64 @@ void param_socket_server(vHost &host) {
 	// }
 }
 
-std::string get_word(std::string & line, int &start_index, std::string & delim) {
-	if (line.size() == 0)
+std::string get_word(std::string & line, int &start_index, std::string delim) {
+	if (line.size() == 0 || !line[start_index])
 		return ("");
-
 	int delim_index = line.find(delim, start_index);
+	if (delim_index == std::string::npos)
+		return ("");
 	std::string word = line.substr(start_index, delim_index - start_index);
-	start_index = delim_index;
+	start_index = delim_index + delim.size();
 	return (word);
+}
+
+std::string trims(std::string  line, std::string chars) {
+	size_t index_begin = line.find_first_not_of(chars, 0);
+	if (index_begin == std::string::npos)
+		return ("");
+	size_t index_end = line.find_last_not_of(chars, line.size());
+	return (line.substr(index_begin, index_end + 1 - index_begin));	
+}
+
+bool	is_t_char(char c) {
+	if (std::isalnum(c) || c == '!' || c ==  '#' || c ==  '$' || c ==  '%' 
+	|| c ==  '&' || c ==  '\'' || c ==  '*' || c ==  '+' || c ==  '-' || c ==  '.' 
+	|| c ==  '^' || c ==  '_' || c ==  '`' || c ==  '|' || c ==  '~')
+		return (true);
+	return (false);
+}
+
+bool	is_token(std::string & s) {
+	int index = 0;
+
+	if (!s.size())
+		return (false);
+	while (s[index])
+	{
+		if (!is_t_char(s[index++]))
+			return (false);
+	}
+	return (true);
+}
+
+bool	is_field_vchar(unsigned char c) {
+	if (std::isprint(c) || (c > 127 && c < 255))
+		return (true);
+	return (false);
+}
+
+bool	is_field_content(std::string & s) {
+	int index = 0;
+	
+	if (!is_field_vchar(s[0]))
+		return (false);
+	if (!s.size())
+		return (false);
+	while (s[index])
+	{
+		if (!is_field_vchar(s[index]) && s[index] != '\t')
+			return (false);
+		index++;	
+	}
+	return (true);
 }

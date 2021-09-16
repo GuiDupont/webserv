@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 12:51:13 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/16 10:07:33 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/16 18:36:04 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,14 @@ int								ft_string_is_alpha(const std::string & s);
 int								ft_string_is_digit(const std::string & s);
 int     						count_words(std::string &line);
 std::string 					get_word(std::string line, int i);
-std::string 					get_word(std::string & line, int &i, std::string & delim);
+std::string 					get_word(std::string & line, int &i, std::string delim);
 
 bool							is_ip(std::string str);
 void							param_socket_server(vHost &host);
+std::string                     trims(std::string line, std::string chars);
+bool	                        is_token(std::string & s);
+bool	                        is_t_char(char c);
+bool							is_field_content(std::string & s);
+bool							is_field_vchar(unsigned char c);
 
 #endif

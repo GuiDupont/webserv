@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:07:25 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/13 15:50:28 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/16 15:12:31 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <string>
 # include <map>
+# include <iostream>
 
 class request {
     
@@ -24,11 +25,11 @@ class request {
 		std::string 						_request_target;
 		std::string 						_HTTP_version;
 		std::map<std::string, std::string>	_header_fields;
-		
-		std::string 						_body;
+		std::string							_body;
+		int									_error_to_send;
 		int									_csock;
 		
-
+		friend std::ostream & operator<<(std::ostream & o,const request & r);
 		
     public:
 
@@ -36,5 +37,7 @@ class request {
 		// ~request();
 		// request & operator=()
 };
+
+
 
 #endif
