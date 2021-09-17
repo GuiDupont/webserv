@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/17 18:29:18 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/17 19:03:32 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include "utils.hpp"
 # include "request.hpp"
 # include "exceptions.hpp"
+# include "logger.hpp"
 
 # include <list>
 # include <map>
@@ -42,6 +43,8 @@ class request;
 
 typedef int unknown;
 extern class webserv_parser g_parser;
+extern class logger g_logger;
+
 
 class webserv {
 	friend class webserv_parser;

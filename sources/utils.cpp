@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/17 17:55:52 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/17 19:03:28 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,19 +105,16 @@ void param_socket_server(vHost &host) {
 				close(sock);
 				throw (cant_listen());
 			}
+			g_logger << LOG_LISTEN_SSOCK + ft_itos(sock);
 			host.map_sock_to_hostport(sock, *it); // tester avec config mm port/dif address..
 			static struct epoll_event ev;
 			ev.events = EPOLLIN | EPOLLOUT | EPOLLET; // a voir si EPOLLET necessaire
 			ev.data.fd = sock;
 			if (epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_ADD, sock, &ev) != 0)
 				throw (epoll_ctl_add_error());
+			g_logger << LOG_SSOCK_ADD_EPOLL + ft_itos(sock);
 		}
 	}
-	// std::map< int, std::pair< std::string, size_t> >::iterator it2 = host.get_sock_list().begin();
-	// for (; it2 != host.get_sock_list().end(); it2++)
-	// {
-	// 	std::cout << "Sock : " << it2->first << " : Host : " << it2->second.first << " : PORT : " << it2->second.second << std::endl;
-	// }
 }
 
 std::string get_word(std::string & line, int &start_index, std::string delim) {
@@ -181,3 +178,48 @@ bool	is_field_content(std::string & s) {
 	}
 	return (true);
 }
+
+
+static int size_dest(long n)
+{
+	char	*dest;
+	int		count = 1;
+
+	if (n < 0)
+	{
+		n = -n;
+		count++;
+	}
+	while (n >= 10)
+	{
+		n = n / 10;
+		count++;
+	}
+	return (count);
+}
+
+std::string ft_itos(int n)
+{
+	long	n_long;
+	int		count;
+	char	dest[20];
+
+	n_long = n;
+	count = size_dest(n);
+	dest[count] = '\0';
+	if (n_long < 0)
+	{
+		dest[0] = '-';
+		n_long = -n_long;
+	}
+	count--;
+	while (n_long > 9)
+	{
+		dest[count] = n_long % 10 + '0';
+		n_long = n_long / 10;
+		count--;
+	}
+	dest[count] = n_long % 10 + '0';
+	return (std::string(dest));
+}
+ 

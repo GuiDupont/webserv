@@ -1,0 +1,13 @@
+18h35m11s: ------BEGINNING OF THE PROGRAM-------
+18h35m11s: Config successful
+18h35m11s: Epoll create successful | epfd  = 4
+18h35m11s: Ssock created           | ssock = 5
+18h35m11s: Ssock added to Epoll    | ssock = 5
+18h35m11s: Ssock created           | ssock = 6
+18h35m11s: Ssock added to Epoll    | ssock = 6
+18h35m11s: Ssock created           | ssock = 7
+18h35m11s: Ssock added to Epoll    | ssock = 7
+18h35m11s: Ssock created           | ssock = 8
+18h35m11s: Ssock added to Epoll    | ssock = 8
+18h35m11s: Ssock created           | ssock = 9
+18h35m11s: Ssock added to Epoll    | ssock = 9

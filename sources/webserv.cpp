@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/17 18:48:16 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/17 19:03:23 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,16 @@
 void webserv::set_hosts() {
 	
 	_epfd = epoll_create(1);
+	g_logger << LOG_EPOLL_CREATE + ft_itos(_epfd);
 	std::list<vHost>::iterator it = _vhosts.begin();
 	for (; it != _vhosts.end(); it++) {
 		param_socket_server(*it);
 	}
 	//epoll get ready to accept
-
 }
 
 void	webserv::wait_for_connection() {
+	g_logger << LOG_WAIT_CO;
 	struct epoll_event *revents;
 	SOCKADDR_IN csin;
 	socklen_t crecsize = sizeof(csin);
@@ -35,14 +36,15 @@ void	webserv::wait_for_connection() {
 		sleep(3); // a supprimer
 
 		int nsfd = epoll_wait(this->_epfd, revents, 64, 0);
-		if (nsfd) {
+		if (nsfd)
+		{
 			std::cout << nsfd << " évènements de capté(s)" << std::endl;
+			g_logger << LOG_EPOLL_EVENT + ft_itos(nsfd);
 		}
 		else if (nsfd == -1)
-			std::cout << strerror(errno) << std::endl;
+			g_logger << LOG_ISSUE_EPOLL_WAIT + std::string(strerror(errno)) << std::endl;
 		else
 			std::cout << "Pas d'événement" << std::endl;
-			
 		for (int i = 0; i < nsfd; i++) {
 			// if (revents[i].events & EPOLLIN)
 			// 	std::cout << "EPOLLIN on " << (ft_is_ssock(revents[i].data.fd) ? "ssock" : "csock") << std::endl;			
@@ -174,6 +176,7 @@ webserv::webserv(const std::string & path_config) : _auto_index(false), _client_
 	if (!g_parser.check_brackets(all_file))
 		throw (bad_brackets_conf());
 	set_config(config_file);
+	g_logger << LOG_CONFIG_DONE;
 }
 
 void		webserv::set_config(std::ifstream & config_file) {

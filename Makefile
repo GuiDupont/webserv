@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+         #
+#    By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/07 11:26:53 by gdupont           #+#    #+#              #
-#    Updated: 2021/09/17 15:57:25 by ade-garr         ###   ########.fr        #
+#    Updated: 2021/09/17 19:03:49 by gdupont          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,8 @@ INCLUDES = ./includes/
 
 PATH_SRCS = sources
 
-SRCS_FILES = exceptions.cpp main.cpp webserv.cpp utils.cpp vhost.cpp location.cpp request.cpp parser.cpp
+SRCS_FILES = 	exceptions.cpp main.cpp webserv.cpp utils.cpp vhost.cpp \
+				location.cpp request.cpp parser.cpp logger.cpp
 
 SRCS = $(addprefix ${PATH_SRCS}/, ${SRCS_FILES})
 
