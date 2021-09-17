@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:24:01 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/17 18:48:27 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/17 19:12:59 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,6 @@
 # define LOG_WAIT_CO    		"Epoll is waiting for connection     | ssock = "
 # define LOG_EPOLL_EVENT   		"Epoll noticed new events     		 | nb    = "
 # define LOG_ISSUE_EPOLL_WAIT   "Epoll wait return -1     			 | nb    = "
-
-
-
-
 
 
 class logger {

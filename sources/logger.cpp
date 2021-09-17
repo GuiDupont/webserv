@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:23:26 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/17 17:27:57 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/17 19:13:23 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,3 @@ std::ofstream & operator<<(logger & logger, const std::string & log) {
 logger::~logger() {
     this->fd.close();
 }
-
-// logger & logger::operator=(logger & rhs) {
-//     f = rhs.f;
-// }
