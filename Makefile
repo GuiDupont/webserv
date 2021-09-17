@@ -6,13 +6,13 @@
 #    By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/07 11:26:53 by gdupont           #+#    #+#              #
-#    Updated: 2021/09/16 10:03:44 by gdupont          ###   ########.fr        #
+#    Updated: 2021/09/17 16:15:46 by gdupont          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = webserv
 
-CXX = clang++-9
+CXX = clang++
 #CXX = clang++
 #CXX = /usr/lib/llvm-12/bin/clang++
 
@@ -23,7 +23,8 @@ INCLUDES = ./includes/
 
 PATH_SRCS = sources
 
-SRCS_FILES = exceptions.cpp main.cpp webserv.cpp utils.cpp vhost.cpp location.cpp request.cpp parser.cpp
+SRCS_FILES = 	exceptions.cpp main.cpp webserv.cpp utils.cpp vhost.cpp \
+				location.cpp request.cpp parser.cpp logger.cpp
 
 SRCS = $(addprefix ${PATH_SRCS}/, ${SRCS_FILES})
 
