@@ -6,16 +6,19 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:07:25 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/16 15:12:31 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/17 13:03:55 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REQUEST_HPP
 # define REQUEST_HPP
 
+# include "utils.hpp"
+
 # include <string>
 # include <map>
 # include <iostream>
+
 
 class request {
     
@@ -33,7 +36,8 @@ class request {
 		
     public:
 
-		// request();
+		request(std::string & header);
+		request();
 		// ~request();
 		// request & operator=()
 };

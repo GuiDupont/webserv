@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/16 16:45:09 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/17 13:05:46 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,13 @@ void	webserv::wait_for_connection() {
 }
 
 void	webserv::handle_new_request(int csock) {
-	request 	new_request;
 	int			ret;
 	std::pair<std::string, std::string> header_body;
 	int index = 0;
 
 	header_body = g_parser.get_header_begin_body(csock);
+	request 	new_request(header_body.first);
 	new_request._body = header_body.second;
-	g_parser.parse_header(header_body.first, new_request);
 	std::cout << new_request;
 
 	// parse msg body

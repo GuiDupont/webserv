@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/13 15:49:13 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/17 13:08:13 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 # define DELETE 4
 
 class vHost;
-
+class request;
 
 typedef int unknown;
 extern class webserv_parser g_parser;

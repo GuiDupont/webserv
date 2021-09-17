@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/16 18:37:23 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/17 13:09:17 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,58 +286,3 @@ std::pair<std::string, std::string> webserv_parser::get_header_begin_body(int cs
 	}
 	return (std::pair<std::string, std::string>("", ""));
 }
-
-void	webserv_parser::parse_header(std::string & header, request & new_request) {
-	int index = 0;
-	new_request._method = get_word(header, index, std::string(" "));
-	if (new_request._method != "GET" && new_request._method != "DELETE" && new_request._method != "POST")
-	{
-		new_request._error_to_send = 400; // a vérifier	
-		return ;
-	}
-	new_request._request_target = get_word(header, index , std::string(" "));
-	if (new_request._request_target.empty() || new_request._request_target[0] != '/' )  // test nginx with charset of segment wrong https://datatracker.ietf.org/doc/html/rfc3986#section-3.3
-	{
-		new_request._error_to_send = 400; // a vérifier	
-		return ;
-	}
-	new_request._HTTP_version = get_word(header, index, std::string("\r\n"));
-	if (new_request._HTTP_version.size() == 0)
-	{
-		new_request._error_to_send = 400; // a vérifier	
-		return ;
-	}
-	if (new_request._HTTP_version != "HTTP/1.1" && new_request._HTTP_version != "HTTP/1.0")
-		new_request._error_to_send = 505; // check what to so in this case;
-	while (index < header.size()) // parsing headerffields
-	{
-		std::pair<std::string, std::string> header_field;
-		std::string header_field_raw = get_word(header, index, std::string("\r\n"));
-		if (header_field_raw.size() == 0)
-			return ;
-		std::cout << header_field_raw << std::endl;
-		int semi_colon_index =  header_field_raw.find(":", 0);
-		if (semi_colon_index != std::string::npos)
-			new_request._error_to_send = 1; // seet good error
-		header_field = std::pair<std::string, std::string>(header_field_raw.substr(0, semi_colon_index), 
-		header_field_raw.substr(semi_colon_index + 1, header_field_raw.size() - semi_colon_index));
-		header_field.second = trims(header_field.second, " \t");
-		
-		if (!header_field.first.size() || !header_field.second.size() 
-		|| header_field.first[header_field.first.size() - 1] == '\t'
-		|| !is_token(header_field.first) || !is_field_content(header_field.second))
-		{
-			std::cout  << is_token(header_field.first) << is_field_content(header_field.second);
-			new_request._error_to_send = 400;
-			return ;
-		}
-		if (new_request._header_fields.find(header_field.first) != new_request._header_fields.end())
-		{
-			new_request._error_to_send = 400;
-			return ;
-		}
-		new_request._header_fields.insert(header_field);
-	}
-	
-}
-

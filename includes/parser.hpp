@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:10 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/16 16:52:24 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/17 13:07:42 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ class webserv_parser {
 		void 								check_server_line(std::string &line);
 
 		std::pair<std::string, std::string> get_header_begin_body(int csock);
-		void								parse_header(std::string & header, request & n_request);
+		// void								parse_header(std::string & header, request & n_request);
 };
 
 
