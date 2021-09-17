@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/17 13:08:13 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/17 18:29:18 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ class webserv {
 		std::string 								_root;
 		unknown										_cgi;
 		int											_epfd;
-		std::map<int, request>						_pending_requests; 
+		std::map<int, request>						_requests;
 	
 	public:
 		webserv(const std::string & path_config);
@@ -75,6 +75,7 @@ class webserv {
 		void	display_sock();
 		bool	is_pending_request(int csock);
 		void	handle_new_request(int csock);
+		bool	is_new_request(int fd);
 
 
 	

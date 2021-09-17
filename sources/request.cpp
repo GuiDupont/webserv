@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/17 13:03:24 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/17 15:44:59 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,11 @@ request::request(std::string & header) {
 			return ;
 		}
 		_header_fields.insert(header_field);
+	}
+	if (_header_fields.find("Host") == _header_fields.end()) {
+		std::cout << "OK pb de Host" << std::endl;
+		_error_to_send = 400;
+		return ;
 	}
 }
 

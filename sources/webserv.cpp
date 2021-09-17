@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/17 13:05:46 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/17 18:48:16 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,35 +35,59 @@ void	webserv::wait_for_connection() {
 		sleep(3); // a supprimer
 
 		int nsfd = epoll_wait(this->_epfd, revents, 64, 0);
-		if (nsfd)
+		if (nsfd) {
 			std::cout << nsfd << " évènements de capté(s)" << std::endl;
+		}
 		else if (nsfd == -1)
 			std::cout << strerror(errno) << std::endl;
 		else
 			std::cout << "Pas d'événement" << std::endl;
 			
 		for (int i = 0; i < nsfd; i++) {
-			if (revents[i].events & EPOLLIN && ft_is_ssock(revents[i].data.fd)) {
+			// if (revents[i].events & EPOLLIN)
+			// 	std::cout << "EPOLLIN on " << (ft_is_ssock(revents[i].data.fd) ? "ssock" : "csock") << std::endl;			
+			// if (revents[i].events & EPOLLOUT)
+			// 	std::cout << "EPOLLOUT on " << (ft_is_ssock(revents[i].data.fd) ? "ssock" : "csock") << std::endl;
+			if (revents[i].events & EPOLLIN && ft_is_ssock(revents[i].data.fd)) { //we have a client to accept
 				// add new socket client to epoll
 				SOCKET csock = accept(revents[i].data.fd, (SOCKADDR*)&csin, &crecsize);
-				//std::cout << csock << std::endl;
+				std::cout << csock << std::endl;
 				std::cout << "On a accepté un client\n";
 				ft_add_csock_to_vhost(revents[i].data.fd, csock);
-				ev.events = EPOLLIN | EPOLLOUT | EPOLLET;
+				ev.events = EPOLLIN | EPOLLOUT;
 				ev.data.fd = csock;
 				fcntl(csock, F_SETFL, O_NONBLOCK);
 				if (epoll_ctl(_epfd, EPOLL_CTL_ADD, csock, &ev) == -1)
 					std::cout << errno << strerror(errno) << std::endl; // add an exception
 			}
-			else if (revents[i].events & EPOLLOUT && revents[i].events & EPOLLIN && !ft_is_ssock(revents[i].data.fd)) { 
+			else if (revents[i].events & EPOLLOUT && (!ft_is_ssock(revents[i].data.fd))) { // we have smthing to send
 				// a voir si eppollout direct 
-				if (is_pending_request(revents[i].data.fd))
-					;
-				else
-					handle_new_request(revents[i].data.fd);
+				// if (is_pending_request(revents[i].data.fd))
+				// 	;
+				// else
+				// 	handle_new_request(revents[i].data.fd);
+			}
+			else if (revents[i].events & EPOLLIN && (!ft_is_ssock(revents[i].data.fd))) { // we have something to read
+				if (is_new_request(revents[i].data.fd) == 1) {
+					// essayer de reto;ber sur la ft handle_new_request;
+				}
+				else {
+					// a completer
+				}
 			}
 		}
 	}
+}
+
+bool webserv::is_new_request(int fd) {
+
+	for (std::map<int, request>::iterator it = _requests.begin(); it != _requests.end(); it++) {
+		if (it->first == fd) {
+			if (it->second.stage != ENDED_REQUEST)
+				return (0);
+		}
+	}
+	return (1);
 }
 
 void	webserv::handle_new_request(int csock) {
@@ -71,8 +95,9 @@ void	webserv::handle_new_request(int csock) {
 	std::pair<std::string, std::string> header_body;
 	int index = 0;
 
+	std::cout << " We are in new request\n";
 	header_body = g_parser.get_header_begin_body(csock);
-	request 	new_request(header_body.first);
+	request 	new_request(header_body.first); // a optimiser avec constructeur de pair
 	new_request._body = header_body.second;
 	std::cout << new_request;
 
@@ -80,7 +105,7 @@ void	webserv::handle_new_request(int csock) {
 }
 
 bool	webserv::is_pending_request(int csock) {
-	if (_pending_requests.find(csock) != _pending_requests.end())
+	if (_requests.find(csock) != _requests.end())
 		return (true);
 	return (false);
 }

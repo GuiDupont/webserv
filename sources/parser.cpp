@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/17 13:09:17 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/17 15:26:43 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,7 +270,7 @@ std::pair<std::string, std::string> webserv_parser::get_header_begin_body(int cs
 	while (1)
 	{
 		ret = recv(csock, c_buffer, 1024, 0);
-		if (ret <= 0)
+		if (ret < 0)
 		{
 			std::cout << strerror(errno) << std::endl;
 			return (std::pair<std::string, std::string>("", ""));

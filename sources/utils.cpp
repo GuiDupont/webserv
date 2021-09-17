@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/16 18:37:31 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/17 17:55:52 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void param_socket_server(vHost &host) {
 			}
 			host.map_sock_to_hostport(sock, *it); // tester avec config mm port/dif address..
 			static struct epoll_event ev;
-			ev.events = EPOLLIN | EPOLLET | EPOLLOUT; // a voir si EPOLLET necessaire
+			ev.events = EPOLLIN | EPOLLOUT | EPOLLET; // a voir si EPOLLET necessaire
 			ev.data.fd = sock;
 			if (epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_ADD, sock, &ev) != 0)
 				throw (epoll_ctl_add_error());

@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+         #
+#    By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/07 11:26:53 by gdupont           #+#    #+#              #
-#    Updated: 2021/09/16 10:03:44 by gdupont          ###   ########.fr        #
+#    Updated: 2021/09/17 15:57:25 by ade-garr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = webserv
 
-CXX = clang++-9
-#CXX = clang++
+# CXX = clang++-9
+CXX = clang++
 #CXX = /usr/lib/llvm-12/bin/clang++
 
 FLAGS =
