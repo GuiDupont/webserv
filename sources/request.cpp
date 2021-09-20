@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/17 15:44:59 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/20 13:09:21 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ std::ostream & operator<<(std::ostream & o,const request & r)
 	return (o);
 }
 
-request::request(std::string & header) {
+request::request(std::string & header) { // a supprimer ?? (ancienne fonction pour avoir le bdy)
 	int index = 0;
 	_method = get_word(header, index, std::string(" "));
 	if (_method != "GET" && _method != "DELETE" && _method != "POST")
@@ -85,4 +85,6 @@ request::request(std::string & header) {
 	}
 }
 
-request::request() {}
+request::request() : stage(0) {}
+
+request::request(int csock) : stage(0), _csock(csock) {}

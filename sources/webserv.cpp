@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 14:11:25 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/20 14:24:46 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,13 @@ void	webserv::wait_for_connection() {
 			if (revents[i].events & EPOLLIN && ft_is_ssock(revents[i].data.fd)) { //we have a client to accept
 				// add new socket client to epoll
 				SOCKET csock = accept(revents[i].data.fd, (SOCKADDR*)&csin, &crecsize);
+				std::time_t t = std::time(0);
+				std::tm	*now = std::localtime(&t);
+				_timeout.insert(std::pair<int, std::tm>(csock, *now));
 				std::cout << csock << std::endl;
 				std::cout << "On a accepté un client\n";
 				ft_add_csock_to_vhost(revents[i].data.fd, csock);
-				ev.events = EPOLLIN | EPOLLOUT;
+				ev.events = EPOLLIN;
 				ev.data.fd = csock;
 				fcntl(csock, F_SETFL, O_NONBLOCK);
 				if (epoll_ctl(_epfd, EPOLL_CTL_ADD, csock, &ev) == -1)
@@ -70,12 +73,9 @@ void	webserv::wait_for_connection() {
 				// 	handle_new_request(revents[i].data.fd);
 			}
 			else if (revents[i].events & EPOLLIN && (!ft_is_ssock(revents[i].data.fd))) { // we have something to read
-				if (is_new_request(revents[i].data.fd) == 1) {
-					// essayer de reto;ber sur la ft handle_new_request;
-				}
-				else {
-					// a completer
-				}
+				if (is_new_request(revents[i].data.fd) == 1)
+					_requests.insert(std::pair<int, request>(revents[i].data.fd, request(revents[i].data.fd)));
+				add_event_to_request(revents[i].data.fd);
 			}
 		}
 	}
@@ -92,7 +92,7 @@ bool webserv::is_new_request(int fd) {
 	return (1);
 }
 
-void	webserv::handle_new_request(int csock) {
+void	webserv::handle_new_request(int csock) { // a supprimer ?? (ancienne fonction pour avoir le bdy)
 	int			ret;
 	std::pair<std::string, std::string> header_body;
 	int index = 0;
@@ -252,5 +252,117 @@ webserv::~webserv(void) {
 
 int		webserv::get_epfd() const {
 	return (this->_epfd);
+}
+
+void webserv::add_event_to_request(int csock) {
+
+	char c_buffer[1025];
+	int ret;
+	std::map<int, request>::iterator it;
+
+	ret = recv(csock, c_buffer, 1024, 0);
+	if (ret < 0)
+	{
+		std::cout << strerror(errno) << std::endl;
+		return ;
+	}
+	std::time_t t = std::time(0);
+	_timeout.find(csock)->second = *std::localtime(&t);
+	c_buffer[ret] = '\0';
+	for (it = _requests.begin(); it != _requests.end(); it++) {
+		if (it->first == csock && it->second.stage != ENDED_REQUEST)
+			break ;
+	}
+	it->second._left += c_buffer;
+	if (it->second.stage == 0)
+		analyse_header(it->second);
+	else (it->second.stage == 1)
+		// analyse_body(it->second); // a faire
+}
+
+void webserv::analyse_header(request &req) {
+
+	if (req._left.find(std::string("\r\n"), 0) != std::string::npos) {
+		int index = 0;
+		req._method = get_word(req._left, index, std::string(" "));
+		if (req._method != "GET" && req._method != "DELETE" && req._method != "POST")
+		{
+			req._error_to_send = 400;
+			set_request_to_ended(req);
+			return ;
+		}
+		req._request_target = get_word(req._left, index , std::string(" "));
+		if (req._request_target.empty() || req._request_target[0] != '/' || is_valid_request_target(req._request_target) == 0)  // test nginx with charset of segment wrong https://datatracker.ietf.org/doc/html/rfc3986#section-3.3
+		{
+			req._error_to_send = 400;
+			set_request_to_ended(req);
+			return ;
+		}
+		req._HTTP_version = get_word(req._left, index, std::string("\r\n"));
+		if (req._HTTP_version.size() == 0)
+		{
+			req._error_to_send = 400;
+			set_request_to_ended(req);
+			return ;
+		}
+		if (req._HTTP_version != "HTTP/1.1" && req._HTTP_version != "HTTP/1.0")
+		{
+			req._error_to_send = 505;
+			set_request_to_ended(req);
+			return ;
+		}
+		while (index < req._left.size()) // parsing headerffields
+		{
+			std::pair<std::string, std::string> header_field;
+			std::string header_field_raw = get_word(req._left, index, std::string("\r\n"));
+			if (header_field_raw.size() == 0)
+				break ;
+			std::cout << header_field_raw << std::endl;
+			int semi_colon_index =  header_field_raw.find(":", 0);
+			if (semi_colon_index != std::string::npos) {
+				req._error_to_send = 400;
+				set_request_to_ended(req);	
+				return ;
+			}
+			header_field = std::pair<std::string, std::string>(header_field_raw.substr(0, semi_colon_index), 
+			header_field_raw.substr(semi_colon_index + 1, header_field_raw.size() - semi_colon_index));
+			header_field.second = trims(header_field.second, " \t");
+			if (!header_field.first.size() || !header_field.second.size() 
+			|| header_field.first[header_field.first.size() - 1] == '\t'
+			|| !is_token(header_field.first) || !is_field_content(header_field.second))
+			{
+				std::cout  << is_token(header_field.first) << is_field_content(header_field.second);
+				req._error_to_send = 400;
+				set_request_to_ended(req);
+				return ;
+			}
+			if (req._header_fields.find(header_field.first) != req._header_fields.end())
+			{
+				req._error_to_send = 400;
+				set_request_to_ended(req);
+				return ;
+			}
+			req._header_fields.insert(header_field);
+		}
+		if (req._header_fields.find("Host") == req._header_fields.end()) {
+			g_logger << "OK pb de Host sur csock : " << ft_itos(req._csock);
+			req._error_to_send = 400;
+			set_request_to_ended(req);
+			return ;
+		}
+		req._left = req._left.substr(index, req._left.size() - index);
+		req.stage = 1;
+	}
+}
+
+void	webserv::set_request_to_ended(request &req) {
+
+	struct epoll_event ev;
+
+	req.stage = 2;
+	ev.events = EPOLLOUT;
+	ev.data.fd = req._csock;
+	epoll_ctl(_epfd, EPOLL_CTL_MOD, req._csock, &ev);
+	return ;
 }
 

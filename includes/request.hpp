@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:07:25 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/17 18:42:28 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/20 13:08:37 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ class request {
 		std::string 						_HTTP_version;
 		std::map<std::string, std::string>	_header_fields;
 		std::string							_body;
+		std::string							_left;
 		int									_error_to_send;
 		int									_csock;
 		int									stage; // 0 = new requete, header en cours ; 1 = body en cours ; 2 = requete complete
@@ -39,7 +40,8 @@ class request {
 		
     public:
 
-		request(std::string & header);
+		request(std::string & header); // a supprimer ?? (ancienne fonction pour avoir le bdy)
+		request(int csock);
 		request();
 		// ~request();
 		// request & operator=()
