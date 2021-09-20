@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 11:35:32 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/20 14:03:41 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ class webserv {
 		void	add_event_to_request(int csock);
 		void	analyse_header(request &req);
 		void	analyse_body(request &req);
+		void	set_request_to_ended(request &req);
 	
 	private:
 
