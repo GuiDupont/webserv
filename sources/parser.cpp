@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/17 15:26:43 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/20 10:51:35 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,7 +259,7 @@ void 		webserv_parser::check_server_line(std::string &line) {
 		throw bad_server_declaration();
 }
 
-std::pair<std::string, std::string> webserv_parser::get_header_begin_body(int csock) {
+std::pair<std::string, std::string> webserv_parser::get_header_begin_body(int csock) { // a supprimer ?? (ancienne fonction pour avoir le bdy)
 	std::string big_buffer;
 
 	char c_buffer[1025];

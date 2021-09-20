@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/17 18:48:16 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/20 12:38:29 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,9 @@ void	webserv::wait_for_connection() {
 			if (revents[i].events & EPOLLIN && ft_is_ssock(revents[i].data.fd)) { //we have a client to accept
 				// add new socket client to epoll
 				SOCKET csock = accept(revents[i].data.fd, (SOCKADDR*)&csin, &crecsize);
+				std::time_t t = std::time(0);
+				std::tm	*now = std::localtime(&t);
+				_timeout.insert(std::pair<int, std::tm>(csock, *now));
 				std::cout << csock << std::endl;
 				std::cout << "On a accepté un client\n";
 				ft_add_csock_to_vhost(revents[i].data.fd, csock);
@@ -68,12 +71,9 @@ void	webserv::wait_for_connection() {
 				// 	handle_new_request(revents[i].data.fd);
 			}
 			else if (revents[i].events & EPOLLIN && (!ft_is_ssock(revents[i].data.fd))) { // we have something to read
-				if (is_new_request(revents[i].data.fd) == 1) {
-					// essayer de reto;ber sur la ft handle_new_request;
-				}
-				else {
-					// a completer
-				}
+				if (is_new_request(revents[i].data.fd) == 1)
+					_requests.insert(std::pair<int, request>(revents[i].data.fd, request()));
+				add_event_to_request(revents[i].data.fd);
 			}
 		}
 	}
@@ -90,7 +90,7 @@ bool webserv::is_new_request(int fd) {
 	return (1);
 }
 
-void	webserv::handle_new_request(int csock) {
+void	webserv::handle_new_request(int csock) { // a supprimer ?? (ancienne fonction pour avoir le bdy)
 	int			ret;
 	std::pair<std::string, std::string> header_body;
 	int index = 0;
@@ -223,3 +223,89 @@ int		webserv::get_epfd() const {
 	return (this->_epfd);
 }
 
+void webserv::add_event_to_request(int csock) {
+
+	char c_buffer[1025];
+	int ret;
+	std::map<int, request>::iterator it;
+
+	ret = recv(csock, c_buffer, 1024, 0);
+	if (ret < 0)
+	{
+		std::cout << strerror(errno) << std::endl;
+		return ;
+	}
+	std::time_t t = std::time(0);
+	_timeout.find(csock)->second = *std::localtime(&t);
+	c_buffer[ret] = '\0';
+	for (it = _requests.begin(); it != _requests.end(); it++) {
+		if (it->first == csock && it->second.stage != ENDED_REQUEST)
+			break ;
+	}
+	it->second._left += c_buffer;
+	if (it->second.stage == 0)
+		analyse_header(it->second);
+	else (it->second.stage == 1)
+		analyse_body(it->second);
+}
+
+void webserv::analyse_header(request &req) {
+
+	if (req._left.find(std::string("\r\n"), 0) != std::npos) {
+		int index = 0;
+		req._method = get_word(req._left, index, std::string(" "));
+		if (req._method != "GET" && req._method != "DELETE" && req._method != "POST")
+		{
+			req._error_to_send = 400;
+			return ;
+		}
+		req._request_target = get_word(req._left, index , std::string(" "));
+		if (_request_target.empty() || _request_target[0] != '/' )  // test nginx with charset of segment wrong https://datatracker.ietf.org/doc/html/rfc3986#section-3.3
+		{
+			_error_to_send = 400;
+			return ;
+		}
+		_HTTP_version = get_word(header, index, std::string("\r\n"));
+		if (_HTTP_version.size() == 0)
+		{
+			_error_to_send = 400;	
+			return ;
+		}
+		if (_HTTP_version != "HTTP/1.1" && _HTTP_version != "HTTP/1.0")
+			_error_to_send = 505;
+		while (index < header.size()) // parsing headerffields
+		{
+			std::pair<std::string, std::string> header_field;
+			std::string header_field_raw = get_word(header, index, std::string("\r\n"));
+			if (header_field_raw.size() == 0)
+				return ;
+			std::cout << header_field_raw << std::endl;
+			int semi_colon_index =  header_field_raw.find(":", 0);
+			if (semi_colon_index != std::string::npos)
+				_error_to_send = 1; // seet good error
+			header_field = std::pair<std::string, std::string>(header_field_raw.substr(0, semi_colon_index), 
+			header_field_raw.substr(semi_colon_index + 1, header_field_raw.size() - semi_colon_index));
+			header_field.second = trims(header_field.second, " \t");
+			
+			if (!header_field.first.size() || !header_field.second.size() 
+			|| header_field.first[header_field.first.size() - 1] == '\t'
+			|| !is_token(header_field.first) || !is_field_content(header_field.second))
+			{
+				std::cout  << is_token(header_field.first) << is_field_content(header_field.second);
+				_error_to_send = 400;
+				return ;
+			}
+			if (_header_fields.find(header_field.first) != _header_fields.end())
+			{
+				_error_to_send = 400;
+				return ;
+			}
+			_header_fields.insert(header_field);
+		}
+		if (_header_fields.find("Host") == _header_fields.end()) {
+			std::cout << "OK pb de Host" << std::endl;
+			_error_to_send = 400;
+			return ;
+		}
+	}
+}

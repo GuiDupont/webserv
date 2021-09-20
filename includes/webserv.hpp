@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/17 18:29:18 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/20 11:35:32 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include "utils.hpp"
 # include "request.hpp"
 # include "exceptions.hpp"
+// # include "logger.hpp"
 
 # include <list>
 # include <map>
@@ -28,6 +29,7 @@
 # include <fstream>
 # include <iostream>
 # include <fcntl.h>
+# include <ctime>
 
 
 
@@ -58,7 +60,8 @@ class webserv {
 		unknown										_cgi;
 		int											_epfd;
 		std::map<int, request>						_requests;
-	
+		std::map<int, std::tm>						_timeout;
+
 	public:
 		webserv(const std::string & path_config);
 		webserv();
@@ -74,10 +77,11 @@ class webserv {
 		int		get_sock_by_matching_host_ip(std::pair< std::string, size_t> host_port);
 		void	display_sock();
 		bool	is_pending_request(int csock);
-		void	handle_new_request(int csock);
+		void	handle_new_request(int csock); // a supprimer ?? (ancienne fonction pour avoir le bdy)
 		bool	is_new_request(int fd);
-
-
+		void	add_event_to_request(int csock);
+		void	analyse_header(request &req);
+		void	analyse_body(request &req);
 	
 	private:
 
