@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/17 19:03:28 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/20 11:13:13 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,3 +223,43 @@ std::string ft_itos(int n)
 	return (std::string(dest));
 }
  
+bool	is_valid_request_target(std::string line) {
+	int position = 0;
+	size_t tmp;
+	
+	for (int i = 0; line[i];) {
+		if (line[i] == '/')
+			i++;
+		else if (line.substr(i, 3) == "../") {
+			position--;
+			i += 3;
+		}
+		else if (line.substr(i, 2) == ".." && !line[i + 2]) {
+			position--;
+			i += 2;
+		}
+		else if ((tmp = line.find("/", i)) == line.npos)
+			i = line.size();
+		else if (line.substr(i, 2) == "./")
+			i = tmp;
+		else
+		{
+			i = tmp;
+			position++;
+		}
+		if (position < 0)
+			return (false);
+	}
+	return (true);
+}
+// to test function
+// std::string test = "/..";
+// 	std::cout << test << " : " << (is_valid_request_target(test) ? "valid\n" : "not valid\n");
+// 	test = "/sdfas/dsfdsf/../sdfs/..";
+// 	std::cout << test << " : " << (is_valid_request_target(test) ? "valid\n" : "not valid\n");
+// 	test = "/sfsf/../../";
+// 	std::cout << test << " : " << (is_valid_request_target(test) ? "valid\n" : "not valid\n");
+// 	test = "/sfsd/.././dfsfs/./sfsdf/.sfsfs/..fsdfs/../../";
+// 	std::cout << test << " : " << (is_valid_request_target(test) ? "valid\n" : "not valid\n");
+// 	test = "/lolo/dsfsd/sfsd/./../../../..";
+// 	std::cout << test << " : " << (is_valid_request_target(test) ? "valid\n" : "not valid\n");

@@ -6,14 +6,13 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:23:26 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/17 19:13:23 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/20 11:04:30 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "logger.hpp"
 
 logger::logger(std::string file) {
-    std::cout << file.c_str();
     this->fd.open(file.c_str(), std::ifstream::in);
     if (!fd.is_open())
 		std::cout << "not open\n";
