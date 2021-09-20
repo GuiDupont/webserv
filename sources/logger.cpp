@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:23:26 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 11:04:30 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/20 11:29:35 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ logger::logger(std::string file) {
 
 std::ofstream & operator<<(logger & logger, const std::string & log) {
     std::time_t t = std::time(0);
-    std::tm*        now = std::localtime(&t);
+    std::tm*    now = std::localtime(&t);
 
 	logger.fd << now->tm_hour << "h" << now->tm_min << "m" << now->tm_sec << "s: " << log << std::endl;
     return (logger.fd);

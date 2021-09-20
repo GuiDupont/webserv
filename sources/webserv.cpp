@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/17 19:03:23 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/20 14:11:25 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,6 +212,34 @@ void		webserv::set_config(std::ifstream & config_file) {
 	}
 	if (this->_vhosts.empty() == 1)
 		throw (no_port_associated()); // changer par la suite par une vraie exception pour vhost, comme recommande par Guillaume.
+}
+
+void	webserv::control_time_out(void) {
+	
+	std::time_t t = std::time(0);
+	std::tm*   now = std::localtime(&t);
+	std::list<int>	sock_to_close;
+
+	
+	for (std::map<int, std::tm>::iterator it = _timeout.begin(); it != _timeout.end(); it++) {
+		
+		if ((now->tm_hour - it->second.tm_hour) != 0 || 
+			(now->tm_min - it->second.tm_min) != 0 || 
+			(now->tm_sec - it->second.tm_sec) > 20)
+		{
+			std::map<int, request>::iterator it_req = _requests.find(it->first);
+			if (it_req == _requests.end())
+				sock_to_close.push_back(it->first);
+			else if (it_req->second.stage != ENDED_REQUEST)
+				sock_to_close.push_back(it->first);		
+		}
+	}
+	for (std::list<int>::iterator it = sock_to_close.begin(); it != sock_to_close.end(); it++)  {
+		close(*it);
+		_requests.erase(*it);
+		_timeout.erase(*it);
+		epoll_ctl(_epfd, EPOLL_CTL_DEL, *it, NULL);
+	}
 }
 
 webserv::webserv(void) {

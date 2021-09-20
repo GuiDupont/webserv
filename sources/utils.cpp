@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/20 11:13:13 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/20 12:22:31 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,6 +253,7 @@ bool	is_valid_request_target(std::string line) {
 	return (true);
 }
 // to test function
+
 // std::string test = "/..";
 // 	std::cout << test << " : " << (is_valid_request_target(test) ? "valid\n" : "not valid\n");
 // 	test = "/sdfas/dsfdsf/../sdfs/..";

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/17 19:03:32 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/20 14:00:37 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ class webserv {
 		unknown										_cgi;
 		int											_epfd;
 		std::map<int, request>						_requests;
+		std::map<int, std::tm>						_timeout;
+		
 	
 	public:
 		webserv(const std::string & path_config);
@@ -79,7 +81,7 @@ class webserv {
 		bool	is_pending_request(int csock);
 		void	handle_new_request(int csock);
 		bool	is_new_request(int fd);
-
+		void	control_time_out(void);
 
 	
 	private:
