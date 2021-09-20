@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 14:24:34 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/20 17:08:12 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "request.hpp"
 # include "exceptions.hpp"
 # include "logger.hpp"
+
 
 # include <list>
 # include <map>
@@ -49,6 +50,7 @@ extern class logger g_logger;
 
 class webserv {
 	friend class webserv_parser;
+	friend class config;
 
 	public:
 
@@ -57,7 +59,7 @@ class webserv {
 		bool										_auto_index;
 		int											_client_max_body_size;
 		std::list< std::pair<int, std::string> >	_error_pages;
-		std::string									_upload;
+		std::string									_upload_pass;
 		std::string 								_root;
 		unknown										_cgi;
 		int											_epfd;

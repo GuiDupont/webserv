@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/12 15:17:41 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/20 18:56:32 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,25 @@ typedef int unknown;
 class location {
 
 	public:
-		location();
+		location() ;
 		location(std::ifstream & config_file, std::string & line);
+
+		std::string	const									& get_path() const;
+		int			const									& get_client_max_body_size() const;
+		bool		const									& get_auto_index() const;
+		size_t		const									& get_disable_methods() const;
+		std::list< std::pair<int, std::string> >	const	& get_error_pages() const;
+		std::string	const									& get_upload_pass() const;
+		std::string const									& get_root() const;
+		std::string const									& get_index() const;
+		std::list< std::pair<int, std::string> >	const	& get_return() const;
+		std::list< std::string >	const					& get_cgi_ext() const;
 
 	private:
 
 		int												_client_max_body_size;
 		bool											_auto_index;
-		size_t											_disable_methods; // defined using bitwise operations
+		size_t											_disable_methods;
 		std::list< std::pair<int, std::string> >		_error_pages;
 		std::string										_upload_pass;
 		std::string 									_root;

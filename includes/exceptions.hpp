@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exceptions.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:09:27 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/09 17:33:27 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/20 18:14:58 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ class bad_brackets_conf : public std::exception {
 };
 
 class bad_directive : public std::exception {
+	public:
+		virtual const char* what() const throw();
+};
+
+class duplicate_location : public std::exception {
 	public:
 		virtual const char* what() const throw();
 };
@@ -137,5 +142,8 @@ class epoll_ctl_add_error : public std::exception {
 	public:
 		virtual const char* what() const throw();
 };
+
+
+
 
 #endif

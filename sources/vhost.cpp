@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 11:18:29 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/12 15:40:20 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/20 19:10:55 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,16 @@ vHost::vHost(std::ifstream &config_file, std::string &line) : _root("/") {
 			_error_pages.push_back(g_parser.parse_error_page(line)); // a retoucher selon suite
 		}
 		else if (first_word == "server_name") {
-			_server_name.push_back(g_parser.parse_server_name(line));
+			_server_name.insert(g_parser.parse_server_name(line));
 		}
 		else if (first_word == "listen") {
 			g_parser.parse_listen(line, *this);
 		}
-		else if (first_word == "location")
-			_locations.push_back(location(config_file, line));
+		else if (first_word == "location") {
+			location loc = location(config_file, line);
+			if (!_locations.insert(std::pair<std::string, location>(loc.get_path(), loc)).second)
+				throw (duplicate_location());
+		}
 		else if (first_word == "}")
 			break ;
 		else if (first_word.size() != 0) {
@@ -98,6 +101,26 @@ std::map< int, std::pair< std::string, size_t> > & vHost::get_sock_list() {
 		return (this->_sock_list);
 }
 
-std::list<int> 										& vHost::get_csock_list() {
+std::set<int> 					& vHost::get_csock_list() {
 	return (this->_csock_list);
+}
+
+std::set<std::string> 			& vHost::get_server_names() {
+	return (this->_server_name);
+}
+
+int	const						& vHost::get_client_max_body_size() const {
+	return (this->_client_max_body_size);
+}
+
+std::string	const						& vHost::get_root() const {
+	return (this->_root);
+}
+
+std::list< std::pair<int, std::string> > const	& vHost::get_error_pages() const {
+	return (this->_error_pages);
+}
+
+std::map< std::string, location >	const	& vHost::get_locations() const {
+	return (this->_locations);
 }

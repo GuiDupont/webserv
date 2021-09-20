@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 17:55:12 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/12 15:23:54 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/20 18:54:56 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,3 +63,42 @@ location::location(std::ifstream & config_file, std::string & line) : _client_ma
 	}
 }
 
+std::string  const	& location::get_path() const {
+	return (this->_path);
+}
+
+int										const		& location::get_client_max_body_size() const {
+	return (this->_client_max_body_size);
+}
+
+bool									const		& location::get_auto_index() const {
+	return (this->_auto_index);
+}
+
+size_t									const		& location::get_disable_methods() const {
+	return (this->_disable_methods);
+}
+
+std::list< std::pair<int, std::string> >const		& location::get_error_pages() const {
+	return (this->_error_pages);
+}
+
+std::string								const		& location::get_upload_pass() const {
+	return (this->_upload_pass);
+}
+
+std::string 							const		& location::get_root() const {
+	return (this->_root);
+}
+
+std::string 							const		& location::get_index() const {
+	return (this->_index);
+}
+
+std::list< std::pair<int, std::string> >const		& location::get_return() const {
+	return (this->_return);
+}
+
+std::list< std::string >				const		& location::get_cgi_ext() const {
+	return (this->_cgi_ext);
+}

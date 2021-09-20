@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exceptions.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:36:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/09 17:33:57 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/20 18:16:09 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,4 +105,9 @@ const char* cant_listen::what() const throw() {
 const char* epoll_ctl_add_error::what() const throw() {
 
 	return ("Impossible to add sock to epoll");
+}
+
+const char* duplicate_location::what() const throw() {
+
+	return ("Impossible to create two locations with the same path at line: ");
 }

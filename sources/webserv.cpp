@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 15:26:18 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/20 19:14:15 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,13 @@ void	webserv::wait_for_connection() {
 		else
 			g_logger << "No events";
 		for (int i = 0; i < nsfd; i++) {
-			// if (revents[i].events & EPOLLIN)
-			// 	std::cout << "EPOLLIN on " << (ft_is_ssock(revents[i].data.fd) ? "ssock" : "csock") << std::endl;			
-			// if (revents[i].events & EPOLLOUT)
-			// 	std::cout << "EPOLLOUT on " << (ft_is_ssock(revents[i].data.fd) ? "ssock" : "csock") << std::endl;
 			if (revents[i].events & EPOLLIN && ft_is_ssock(revents[i].data.fd)) { //we have a client to accept
 				// add new socket client to epoll
 				SOCKET csock = accept(revents[i].data.fd, (SOCKADDR*)&csin, &crecsize);
 				std::time_t t = std::time(0);
 				std::tm	*now = std::localtime(&t);
 				_timeout.insert(std::pair<int, std::tm>(csock, *now));
-				g_logger << "On a accepté un client, csock = " + ft_itos(csock);
+				g_logger << "We accepted a new client, csock = " + ft_itos(csock);
 				ft_add_csock_to_vhost(revents[i].data.fd, csock);
 				ev.events = EPOLLIN;
 				ev.data.fd = csock;
@@ -62,7 +58,7 @@ void	webserv::wait_for_connection() {
 					std::cout << errno << strerror(errno) << std::endl; // add an exception
 			}
 			else if (revents[i].events & EPOLLOUT && (!ft_is_ssock(revents[i].data.fd))) { // we have smthing to send
-				g_logger << "Flag EPOLLOUT";
+				g_logger << "Epoll_wait identified an EPOLLOUT on csock: " + ft_itos(revents[i].data.fd);
 				// a voir si eppollout direct 
 				// if (is_pending_request(revents[i].data.fd))
 				// 	;
@@ -70,9 +66,9 @@ void	webserv::wait_for_connection() {
 				// 	handle_new_request(revents[i].data.fd);
 			}
 			else if (revents[i].events & EPOLLIN && (!ft_is_ssock(revents[i].data.fd))) { // we have something to read
-				g_logger << "Flag EPOLLIN";
+				g_logger << "Epoll_wait identified an EPOLLIN on csock: " + ft_itos(revents[i].data.fd);
 				if (is_new_request(revents[i].data.fd) == 1) {
-					g_logger << "Nouvelle requete cree";
+					g_logger << "New request has been created on csock: " + ft_itos(revents[i].data.fd);
 					_requests.insert(std::pair<int, request>(revents[i].data.fd, request(revents[i].data.fd)));
 				}
 				add_event_to_request(revents[i].data.fd);
@@ -119,7 +115,7 @@ void	webserv::ft_add_csock_to_vhost(int sock, int csock) {
 		std::map< int, std::pair< std::string, size_t> >::iterator it_sock = it->get_sock_list().begin();
 		for (; it_sock != it->get_sock_list().end(); it_sock++) {
 			if (sock == it_sock->first)
-				it->get_csock_list().push_back(csock);	
+				it->get_csock_list().insert(csock);	
 		}
 	}
 }
@@ -237,6 +233,8 @@ void	webserv::control_time_out(void) {
 		_requests.erase(*it);
 		_timeout.erase(*it);
 		epoll_ctl(_epfd, EPOLL_CTL_DEL, *it, NULL);
+		for (std::list<vHost>::iterator it_vhost = _vhosts.begin(); it_vhost != _vhosts.end(); it_vhost++)
+			it_vhost->get_csock_list().erase(it_vhost->get_csock_list().find(*it));
 		g_logger << "TIMEOUT, csock closed : " + ft_itos(*it);
 	}
 }
@@ -275,8 +273,8 @@ void webserv::add_event_to_request(int csock) {
 	it->second._left += c_buffer;
 	if (it->second.stage == 0)
 		analyse_header(it->second);
-	else (it->second.stage == 1)
-		;// analyse_body(it->second); // a faire
+	else if (it->second.stage == 1)
+		g_logger << "We start to parse body";// analyse_body(it->second); // a faire
 }
 
 void webserv::analyse_header(request &req) {

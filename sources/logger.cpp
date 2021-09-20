@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   logger.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:23:26 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 14:49:16 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/20 18:19:27 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,3 +29,6 @@ std::ofstream & operator<<(logger & logger, const std::string & log) {
 logger::~logger() {
     this->fd.close();
 }
+
+
+
