@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:42:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 12:33:15 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/20 14:27:25 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ int main(int ac, char **av) {
 		std::cout << "Error argument\n" << std::endl;
 		return (1);
 	}
-	g_webserv.control_time_out();
-	return (1);
 	try {
 		g_logger << LOG_START;
 		g_webserv = webserv(ac == 2 ? av[1] : "config/default.config");

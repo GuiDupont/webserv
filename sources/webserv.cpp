@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 14:24:46 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/20 15:26:18 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,14 @@ void	webserv::wait_for_connection() {
 	while (1)
 	{
 		sleep(3); // a supprimer
-
+		control_time_out();
 		int nsfd = epoll_wait(this->_epfd, revents, 64, 0);
 		if (nsfd)
-		{
-			std::cout << nsfd << " évènements de capté(s)" << std::endl;
 			g_logger << LOG_EPOLL_EVENT + ft_itos(nsfd);
-		}
 		else if (nsfd == -1)
 			g_logger << LOG_ISSUE_EPOLL_WAIT + std::string(strerror(errno)) << std::endl;
 		else
-			std::cout << "Pas d'événement" << std::endl;
+			g_logger << "No events";
 		for (int i = 0; i < nsfd; i++) {
 			// if (revents[i].events & EPOLLIN)
 			// 	std::cout << "EPOLLIN on " << (ft_is_ssock(revents[i].data.fd) ? "ssock" : "csock") << std::endl;			
@@ -56,8 +53,7 @@ void	webserv::wait_for_connection() {
 				std::time_t t = std::time(0);
 				std::tm	*now = std::localtime(&t);
 				_timeout.insert(std::pair<int, std::tm>(csock, *now));
-				std::cout << csock << std::endl;
-				std::cout << "On a accepté un client\n";
+				g_logger << "On a accepté un client, csock = " + ft_itos(csock);
 				ft_add_csock_to_vhost(revents[i].data.fd, csock);
 				ev.events = EPOLLIN;
 				ev.data.fd = csock;
@@ -66,6 +62,7 @@ void	webserv::wait_for_connection() {
 					std::cout << errno << strerror(errno) << std::endl; // add an exception
 			}
 			else if (revents[i].events & EPOLLOUT && (!ft_is_ssock(revents[i].data.fd))) { // we have smthing to send
+				g_logger << "Flag EPOLLOUT";
 				// a voir si eppollout direct 
 				// if (is_pending_request(revents[i].data.fd))
 				// 	;
@@ -73,8 +70,11 @@ void	webserv::wait_for_connection() {
 				// 	handle_new_request(revents[i].data.fd);
 			}
 			else if (revents[i].events & EPOLLIN && (!ft_is_ssock(revents[i].data.fd))) { // we have something to read
-				if (is_new_request(revents[i].data.fd) == 1)
+				g_logger << "Flag EPOLLIN";
+				if (is_new_request(revents[i].data.fd) == 1) {
+					g_logger << "Nouvelle requete cree";
 					_requests.insert(std::pair<int, request>(revents[i].data.fd, request(revents[i].data.fd)));
+				}
 				add_event_to_request(revents[i].data.fd);
 			}
 		}
@@ -223,9 +223,7 @@ void	webserv::control_time_out(void) {
 	
 	for (std::map<int, std::tm>::iterator it = _timeout.begin(); it != _timeout.end(); it++) {
 		
-		if ((now->tm_hour - it->second.tm_hour) != 0 || 
-			(now->tm_min - it->second.tm_min) != 0 || 
-			(now->tm_sec - it->second.tm_sec) > 20)
+		if (((now->tm_hour - it->second.tm_hour) * 3600 + (now->tm_min - it->second.tm_min) * 60 + (now->tm_sec - it->second.tm_sec)) > 20)
 		{
 			std::map<int, request>::iterator it_req = _requests.find(it->first);
 			if (it_req == _requests.end())
@@ -239,6 +237,7 @@ void	webserv::control_time_out(void) {
 		_requests.erase(*it);
 		_timeout.erase(*it);
 		epoll_ctl(_epfd, EPOLL_CTL_DEL, *it, NULL);
+		g_logger << "TIMEOUT, csock closed : " + ft_itos(*it);
 	}
 }
 
@@ -277,12 +276,12 @@ void webserv::add_event_to_request(int csock) {
 	if (it->second.stage == 0)
 		analyse_header(it->second);
 	else (it->second.stage == 1)
-		// analyse_body(it->second); // a faire
+		;// analyse_body(it->second); // a faire
 }
 
 void webserv::analyse_header(request &req) {
 
-	if (req._left.find(std::string("\r\n"), 0) != std::string::npos) {
+	if (req._left.find(std::string("\r\n\r\n"), 0) != std::string::npos) {
 		int index = 0;
 		req._method = get_word(req._left, index, std::string(" "));
 		if (req._method != "GET" && req._method != "DELETE" && req._method != "POST")
@@ -317,9 +316,10 @@ void webserv::analyse_header(request &req) {
 			std::string header_field_raw = get_word(req._left, index, std::string("\r\n"));
 			if (header_field_raw.size() == 0)
 				break ;
-			std::cout << header_field_raw << std::endl;
-			int semi_colon_index =  header_field_raw.find(":", 0);
-			if (semi_colon_index != std::string::npos) {
+			g_logger << header_field_raw;
+			size_t semi_colon_index =  header_field_raw.find(":", 0);
+			if (semi_colon_index == std::string::npos) {
+				g_logger << "je suis rentre ici2";
 				req._error_to_send = 400;
 				set_request_to_ended(req);	
 				return ;
@@ -331,13 +331,15 @@ void webserv::analyse_header(request &req) {
 			|| header_field.first[header_field.first.size() - 1] == '\t'
 			|| !is_token(header_field.first) || !is_field_content(header_field.second))
 			{
-				std::cout  << is_token(header_field.first) << is_field_content(header_field.second);
+				g_logger << "je suis rentre ici";
+				std::cout  << is_token(header_field.first) << is_field_content(header_field.second); // a supprimer
 				req._error_to_send = 400;
 				set_request_to_ended(req);
 				return ;
 			}
 			if (req._header_fields.find(header_field.first) != req._header_fields.end())
 			{
+				g_logger << "je suis rentre la";
 				req._error_to_send = 400;
 				set_request_to_ended(req);
 				return ;

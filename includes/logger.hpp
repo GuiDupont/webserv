@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   logger.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:24:01 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/17 19:12:59 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/20 14:31:52 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # define LOG_EPOLL_CREATE       "Epoll create successful			 | epfd  = "
 # define LOG_LISTEN_SSOCK       "Ssock created           			 | ssock = "
 # define LOG_SSOCK_ADD_EPOLL    "Ssock added to Epoll    			 | ssock = "
-# define LOG_WAIT_CO    		"Epoll is waiting for connection     | ssock = "
+# define LOG_WAIT_CO    		"Epoll is waiting for connection"
 # define LOG_EPOLL_EVENT   		"Epoll noticed new events     		 | nb    = "
 # define LOG_ISSUE_EPOLL_WAIT   "Epoll wait return -1     			 | nb    = "
 
