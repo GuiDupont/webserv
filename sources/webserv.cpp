@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 15:26:18 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/20 18:39:10 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,8 +275,8 @@ void webserv::add_event_to_request(int csock) {
 	it->second._left += c_buffer;
 	if (it->second.stage == 0)
 		analyse_header(it->second);
-	else (it->second.stage == 1)
-		;// analyse_body(it->second); // a faire
+	if (it->second.stage == 1)
+		analyse_body(it->second);
 }
 
 void webserv::analyse_header(request &req) {
@@ -357,6 +357,13 @@ void webserv::analyse_header(request &req) {
 	}
 }
 
+void	webserv::analyse_body(request &req) {
+
+	if (req._header_fields.find("Content-Length") == req._header_fields.end() && !is_chunked(req)) {
+		g_logger << "pas chunked ou bien Content Length";
+	}
+}
+
 void	webserv::set_request_to_ended(request &req) {
 
 	struct epoll_event ev;
@@ -368,3 +375,32 @@ void	webserv::set_request_to_ended(request &req) {
 	return ;
 }
 
+bool webserv::is_chunked(request &req) {
+
+	std::map<std::string, std::string>::iterator it = req._header_fields.find("Transfer-Encoding");
+	if (it == req._header_fields.end())
+		return (0);
+	int index = find_word(it->second, "chunked");
+	g_logger << "index chunked = " + ft_itos(index);
+	if (index >= 0)
+		return (1);
+	else
+		return (0);
+}
+
+int webserv::find_word(std::string str, std::string word) {
+
+	std::string::iterator it = str.begin();
+	std::string::iterator it2;
+	if (str.size() == 0 || word.size() == 0)
+		return (-1);
+	for (; it != str.end(); it++) {
+		for (; (it != str.end() && (std::isspace(*it) != 0 || *it == ',')); it++) {}
+		it2 = it;
+		for (; it2 != str.end() && std::isspace(*it2) == 0 && *it2 != ','; it2++) {}
+		if (str.substr((it - str.begin()), (it2 - it)) == word)
+			return (it - str.begin());
+		it = it2 - 1;
+	}
+	return (-1);
+}

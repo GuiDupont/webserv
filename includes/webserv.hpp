@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 14:24:34 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/20 17:56:08 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,12 @@ class webserv {
 		void	handle_new_request(int csock); // a supprimer ?? (ancienne fonction pour avoir le bdy)
 		bool	is_new_request(int fd);
 		void	control_time_out(void);
-
 		void	add_event_to_request(int csock);
 		void	analyse_header(request &req);
 		void	analyse_body(request &req);
 		void	set_request_to_ended(request &req);
+		bool	is_chunked(request &req);
+		int		find_word(std::string str, std::string word);
 	
 	private:
 
