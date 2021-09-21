@@ -1,31 +1,57 @@
-19h14m25s: ------BEGINNING OF THE PROGRAM-------
-19h14m25s: Config successful
-19h14m25s: Epoll create successful			 | epfd  = 4
-19h14m25s: Ssock created           			 | ssock = 5
-19h14m25s: Ssock added to Epoll    			 | ssock = 5
-19h14m25s: Ssock created           			 | ssock = 6
-19h14m25s: Ssock added to Epoll    			 | ssock = 6
-19h14m25s: Ssock created           			 | ssock = 7
-19h14m25s: Ssock added to Epoll    			 | ssock = 7
-19h14m25s: Ssock created           			 | ssock = 8
-19h14m25s: Ssock added to Epoll    			 | ssock = 8
-19h14m25s: Ssock created           			 | ssock = 9
-19h14m25s: Ssock added to Epoll    			 | ssock = 9
-19h14m25s: Epoll is waiting for connection
-19h14m28s: No events
-19h14m31s: No events
-19h14m34s: No events
-19h14m37s: No events
-19h14m40s: No events
-19h14m43s: No events
-19h14m46s: No events
-19h14m49s: No events
-19h14m52s: No events
-19h14m55s: No events
-19h14m58s: No events
-19h15m1s: No events
-19h15m4s: No events
-19h15m7s: No events
-19h15m10s: No events
-19h15m13s: No events
-19h15m16s: No events
+15h32m12s: ------BEGINNING OF THE PROGRAM-------
+15h32m12s: Config successful
+15h32m12s: Epoll create successful			 | epfd  = 4
+15h32m12s: Ssock created           			 | ssock = 5
+15h32m12s: Ssock added to Epoll    			 | ssock = 5
+15h32m12s: Ssock created           			 | ssock = 6
+15h32m12s: Ssock added to Epoll    			 | ssock = 6
+15h32m12s: Ssock created           			 | ssock = 7
+15h32m12s: Ssock added to Epoll    			 | ssock = 7
+15h32m12s: Ssock created           			 | ssock = 8
+15h32m12s: Ssock added to Epoll    			 | ssock = 8
+15h32m12s: Ssock created           			 | ssock = 9
+15h32m12s: Ssock added to Epoll    			 | ssock = 9
+15h32m12s: Epoll is waiting for connection
+15h32m15s: No events
+15h32m18s: Epoll noticed new events     	| nb    = 1
+15h32m18s: We accepted a new client from ssock 8, new csock is = 10
+15h32m21s: Epoll noticed new events     	| nb    = 1
+15h32m21s: Epoll_wait identified an EPOLLIN on csock: 10
+15h32m21s: New request has been created on csock: 10
+15h32m21s: We are parsing header from ccosk: 10
+15h32m21s: Host: 127.0.0.3:1205
+15h32m21s: Connection: keep-alive
+15h32m21s: Cache-Control: max-age=0
+15h32m21s: sec-ch-ua: " Not;A Brand";v="99", "Google Chrome";v="91", "Chromium";v="91"
+15h32m21s: sec-ch-ua-mobile: ?0
+15h32m21s: Upgrade-Insecure-Requests: 1
+15h32m21s: User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36
+15h32m21s: Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+15h32m21s: Sec-Fetch-Site: none
+15h32m21s: Sec-Fetch-Mode: navigate
+15h32m21s: Sec-Fetch-User: ?1
+15h32m21s: Sec-Fetch-Dest: document
+15h32m21s: Accept-Encoding: gzip, deflate, br
+15h32m21s: Accept-Language: en-US,en;q=0.9
+15h32m21s: HERE IS THE CONFIGURATION WE SET UP
+Server name: localhost
+Request_target: /
+Auto_index: 1
+Client_max_body_size: 24
+Upload_pass: /lalala
+Root: www/
+CGI: 0
+Index: index.php
+Error 403 | page :www/error_page_403.html
+Error 404 | page :www/error_page_404.html
+Error 500 | page :www/error_page_500.html
+Method: GET
+Request_target: /
+CGI ext : .jpg
+15h32m21s:  csock is closed: 10
+15h32m21s:  ssock is closed: 5
+15h32m21s:  ssock is closed: 6
+15h32m21s:  ssock is closed: 7
+15h32m21s:  ssock is closed: 8
+15h32m21s:  ssock is closed: 9
+15h32m21s:  EPFD is closed: 4

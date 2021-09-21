@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/20 12:22:31 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/21 15:31:53 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,6 +251,29 @@ bool	is_valid_request_target(std::string line) {
 			return (false);
 	}
 	return (true);
+}
+
+void	stop_program_sigint(int signum) {
+	std::set<int> csock;
+	std::set<int> sock;
+	for (std::list<vHost>::iterator it = g_webserv.get_vhosts().begin(); it != g_webserv.get_vhosts().end(); it++) {
+		for (std::set<int>::iterator it_csock = it->get_csock_list().begin(); it_csock != it->get_csock_list().end(); it_csock++)
+			csock.insert(*it_csock);
+		for (std::map< int, std::pair< std::string, size_t> >::iterator it_sock = it->get_sock_list().begin(); it_sock != it->get_sock_list().end(); it_sock++) {
+			sock.insert(it_sock->first);
+		}
+	}
+	for (std::set<int>::iterator it = csock.begin(); it != csock.end(); it++) {
+		g_logger.fd << g_logger.get_timestamp() << " csock is closed: " << *it << std::endl;
+		close(*it);
+	}
+	for (std::set<int>::iterator it = sock.begin(); it != sock.end(); it++) {
+		g_logger.fd << g_logger.get_timestamp() << " ssock is closed: " << *it << std::endl;
+		close(*it);
+	}
+	g_logger.fd << g_logger.get_timestamp() << " EPFD is closed: " << g_webserv.get_epfd() << std::endl;
+	close(g_webserv.get_epfd());
+	exit(1);
 }
 // to test function
 

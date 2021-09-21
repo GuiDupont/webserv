@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:42:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 14:27:25 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/21 15:08:52 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int main(int ac, char **av) {
 		return (1);
 		//rajouter une ligne pour l'exception bad_nb_arg
 	}
+	signal(SIGINT, stop_program_sigint);
 	try {
 		g_webserv.set_hosts();
 		g_webserv.wait_for_connection();

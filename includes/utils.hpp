@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 12:51:13 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/20 11:00:53 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/21 15:08:41 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ bool							is_field_content(std::string & s);
 bool							is_field_vchar(unsigned char c);
 std::string                     ft_itos(int n);
 bool                            is_valid_request_target(std::string line);
+void                            stop_program_sigint(int signum);
+
 
 
 

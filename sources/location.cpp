@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 17:55:12 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 18:54:56 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/21 14:08:48 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,17 @@
 
 size_t g_line;
 
-location::location(std::ifstream & config_file, std::string & line) : _client_max_body_size(0), _disable_methods(0), _auto_index(false) {
+location::location(std::ifstream & config_file, std::string & line, vHost & host) 
+		: _client_max_body_size(-1), _disable_methods(0), _error_pages(host.get_error_pages()),
+		_auto_index(false), _root(host.get_root()) {
+	
 	int i = go_to_next_word(line, 0);
 	std::string path = get_word(line, i);
 	i = go_to_next_word(line, i);
 	std::string opening_bracket = get_word(line, i);
 	if (opening_bracket != "{")
 		throw (bad_location_declaration());
-	_path = path;
+	_location = path;
 	std::string	first_word;
 	while (1) {
 		std::getline(config_file, line, '\n');
@@ -63,8 +66,8 @@ location::location(std::ifstream & config_file, std::string & line) : _client_ma
 	}
 }
 
-std::string  const	& location::get_path() const {
-	return (this->_path);
+std::string  const	& location::get_location() const {
+	return (this->_location);
 }
 
 int										const		& location::get_client_max_body_size() const {
@@ -99,6 +102,6 @@ std::list< std::pair<int, std::string> >const		& location::get_return() const {
 	return (this->_return);
 }
 
-std::list< std::string >				const		& location::get_cgi_ext() const {
+std::set< std::string >					const		& location::get_cgi_ext() const {
 	return (this->_cgi_ext);
 }

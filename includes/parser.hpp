@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:10 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 10:51:49 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/21 14:10:29 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <iostream>
 # include <fstream>
 # include <list>
+# include <set>
 # include "exceptions.hpp"
 # include "webserv.hpp"
 # include "vhost.hpp"
@@ -40,7 +41,7 @@ class webserv_parser {
 		size_t								parse_disabled_methods(std::string & line);
 		std::string							parse_one_word(std::string & line);
 		bool								parse_auto_index(std::string & line);
-		void								parse_cgi_extension(std::list< std::string > & cgi_ext, std::string & line);
+		void								parse_cgi_extension(std::set< std::string > & cgi_ext, std::string & line);
 		size_t								get_max_body_size(std::string & line);
 		std::pair<int, std::string> 		parse_return(std::string &line);
 		std::pair<int, std::string>			parse_error_page(std::string & line);

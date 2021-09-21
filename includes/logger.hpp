@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   logger.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:24:01 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 14:31:52 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/21 10:24:23 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LOGGER_HPP
 # define LOGGER_HPP
+
+# include "utils.hpp"
 
 # include <fstream>
 # include <ios>
@@ -24,7 +26,7 @@
 # define LOG_LISTEN_SSOCK       "Ssock created           			 | ssock = "
 # define LOG_SSOCK_ADD_EPOLL    "Ssock added to Epoll    			 | ssock = "
 # define LOG_WAIT_CO    		"Epoll is waiting for connection"
-# define LOG_EPOLL_EVENT   		"Epoll noticed new events     		 | nb    = "
+# define LOG_EPOLL_EVENT   		"Epoll noticed new events     	| nb    = "
 # define LOG_ISSUE_EPOLL_WAIT   "Epoll wait return -1     			 | nb    = "
 
 
@@ -35,12 +37,14 @@ class logger {
         // logger();
         ~logger();
 
-        logger & operator=(logger & rhs);
-		friend std::ofstream & operator<<(logger & logger, const std::string & log);
 
-    private:
+        logger & operator=(logger & rhs);
+		friend std::ofstream    & operator<<(logger & logger, const std::string & log);
+        std::string             	get_timestamp();
+
+ 
         std::ofstream    fd;
-        
+	private:
 };
 
 

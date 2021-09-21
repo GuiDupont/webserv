@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:23:26 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 18:19:27 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/21 10:05:57 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,12 @@ logger::~logger() {
     this->fd.close();
 }
 
+std::string     logger::get_timestamp() {
+    std::time_t t = std::time(0);
+    std::tm*    now = std::localtime(&t);
 
+    std::string timestamp;
+	timestamp =  ft_itos(now->tm_hour) + "h" + ft_itos(now->tm_min) + "m" + ft_itos(now->tm_sec) + "s: ";
+    return (timestamp);
+}
 

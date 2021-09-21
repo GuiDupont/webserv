@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 18:56:32 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/21 14:09:28 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ class location {
 
 	public:
 		location() ;
-		location(std::ifstream & config_file, std::string & line);
+		location(std::ifstream & config_file, std::string & line, vHost & vhost);
 
-		std::string	const									& get_path() const;
+		std::string	const									& get_location() const;
 		int			const									& get_client_max_body_size() const;
 		bool		const									& get_auto_index() const;
 		size_t		const									& get_disable_methods() const;
@@ -40,7 +40,7 @@ class location {
 		std::string const									& get_root() const;
 		std::string const									& get_index() const;
 		std::list< std::pair<int, std::string> >	const	& get_return() const;
-		std::list< std::string >	const					& get_cgi_ext() const;
+		std::set< std::string >	const					& get_cgi_ext() const;
 
 	private:
 
@@ -52,8 +52,8 @@ class location {
 		std::string 									_root;
 		std::string 									_index;
 		std::list< std::pair<int, std::string> >		_return;
-		std::list< std::string >						_cgi_ext;
-		std::string 									_path;
+		std::set< std::string >							_cgi_ext;
+		std::string 									_location;
 };
 
 

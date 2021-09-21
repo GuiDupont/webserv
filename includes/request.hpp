@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:07:25 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 13:08:37 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/21 11:45:47 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class request {
 		std::string 						_request_target;
 		std::string 						_HTTP_version;
 		std::map<std::string, std::string>	_header_fields;
+		std::string							_host;
 		std::string							_body;
 		std::string							_left;
 		int									_error_to_send;

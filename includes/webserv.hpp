@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 17:08:12 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/21 15:15:24 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # include <iostream>
 # include <fcntl.h>
 # include <ctime>
+# include <csignal>
 
 
 
@@ -39,6 +40,9 @@
 # define GET 1
 # define POST 2
 # define DELETE 4
+
+
+# define TIMEOUT 10
 
 class vHost;
 class request;
@@ -56,7 +60,6 @@ class webserv {
 
 	private:
 		std::list<vHost> 							_vhosts;
-		bool										_auto_index;
 		int											_client_max_body_size;
 		std::list< std::pair<int, std::string> >	_error_pages;
 		std::string									_upload_pass;
@@ -72,8 +75,10 @@ class webserv {
 
 		void	set_config(std::ifstream & config_file);
 
-		void 	set_hosts();
-		int		get_epfd() const ;
+		void 							set_hosts();
+		int								get_epfd() const ;
+		std::list<vHost>				&get_vhosts() ;
+
 		void	wait_for_connection();
 		bool	ft_is_ssock(int fd);
 		void	ft_add_csock_to_vhost(int sock, int csock);
@@ -88,6 +93,8 @@ class webserv {
 		void	analyse_header(request &req);
 		void	analyse_body(request &req);
 		void	set_request_to_ended(request &req);
+		void	clean_csock_from_server(int fd);
+
 	
 	private:
 

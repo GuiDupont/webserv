@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 14:23:28 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/21 14:11:11 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,12 +124,12 @@ bool	webserv_parser::parse_auto_index(std::string & line) {
 		throw (bad_auto_index_value()); //change with wrong nb argument
 }
 
-void	webserv_parser::parse_cgi_extension(std::list< std::string > & cgi_ext, std::string & line) {
+void	webserv_parser::parse_cgi_extension(std::set< std::string > & cgi_ext, std::string & line) {
 	int i = go_to_next_word(line, 0);
 	if (!line[i])
 		throw (empty_declaration());
 	while (line[i]) {
-		cgi_ext.push_back(get_word(line, i));
+		cgi_ext.insert(get_word(line, i));
 		i = go_to_next_word(line, i);
 	}
 }

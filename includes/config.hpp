@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 18:57:37 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/21 14:07:22 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 # include <string>
 # include <map>
+# include <set>
 
 typedef int unknown;
 class vHost;
@@ -41,13 +42,22 @@ class config {
 		std::string									_request_target;
 		std::map<std::string, std::string>			_header_fields;
 		std::list< std::pair<int, std::string> >	_return;
-		std::list< std::string >					_cgi_ext;
-		std::string 								_path;
+		std::set< std::string >					_cgi_ext;
+		std::string 								_location;
 	
 		config(request & req);
 		void	put_vhost_and_location_in_config(vHost & host, request & conf);
 	private:
 
+
+
+	public:
+
+		friend std::ostream & operator<<(std::ostream & o, const config & c);
+
 };
+
+
+
 
 # endif
