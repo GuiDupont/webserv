@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/21 14:09:28 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/21 18:53:15 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ class location {
 		std::string	const									& get_upload_pass() const;
 		std::string const									& get_root() const;
 		std::string const									& get_index() const;
-		std::list< std::pair<int, std::string> >	const	& get_return() const;
-		std::set< std::string >	const					& get_cgi_ext() const;
+		std::pair<int, std::string>					const	& get_return() const;
+		std::set< std::string >	const						& get_cgi_ext() const;
 
 	private:
 
@@ -51,9 +51,10 @@ class location {
 		std::string										_upload_pass;
 		std::string 									_root;
 		std::string 									_index;
-		std::list< std::pair<int, std::string> >		_return;
+		std::pair<int, std::string>						_return;
 		std::set< std::string >							_cgi_ext;
 		std::string 									_location;
+		std::string										_cgi_dir;
 };
 
 

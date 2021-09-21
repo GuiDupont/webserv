@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/21 15:42:05 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/21 18:40:53 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ bool	is_ip(std::string str) {
 	return (1);
 }
 
-void param_socket_server(vHost &host) {
+void	param_socket_server(vHost &host) {
 
     SOCKADDR_IN sin;
     SOCKET sock;
@@ -95,7 +95,8 @@ void param_socket_server(vHost &host) {
 			close(sock);
 			sock = g_webserv.get_sock_by_matching_host_ip(std::pair< std::string, size_t> (*it));
 			if (sock == -1)
-				throw (port_already_used());
+				// throw (port_already_used());
+				;
 			else
 				host.map_sock_to_hostport(sock, *it);
 		}
@@ -106,9 +107,9 @@ void param_socket_server(vHost &host) {
 				throw (cant_listen());
 			}
 			g_logger << LOG_LISTEN_SSOCK + ft_itos(sock);
-			host.map_sock_to_hostport(sock, *it); // tester avec config mm port/dif address..
+			host.map_sock_to_hostport(sock, *it);
 			static struct epoll_event ev;
-			ev.events = EPOLLIN | EPOLLOUT | EPOLLET; // a voir si EPOLLET necessaire
+			ev.events = EPOLLIN | EPOLLET;
 			ev.data.fd = sock;
 			if (epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_ADD, sock, &ev) != 0)
 				throw (epoll_ctl_add_error());
@@ -264,17 +265,20 @@ void	stop_program_sigint(int signum) {
 		}
 	}
 	for (std::set<int>::iterator it = csock.begin(); it != csock.end(); it++) {
-		g_logger.fd << g_logger.get_timestamp() << " csock is closed: " << *it << std::endl;
-		close(*it);
+		
+		!close(*it) ? g_logger.fd << g_logger.get_timestamp() << " csock is closed: " << *it << std::endl : 
+		g_logger.fd << g_logger.get_timestamp() << " csock not closed: " << *it << " error: " << strerror(errno) << std::endl;
 	}
 	for (std::set<int>::iterator it = sock.begin(); it != sock.end(); it++) {
-		g_logger.fd << g_logger.get_timestamp() << " ssock is closed: " << *it << std::endl;
-		close(*it);
+		!close(*it) ? g_logger.fd << g_logger.get_timestamp() << " cssock is closed: " << *it << std::endl : 
+		g_logger.fd << g_logger.get_timestamp() << " ssock not closed: " << *it << " error: " << strerror(errno) << std::endl;;
 	}
-	g_logger.fd << g_logger.get_timestamp() << " EPFD is closed: " << g_webserv.get_epfd() << std::endl;
-	close(g_webserv.get_epfd());
+
+	!close(g_webserv.get_epfd()) ? g_logger.fd << g_logger.get_timestamp() << " EPFD is closed: " << g_webserv.get_epfd() << std::endl : 
+		g_logger.fd << g_logger.get_timestamp() << " EPFD not closed: " << g_webserv.get_epfd() << " error: " << strerror(errno) << std::endl;;
 	exit(1);
 }
+
 // to test function
 
 // std::string test = "/..";

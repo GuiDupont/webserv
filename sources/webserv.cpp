@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/21 15:53:25 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/21 19:24:15 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	webserv::wait_for_connection() {
 	socklen_t crecsize = sizeof(csin);
 	revents = (struct epoll_event *)calloc(64, sizeof(*revents)); // verifier quelle valeur mettre
 	char buffer[100] = "";
-	struct epoll_event ev;
+
 	while (1)
 	{
 		sleep(3); // a supprimer
@@ -43,32 +43,12 @@ void	webserv::wait_for_connection() {
 		else
 			g_logger << "No events";
 		for (int i = 0; i < nsfd; i++) {
-			if (revents[i].events & EPOLLIN && ft_is_ssock(revents[i].data.fd)) { //we have a client to accept
-				// add new socket client to epoll
-				SOCKET csock = accept(revents[i].data.fd, (SOCKADDR*)&csin, &crecsize);
-				std::time_t t = std::time(0);
-				std::tm	*now = std::localtime(&t);
-				_timeout.insert(std::pair<int, std::tm>(csock, *now));
-				g_logger.fd << g_logger.get_timestamp() << "We accepted a new client from ssock " << revents[i].data.fd << ", new csock is = " << csock << std::endl;
-				ft_add_csock_to_vhost(revents[i].data.fd, csock);
-				ev.events = EPOLLIN;
-				ev.data.fd = csock;
-				fcntl(csock, F_SETFL, O_NONBLOCK);
-				if (epoll_ctl(_epfd, EPOLL_CTL_ADD, csock, &ev) == -1)
-					std::cout << errno << strerror(errno) << std::endl; // add an exception
-			}
-			else if (revents[i].events & EPOLLOUT && (!ft_is_ssock(revents[i].data.fd))) { // we have smthing to send
-				g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on csock: " << revents[i].data.fd << std::endl;
-				config conf(g_webserv._requests.find(revents[i].data.fd)->second);
-				g_logger.fd << g_logger.get_timestamp() << conf;
-				
-				// a voir si eppollout direct 
-				// if (is_pending_request(revents[i].data.fd))
-				// 	;
-				// else
-				// 	handle_new_request(revents[i].data.fd);
-			}
+			if (revents[i].events & EPOLLIN && ft_is_ssock(revents[i].data.fd))
+				handle_new_client(revents[i].data.fd, (SOCKADDR*)&csin, &crecsize);
+			else if (revents[i].events & EPOLLOUT && (!ft_is_ssock(revents[i].data.fd)))
+				handle_answer_to_request(revents[i].data.fd);
 			else if (revents[i].events & EPOLLIN && (!ft_is_ssock(revents[i].data.fd))) { // we have something to read
+			
 				g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLIN on csock: " << revents[i].data.fd << std::endl;
 				if (is_new_request(revents[i].data.fd) == 1) {
 					g_logger.fd << g_logger.get_timestamp() << "New request has been created on csock: " + ft_itos(revents[i].data.fd) << std::endl;
@@ -79,6 +59,22 @@ void	webserv::wait_for_connection() {
 		}
 	}
 }
+
+
+void	webserv::handle_answer_to_request(int csock) {
+	g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on csock: " << csock << std::endl;
+	config conf(g_webserv._requests.find(csock)->second);
+	g_logger.fd << g_logger.get_timestamp() << conf;
+
+	// a voir si eppollout direct 
+	// if (is_pending_request(revents[i].data.fd))
+	// 	;
+	// else
+	// 	handle_new_request(revents[i].data.fd);
+}
+
+/* REQUEST MANAGEMENT */
+
 
 void webserv::analyse_header(request &req) {
 	g_logger.fd << g_logger.get_timestamp() + "We are parsing header from ccosk: " << req._csock << std::endl;// analyse_body(it->second); // a faire
@@ -173,6 +169,12 @@ void webserv::analyse_header(request &req) {
 }
 
 
+bool	webserv::is_pending_request(int csock) {
+	if (_requests.find(csock) != _requests.end())
+		return (true);
+	return (false);
+}
+
 void	webserv::set_request_to_ended(request &req) {
 
 	struct epoll_event ev;
@@ -196,26 +198,25 @@ bool webserv::is_new_request(int fd) {
 	return (1);
 }
 
+/* END REQUEST MANAGEMENT */
 
 
-void	webserv::handle_new_request(int csock) { // a supprimer ?? (ancienne fonction pour avoir le bdy)
-	int			ret;
-	std::pair<std::string, std::string> header_body;
-	int index = 0;
+/* CSOCK MANAGEMENT */
 
-	g_logger.fd << g_logger.get_timestamp() << "We are receiving a new request" << std::endl;
-	header_body = g_parser.get_header_begin_body(csock);
-	request 	new_request(header_body.first); // a optimiser avec constructeur de pair
-	new_request._body = header_body.second;
-	std::cout << new_request;
+void		webserv::handle_new_client(int ssock, SOCKADDR* csin, socklen_t* crecsize) {
+	SOCKET csock = accept(ssock,csin, crecsize);
+	std::time_t t = std::time(0);
+	std::tm	*now = std::localtime(&t);
+	struct epoll_event ev;
 
-	// parse msg body
-}
-
-bool	webserv::is_pending_request(int csock) {
-	if (_requests.find(csock) != _requests.end())
-		return (true);
-	return (false);
+	_timeout.insert(std::pair<int, std::tm>(csock, *now));
+	g_logger.fd << g_logger.get_timestamp() << "We accepted a new client from ssock " << ssock << ", new csock is = " << csock << std::endl;
+	ft_add_csock_to_vhost(ssock, csock);
+	ev.events = EPOLLIN;
+	ev.data.fd = csock;
+	fcntl(csock, F_SETFL, O_NONBLOCK);
+	if (epoll_ctl(_epfd, EPOLL_CTL_ADD, csock, &ev) == -1)
+		std::cout << errno << strerror(errno) << std::endl; // add an exception
 }
 
 void	webserv::ft_add_csock_to_vhost(int sock, int csock) {
@@ -269,9 +270,12 @@ void	webserv::display_sock() {
 	}
 }
 
+/* END CSOCK MANAGEMENT */
+
+
 /* CONSTRUCTOR */
 
-webserv::webserv(const std::string & path_config) : _client_max_body_size(-1) {
+webserv::webserv(const std::string & path_config) : _client_max_body_size(-1), _cgi_dir("some path") {
 	std::ifstream	config_file;
 	std::string		all_file;
 	
@@ -323,9 +327,6 @@ void		webserv::set_config(std::ifstream & config_file) {
 		throw (no_port_associated()); // changer par la suite par une vraie exception pour vhost, comme recommande par Guillaume.
 }
 
-
-
-
 void	webserv::control_time_out(void) {
 	
 	std::time_t t = std::time(0);
@@ -361,23 +362,19 @@ void	webserv::clean_csock_from_server(int fd) {
 		close(fd);
 }
 
-webserv::webserv(void) {
-	
-}
+webserv::webserv(void) { }
 
-webserv::~webserv(void) {
-	
-}
+webserv::~webserv(void) { }
 
 int		webserv::get_epfd() const {
 	return (this->_epfd);
 }
 
-std::list<vHost>				&webserv::get_vhosts() {
+std::list<vHost>	&webserv::get_vhosts() {
 	return (this->_vhosts);
 }
 
-void webserv::add_event_to_request(int csock) {
+void 				webserv::add_event_to_request(int csock) {
 
 	char c_buffer[1025];
 	int ret;

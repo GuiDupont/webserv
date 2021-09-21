@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/21 15:50:18 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/21 19:23:23 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@
 # include <ctime>
 # include <csignal>
 # include <regex.h>
+# include <sys/socket.h>
+
 
 
 
@@ -52,6 +54,10 @@ typedef int unknown;
 extern class webserv_parser g_parser;
 extern class logger g_logger;
 
+typedef int SOCKET; // a bouger ?
+typedef struct sockaddr_in SOCKADDR_IN; // a bouger ?
+typedef struct sockaddr SOCKADDR; // a bouger ?
+
 
 class webserv {
 	friend class webserv_parser;
@@ -65,7 +71,7 @@ class webserv {
 		std::list< std::pair<int, std::string> >	_error_pages;
 		std::string									_upload_pass;
 		std::string 								_root;
-		unknown										_cgi;
+		std::string									_cgi_dir;
 		int											_epfd;
 		std::map<int, request>						_requests;
 		std::map<int, std::tm>						_timeout;
@@ -81,6 +87,10 @@ class webserv {
 		std::list<vHost>				&get_vhosts() ;
 
 		void	wait_for_connection();
+		void	handle_new_client(int ssock, SOCKADDR* csin, socklen_t* crecsize);
+		void	handle_answer_to_request(int csock);
+
+
 		bool	ft_is_ssock(int fd);
 		void	ft_add_csock_to_vhost(int sock, int csock);
 		int		get_sock_by_matching_host_ip(std::pair< std::string, size_t> host_port);
@@ -97,6 +107,7 @@ class webserv {
 		bool	is_chunked(request &req);
 		int		find_word(std::string str, std::string word);
 		bool	is_valid_content_length(std::string val);
+
 	
 	private:
 

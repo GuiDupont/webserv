@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:42:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/21 15:43:27 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/21 17:28:17 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,6 @@ int main(int ac, char **av) {
 	catch (std::exception & e) {
 		std::cout << e.what() << std::endl;
 	}
-	//stop_program_sigint();
+	stop_program_sigint(1);
 	// quitter proprement
 }

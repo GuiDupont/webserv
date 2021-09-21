@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/21 14:19:10 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/21 19:04:16 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ config::config(request & request) {
 	_error_pages = g_webserv._error_pages;
 	_upload_pass = g_webserv._upload_pass;
 	_root = g_webserv._root;
-	_cgi = g_webserv._cgi;
+	_cgi_dir = g_webserv._cgi_dir;
 	_request_target = request._request_target;
 	_method = request._method;
 
@@ -86,17 +86,17 @@ std::ostream & operator<<(std::ostream & o, const config & c)
 	o << "Client_max_body_size: " << c._client_max_body_size << std::endl;
 	o << "Upload_pass: " << c._upload_pass << std::endl;
 	o << "Root: " << c._root << std::endl;
-	o << "CGI: " << c._cgi << std::endl;
+	o << "CGI_dir: " << c._cgi_dir << std::endl;
+	for (std::set<std::string>::const_iterator it = c._cgi_ext.begin(); it != c._cgi_ext.end(); it++)
+		o << "CGI ext : " << *it << std::endl;
 	o << "Index: " << c._index << std::endl;
 	for (std::list<std::pair<int, std::string> >::const_iterator it = c._error_pages.begin(); it != c._error_pages.end(); it++)
 		o << "Error " << it->first << " | page :" << it->second << std::endl;
 	for (std::map<std::string, std::string>::const_iterator it = c._header_fields.begin(); it != c._header_fields.end(); it++)
 		o << "Header " << it->first << " | value :" << it->second << std::endl;
-	for (std::list<std::pair<int, std::string> >::const_iterator it = c._return.begin(); it != c._return.end(); it++)
-		o << "Return: " << it->first << " | Link :" << it->second << std::endl;
+	o << "Return: " << c._return.first << " | Link :" << c._return.second << std::endl;
 	o << "Method: " << c._method << std::endl;
 	o << "Request_target: " << c._request_target << std::endl;
-	for (std::set<std::string>::const_iterator it = c._cgi_ext.begin(); it != c._cgi_ext.end(); it++)
-		o << "CGI ext : " << *it << std::endl;
+	
 	return (o);
 }

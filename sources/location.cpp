@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 17:55:12 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/21 14:08:48 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/21 18:53:46 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ size_t g_line;
 
 location::location(std::ifstream & config_file, std::string & line, vHost & host) 
 		: _client_max_body_size(-1), _disable_methods(0), _error_pages(host.get_error_pages()),
-		_auto_index(false), _root(host.get_root()) {
+		_auto_index(false), _root(host.get_root()), _cgi_dir("cgi_dir") {
 	
 	int i = go_to_next_word(line, 0);
 	std::string path = get_word(line, i);
@@ -39,11 +39,11 @@ location::location(std::ifstream & config_file, std::string & line, vHost & host
 		if (first_word == "disable_methods")
 			_disable_methods = g_parser.parse_disabled_methods(line);
 		else if (first_word == "cgi_dir") // a finir
-			;
-		else if (first_word == "cgi_ext") // a finir
+			_cgi_dir = first_word;
+		else if (first_word == "cgi_ext")
 			g_parser.parse_cgi_extension(_cgi_ext, line);
 		else if (first_word == "return")
-			_return.push_back(g_parser.parse_return(line)); // only one necessary so no need for a list
+			_return = g_parser.parse_return(line);
 		else if (first_word == "root")
 			_root = g_parser.parse_one_word(line);
 		else if (first_word == "upload_pass")
@@ -98,7 +98,7 @@ std::string 							const		& location::get_index() const {
 	return (this->_index);
 }
 
-std::list< std::pair<int, std::string> >const		& location::get_return() const {
+std::pair<int, std::string> 			const		& location::get_return() const {
 	return (this->_return);
 }
 
