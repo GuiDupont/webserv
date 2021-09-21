@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/21 15:42:05 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/21 18:41:33 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void param_socket_server(vHost &host) {
 			g_logger << LOG_LISTEN_SSOCK + ft_itos(sock);
 			host.map_sock_to_hostport(sock, *it); // tester avec config mm port/dif address..
 			static struct epoll_event ev;
-			ev.events = EPOLLIN | EPOLLOUT | EPOLLET; // a voir si EPOLLET necessaire
+			ev.events = EPOLLIN | EPOLLET; // a voir si EPOLLET necessaire
 			ev.data.fd = sock;
 			if (epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_ADD, sock, &ev) != 0)
 				throw (epoll_ctl_add_error());
@@ -273,6 +273,7 @@ void	stop_program_sigint(int signum) {
 	}
 	g_logger.fd << g_logger.get_timestamp() << " EPFD is closed: " << g_webserv.get_epfd() << std::endl;
 	close(g_webserv.get_epfd());
+	g_logger.fd.close();
 	exit(1);
 }
 // to test function
