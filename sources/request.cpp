@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 13:09:21 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/21 13:49:18 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,3 +88,5 @@ request::request(std::string & header) { // a supprimer ?? (ancienne fonction po
 request::request() : stage(0) {}
 
 request::request(int csock) : stage(0), _csock(csock) {}
+
+request::request(int csock, std::string left) : stage(0), _csock(csock), _left(left) {}

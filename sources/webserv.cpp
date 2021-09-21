@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 18:39:10 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/21 15:41:58 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,7 +275,7 @@ void webserv::add_event_to_request(int csock) {
 	it->second._left += c_buffer;
 	if (it->second.stage == 0)
 		analyse_header(it->second);
-	if (it->second.stage == 1)
+	else if (it->second.stage == 1)
 		analyse_body(it->second);
 }
 
@@ -352,16 +352,56 @@ void webserv::analyse_header(request &req) {
 			set_request_to_ended(req);
 			return ;
 		}
+		if (req._header_fields.find("Content-Length") != req._header_fields.end() && is_chunked(req)) {
+			g_logger << "Content-Length et Transfer-Encoding chunked indiques sur csock : " << ft_itos(req._csock);
+			req._error_to_send = 400;
+			set_request_to_ended(req);
+			return ;
+		}
+		if (req._header_fields.find("Content-Length") != req._header_fields.end() {
+			if (is_valid_content_length(req._header_fields.find("Content-Length")->second) == 0) {
+				req._error_to_send = 400;
+				set_request_to_ended(req);
+				return ;
+			}
+		}
 		req._left = req._left.substr(index, req._left.size() - index);
 		req.stage = 1;
+		analyse_body(req);
 	}
 }
 
 void	webserv::analyse_body(request &req) {
 
 	if (req._header_fields.find("Content-Length") == req._header_fields.end() && !is_chunked(req)) {
-		g_logger << "pas chunked ou bien Content Length";
+		set_request_to_ended(req);
+		// g_logger << "size de left = " + ft_itos(req._left.size());
+		if (req._left.size() != 0) {
+			_requests.insert(std::pair<int, request>(req._csock, request(req._csock, req._left)));
+			req._left.clear();
+			analyse_header((--_requests.end())->second);
+		}
 	}
+	if (req._header_fields.find("Content-Length") != req._header_fields.end()) {
+		size_t length = std::atoi(req._header_fields.find("Content-Length")->second.c_str());
+		req._body += req._left;
+		req._left.clear();
+		if (req._body.size() > length) {
+			req._left = req._body.substr(length, req._body.end() - (req._body.begin() + length));
+			req._body = req._body.substr(0, length);
+			set_request_to_ended(req);
+			_requests.insert(std::pair<int, request>(req._csock, request(req._csock, req._left)));
+			req._left.clear();
+			analyse_header((--_requests.end())->second);
+		}
+		else if (req._body.size() == length)
+			set_request_to_ended(req);
+	}
+	// if (is_chunked(req)) {
+	// 	while(req._left.empty() == 1) {
+			
+	// 	}
+	// }
 }
 
 void	webserv::set_request_to_ended(request &req) {
@@ -381,7 +421,6 @@ bool webserv::is_chunked(request &req) {
 	if (it == req._header_fields.end())
 		return (0);
 	int index = find_word(it->second, "chunked");
-	g_logger << "index chunked = " + ft_itos(index);
 	if (index >= 0)
 		return (1);
 	else
@@ -392,15 +431,39 @@ int webserv::find_word(std::string str, std::string word) {
 
 	std::string::iterator it = str.begin();
 	std::string::iterator it2;
+	std::string::iterator it3;
+	std::string substr;
+
 	if (str.size() == 0 || word.size() == 0)
 		return (-1);
 	for (; it != str.end(); it++) {
-		for (; (it != str.end() && (std::isspace(*it) != 0 || *it == ',')); it++) {}
-		it2 = it;
-		for (; it2 != str.end() && std::isspace(*it2) == 0 && *it2 != ','; it2++) {}
-		if (str.substr((it - str.begin()), (it2 - it)) == word)
+		for (; it != str.end() && std::isspace(*it) != 0; it++) {}
+		if (str.find(',', it - str.begin()) != std::string::npos)
+			it2 = str.begin() + str.find(',', it - str.begin());
+		else
+			it2 = str.end();
+		substr = str.substr(it - str.begin(), it2 - it);
+		it3 = it2 - 1;
+		for (; it3 - it >= 0 && std::isspace(*it3) != 0; it3--) {}
+		substr = substr.substr(0, it3 - it + 1);
+		if (substr == word)
 			return (it - str.begin());
-		it = it2 - 1;
+		it = (it2 == str.end() ? it2 - 1 : it2);
 	}
 	return (-1);
+}
+
+bool	webserv::is_valid_content_length(std::string val) {
+
+    regex_t	regex;
+	int 	reti;
+
+	reti = regcomp(&regex, "^[0-9]\\{0,10\\}$", 0);
+    reti = regexec(&regex, val.c_str(), 0, NULL, 0);
+	if (reti) {
+    	regfree(&regex);
+		return (0);
+    }
+    regfree(&regex);
+	return (1);
 }

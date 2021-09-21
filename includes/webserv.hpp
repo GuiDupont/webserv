@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 17:56:08 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/21 14:38:04 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # include <iostream>
 # include <fcntl.h>
 # include <ctime>
+# include <regex.h>
 
 
 
@@ -87,6 +88,7 @@ class webserv {
 		void	set_request_to_ended(request &req);
 		bool	is_chunked(request &req);
 		int		find_word(std::string str, std::string word);
+		bool	is_valid_content_length(std::string val);
 	
 	private:
 

@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:07:25 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 13:08:37 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/21 13:48:46 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ class request {
 
 		request(std::string & header); // a supprimer ?? (ancienne fonction pour avoir le bdy)
 		request(int csock);
+		request(int csock, std::string left);
 		request();
 		// ~request();
 		// request & operator=()
