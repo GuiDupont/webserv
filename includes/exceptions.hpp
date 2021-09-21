@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:09:27 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 18:14:58 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/21 15:41:41 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,10 @@ class epoll_ctl_add_error : public std::exception {
 		virtual const char* what() const throw();
 };
 
+class port_already_used : public std::exception {
+	public:
+		virtual const char* what() const throw();
+};
 
 
 

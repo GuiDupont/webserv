@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:36:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/20 18:16:09 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/21 15:41:16 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,21 +93,21 @@ const char* cant_create_socket::what() const throw() {
 }
 
 const char* cant_bind_address::what() const throw() {
-
 	return ("Impossible to bind address");
 }
 
 const char* cant_listen::what() const throw() {
-
 	return ("Impossible to operate listen");
 }
 
 const char* epoll_ctl_add_error::what() const throw() {
-
 	return ("Impossible to add sock to epoll");
 }
 
 const char* duplicate_location::what() const throw() {
-
 	return ("Impossible to create two locations with the same path at line: ");
+}
+
+const char* port_already_used::what() const throw() {
+	return ("Impossible to bind to port, it's might be used by another program");
 }
