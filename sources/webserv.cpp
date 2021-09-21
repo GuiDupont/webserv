@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/21 15:49:02 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/21 15:53:25 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,34 +77,6 @@ void	webserv::wait_for_connection() {
 				add_event_to_request(revents[i].data.fd);
 			}
 		}
-	}
-}
-
-void webserv::add_event_to_request(int csock) {
-
-	char c_buffer[1025];
-	int ret;
-	std::map<int, request>::iterator it;
-
-	ret = recv(csock, c_buffer, 1024, 0);
-	if (ret < 0)
-	{
-		g_logger.fd << g_logger.get_timestamp() << "Error recv :" << strerror(errno) << std::endl;
-		return ;
-	}
-	std::time_t t = std::time(0);
-	_timeout.find(csock)->second = *std::localtime(&t);
-	c_buffer[ret] = '\0';
-	for (it = _requests.begin(); it != _requests.end(); it++) {
-		if (it->first == csock && it->second.stage != ENDED_REQUEST)
-			break ;
-	}
-	it->second._left += c_buffer;
-	if (it->second.stage == 0)
-		analyse_header(it->second);
-	else if (it->second.stage == 1)
-	{
-		g_logger.fd << g_logger.get_timestamp() << "We start to parse body";// analyse_body(it->second); // a faire
 	}
 }
 
@@ -187,7 +159,7 @@ void webserv::analyse_header(request &req) {
 			set_request_to_ended(req);
 			return ;
 		}
-		if (req._header_fields.find("Content-Length") != req._header_fields.end() {
+		if (req._header_fields.find("Content-Length") != req._header_fields.end()) {
 			if (is_valid_content_length(req._header_fields.find("Content-Length")->second) == 0) {
 				req._error_to_send = 400;
 				set_request_to_ended(req);
@@ -462,17 +434,6 @@ void	webserv::analyse_body(request &req) {
 			
 	// 	}
 	// }
-}
-
-void	webserv::set_request_to_ended(request &req) {
-
-	struct epoll_event ev;
-
-	req.stage = 2;
-	ev.events = EPOLLOUT;
-	ev.data.fd = req._csock;
-	epoll_ctl(_epfd, EPOLL_CTL_MOD, req._csock, &ev);
-	return ;
 }
 
 bool webserv::is_chunked(request &req) {
