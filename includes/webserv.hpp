@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/21 15:15:24 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/21 15:50:18 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # include <fcntl.h>
 # include <ctime>
 # include <csignal>
+# include <regex.h>
 
 
 
@@ -88,13 +89,14 @@ class webserv {
 		void	handle_new_request(int csock); // a supprimer ?? (ancienne fonction pour avoir le bdy)
 		bool	is_new_request(int fd);
 		void	control_time_out(void);
-
 		void	add_event_to_request(int csock);
 		void	analyse_header(request &req);
 		void	analyse_body(request &req);
 		void	set_request_to_ended(request &req);
 		void	clean_csock_from_server(int fd);
-
+		bool	is_chunked(request &req);
+		int		find_word(std::string str, std::string word);
+		bool	is_valid_content_length(std::string val);
 	
 	private:
 
