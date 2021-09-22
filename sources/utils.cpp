@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/21 18:40:53 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/22 14:23:26 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,6 +276,7 @@ void	stop_program_sigint(int signum) {
 
 	!close(g_webserv.get_epfd()) ? g_logger.fd << g_logger.get_timestamp() << " EPFD is closed: " << g_webserv.get_epfd() << std::endl : 
 		g_logger.fd << g_logger.get_timestamp() << " EPFD not closed: " << g_webserv.get_epfd() << " error: " << strerror(errno) << std::endl;;
+	// close file de log
 	exit(1);
 }
 

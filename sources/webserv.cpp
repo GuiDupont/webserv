@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/22 13:31:11 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/22 14:24:10 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,12 +153,6 @@ void webserv::analyse_header(request &req) {
 		}
 		if (req._header_fields.find("Host") == req._header_fields.end()) {
 			g_logger << "OK pb de Host sur csock : " << ft_itos(req._csock);
-			req._code_to_send = 400;
-			set_request_to_ended(req);
-			return ;
-		}
-		if (req._header_fields.find("Content-Length") != req._header_fields.end() && is_chunked(req)) {
-			g_logger << "Content-Length et Transfer-Encoding chunked indiques sur csock : " << ft_itos(req._csock);
 			req._code_to_send = 400;
 			set_request_to_ended(req);
 			return ;
@@ -411,33 +405,29 @@ void 				webserv::add_event_to_request(int csock) {
 void	webserv::analyse_body(request &req) {
 	if (req._header_fields.find("Content-Length") == req._header_fields.end() && !is_chunked(req)) {
 		set_request_to_ended(req);
-		// g_logger << "size de left = " + ft_itos(req._left.size());
-		if (req._left.size() != 0) {
-			_requests.insert(std::pair<int, request>(req._csock, request(req._csock, req._left)));
+		if (req._left.size() != 0)
 			req._left.clear();
-			analyse_header((--_requests.end())->second);
+	}
+	else if (is_chunked(req)) {
+		while(req._left.empty() == 1) {
+			if (req._left.find("\r\n", 0) != std::string::npos) {
+				
+			}
+			else
+				break;
 		}
 	}
-	if (req._header_fields.find("Content-Length") != req._header_fields.end()) {
+	else if (req._header_fields.find("Content-Length") != req._header_fields.end()) {
 		size_t length = std::atoi(req._header_fields.find("Content-Length")->second.c_str());
+		g_logger << "length = " + ft_itos(length);
 		req._body += req._left;
 		req._left.clear();
-		if (req._body.size() > length) {
-			req._left = req._body.substr(length, req._body.end() - (req._body.begin() + length));
+		if (req._body.size() >= length) {
 			req._body = req._body.substr(0, length);
 			set_request_to_ended(req);
-			_requests.insert(std::pair<int, request>(req._csock, request(req._csock, req._left)));
 			req._left.clear();
-			analyse_header((--_requests.end())->second);
 		}
-		else if (req._body.size() == length)
-			set_request_to_ended(req);
 	}
-	// if (is_chunked(req)) {
-	// 	while(req._left.empty() == 1) {
-			
-	// 	}
-	// }
 }
 
 bool webserv::is_chunked(request &req) {
