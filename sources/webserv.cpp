@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/22 14:24:10 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/22 18:58:39 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	webserv::wait_for_connection() {
 	socklen_t crecsize = sizeof(csin);
 	revents = (struct epoll_event *)calloc(64, sizeof(*revents)); // verifier quelle valeur mettre
 	char buffer[100] = "";
-
+	struct epoll_event ev;
 	while (1)
 	{
 		sleep(3); // a supprimer
@@ -43,12 +43,32 @@ void	webserv::wait_for_connection() {
 		else
 			g_logger << "No events";
 		for (int i = 0; i < nsfd; i++) {
-			if (revents[i].events & EPOLLIN && ft_is_ssock(revents[i].data.fd))
-				handle_new_client(revents[i].data.fd, (SOCKADDR*)&csin, &crecsize);
-			else if (revents[i].events & EPOLLOUT && (!ft_is_ssock(revents[i].data.fd)))
-				handle_answer_to_request(revents[i].data.fd);
+			if (revents[i].events & EPOLLIN && ft_is_ssock(revents[i].data.fd)) { //we have a client to accept
+				// add new socket client to epoll
+				SOCKET csock = accept(revents[i].data.fd, (SOCKADDR*)&csin, &crecsize);
+				std::time_t t = std::time(0);
+				std::tm	*now = std::localtime(&t);
+				_timeout.insert(std::pair<int, std::tm>(csock, *now));
+				g_logger.fd << g_logger.get_timestamp() << "We accepted a new client from ssock " << revents[i].data.fd << ", new csock is = " << csock << std::endl;
+				ft_add_csock_to_vhost(revents[i].data.fd, csock);
+				ev.events = EPOLLIN;
+				ev.data.fd = csock;
+				fcntl(csock, F_SETFL, O_NONBLOCK);
+				if (epoll_ctl(_epfd, EPOLL_CTL_ADD, csock, &ev) == -1)
+					std::cout << errno << strerror(errno) << std::endl; // add an exception
+			}
+			else if (revents[i].events & EPOLLOUT && (!ft_is_ssock(revents[i].data.fd))) { // we have smthing to send
+				g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on csock: " << revents[i].data.fd << std::endl;
+				config conf(g_webserv._requests.find(revents[i].data.fd)->second);
+				g_logger.fd << g_logger.get_timestamp() << conf;
+				
+				// a voir si eppollout direct 
+				// if (is_pending_request(revents[i].data.fd))
+				// 	;
+				// else
+				// 	handle_new_request(revents[i].data.fd);
+			}
 			else if (revents[i].events & EPOLLIN && (!ft_is_ssock(revents[i].data.fd))) { // we have something to read
-			
 				g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLIN on csock: " << revents[i].data.fd << std::endl;
 				if (is_new_request(revents[i].data.fd) == 1) {
 					g_logger.fd << g_logger.get_timestamp() << "New request has been created on csock: " + ft_itos(revents[i].data.fd) << std::endl;
@@ -60,30 +80,6 @@ void	webserv::wait_for_connection() {
 	}
 }
 
-void	webserv::handle_answer_to_request(int csock) {
-	// ou suis-je dans ma reponse
-	g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on csock: " << csock << std::endl;
-	request & req = g_webserv._requests.find(csock)->second;
-	if ("first_time" && req._code_to_send == 0)
-		req.control_validity();
-	req.manage_request();
-	if (req.done()) {
-		clean_request();
-	}
-}
-
-
-void	request::control_validity() {
-	if (config->_method & config->_disable_methods)
-		_code_to_send = 405;
-	
-}
-
-
-
-/* REQUEST MANAGEMENT */
-
-
 void webserv::analyse_header(request &req) {
 	g_logger.fd << g_logger.get_timestamp() + "We are parsing header from ccosk: " << req._csock << std::endl;// analyse_body(it->second); // a faire
 	if (req._left.find(std::string("\r\n\r\n"), 0) != std::string::npos) {
@@ -93,6 +89,7 @@ void webserv::analyse_header(request &req) {
 		{
 			req._code_to_send = 400;
 			set_request_to_ended(req);
+			req.config = new config(req);
 			return ;
 		}
 		req._request_target = get_word(req._left, index , std::string(" "));
@@ -100,6 +97,7 @@ void webserv::analyse_header(request &req) {
 		{
 			req._code_to_send = 400;
 			set_request_to_ended(req);
+			req.config = new config(req);
 			return ;
 		}
 		req._HTTP_version = get_word(req._left, index, std::string("\r\n"));
@@ -107,12 +105,14 @@ void webserv::analyse_header(request &req) {
 		{
 			req._code_to_send = 400;
 			set_request_to_ended(req);
+			req.config = new config(req);
 			return ;
 		}
 		if (req._HTTP_version != "HTTP/1.1" && req._HTTP_version != "HTTP/1.0")
 		{
 			req._code_to_send = 505;
 			set_request_to_ended(req);
+			req.config = new config(req);
 			return ;
 		}
 		while (index < req._left.size()) // parsing headerffields
@@ -124,9 +124,9 @@ void webserv::analyse_header(request &req) {
 			g_logger << header_field_raw;
 			size_t semi_colon_index =  header_field_raw.find(":", 0);
 			if (semi_colon_index == std::string::npos) {
-				g_logger << "je suis rentre ici2";
 				req._code_to_send = 400;
 				set_request_to_ended(req);	
+				req.config = new config(req);
 				return ;
 			}
 			header_field = std::pair<std::string, std::string>(header_field_raw.substr(0, semi_colon_index), 
@@ -136,17 +136,17 @@ void webserv::analyse_header(request &req) {
 			|| header_field.first[header_field.first.size() - 1] == '\t'
 			|| !is_token(header_field.first) || !is_field_content(header_field.second))
 			{
-				g_logger << "je suis rentre ici";
 				std::cout  << is_token(header_field.first) << is_field_content(header_field.second); // a supprimer
 				req._code_to_send = 400;
 				set_request_to_ended(req);
+				req.config = new config(req);
 				return ;
 			}
 			if (req._header_fields.find(header_field.first) != req._header_fields.end())
 			{
-				g_logger << "je suis rentre la";
 				req._code_to_send = 400;
 				set_request_to_ended(req);
+				req.config = new config(req);
 				return ;
 			}
 			req._header_fields.insert(header_field);
@@ -155,27 +155,27 @@ void webserv::analyse_header(request &req) {
 			g_logger << "OK pb de Host sur csock : " << ft_itos(req._csock);
 			req._code_to_send = 400;
 			set_request_to_ended(req);
+			req.config = new config(req);
 			return ;
 		}
 		if (req._header_fields.find("Content-Length") != req._header_fields.end()) {
 			if (is_valid_content_length(req._header_fields.find("Content-Length")->second) == 0) {
 				req._code_to_send = 400;
 				set_request_to_ended(req);
+				req.config = new config(req);
 				return ;
 			}
 		}
+		if (req._header_fields.find("Trailer") != req._header_fields.end()) {
+			req.param_trailer(req._header_fields.find("Trailer")->second);
+		}
 		req._left = req._left.substr(index, req._left.size() - index);
-		req.stage = BDY_REQUEST;
+		req.stage = 1;
+		req.config = new config(req);
 		analyse_body(req);
 	}
 }
 
-
-bool	webserv::is_pending_request(int csock) {
-	if (_requests.find(csock) != _requests.end())
-		return (true);
-	return (false);
-}
 
 void	webserv::set_request_to_ended(request &req) {
 
@@ -200,25 +200,26 @@ bool webserv::is_new_request(int fd) {
 	return (1);
 }
 
-/* END REQUEST MANAGEMENT */
 
 
-/* CSOCK MANAGEMENT */
+void	webserv::handle_new_request(int csock) { // a supprimer ?? (ancienne fonction pour avoir le bdy)
+	int			ret;
+	std::pair<std::string, std::string> header_body;
+	int index = 0;
 
-void		webserv::handle_new_client(int ssock, SOCKADDR* csin, socklen_t* crecsize) {
-	SOCKET csock = accept(ssock,csin, crecsize);
-	std::time_t t = std::time(0);
-	std::tm	*now = std::localtime(&t);
-	struct epoll_event ev;
+	g_logger.fd << g_logger.get_timestamp() << "We are receiving a new request" << std::endl;
+	header_body = g_parser.get_header_begin_body(csock);
+	request 	new_request(header_body.first); // a optimiser avec constructeur de pair
+	new_request._body = header_body.second;
+	std::cout << new_request;
 
-	_timeout.insert(std::pair<int, std::tm>(csock, *now));
-	g_logger.fd << g_logger.get_timestamp() << "We accepted a new client from ssock " << ssock << ", new csock is = " << csock << std::endl;
-	ft_add_csock_to_vhost(ssock, csock);
-	ev.events = EPOLLIN;
-	ev.data.fd = csock;
-	fcntl(csock, F_SETFL, O_NONBLOCK);
-	if (epoll_ctl(_epfd, EPOLL_CTL_ADD, csock, &ev) == -1)
-		std::cout << errno << strerror(errno) << std::endl; // add an exception
+	// parse msg body
+}
+
+bool	webserv::is_pending_request(int csock) {
+	if (_requests.find(csock) != _requests.end())
+		return (true);
+	return (false);
 }
 
 void	webserv::ft_add_csock_to_vhost(int sock, int csock) {
@@ -272,12 +273,9 @@ void	webserv::display_sock() {
 	}
 }
 
-/* END CSOCK MANAGEMENT */
-
-
 /* CONSTRUCTOR */
 
-webserv::webserv(const std::string & path_config) : _client_max_body_size(-1), _cgi_dir("some path") {
+webserv::webserv(const std::string & path_config) : _client_max_body_size(-1) {
 	std::ifstream	config_file;
 	std::string		all_file;
 	
@@ -329,6 +327,9 @@ void		webserv::set_config(std::ifstream & config_file) {
 		throw (no_port_associated()); // changer par la suite par une vraie exception pour vhost, comme recommande par Guillaume.
 }
 
+
+
+
 void	webserv::control_time_out(void) {
 	
 	std::time_t t = std::time(0);
@@ -364,19 +365,23 @@ void	webserv::clean_csock_from_server(int fd) {
 		close(fd);
 }
 
-webserv::webserv(void) { }
+webserv::webserv(void) {
+	
+}
 
-webserv::~webserv(void) { }
+webserv::~webserv(void) {
+	
+}
 
 int		webserv::get_epfd() const {
 	return (this->_epfd);
 }
 
-std::list<vHost>	&webserv::get_vhosts() {
+std::list<vHost>				&webserv::get_vhosts() {
 	return (this->_vhosts);
 }
 
-void 				webserv::add_event_to_request(int csock) {
+void webserv::add_event_to_request(int csock) {
 
 	char c_buffer[1025];
 	int ret;
@@ -403,15 +408,39 @@ void 				webserv::add_event_to_request(int csock) {
 }
 
 void	webserv::analyse_body(request &req) {
+
 	if (req._header_fields.find("Content-Length") == req._header_fields.end() && !is_chunked(req)) {
 		set_request_to_ended(req);
 		if (req._left.size() != 0)
 			req._left.clear();
 	}
 	else if (is_chunked(req)) {
-		while(req._left.empty() == 1) {
-			if (req._left.find("\r\n", 0) != std::string::npos) {
-				
+		while (req._left.empty() == 1) {
+			if (req._left.find("\r\n", req._left.find("\r\n", 0) + 2) != std::string::npos) {
+				std::string substr = req._left.substr(0, req._left.find("\r\n", 0));
+				if (req.is_valid_chunk_size(substr) == 0) {
+					req._code_to_send = 400;
+					set_request_to_ended(req);
+					return ;
+				}
+				for (std::string::iterator it = substr.begin(); it != substr.end(); it++) {
+					*it = std::tolower(*it);
+				}
+				int chunk_size = ft_atoi_base(substr.c_str(), "0123456789abcdef");
+				substr = req._left.substr(req._left.find("\r\n", 0) + 2, req._left.find("\r\n", req._left.find("\r\n", 0) + 2) - (req._left.find("\r\n", 0) + 2));
+				if (substr.size() != chunk_size) {
+					req._code_to_send = 400;
+					set_request_to_ended(req);
+					return ;
+				}
+				else {
+					req._body += substr; ///////a refaire, a completer
+				}
+			}
+			else if (req._left.size() > req.config->_client_max_body_size) {
+				req._code_to_send = 413;
+				set_request_to_ended(req);
+				return ;
 			}
 			else
 				break;

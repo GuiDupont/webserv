@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/21 19:23:23 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/22 18:34:16 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include <map>
 # include <string>
 # include <cstdlib>
+# include <cctype>
 # include <sys/epoll.h>
 # include <fstream>
 # include <iostream>

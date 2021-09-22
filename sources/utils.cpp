@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/22 14:23:26 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/22 18:38:39 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,6 +278,84 @@ void	stop_program_sigint(int signum) {
 		g_logger.fd << g_logger.get_timestamp() << " EPFD not closed: " << g_webserv.get_epfd() << " error: " << strerror(errno) << std::endl;;
 	// close file de log
 	exit(1);
+}
+
+static int     ft_retraitement(char *str, int i, char *base, int z)
+{
+        int j;
+        int l;
+        int m;
+
+        l = 0;
+        while (str[i] != '\0')
+        {
+                j = 0;
+                m = 0;
+                while (base[j] != '\0')
+                {
+                        if (str[i] == base[j])
+                        {
+                                l = l * z + j;
+                                m = 1;
+                        }
+                        j++;
+                }
+                if (m == 0)
+                        break ;
+                i++;
+        }
+        return (l);
+}
+
+static int     ft_atoi(char *str, char *base, int z)
+{
+        int i;
+        int k;
+        int     l;
+
+        i = 0;
+        k = 0;
+        while (str[i] == ' ' || str[i] == '\f' || str[i] == '\n' ||
+                        str[i] == '\r' || str[i] == '\t' || str[i] == '\v')
+                i++;
+        while (str[i] == '+' || str[i] == '-')
+        {
+                if (str[i] == '-')
+                        k++;
+                i++;
+        }
+        l = ft_retraitement(str, i, base, z);
+        if (k % 2 == 1)
+                l = l * -1;
+        return (l);
+}
+
+int     ft_atoi_base(const char *str, char *base)
+{
+        int     i;
+        int     j;
+        int     k;
+
+        i = 0;
+        if (base[i] == '\0' || base[i + 1] == '\0')
+                return (0);
+        while (base[i] != '\0')
+        {
+                if (base[i] == '+' || base[i] == '-' || base[i] == ' ' ||
+                        base[i] == '\f' || base[i] == '\n' || base[i] == '\r' ||
+                        base[i] == '\t' || base[i] == '\v')
+                        return (0);
+                j = i + 1;
+                while (base[j] != '\0')
+                {
+                        if (base[i] == base[j])
+                                return (0);
+                        j++;
+                }
+                i++;
+        }
+        k = ft_atoi(str, base, j);
+        return (k);
 }
 
 // to test function
