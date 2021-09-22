@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/21 14:11:11 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/22 11:49:21 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ std::string	webserv_parser::parse_one_word(std::string & line) {
 	std::string path = get_word(line, i);
 	i = go_to_next_word(line, i);
 	if (line[i])
-		throw (bad_directive()); // change with wrong nb_arg
+		throw (bad_nb_argument("")); // change with wrong nb_arg
 	return (path);
 }
 
@@ -115,7 +115,7 @@ bool	webserv_parser::parse_auto_index(std::string & line) {
 	std::string on_off = get_word(line, i);
 	i = go_to_next_word(line, i);
 	if (line[i])
-		throw (bad_directive()); //change with wrong nb argument
+		throw (bad_nb_argument("autoindex"));
 	if (on_off == "on")
 		return true;
 	if (on_off == "off")

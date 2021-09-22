@@ -6,11 +6,14 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/21 19:04:16 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/22 12:31:04 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "config.hpp"
+
+
+config::config(void) { }
 
 config::config(request & request) {
 	_client_max_body_size = (g_webserv._client_max_body_size  == -1 ? 0: g_webserv._client_max_body_size);
@@ -19,7 +22,7 @@ config::config(request & request) {
 	_root = g_webserv._root;
 	_cgi_dir = g_webserv._cgi_dir;
 	_request_target = request._request_target;
-	_method = request._method;
+	code = request._code_to_send;
 
 	int first = 1;
 	vHost chosen;
@@ -41,8 +44,15 @@ config::config(request & request) {
 		}
 	}
 	if (first == 1)
-		g_logger.fd << g_logger.get_timestamp() << "We could not find any matching vhost, THAT SHOULD NOT HAPPEN" << std::endl;
+		g_logger.fd << g_logger.get_timestamp() << "--------We could not find any matching vhost, THAT SHOULD NOT HAPPEN---------";
 	put_vhost_and_location_in_config(chosen, request);
+	_client_max_body_size *= 1000000;
+	if (request._method == "GET")
+		_method = GET;
+	else if (request._method == "POST")
+		_method = POST;
+	else if (request._method == "DELETE")
+		_method = DELETE;
 }
 
 void	config::put_vhost_and_location_in_config(vHost & host, request & request) {

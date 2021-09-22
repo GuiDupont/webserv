@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:42:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/21 17:28:17 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/22 11:14:19 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ webserv_parser	g_parser;
 logger			g_logger("logs/log"); // to fix
 
 int main(int ac, char **av) {
-
 	if (ac > 2) {
+		
 		std::cout << "Error argument\n" << std::endl;
 		return (1);
 	}

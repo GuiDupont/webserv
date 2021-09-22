@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/21 19:24:15 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/22 13:31:11 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,26 @@ void	webserv::wait_for_connection() {
 	}
 }
 
-
 void	webserv::handle_answer_to_request(int csock) {
+	// ou suis-je dans ma reponse
 	g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on csock: " << csock << std::endl;
-	config conf(g_webserv._requests.find(csock)->second);
-	g_logger.fd << g_logger.get_timestamp() << conf;
-
-	// a voir si eppollout direct 
-	// if (is_pending_request(revents[i].data.fd))
-	// 	;
-	// else
-	// 	handle_new_request(revents[i].data.fd);
+	request & req = g_webserv._requests.find(csock)->second;
+	if ("first_time" && req._code_to_send == 0)
+		req.control_validity();
+	req.manage_request();
+	if (req.done()) {
+		clean_request();
+	}
 }
+
+
+void	request::control_validity() {
+	if (config->_method & config->_disable_methods)
+		_code_to_send = 405;
+	
+}
+
+
 
 /* REQUEST MANAGEMENT */
 
@@ -83,27 +91,27 @@ void webserv::analyse_header(request &req) {
 		req._method = get_word(req._left, index, std::string(" "));
 		if (req._method != "GET" && req._method != "DELETE" && req._method != "POST")
 		{
-			req._error_to_send = 400;
+			req._code_to_send = 400;
 			set_request_to_ended(req);
 			return ;
 		}
 		req._request_target = get_word(req._left, index , std::string(" "));
 		if (req._request_target.empty() || req._request_target[0] != '/' || is_valid_request_target(req._request_target) == 0)  // test nginx with charset of segment wrong https://datatracker.ietf.org/doc/html/rfc3986#section-3.3
 		{
-			req._error_to_send = 400;
+			req._code_to_send = 400;
 			set_request_to_ended(req);
 			return ;
 		}
 		req._HTTP_version = get_word(req._left, index, std::string("\r\n"));
 		if (req._HTTP_version.size() == 0)
 		{
-			req._error_to_send = 400;
+			req._code_to_send = 400;
 			set_request_to_ended(req);
 			return ;
 		}
 		if (req._HTTP_version != "HTTP/1.1" && req._HTTP_version != "HTTP/1.0")
 		{
-			req._error_to_send = 505;
+			req._code_to_send = 505;
 			set_request_to_ended(req);
 			return ;
 		}
@@ -117,7 +125,7 @@ void webserv::analyse_header(request &req) {
 			size_t semi_colon_index =  header_field_raw.find(":", 0);
 			if (semi_colon_index == std::string::npos) {
 				g_logger << "je suis rentre ici2";
-				req._error_to_send = 400;
+				req._code_to_send = 400;
 				set_request_to_ended(req);	
 				return ;
 			}
@@ -130,14 +138,14 @@ void webserv::analyse_header(request &req) {
 			{
 				g_logger << "je suis rentre ici";
 				std::cout  << is_token(header_field.first) << is_field_content(header_field.second); // a supprimer
-				req._error_to_send = 400;
+				req._code_to_send = 400;
 				set_request_to_ended(req);
 				return ;
 			}
 			if (req._header_fields.find(header_field.first) != req._header_fields.end())
 			{
 				g_logger << "je suis rentre la";
-				req._error_to_send = 400;
+				req._code_to_send = 400;
 				set_request_to_ended(req);
 				return ;
 			}
@@ -145,25 +153,25 @@ void webserv::analyse_header(request &req) {
 		}
 		if (req._header_fields.find("Host") == req._header_fields.end()) {
 			g_logger << "OK pb de Host sur csock : " << ft_itos(req._csock);
-			req._error_to_send = 400;
+			req._code_to_send = 400;
 			set_request_to_ended(req);
 			return ;
 		}
 		if (req._header_fields.find("Content-Length") != req._header_fields.end() && is_chunked(req)) {
 			g_logger << "Content-Length et Transfer-Encoding chunked indiques sur csock : " << ft_itos(req._csock);
-			req._error_to_send = 400;
+			req._code_to_send = 400;
 			set_request_to_ended(req);
 			return ;
 		}
 		if (req._header_fields.find("Content-Length") != req._header_fields.end()) {
 			if (is_valid_content_length(req._header_fields.find("Content-Length")->second) == 0) {
-				req._error_to_send = 400;
+				req._code_to_send = 400;
 				set_request_to_ended(req);
 				return ;
 			}
 		}
 		req._left = req._left.substr(index, req._left.size() - index);
-		req.stage = 1;
+		req.stage = BDY_REQUEST;
 		analyse_body(req);
 	}
 }
@@ -401,7 +409,6 @@ void 				webserv::add_event_to_request(int csock) {
 }
 
 void	webserv::analyse_body(request &req) {
-
 	if (req._header_fields.find("Content-Length") == req._header_fields.end() && !is_chunked(req)) {
 		set_request_to_ended(req);
 		// g_logger << "size de left = " + ft_itos(req._left.size());

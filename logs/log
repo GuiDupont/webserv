@@ -1,43 +1,326 @@
-19h25m25s: ------BEGINNING OF THE PROGRAM-------
-19h25m25s: Config successful
-19h25m25s: Epoll create successful			 | epfd  = 4
-19h25m25s: Ssock created           			 | ssock = 5
-19h25m25s: Ssock added to Epoll    			 | ssock = 5
-19h25m25s: Ssock created           			 | ssock = 6
-19h25m25s: Ssock added to Epoll    			 | ssock = 6
-19h25m25s: Ssock created           			 | ssock = 7
-19h25m25s: Ssock added to Epoll    			 | ssock = 7
-19h25m25s: Ssock created           			 | ssock = 8
-19h25m25s: Ssock added to Epoll    			 | ssock = 8
-19h25m25s: Epoll is waiting for connection
-19h25m28s: No events
-19h25m31s: No events
-19h25m34s: No events
-19h25m37s: No events
-19h25m40s: No events
-19h25m43s: No events
-19h25m46s: Epoll noticed new events     	| nb    = 1
-19h25m46s: We accepted a new client from ssock 7, new csock is = 9
-19h25m49s: Epoll noticed new events     	| nb    = 1
-19h25m49s: Epoll_wait identified an EPOLLIN on csock: 9
-19h25m49s: New request has been created on csock: 9
-19h25m49s: We are parsing header from ccosk: 9
-19h25m49s: Host: 127.0.0.3:1204
-19h25m49s: Connection: keep-alive
-19h25m49s: sec-ch-ua: " Not;A Brand";v="99", "Google Chrome";v="91", "Chromium";v="91"
-19h25m49s: sec-ch-ua-mobile: ?0
-19h25m49s: Upgrade-Insecure-Requests: 1
-19h25m49s: User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36
-19h25m49s: Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-19h25m49s: Sec-Fetch-Site: none
-19h25m49s: Sec-Fetch-Mode: navigate
-19h25m49s: Sec-Fetch-User: ?1
-19h25m49s: Sec-Fetch-Dest: document
-19h25m49s: Accept-Encoding: gzip, deflate, br
-19h25m49s: Accept-Language: en-US,en;q=0.9
-19h25m50s:  csock is closed: 9
-19h25m50s:  cssock is closed: 5
-19h25m50s:  cssock is closed: 6
-19h25m50s:  cssock is closed: 7
-19h25m50s:  cssock is closed: 8
-19h25m50s:  EPFD is closed: 4
+11h13m38s: [1;31mWe could not find any matching vhost, THAT SHOULD NOT HAPPEN[0m
+11h13m38s: ------BEGINNING OF THE PROGRAM-------
+11h13m38s: Config successful
+11h13m38s: Epoll create successful			 | epfd  = 4
+11h13m38s: Ssock created           			 | ssock = 5
+11h13m38s: Ssock added to Epoll    			 | ssock = 5
+11h13m38s: Ssock created           			 | ssock = 6
+11h13m38s: Ssock added to Epoll    			 | ssock = 6
+11h13m38s: Ssock created           			 | ssock = 7
+11h13m38s: Ssock added to Epoll    			 | ssock = 7
+11h13m38s: Ssock created           			 | ssock = 8
+11h13m38s: Ssock added to Epoll    			 | ssock = 8
+11h13m38s: Ssock created           			 | ssock = 9
+11h13m38s: Ssock added to Epoll    			 | ssock = 9
+11h13m38s: Epoll is waiting for connection
+11h13m41s: No events
+11h13m44s: No events
+11h13m47s: No events
+11h13m50s: No events
+11h13m53s: No events
+11h13m56s: No events
+11h13m59s: No events
+11h14m2s: No events
+11h14m5s: No events
+11h14m8s: No events
+11h14m11s: No events
+11h14m14s: No events
+11h14m17s: No events
+11h14m20s: No events
+11h14m23s: No events
+11h14m26s: No events
+11h14m29s: No events
+11h14m32s: No events
+11h14m35s: No events
+11h14m38s: No events
+11h14m41s: No events
+11h14m44s: No events
+11h14m47s: No events
+11h14m50s: No events
+11h14m53s: No events
+11h14m56s: No events
+11h14m59s: No events
+11h15m2s: No events
+11h15m5s: No events
+11h15m8s: No events
+11h15m11s: No events
+11h15m14s: No events
+11h15m17s: No events
+11h15m20s: No events
+11h15m23s: No events
+11h15m26s: No events
+11h15m29s: No events
+11h15m32s: No events
+11h15m35s: No events
+11h15m38s: No events
+11h15m41s: No events
+11h15m44s: No events
+11h15m47s: No events
+11h15m50s: No events
+11h15m53s: No events
+11h15m56s: No events
+11h15m59s: No events
+11h16m2s: No events
+11h16m5s: No events
+11h16m8s: No events
+11h16m11s: No events
+11h16m14s: No events
+11h16m17s: No events
+11h16m20s: No events
+11h16m23s: No events
+11h16m26s: No events
+11h16m29s: No events
+11h16m32s: No events
+11h16m35s: No events
+11h16m38s: No events
+11h16m41s: No events
+11h16m44s: No events
+11h16m47s: No events
+11h16m50s: No events
+11h16m53s: No events
+11h16m56s: No events
+11h16m59s: No events
+11h17m2s: No events
+11h17m5s: No events
+11h17m8s: No events
+11h17m11s: No events
+11h17m14s: No events
+11h17m17s: No events
+11h17m20s: No events
+11h17m23s: No events
+11h17m26s: No events
+11h17m29s: No events
+11h17m32s: No events
+11h17m35s: No events
+11h17m38s: No events
+11h17m41s: No events
+11h17m44s: No events
+11h17m47s: No events
+11h17m50s: No events
+11h17m53s: No events
+11h17m56s: No events
+11h17m59s: No events
+11h18m2s: No events
+11h18m5s: No events
+11h18m8s: No events
+11h18m11s: No events
+11h18m14s: No events
+11h18m17s: No events
+11h18m20s: No events
+11h18m23s: No events
+11h18m26s: No events
+11h18m29s: No events
+11h18m32s: No events
+11h18m35s: No events
+11h18m38s: No events
+11h18m41s: No events
+11h18m44s: No events
+11h18m47s: No events
+11h18m50s: No events
+11h18m53s: No events
+11h18m56s: No events
+11h18m59s: No events
+11h19m2s: No events
+11h19m5s: No events
+11h19m8s: No events
+11h19m11s: No events
+11h19m14s: No events
+11h19m17s: No events
+11h19m20s: No events
+11h19m23s: No events
+11h19m26s: No events
+11h19m29s: No events
+11h19m32s: No events
+11h19m35s: No events
+11h19m38s: No events
+11h19m41s: No events
+11h19m44s: No events
+11h19m47s: No events
+11h19m50s: No events
+11h19m53s: No events
+11h19m56s: No events
+11h19m59s: No events
+11h20m2s: No events
+11h20m5s: No events
+11h20m8s: No events
+11h20m11s: No events
+11h20m14s: No events
+11h20m17s: No events
+11h20m20s: No events
+11h20m23s: No events
+11h20m26s: No events
+11h20m29s: No events
+11h20m32s: No events
+11h20m35s: No events
+11h20m38s: No events
+11h20m41s: No events
+11h20m44s: No events
+11h20m47s: No events
+11h20m50s: No events
+11h20m53s: No events
+11h20m56s: No events
+11h20m59s: No events
+11h21m2s: No events
+11h21m5s: No events
+11h21m8s: No events
+11h21m11s: No events
+11h21m14s: No events
+11h21m17s: No events
+11h21m20s: No events
+11h21m23s: No events
+11h21m26s: No events
+11h21m29s: No events
+11h21m32s: No events
+11h21m35s: No events
+11h21m38s: No events
+11h21m41s: No events
+11h21m44s: No events
+11h21m47s: No events
+11h21m50s: No events
+11h21m53s: No events
+11h21m56s: No events
+11h21m59s: No events
+11h22m2s: No events
+11h22m5s: No events
+11h22m8s: No events
+11h22m11s: No events
+11h22m14s: No events
+11h22m17s: No events
+11h22m20s: No events
+11h22m23s: No events
+11h22m26s: No events
+11h22m29s: No events
+11h22m32s: No events
+11h22m35s: No events
+11h22m38s: No events
+11h22m41s: No events
+11h22m44s: No events
+11h22m47s: No events
+11h22m50s: No events
+11h22m53s: No events
+11h22m56s: No events
+11h22m59s: No events
+11h23m2s: No events
+11h23m5s: No events
+11h23m8s: No events
+11h23m11s: No events
+11h23m14s: No events
+11h23m17s: No events
+11h23m20s: No events
+11h23m23s: No events
+11h23m26s: No events
+11h23m29s: No events
+11h23m32s: No events
+11h23m35s: No events
+11h23m38s: No events
+11h23m41s: No events
+11h23m44s: No events
+11h23m47s: No events
+11h23m50s: No events
+11h23m53s: No events
+11h23m56s: No events
+11h23m59s: No events
+11h24m2s: No events
+11h24m5s: No events
+11h24m8s: No events
+11h24m11s: No events
+11h24m14s: No events
+11h24m17s: No events
+11h24m20s: No events
+11h24m23s: No events
+11h24m26s: No events
+11h24m29s: No events
+11h24m32s: No events
+11h24m35s: No events
+11h24m38s: No events
+11h24m41s: No events
+11h24m44s: No events
+11h24m47s: No events
+11h24m50s: No events
+11h24m53s: No events
+11h24m56s: No events
+11h24m59s: No events
+11h25m2s: No events
+11h25m5s: No events
+11h25m8s: No events
+11h25m11s: No events
+11h25m14s: No events
+11h25m17s: No events
+11h25m20s: No events
+11h25m23s: No events
+11h25m26s: No events
+11h25m29s: No events
+11h25m32s: No events
+11h25m35s: No events
+11h25m38s: No events
+11h25m41s: No events
+11h25m44s: No events
+11h25m47s: No events
+11h25m50s: No events
+11h25m53s: No events
+11h25m56s: No events
+11h25m59s: No events
+11h26m2s: No events
+11h26m5s: No events
+11h26m8s: No events
+11h26m11s: No events
+11h26m14s: No events
+11h26m17s: No events
+11h26m20s: No events
+11h26m23s: No events
+11h26m26s: No events
+11h26m29s: No events
+11h26m32s: No events
+11h26m35s: No events
+11h26m38s: No events
+11h26m41s: No events
+11h26m44s: No events
+11h26m47s: No events
+11h26m50s: No events
+11h26m53s: No events
+11h26m56s: No events
+11h26m59s: No events
+11h27m2s: No events
+11h27m5s: No events
+11h27m8s: No events
+11h27m11s: No events
+11h27m14s: No events
+11h27m17s: No events
+11h27m20s: No events
+11h27m23s: No events
+11h27m26s: No events
+11h27m29s: No events
+11h27m32s: No events
+11h27m35s: No events
+11h27m38s: No events
+11h27m41s: No events
+11h27m44s: No events
+11h27m47s: No events
+11h27m50s: No events
+11h27m53s: No events
+11h27m56s: No events
+11h27m59s: No events
+11h28m2s: No events
+11h28m5s: No events
+11h28m8s: No events
+11h28m11s: No events
+11h28m14s: No events
+11h28m17s: No events
+11h28m20s: No events
+11h28m23s: No events
+11h28m26s: No events
+11h28m29s: No events
+11h28m32s: No events
+11h28m35s: No events
+11h28m38s: No events
+11h28m41s: No events
+11h28m44s: No events
+11h28m47s: No events
+11h28m50s: No events
+11h28m53s: No events
+11h28m56s:  cssock is closed: 5
+11h28m56s:  cssock is closed: 6
+11h28m56s:  cssock is closed: 7
+11h28m56s:  cssock is closed: 8
+11h28m56s:  cssock is closed: 9
+11h28m56s:  EPFD is closed: 4
