@@ -40,7 +40,9 @@ int main () {
 	std::string str = "7\r\nolala   \r\n";
 	// request test;
 	
-	std::string substr = str.substr(str.find("\r\n", 0) + 2, str.find("\r\n", str.find("\r\n", 0) + 2) - (str.find("\r\n", 0) + 2));
+	std::string substr  = str.substr(7, str.size() - 7);
+	// std::string substr = str.substr(str.find("\r\n", 0) + 2, str.size() - (str.find("\r\n", 0) + 2));
+	// std::string substr = str.substr(str.find("\r\n", 0) + 2, str.find("\r\n", str.find("\r\n", 0) + 2) - (str.find("\r\n", 0) + 2));
 	// test.param_trailer(test, str);
 	// for (std::list<std::string>::iterator it = test._trailer.begin(); it != test._trailer.end(); it++) {
 	// 	std::cout << *it << ", size = " << it->size() << std::endl;

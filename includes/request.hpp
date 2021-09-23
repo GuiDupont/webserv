@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:07:25 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/22 17:56:34 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/23 11:47:26 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ class request {
 		std::string							_host;
 		std::string							_body;
 		std::string							_left;
-		int									next_chunk;
+		int									next_chunk; // -2 = trailer stage ; -1 = chunk stage
+		int									nb_trailer_to_received;
 		int									_code_to_send;
 		int									_csock;
 		int									stage; // 0 = new requete, header en cours ; 1 = body en cours ; 2 = requete complete
@@ -53,8 +54,9 @@ class request {
 		request();
 
 		void	control_validity();
-		void	param_trailer(request &req, std::string str);
+		void	param_trailer(std::string str);
 		bool	is_valid_chunk_size(std::string &str);
+		bool	find_trailer_in_list(std::string str);
 		
 		// ~request();
 		// request & operator=()

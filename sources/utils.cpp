@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/22 18:38:39 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/23 12:14:17 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -280,7 +280,7 @@ void	stop_program_sigint(int signum) {
 	exit(1);
 }
 
-static int     ft_retraitement(char *str, int i, char *base, int z)
+static int     ft_retraitement(const char *str, int i, const char *base, int z)
 {
         int j;
         int l;
@@ -307,7 +307,7 @@ static int     ft_retraitement(char *str, int i, char *base, int z)
         return (l);
 }
 
-static int     ft_atoi(char *str, char *base, int z)
+static int     ft_atoi(const char *str, const char *base, int z)
 {
         int i;
         int k;
@@ -330,7 +330,7 @@ static int     ft_atoi(char *str, char *base, int z)
         return (l);
 }
 
-int     ft_atoi_base(const char *str, char *base)
+int     ft_atoi_base(const char *str, const char *base)
 {
         int     i;
         int     j;

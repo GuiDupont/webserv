@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/22 18:58:39 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/23 14:38:34 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,7 @@ void webserv::analyse_header(request &req) {
 			req.param_trailer(req._header_fields.find("Trailer")->second);
 		}
 		req._left = req._left.substr(index, req._left.size() - index);
+		g_logger << "POSITION DU LEFT APRES HEADER = " + req._left;
 		req.stage = 1;
 		req.config = new config(req);
 		analyse_body(req);
@@ -198,22 +199,6 @@ bool webserv::is_new_request(int fd) {
 		}
 	}
 	return (1);
-}
-
-
-
-void	webserv::handle_new_request(int csock) { // a supprimer ?? (ancienne fonction pour avoir le bdy)
-	int			ret;
-	std::pair<std::string, std::string> header_body;
-	int index = 0;
-
-	g_logger.fd << g_logger.get_timestamp() << "We are receiving a new request" << std::endl;
-	header_body = g_parser.get_header_begin_body(csock);
-	request 	new_request(header_body.first); // a optimiser avec constructeur de pair
-	new_request._body = header_body.second;
-	std::cout << new_request;
-
-	// parse msg body
 }
 
 bool	webserv::is_pending_request(int csock) {
@@ -273,8 +258,6 @@ void	webserv::display_sock() {
 	}
 }
 
-/* CONSTRUCTOR */
-
 webserv::webserv(const std::string & path_config) : _client_max_body_size(-1) {
 	std::ifstream	config_file;
 	std::string		all_file;
@@ -326,9 +309,6 @@ void		webserv::set_config(std::ifstream & config_file) {
 	if (this->_vhosts.empty() == 1)
 		throw (no_port_associated()); // changer par la suite par une vraie exception pour vhost, comme recommande par Guillaume.
 }
-
-
-
 
 void	webserv::control_time_out(void) {
 	
@@ -409,48 +389,110 @@ void webserv::add_event_to_request(int csock) {
 
 void	webserv::analyse_body(request &req) {
 
+	std::string substr;
+	int index = 0;
+
 	if (req._header_fields.find("Content-Length") == req._header_fields.end() && !is_chunked(req)) {
 		set_request_to_ended(req);
 		if (req._left.size() != 0)
 			req._left.clear();
 	}
 	else if (is_chunked(req)) {
-		while (req._left.empty() == 1) {
-			if (req._left.find("\r\n", req._left.find("\r\n", 0) + 2) != std::string::npos) {
-				std::string substr = req._left.substr(0, req._left.find("\r\n", 0));
-				if (req.is_valid_chunk_size(substr) == 0) {
-					req._code_to_send = 400;
-					set_request_to_ended(req);
-					return ;
-				}
-				for (std::string::iterator it = substr.begin(); it != substr.end(); it++) {
-					*it = std::tolower(*it);
-				}
-				int chunk_size = ft_atoi_base(substr.c_str(), "0123456789abcdef");
-				substr = req._left.substr(req._left.find("\r\n", 0) + 2, req._left.find("\r\n", req._left.find("\r\n", 0) + 2) - (req._left.find("\r\n", 0) + 2));
-				if (substr.size() != chunk_size) {
-					req._code_to_send = 400;
-					set_request_to_ended(req);
-					return ;
-				}
+		while (req._left.empty() != 1) {
+			if (req.next_chunk > -1) {
+				if (req._left.size() < req.next_chunk + 2)
+					break;
 				else {
-					req._body += substr; ///////a refaire, a completer
+					if (req.next_chunk == 0) {
+						if (req._left[req.next_chunk] != '\r' && req._left[req.next_chunk + 1] != '\n') {
+							req._code_to_send = 400;
+							set_request_to_ended(req);
+							return ;
+						}
+						req._left = req._left.substr(2, req._left.size());
+						req.next_chunk = -2;
+						if (req.nb_trailer_to_received == 0) {
+							set_request_to_ended(req);
+							return ;
+						}
+					}
+					else {
+						req._body += req._left.substr(0, req.next_chunk);
+						if (req._body.size() > req.config->_client_max_body_size) {
+								req._code_to_send = 413;
+								set_request_to_ended(req);
+								return ;
+						}
+						if (req._left[req.next_chunk] != '\r' || req._left[req.next_chunk + 1] != '\n') {
+							req._code_to_send = 400;
+							set_request_to_ended(req);
+							return ;
+						}
+						req._left = req._left.substr(req.next_chunk + 2, req._left.size() - (req.next_chunk + 2));
+						req.next_chunk = -1;
+					}
 				}
 			}
-			else if (req._left.size() > req.config->_client_max_body_size) {
-				req._code_to_send = 413;
-				set_request_to_ended(req);
-				return ;
+			else if (req.next_chunk == -1) {
+				if (req._left.find("\r\n", 0) != std::string::npos) {
+					substr = req._left.substr(0, req._left.find("\r\n", 0));
+					if (req.is_valid_chunk_size(substr) == 0) {
+						req._code_to_send = 400;
+						set_request_to_ended(req);
+						return ;
+					}
+					for (std::string::iterator it = substr.begin(); it != substr.end(); it++) {
+						*it = std::tolower(*it);
+					}
+					req.next_chunk = ft_atoi_base(substr.c_str(), "0123456789abcdef");
+					req._left = req._left.substr(req._left.find("\r\n", 0) + 2, req._left.size() - (req._left.find("\r\n", 0) + 2));
+				}
+				else
+					break;
 			}
-			else
-				break;
+			else {
+				if (req._left.find("\r\n", 0) != std::string::npos) {
+					std::pair<std::string, std::string> header_field;
+					std::string header_field_raw = get_word(req._left, index, std::string("\r\n"));
+					size_t semi_colon_index =  header_field_raw.find(":", 0);
+					if (semi_colon_index == std::string::npos) {
+						req._code_to_send = 400;
+						set_request_to_ended(req);
+						return ;
+					}
+					header_field = std::pair<std::string, std::string>(header_field_raw.substr(0, semi_colon_index), 
+					header_field_raw.substr(semi_colon_index + 1, header_field_raw.size() - semi_colon_index));
+					header_field.second = trims(header_field.second, " \t");
+					if (!header_field.first.size() || !header_field.second.size() 
+					|| header_field.first[header_field.first.size() - 1] == '\t'
+					|| !is_token(header_field.first) || !is_field_content(header_field.second) || req.find_trailer_in_list(header_field.first) == 0) {
+						req._code_to_send = 400;
+						set_request_to_ended(req);
+						return ;
+					}
+					req._header_fields.insert(header_field);
+					req.nb_trailer_to_received = req.nb_trailer_to_received - 1;
+					req._trailer.remove(header_field.first);
+					req._left = req._left.substr(req._left.find("\r\n", 0) + 2, req._left.size() - (req._left.find("\r\n", 0) + 2));
+					if (req.nb_trailer_to_received == 0) {
+						set_request_to_ended(req);
+						return ;
+					}
+				}
+				else
+					break;
+			}
 		}
 	}
 	else if (req._header_fields.find("Content-Length") != req._header_fields.end()) {
 		size_t length = std::atoi(req._header_fields.find("Content-Length")->second.c_str());
-		g_logger << "length = " + ft_itos(length);
 		req._body += req._left;
 		req._left.clear();
+		if (req._body.size() > req.config->_client_max_body_size) {
+			req._code_to_send = 413;
+			set_request_to_ended(req);
+			return ;
+		}
 		if (req._body.size() >= length) {
 			req._body = req._body.substr(0, length);
 			set_request_to_ended(req);

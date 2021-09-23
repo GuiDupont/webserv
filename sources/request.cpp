@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/22 18:38:49 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/23 12:41:17 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ std::ostream & operator<<(std::ostream & o,const request & r)
 	return (o);
 }
 
-request::request() : stage(0) {}
+request::request() : stage(0), next_chunk(-1), nb_trailer_to_received(0) {}
 
-request::request(int csock) : stage(0), _csock(csock) {}
+request::request(int csock) : stage(0), _csock(csock), next_chunk(-1), nb_trailer_to_received(0) {}
 
-request::request(int csock, std::string left) : stage(0), _csock(csock), _left(left) {}
+request::request(int csock, std::string left) : stage(0), _csock(csock), _left(left), next_chunk(-1), nb_trailer_to_received(0) {}
 
 void request::param_trailer(std::string str) {
 
@@ -55,6 +55,8 @@ void request::param_trailer(std::string str) {
 		this->_trailer.push_back(substr);
 		it = (it2 == str.end() ? it2 - 1 : it2);
 	}
+	this->_trailer.unique();
+	this->nb_trailer_to_received = this->_trailer.size();
 	return ;
 }
 
@@ -63,7 +65,7 @@ bool request::is_valid_chunk_size(std::string &str) {
 	regex_t	regex;
 	int 	reti;
 
-	reti = regcomp(&regex, "^[0-9a-fA-F]\\{0,8\\}$", 0);
+	reti = regcomp(&regex, "^[0-9a-fA-F]\\{1,8\\}$", 0);
     reti = regexec(&regex, str.c_str(), 0, NULL, 0);
 	if (reti) {
     	regfree(&regex);
@@ -71,4 +73,13 @@ bool request::is_valid_chunk_size(std::string &str) {
     }
     regfree(&regex);
 	return (1);
+}
+
+bool request::find_trailer_in_list(std::string str) {
+
+	for (std::list<std::string>::iterator it = this->_trailer.begin(); it != this->_trailer.end(); it++) {
+		if (str == *it)
+			return (1);
+	}
+	return (0);
 }

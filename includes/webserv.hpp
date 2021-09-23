@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/22 18:34:16 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/23 12:15:48 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@
 # define DELETE 4
 
 
-# define TIMEOUT 10
+# define TIMEOUT 100
 
 class vHost;
 class request;
@@ -97,7 +97,6 @@ class webserv {
 		int		get_sock_by_matching_host_ip(std::pair< std::string, size_t> host_port);
 		void	display_sock();
 		bool	is_pending_request(int csock);
-		void	handle_new_request(int csock); // a supprimer ?? (ancienne fonction pour avoir le bdy)
 		bool	is_new_request(int fd);
 		void	control_time_out(void);
 		void	add_event_to_request(int csock);
