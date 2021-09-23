@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 11:18:29 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/21 15:13:13 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/23 15:46:42 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ vHost::vHost(){
 	return ;
 }
 
-vHost::vHost(std::ifstream &config_file, std::string &line) : _client_max_body_size(-1), _root("/") {
+vHost::vHost(std::ifstream &config_file, std::string &line) : _client_max_body_size(-1) {
 	std::string	sub_line;
 	std::string	first_word;
 	
@@ -47,6 +47,8 @@ vHost::vHost(std::ifstream &config_file, std::string &line) : _client_max_body_s
 		else if (first_word == "listen") {
 			g_parser.parse_listen(line, *this);
 		}
+		else if (first_word == "root")
+			_root = g_parser.parse_one_word(line);
 		else if (first_word == "location") {
 			location loc = location(config_file, line, *this);
 			if (!_locations.insert(std::pair<std::string, location>(loc.get_location(), loc)).second)
@@ -124,3 +126,4 @@ std::list< std::pair<int, std::string> > const	& vHost::get_error_pages() const 
 std::map< std::string, location >	const	& vHost::get_locations() const {
 	return (this->_locations);
 }
+

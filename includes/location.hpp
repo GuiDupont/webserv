@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/21 18:53:15 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/23 12:40:21 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ typedef int unknown;
 #include <fstream>
 #include <list>
 
-
+class vHost;
 class location {
 
 	public:

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/22 11:49:21 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/23 15:47:02 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,12 @@ std::string	webserv_parser::parse_one_word(std::string & line) {
 	return (path);
 }
 
+// std::string webserv_parser::parse_root(std::string & line) {
+// 	std::string temp = parse_one_word(line);
+// 	if (temp[0] != '/')
+// 		temp = "/" + temp;
+// 	return (temp);
+// }
 
 bool	webserv_parser::parse_auto_index(std::string & line) {
 	int i = go_to_next_word(line, 0);

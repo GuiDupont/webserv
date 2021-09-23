@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/22 12:32:59 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/23 15:22:16 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "webserv.hpp"
 # include "vhost.hpp"
 # include "request.hpp"
+# include "location.hpp"
 
 # include <string>
 # include <map>
@@ -24,7 +25,7 @@
 typedef int unknown;
 class vHost;
 class request;
-
+class location;
 
 class config {
 
@@ -44,12 +45,19 @@ class config {
 		std::pair<int, std::string>					_return;
 		std::set< std::string >						_cgi_ext;
 		std::string 								_location;
+		std::string									path_to_target;
 		int											code;
+		bool										validity_checked;
 	
 		config(request & req);
 		config();
 
-		void	put_vhost_and_location_in_config(vHost & host, request & conf);
+		void							put_vhost_and_location_in_config(vHost & host, request & conf);
+		std::map< std::string, location >::const_iterator get_most_accurate_location(vHost & host);
+		std::string						update_path_to_target_with_root(const location & location);
+		vHost						&	get_associated_vhost(request & request);
+
+
 	private:
 
 

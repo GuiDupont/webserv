@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/23 12:14:17 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/23 18:11:52 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -359,14 +359,24 @@ int     ft_atoi_base(const char *str, const char *base)
 }
 
 // to test function
+bool	is_directory(std::string & path) {
+	struct stat s;
+	if( stat(path.c_str(), &s) == 0 ) {
+		if( s.st_mode & S_IFDIR )
+			return (true);
+		return (false);
+		}
+	else {
+		g_logger.fd << g_logger.get_timestamp() << "Following file provides this error " << strerror(errno) << std::endl; 
+	}
+	return (false);
+}
 
-// std::string test = "/..";
-// 	std::cout << test << " : " << (is_valid_request_target(test) ? "valid\n" : "not valid\n");
-// 	test = "/sdfas/dsfdsf/../sdfs/..";
-// 	std::cout << test << " : " << (is_valid_request_target(test) ? "valid\n" : "not valid\n");
-// 	test = "/sfsf/../../";
-// 	std::cout << test << " : " << (is_valid_request_target(test) ? "valid\n" : "not valid\n");
-// 	test = "/sfsd/.././dfsfs/./sfsdf/.sfsfs/..fsdfs/../../";
-// 	std::cout << test << " : " << (is_valid_request_target(test) ? "valid\n" : "not valid\n");
-// 	test = "/lolo/dsfsd/sfsd/./../../../..";
-// 	std::cout << test << " : " << (is_valid_request_target(test) ? "valid\n" : "not valid\n");
+std::string				from_two_str_to_path(const std::string & str1, const std::string & str2) {
+	std::string str2_bis = str2;
+	if (str1[str1.size() - 1] == '/' && str2[0] == '/')
+		str2_bis = str2.substr(1, str2.size() - 1);
+	else if (str1[str1.size() - 1] != '/' && str2[0] != '/')
+		str2_bis = "/" + str2_bis;
+	return (str1 + str2_bis);
+}

@@ -1,146 +1,131 @@
-14h31m26s: ------BEGINNING OF THE PROGRAM-------
-14h31m26s: Config successful
-14h31m26s: Epoll create successful			 | epfd  = 4
-14h31m26s: Ssock created           			 | ssock = 5
-14h31m26s: Ssock added to Epoll    			 | ssock = 5
-14h31m26s: Ssock created           			 | ssock = 6
-14h31m26s: Ssock added to Epoll    			 | ssock = 6
-14h31m26s: Ssock created           			 | ssock = 7
-14h31m26s: Ssock added to Epoll    			 | ssock = 7
-14h31m26s: Ssock created           			 | ssock = 8
-14h31m26s: Ssock added to Epoll    			 | ssock = 8
-14h31m26s: Epoll is waiting for connection
-14h31m29s: No events
-14h31m32s: No events
-14h31m35s: No events
-14h31m38s: No events
-14h31m41s: No events
-14h31m44s: No events
-14h31m47s: No events
-14h31m50s: Epoll noticed new events     	| nb    = 1
-14h31m50s: We accepted a new client from ssock 8, new csock is = 9
-14h31m53s: Epoll noticed new events     	| nb    = 1
-14h31m53s: Epoll_wait identified an EPOLLIN on csock: 9
-14h31m53s: New request has been created on csock: 9
-14h31m53s: We are parsing header from ccosk: 9
-14h31m53s: Host:f
-14h31m53s: Transfer-Encoding: gzip, chunked
-14h31m53s: Trailer: test, lol
-14h31m53s: POSITION DU LEFT APRES HEADER = 4
-ffff
-0
-
-
-14h31m53s: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-14h31m53s: CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-14h31m53s: DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
-14h31m53s: next chunk = 4
-14h31m53s: left = 
-ffff
-0
-
-14h31m53s: CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-14h31m53s: BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB next_chunk = 4
-14h31m53s: QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ
-14h31m53s: CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-14h31m53s: DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
-14h31m53s: next chunk = 0
-14h31m53s: left = 
-
-14h31m53s: CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-14h31m53s: BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB next_chunk = 0
-14h31m56s: No events
-14h31m59s: No events
-14h32m2s: Epoll noticed new events     	| nb    = 1
-14h32m2s: Epoll_wait identified an EPOLLIN on csock: 9
-14h32m2s: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-14h32m2s: CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-14h32m5s: No events
-14h32m8s: No events
-14h32m11s: Epoll noticed new events     	| nb    = 1
-14h32m11s: Epoll_wait identified an EPOLLIN on csock: 9
-14h32m11s: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-14h32m11s: CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-14h32m11s: Host
-:f14h32m11s: Trailer
-:test, lol14h32m11s: Transfer-Encoding
-:gzip, chunked14h32m11s: lol
-:ouueueueue14h32m11s: test
-:ouioui14h32m14s: Epoll noticed new events     	| nb    = 1
-14h32m14s: Epoll_wait identified an EPOLLOUT on csock: 9
-14h32m14s: HERE IS THE CONFIGURATION WE SET UP
+18h24m0s: ------BEGINNING OF THE PROGRAM-------
+18h24m0s: Config successful
+18h24m0s: Epoll create successful			 | epfd  = 4
+18h24m0s: Ssock created           			 | ssock = 5
+18h24m0s: Ssock added to Epoll    			 | ssock = 5
+18h24m0s: Ssock created           			 | ssock = 6
+18h24m0s: Ssock added to Epoll    			 | ssock = 6
+18h24m0s: Ssock created           			 | ssock = 7
+18h24m0s: Ssock added to Epoll    			 | ssock = 7
+18h24m0s: Ssock created           			 | ssock = 8
+18h24m0s: Ssock added to Epoll    			 | ssock = 8
+18h24m0s: Ssock created           			 | ssock = 9
+18h24m0s: Ssock added to Epoll    			 | ssock = 9
+18h24m0s: Epoll is waiting for connection
+18h24m3s: No events
+18h24m6s: No events
+18h24m9s: Epoll noticed new events     	| nb    = 1
+18h24m9s: We accepted a new client from ssock 8, new csock is = 10
+18h24m12s: Epoll noticed new events     	| nb    = 1
+18h24m12s: Epoll_wait identified an EPOLLIN on csock: 10
+18h24m12s: New request has been created on csock: 10
+18h24m12s: We are parsing header from ccosk: 10
+18h24m12s: Host: 127.0.0.3:1205
+18h24m12s: Connection: keep-alive
+18h24m12s: Cache-Control: max-age=0
+18h24m12s: sec-ch-ua: " Not;A Brand";v="99", "Google Chrome";v="91", "Chromium";v="91"
+18h24m12s: sec-ch-ua-mobile: ?0
+18h24m12s: Upgrade-Insecure-Requests: 1
+18h24m12s: User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36
+18h24m12s: Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+18h24m12s: Sec-Fetch-Site: none
+18h24m12s: Sec-Fetch-Mode: navigate
+18h24m12s: Sec-Fetch-User: ?1
+18h24m12s: Sec-Fetch-Dest: document
+18h24m12s: Accept-Encoding: gzip, deflate, br
+18h24m12s: Accept-Language: en-US,en;q=0.9
+18h24m12s: POSITION DU LEFT APRES HEADER = 
+18h24m12s: HERE IS THE CONFIGURATION WE SET UP
 Server name: localhost
-Request_target: /
-Auto_index: 1
+Request_target: /webserv
+Auto_index: 0
 Client_max_body_size: 24000000
-Upload_pass: /lalala
-Root: www/
+Upload_pass: /lala/
+Root: /mnt/nfs/homes/gdupont/Desktop/webserv
 CGI_dir: 
-CGI ext : .jpg
-Index: index.php
+Index: file.html
 Error 403 | page :www/error_page_403.html
 Error 404 | page :www/error_page_404.html
 Error 500 | page :www/error_page_500.html
 Return: 0 | Link :
 Method: 1
-Request_target: /
-14h32m17s: Epoll noticed new events     	| nb    = 1
-14h32m17s: Epoll_wait identified an EPOLLOUT on csock: 9
-14h32m17s: HERE IS THE CONFIGURATION WE SET UP
+Request_target: /webserv
+Final target: /mnt/nfs/homes/gdupont/Desktop/webserv/file.html
+
+18h24m15s: Epoll noticed new events     	| nb    = 1
+18h24m15s: Epoll_wait identified an EPOLLOUT on csock: 10
+18h24m15s: HERE IS THE CONFIGURATION WE SET UP
 Server name: localhost
-Request_target: /
-Auto_index: 1
+Request_target: /webserv
+Auto_index: 0
 Client_max_body_size: 24000000
-Upload_pass: /lalala
-Root: www/
+Upload_pass: /lala/
+Root: /mnt/nfs/homes/gdupont/Desktop/webserv
 CGI_dir: 
-CGI ext : .jpg
-Index: index.php
+Index: file.html
 Error 403 | page :www/error_page_403.html
 Error 404 | page :www/error_page_404.html
 Error 500 | page :www/error_page_500.html
 Return: 0 | Link :
 Method: 1
-Request_target: /
-14h32m20s: Epoll noticed new events     	| nb    = 1
-14h32m20s: Epoll_wait identified an EPOLLOUT on csock: 9
-14h32m20s: HERE IS THE CONFIGURATION WE SET UP
+Request_target: /webserv
+Final target: /mnt/nfs/homes/gdupont/Desktop/webserv/file.html
+
+18h24m15s: HERE IS THE CONFIGURATION WE SET UP
 Server name: localhost
-Request_target: /
-Auto_index: 1
+Request_target: /webserv
+Auto_index: 0
 Client_max_body_size: 24000000
-Upload_pass: /lalala
-Root: www/
+Upload_pass: /lala/
+Root: /mnt/nfs/homes/gdupont/Desktop/webserv
 CGI_dir: 
-CGI ext : .jpg
-Index: index.php
+Index: file.html
 Error 403 | page :www/error_page_403.html
 Error 404 | page :www/error_page_404.html
 Error 500 | page :www/error_page_500.html
 Return: 0 | Link :
 Method: 1
-Request_target: /
-14h32m23s: Epoll noticed new events     	| nb    = 1
-14h32m23s: Epoll_wait identified an EPOLLOUT on csock: 9
-14h32m23s: HERE IS THE CONFIGURATION WE SET UP
+Request_target: /webserv
+Final target: /mnt/nfs/homes/gdupont/Desktop/webserv/file.html
+18h24m18s: Epoll noticed new events     	| nb    = 1
+18h24m18s: Epoll_wait identified an EPOLLOUT on csock: 10
+18h24m18s: HERE IS THE CONFIGURATION WE SET UP
 Server name: localhost
-Request_target: /
-Auto_index: 1
+Request_target: /webserv
+Auto_index: 0
 Client_max_body_size: 24000000
-Upload_pass: /lalala
-Root: www/
+Upload_pass: /lala/
+Root: /mnt/nfs/homes/gdupont/Desktop/webserv
 CGI_dir: 
-CGI ext : .jpg
-Index: index.php
+Index: file.html
 Error 403 | page :www/error_page_403.html
 Error 404 | page :www/error_page_404.html
 Error 500 | page :www/error_page_500.html
 Return: 0 | Link :
 Method: 1
-Request_target: /
-14h32m26s:  csock is closed: 9
-14h32m26s:  cssock is closed: 5
-14h32m26s:  cssock is closed: 6
-14h32m26s:  cssock is closed: 7
-14h32m26s:  cssock is closed: 8
-14h32m26s:  EPFD is closed: 4
+Request_target: /webserv
+Final target: /mnt/nfs/homes/gdupont/Desktop/webserv/file.html
+
+18h24m18s: HERE IS THE CONFIGURATION WE SET UP
+Server name: localhost
+Request_target: /webserv
+Auto_index: 0
+Client_max_body_size: 24000000
+Upload_pass: /lala/
+Root: /mnt/nfs/homes/gdupont/Desktop/webserv
+CGI_dir: 
+Index: file.html
+Error 403 | page :www/error_page_403.html
+Error 404 | page :www/error_page_404.html
+Error 500 | page :www/error_page_500.html
+Return: 0 | Link :
+Method: 1
+Request_target: /webserv
+Final target: /mnt/nfs/homes/gdupont/Desktop/webserv/file.html
+18h24m19s:  csock is closed: 10
+18h24m19s:  cssock is closed: 5
+18h24m19s:  cssock is closed: 6
+18h24m19s:  cssock is closed: 7
+18h24m19s:  cssock is closed: 8
+18h24m19s:  cssock is closed: 9
+18h24m19s:  EPFD is closed: 4

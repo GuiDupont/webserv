@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/23 12:41:17 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/23 18:20:24 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ std::ostream & operator<<(std::ostream & o,const request & r)
 	return (o);
 }
 
-request::request() : stage(0), next_chunk(-1), nb_trailer_to_received(0) {}
+request::request() : stage(0), next_chunk(-1), nb_trailer_to_received(0), _code_to_send(0), close_csock(false), local_actions_done(false), conf(NULL), resp(NULL) {}
 
-request::request(int csock) : stage(0), _csock(csock), next_chunk(-1), nb_trailer_to_received(0) {}
+request::request(int csock) : stage(0), _csock(csock), next_chunk(-1), nb_trailer_to_received(0), _code_to_send(0), close_csock(false), local_actions_done(false), conf(NULL), resp(NULL){}
 
-request::request(int csock, std::string left) : stage(0), _csock(csock), _left(left), next_chunk(-1), nb_trailer_to_received(0) {}
+request::request(int csock, std::string left) : stage(0), _csock(csock), _left(left), next_chunk(-1), nb_trailer_to_received(0), _code_to_send(0), close_csock(false), local_actions_done(false), conf(NULL), resp(NULL) {}
 
 void request::param_trailer(std::string str) {
 
@@ -82,4 +82,9 @@ bool request::find_trailer_in_list(std::string str) {
 			return (1);
 	}
 	return (0);
+}
+
+request::~request() {
+	delete conf;
+	delete resp;
 }

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:10 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/21 14:10:29 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/23 15:46:53 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ class webserv_parser {
 		std::string 						parse_upload_pass(std::string &line);
 		std::string							parse_ip(std::string str, vHost &host);
 		void 								check_server_line(std::string &line);
+		// std::string							parse_root(std::string & line); to delete
+
 
 		std::pair<std::string, std::string> get_header_begin_body(int csock); // a supprimer ?? (ancienne fonction pour avoir le bdy)
 		// void								parse_header(std::string & header, request & n_request);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/23 12:15:48 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/23 18:42:51 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include "request.hpp"
 # include "exceptions.hpp"
 # include "logger.hpp"
-
+# include "response.hpp"
 
 # include <list>
 # include <map>
@@ -36,20 +36,17 @@
 # include <regex.h>
 # include <sys/socket.h>
 
-
-
-
 # define WHITESPACE " \t\n\v\f\r"
 
 # define GET 1
 # define POST 2
 # define DELETE 4
 
-
 # define TIMEOUT 100
 
 class vHost;
 class request;
+class response;
 
 typedef int unknown;
 extern class webserv_parser g_parser;
@@ -65,6 +62,9 @@ class webserv {
 	friend class config;
 
 	public:
+		std::map<int, std::string>					status_code;
+		std::map<int, request>						_requests;
+
 
 	private:
 		std::list<vHost> 							_vhosts;
@@ -74,8 +74,8 @@ class webserv {
 		std::string 								_root;
 		std::string									_cgi_dir;
 		int											_epfd;
-		std::map<int, request>						_requests;
 		std::map<int, std::tm>						_timeout;
+		
 	public:
 		webserv(const std::string & path_config);
 		webserv();
@@ -86,6 +86,7 @@ class webserv {
 		void 							set_hosts();
 		int								get_epfd() const ;
 		std::list<vHost>				&get_vhosts() ;
+		std::string						&get_root();
 
 		void	wait_for_connection();
 		void	handle_new_client(int ssock, SOCKADDR* csin, socklen_t* crecsize);
@@ -107,6 +108,9 @@ class webserv {
 		bool	is_chunked(request &req);
 		int		find_word(std::string str, std::string word);
 		bool	is_valid_content_length(std::string val);
+		void	insert_status_code();
+		void	accept_new_client(int sock);
+		
 
 	
 	private:

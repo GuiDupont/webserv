@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/23 14:38:34 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/09/23 18:43:56 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,20 +43,8 @@ void	webserv::wait_for_connection() {
 		else
 			g_logger << "No events";
 		for (int i = 0; i < nsfd; i++) {
-			if (revents[i].events & EPOLLIN && ft_is_ssock(revents[i].data.fd)) { //we have a client to accept
-				// add new socket client to epoll
-				SOCKET csock = accept(revents[i].data.fd, (SOCKADDR*)&csin, &crecsize);
-				std::time_t t = std::time(0);
-				std::tm	*now = std::localtime(&t);
-				_timeout.insert(std::pair<int, std::tm>(csock, *now));
-				g_logger.fd << g_logger.get_timestamp() << "We accepted a new client from ssock " << revents[i].data.fd << ", new csock is = " << csock << std::endl;
-				ft_add_csock_to_vhost(revents[i].data.fd, csock);
-				ev.events = EPOLLIN;
-				ev.data.fd = csock;
-				fcntl(csock, F_SETFL, O_NONBLOCK);
-				if (epoll_ctl(_epfd, EPOLL_CTL_ADD, csock, &ev) == -1)
-					std::cout << errno << strerror(errno) << std::endl; // add an exception
-			}
+			if (revents[i].events & EPOLLIN && ft_is_ssock(revents[i].data.fd))
+				accept_new_client(revents[i].data.fd);
 			else if (revents[i].events & EPOLLOUT && (!ft_is_ssock(revents[i].data.fd))) { // we have smthing to send
 				g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on csock: " << revents[i].data.fd << std::endl;
 				config conf(g_webserv._requests.find(revents[i].data.fd)->second);
@@ -80,6 +68,89 @@ void	webserv::wait_for_connection() {
 	}
 }
 
+void	webserv::accept_new_client(int sock) {
+	struct epoll_event ev;
+	SOCKADDR_IN csin;
+	socklen_t crecsize = sizeof(csin);
+	SOCKET csock = accept(sock, (SOCKADDR*)&csin, &crecsize);
+	std::time_t t = std::time(0);
+	std::tm	*now = std::localtime(&t);
+	_timeout.insert(std::pair<int, std::tm>(csock, *now));
+	g_logger.fd << g_logger.get_timestamp() << "We accepted a new client from ssock " << sock << ", new csock is = " << csock << std::endl;
+	ft_add_csock_to_vhost(sock, csock);
+	ev.events = EPOLLIN;
+	ev.data.fd = csock;
+	fcntl(csock, F_SETFL, O_NONBLOCK);
+	if (epoll_ctl(_epfd, EPOLL_CTL_ADD, csock, &ev) == -1)
+		std::cout << errno << strerror(errno) << std::endl; // add an exception
+}
+
+void	send_response(int csock, response * resp) {
+		send(csock, resp->status_line.c_str(), resp->status_line.size(), 0);
+}
+
+void	request::response_request() {
+	// if (local_actions_done == false) {
+	// 	do_local_actions(); // dlelete ou post
+	// }
+	// if (local_actions_done == true && header_is_not_sent()) {
+	// 	generate_header();
+	// 	send_header();
+	// }
+	// else if (local_actions_done == true) {
+	// 	send_body();
+	// }
+}
+
+
+void	webserv::handle_answer_to_request(int csock) {
+	g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on csock: " << csock << std::endl;
+	request & req = g_webserv._requests.find(csock)->second;
+	config conf(req);
+	exit(1);
+	if (req.conf->validity_checked == false)
+		req.control_config_validity();
+	req.response_request();
+	if (req.done) {
+		//g_webserv._requests.erase(csock);
+		if (req.close_csock == true)
+			g_webserv.clean_csock_from_server(csock); // timeout
+		else {
+			struct epoll_event ev;
+			ev.events = EPOLLIN;
+			ev.data.fd = csock;
+			if (epoll_ctl(_epfd, EPOLL_CTL_MOD, csock, &ev) == -1)
+				std::cout << errno << " " << strerror(errno) << std::endl; // add an exception
+		}
+	}
+}
+
+void	check_file_exists(std::string &path) {
+	
+}
+
+void	request::control_config_validity() {
+	conf->validity_checked = true;
+	if (_code_to_send != 0)
+		;
+	else if (conf->_method & conf->_disable_methods && _code_to_send == 0)
+		_code_to_send = 405;
+	else if ((conf->_method & GET))
+	// && check_file_exists(re))
+		_code_to_send = 404;	
+	if (_code_to_send != 0)
+		local_actions_done = true;
+	g_logger.fd << g_logger.get_timestamp() << "We are going to respond a request with code : " << _code_to_send << std::endl;
+
+}
+
+
+
+
+
+/* REQUEST MANAGEMENT */
+
+
 void webserv::analyse_header(request &req) {
 	g_logger.fd << g_logger.get_timestamp() + "We are parsing header from ccosk: " << req._csock << std::endl;// analyse_body(it->second); // a faire
 	if (req._left.find(std::string("\r\n\r\n"), 0) != std::string::npos) {
@@ -89,7 +160,7 @@ void webserv::analyse_header(request &req) {
 		{
 			req._code_to_send = 400;
 			set_request_to_ended(req);
-			req.config = new config(req);
+			req.conf = new config(req);
 			return ;
 		}
 		req._request_target = get_word(req._left, index , std::string(" "));
@@ -97,7 +168,7 @@ void webserv::analyse_header(request &req) {
 		{
 			req._code_to_send = 400;
 			set_request_to_ended(req);
-			req.config = new config(req);
+			req.conf = new config(req);
 			return ;
 		}
 		req._HTTP_version = get_word(req._left, index, std::string("\r\n"));
@@ -105,14 +176,14 @@ void webserv::analyse_header(request &req) {
 		{
 			req._code_to_send = 400;
 			set_request_to_ended(req);
-			req.config = new config(req);
+			req.conf = new config(req);
 			return ;
 		}
 		if (req._HTTP_version != "HTTP/1.1" && req._HTTP_version != "HTTP/1.0")
 		{
 			req._code_to_send = 505;
 			set_request_to_ended(req);
-			req.config = new config(req);
+			req.conf = new config(req);
 			return ;
 		}
 		while (index < req._left.size()) // parsing headerffields
@@ -126,7 +197,7 @@ void webserv::analyse_header(request &req) {
 			if (semi_colon_index == std::string::npos) {
 				req._code_to_send = 400;
 				set_request_to_ended(req);	
-				req.config = new config(req);
+				req.conf = new config(req);
 				return ;
 			}
 			header_field = std::pair<std::string, std::string>(header_field_raw.substr(0, semi_colon_index), 
@@ -139,14 +210,14 @@ void webserv::analyse_header(request &req) {
 				std::cout  << is_token(header_field.first) << is_field_content(header_field.second); // a supprimer
 				req._code_to_send = 400;
 				set_request_to_ended(req);
-				req.config = new config(req);
+				req.conf = new config(req);
 				return ;
 			}
 			if (req._header_fields.find(header_field.first) != req._header_fields.end())
 			{
 				req._code_to_send = 400;
 				set_request_to_ended(req);
-				req.config = new config(req);
+				req.conf = new config(req);
 				return ;
 			}
 			req._header_fields.insert(header_field);
@@ -155,14 +226,14 @@ void webserv::analyse_header(request &req) {
 			g_logger << "OK pb de Host sur csock : " << ft_itos(req._csock);
 			req._code_to_send = 400;
 			set_request_to_ended(req);
-			req.config = new config(req);
+			req.conf = new config(req);
 			return ;
 		}
 		if (req._header_fields.find("Content-Length") != req._header_fields.end()) {
 			if (is_valid_content_length(req._header_fields.find("Content-Length")->second) == 0) {
 				req._code_to_send = 400;
 				set_request_to_ended(req);
-				req.config = new config(req);
+				req.conf = new config(req);
 				return ;
 			}
 		}
@@ -172,7 +243,7 @@ void webserv::analyse_header(request &req) {
 		req._left = req._left.substr(index, req._left.size() - index);
 		g_logger << "POSITION DU LEFT APRES HEADER = " + req._left;
 		req.stage = 1;
-		req.config = new config(req);
+		req.conf = new config(req);
 		analyse_body(req);
 	}
 }
@@ -262,9 +333,6 @@ webserv::webserv(const std::string & path_config) : _client_max_body_size(-1) {
 	std::ifstream	config_file;
 	std::string		all_file;
 	
-	char *tmp = getcwd(NULL, 0);
-	_root = std::string(tmp) + ("/www");
-	free(tmp);
 	config_file.open(path_config.c_str(), std::ios_base::in);
 	if (!config_file.is_open())
 		throw (config_file_not_open());
@@ -272,6 +340,7 @@ webserv::webserv(const std::string & path_config) : _client_max_body_size(-1) {
 	if (!g_parser.check_brackets(all_file))
 		throw (bad_brackets_conf());
 	set_config(config_file);
+	insert_status_code();
 	g_logger << LOG_CONFIG_DONE;
 }
 
@@ -296,7 +365,9 @@ void		webserv::set_config(std::ifstream & config_file) {
 		else if (first_word == "client_max_body_size")
 			this->_client_max_body_size = g_parser.get_max_body_size(line);
 		else if (first_word == "error_page")
-			this->_error_pages.push_back(g_parser.parse_error_page(line)); 
+			this->_error_pages.push_back(g_parser.parse_error_page(line));
+		else if (first_word == "root")
+			_root = g_parser.parse_one_word(line);
 		else if (first_word == "}")
 			;
 		else if (first_word.size() != 0) {
@@ -327,12 +398,12 @@ void	webserv::control_time_out(void) {
 		}
 	}
 	for (std::list<int>::iterator it = sock_to_close.begin(); it != sock_to_close.end(); it++)  {
+		g_logger.fd << g_logger.get_timestamp() << "TIMEOUT, csock closed : " << *it << std::endl;// analyse_body(it->second); // a faire
 		clean_csock_from_server(*it);
 	}
 }
 
 void	webserv::clean_csock_from_server(int fd) {
-	g_logger.fd << g_logger.get_timestamp() << "TIMEOUT, csock closed : " << fd << std::endl;// analyse_body(it->second); // a faire
 		_requests.erase(fd);
 		_timeout.erase(fd);
 		for (std::list<vHost>::iterator it_vhost = _vhosts.begin(); it_vhost != _vhosts.end(); it_vhost++)
@@ -345,21 +416,13 @@ void	webserv::clean_csock_from_server(int fd) {
 		close(fd);
 }
 
-webserv::webserv(void) {
-	
-}
+webserv::webserv(void)	{ }
 
-webserv::~webserv(void) {
-	
-}
+webserv::~webserv(void)	{ }
 
-int		webserv::get_epfd() const {
-	return (this->_epfd);
-}
+int					webserv::get_epfd() const { return (this->_epfd); }
 
-std::list<vHost>				&webserv::get_vhosts() {
-	return (this->_vhosts);
-}
+std::list<vHost>	&webserv::get_vhosts() 	{ return (this->_vhosts); }
 
 void webserv::add_event_to_request(int csock) {
 
@@ -418,7 +481,7 @@ void	webserv::analyse_body(request &req) {
 					}
 					else {
 						req._body += req._left.substr(0, req.next_chunk);
-						if (req._body.size() > req.config->_client_max_body_size) {
+						if (req._body.size() > req.conf->_client_max_body_size) {
 								req._code_to_send = 413;
 								set_request_to_ended(req);
 								return ;
@@ -488,7 +551,7 @@ void	webserv::analyse_body(request &req) {
 		size_t length = std::atoi(req._header_fields.find("Content-Length")->second.c_str());
 		req._body += req._left;
 		req._left.clear();
-		if (req._body.size() > req.config->_client_max_body_size) {
+		if (req._body.size() > req.conf->_client_max_body_size) {
 			req._code_to_send = 413;
 			set_request_to_ended(req);
 			return ;
@@ -552,4 +615,59 @@ bool	webserv::is_valid_content_length(std::string val) {
     }
     regfree(&regex);
 	return (1);
+}
+
+std::string		&webserv::get_root() {
+	return (_root);
+}
+
+void	webserv::insert_status_code() {
+
+	status_code.insert(std::make_pair(100, "100 Continue"));
+	status_code.insert(std::make_pair(101, "101 Switching Protocols"));
+
+	status_code.insert(std::make_pair(200, "200 OK"));
+	status_code.insert(std::make_pair(201, "201 Created"));
+	status_code.insert(std::make_pair(202, "202 Accepted"));
+	status_code.insert(std::make_pair(203, "203 Non-Authoritative Information"));
+	status_code.insert(std::make_pair(204, "204 No Content"));
+	status_code.insert(std::make_pair(205, "205 Reset Content"));
+	status_code.insert(std::make_pair(206, "206 Partial Content"));
+
+	status_code.insert(std::make_pair(300, "300 Multiple Choices"));
+	status_code.insert(std::make_pair(301, "301 Moved Permanently"));
+	status_code.insert(std::make_pair(302, "302 Found"));
+	status_code.insert(std::make_pair(303, "303 See Other"));
+	status_code.insert(std::make_pair(304, "304 Not Modified"));
+	status_code.insert(std::make_pair(305, "305 Use Proxy"));
+
+	status_code.insert(std::make_pair(307, "307 Temporary Redirect"));
+
+	status_code.insert(std::make_pair(400, "400 Bad Request"));
+	status_code.insert(std::make_pair(401, "401 Unauthorized"));
+	status_code.insert(std::make_pair(402, "402 Payment Required"));
+	status_code.insert(std::make_pair(403, "403 Forbidden"));
+	status_code.insert(std::make_pair(404, "404 Not Found"));
+	status_code.insert(std::make_pair(405, "405 Method Not Allowed"));
+	status_code.insert(std::make_pair(406, "406 Not Acceptable"));
+	status_code.insert(std::make_pair(407, "407 Proxy Authentication Required"));
+	status_code.insert(std::make_pair(408, "408 Request Timeout"));
+	status_code.insert(std::make_pair(409, "409 Conflict"));
+	status_code.insert(std::make_pair(410, "410 Gone"));
+	status_code.insert(std::make_pair(411, "411 Length Required"));
+	status_code.insert(std::make_pair(412, "412 Precondition Failed"));
+	status_code.insert(std::make_pair(413, "413 Payload Too Large"));
+	status_code.insert(std::make_pair(414, "414 URI Too Long"));
+	status_code.insert(std::make_pair(415, "415 Unsupported Media Type"));
+	status_code.insert(std::make_pair(416, "416 Range Not Satisfiable"));
+	status_code.insert(std::make_pair(417, "417 Expectation Failed"));
+
+	status_code.insert(std::make_pair(426, "426 Upgrade Required"));
+
+	status_code.insert(std::make_pair(500, "500 Internal Server Error"));
+	status_code.insert(std::make_pair(501, "501 Not Implemented"));
+	status_code.insert(std::make_pair(502, "502 Bad Gateway"));
+	status_code.insert(std::make_pair(503, "503 Service Unavailable"));
+	status_code.insert(std::make_pair(504, "504 Gateway Timeout"));
+	status_code.insert(std::make_pair(505, "505 HTTP Version Not Supported"));
 }
