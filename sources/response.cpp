@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 14:56:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/24 18:54:22 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/24 18:57:25 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ std::string         response::generate_error_body(std::string & message) {
     return (body);
 }
 
-std::string         response::generate_autoindex_body(std::string path) {
+std::string         response::generate_autoindex_body(std::string & path) {  //wip 
     std::string body = "<html><head><title>";
     body += path;
     body += "</title></head>\n<body>\n<center><h1>";

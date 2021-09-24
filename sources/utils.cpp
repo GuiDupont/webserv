@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/24 18:49:15 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/24 18:56:36 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -385,6 +385,8 @@ void					test_path(request & req) {
 	if (is_directory(path)) {
 		if (req.conf->_auto_index == false)
 			req.code_to_send = 404;
+		else
+			req.body = response::generate_autoindex_body(path);
 		return ;
 	}
 	int fd = open(path.c_str(), O_WRONLY);
