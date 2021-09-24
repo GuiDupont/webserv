@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/23 18:43:56 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/24 12:26:57 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ void	webserv::wait_for_connection() {
 				accept_new_client(revents[i].data.fd);
 			else if (revents[i].events & EPOLLOUT && (!ft_is_ssock(revents[i].data.fd))) { // we have smthing to send
 				g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on csock: " << revents[i].data.fd << std::endl;
-				config conf(g_webserv._requests.find(revents[i].data.fd)->second);
-				g_logger.fd << g_logger.get_timestamp() << conf;
-				
+				// config conf(g_webserv._requests.find(revents[i].data.fd)->second);
+				// g_logger.fd << g_logger.get_timestamp() << conf;
+				//handle_answer_to_request();
 				// a voir si eppollout direct 
 				// if (is_pending_request(revents[i].data.fd))
 				// 	;
@@ -62,7 +62,7 @@ void	webserv::wait_for_connection() {
 					g_logger.fd << g_logger.get_timestamp() << "New request has been created on csock: " + ft_itos(revents[i].data.fd) << std::endl;
 					_requests.insert(std::pair<int, request>(revents[i].data.fd, request(revents[i].data.fd)));
 				}
-				add_event_to_request(revents[i].data.fd);
+				read_from_csock(revents[i].data.fd);
 			}
 		}
 	}
@@ -90,58 +90,54 @@ void	send_response(int csock, response * resp) {
 }
 
 void	request::response_request() {
-	// if (local_actions_done == false) {
-	// 	do_local_actions(); // dlelete ou post
-	// }
+	if (local_actions_done == false) {
+		//do_local_actions(); // dlelete ou post
+	}
 	// if (local_actions_done == true && header_is_not_sent()) {
-	// 	generate_header();
-	// 	send_header();
+	// 	//generate_header();
+	// 	//send_header();
 	// }
-	// else if (local_actions_done == true) {
-	// 	send_body();
+	// else if (local_actions_done == true && !header_is_not_sent()) {
+	// 	//send_body();
 	// }
 }
 
 
 void	webserv::handle_answer_to_request(int csock) {
-	g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on csock: " << csock << std::endl;
-	request & req = g_webserv._requests.find(csock)->second;
-	config conf(req);
-	exit(1);
-	if (req.conf->validity_checked == false)
-		req.control_config_validity();
-	req.response_request();
-	if (req.done) {
-		//g_webserv._requests.erase(csock);
-		if (req.close_csock == true)
-			g_webserv.clean_csock_from_server(csock); // timeout
-		else {
-			struct epoll_event ev;
-			ev.events = EPOLLIN;
-			ev.data.fd = csock;
-			if (epoll_ctl(_epfd, EPOLL_CTL_MOD, csock, &ev) == -1)
-				std::cout << errno << " " << strerror(errno) << std::endl; // add an exception
-		}
-	}
+	// g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on csock: " << csock << std::endl;
+	// request & req = g_webserv._requests.find(csock)->second;
+	// //config conf(req);
+	// //exit(1);
+	// if (req.conf->validity_checked == false)
+	// 	req.control_config_validity();
+	// req.response_request();
+	// if (req.done) {
+	// 	//g_webserv._requests.erase(csock);
+	// 	if (req.close_csock == true)
+	// 		g_webserv.clean_csock_from_server(csock); // timeout
+	// 	else {
+	// 		struct epoll_event ev;
+	// 		ev.events = EPOLLIN;
+	// 		ev.data.fd = csock;
+	// 		if (epoll_ctl(_epfd, EPOLL_CTL_MOD, csock, &ev) == -1)
+	// 			std::cout << errno << " " << strerror(errno) << std::endl; // add an exception
+	// 	}
+	// }
 }
 
-void	check_file_exists(std::string &path) {
-	
-}
 
 void	request::control_config_validity() {
 	conf->validity_checked = true;
 	if (_code_to_send != 0)
-		;
+		return ;
 	else if (conf->_method & conf->_disable_methods && _code_to_send == 0)
 		_code_to_send = 405;
 	else if ((conf->_method & GET))
-	// && check_file_exists(re))
-		_code_to_send = 404;	
-	if (_code_to_send != 0)
+		//&& path_is_accessible(re))
+	if (_code_to_send != 0) {
 		local_actions_done = true;
-	g_logger.fd << g_logger.get_timestamp() << "We are going to respond a request with code : " << _code_to_send << std::endl;
-
+		g_logger.fd << g_logger.get_timestamp() << "We are going to respond a request with code : " << _code_to_send << std::endl;
+	}
 }
 
 
@@ -424,7 +420,7 @@ int					webserv::get_epfd() const { return (this->_epfd); }
 
 std::list<vHost>	&webserv::get_vhosts() 	{ return (this->_vhosts); }
 
-void webserv::add_event_to_request(int csock) {
+void webserv::read_from_csock(int csock) {
 
 	char c_buffer[1025];
 	int ret;

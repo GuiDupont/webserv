@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 12:51:13 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/23 18:13:54 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/24 13:32:34 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ int    							ft_atoi_base(const char *str, const char *base);
 bool                            is_directory(std::string & path);
 void	                        stop_program_sigint(int signum);
 std::string                     from_two_str_to_path(const std::string & str1, const std::string & str2);
+bool		        			test_path(std::string  path);
+
 
 
 

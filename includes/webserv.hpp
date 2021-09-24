@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/23 18:42:51 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/24 11:39:52 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ class webserv {
 		bool	is_pending_request(int csock);
 		bool	is_new_request(int fd);
 		void	control_time_out(void);
-		void	add_event_to_request(int csock);
+		void	read_from_csock(int csock);
 		void	analyse_header(request &req);
 		void	analyse_body(request &req);
 		void	set_request_to_ended(request &req);

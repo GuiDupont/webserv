@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/23 18:11:52 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/24 13:35:59 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -358,7 +358,6 @@ int     ft_atoi_base(const char *str, const char *base)
         return (k);
 }
 
-// to test function
 bool	is_directory(std::string & path) {
 	struct stat s;
 	if( stat(path.c_str(), &s) == 0 ) {
@@ -379,4 +378,24 @@ std::string				from_two_str_to_path(const std::string & str1, const std::string 
 	else if (str1[str1.size() - 1] != '/' && str2[0] != '/')
 		str2_bis = "/" + str2_bis;
 	return (str1 + str2_bis);
+}
+
+bool				test_path(request & req) {
+	std::string path = req.conf->path_to_target;
+	if (is_directory(path))
+		return (true);
+	int fd = open(path.c_str(), O_WRONLY);
+	if (fd == -1) {
+		g_logger.fd << g_logger.get_timestamp() << "can't open file cause : " << strerror(errno) << std::endl;
+		std::cout << errno << std::endl;
+		
+		if (errno == EACCES)
+			req._code_to_send = 403;
+		else if (errno == ENOENT && (req._method == "GET" || req._method == "DELETE"))
+			req._code_to_send = 404;
+		else if (errno == ENOENT)
+			return (true);
+	}
+	close(fd);
+	return (true);
 }
