@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/23 15:22:16 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/24 18:47:44 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,18 @@ class config {
 		std::string									_cgi_dir;
 		std::string 								_index;
 		size_t										_disable_methods;
-		size_t										_method;
+		size_t										method;
 		std::string									_request_target;
 		std::map<std::string, std::string>			_header_fields;
 		std::pair<int, std::string>					_return;
+		bool										return_activated;
 		std::set< std::string >						_cgi_ext;
 		std::string 								_location;
 		std::string									path_to_target;
 		int											code;
 		bool										validity_checked;
+		bool										local_actions_done;
+		
 	
 		config(request & req);
 		config();

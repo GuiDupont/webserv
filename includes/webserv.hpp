@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/24 11:39:52 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/24 18:38:14 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ class webserv {
 
 		void	wait_for_connection();
 		void	handle_new_client(int ssock, SOCKADDR* csin, socklen_t* crecsize);
-		void	handle_answer_to_request(int csock);
+		void	answer_to_request(int csock);
 
 
 		bool	ft_is_ssock(int fd);

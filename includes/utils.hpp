@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 12:51:13 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/24 13:32:34 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/24 18:31:40 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "exceptions.hpp"
 # include "webserv.hpp"
 # include "vhost.hpp"
+# include "request.hpp" 
 
 # include <sys/stat.h>
 # include <cctype>
@@ -31,6 +32,8 @@
 # include <cerrno>
 # include <cstring>
 # include <stdlib.h>
+# include <sys/stat.h>
+# include <unistd.h>
 
 # define INVALID_SOCKET -1 // a bouger ?
 # define SOCKET_ERROR -1 // a bouger ?
@@ -40,6 +43,7 @@ typedef struct sockaddr_in SOCKADDR_IN; // a bouger ?
 typedef struct sockaddr SOCKADDR; // a bouger ?
 
 class vHost;
+class request;
 
 int								go_to_next_word(const std::string & line, int index);
 int								ft_string_is_alpha(const std::string & s);
@@ -61,7 +65,10 @@ int    							ft_atoi_base(const char *str, const char *base);
 bool                            is_directory(std::string & path);
 void	                        stop_program_sigint(int signum);
 std::string                     from_two_str_to_path(const std::string & str1, const std::string & str2);
-bool		        			test_path(std::string  path);
+void		        			test_path(request & request);
+
+
+
 
 
 

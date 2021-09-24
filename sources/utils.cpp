@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/24 13:35:59 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/24 18:49:15 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -380,22 +380,26 @@ std::string				from_two_str_to_path(const std::string & str1, const std::string 
 	return (str1 + str2_bis);
 }
 
-bool				test_path(request & req) {
+void					test_path(request & req) {
 	std::string path = req.conf->path_to_target;
-	if (is_directory(path))
-		return (true);
+	if (is_directory(path)) {
+		if (req.conf->_auto_index == false)
+			req.code_to_send = 404;
+		return ;
+	}
 	int fd = open(path.c_str(), O_WRONLY);
 	if (fd == -1) {
 		g_logger.fd << g_logger.get_timestamp() << "can't open file cause : " << strerror(errno) << std::endl;
 		std::cout << errno << std::endl;
-		
 		if (errno == EACCES)
-			req._code_to_send = 403;
-		else if (errno == ENOENT && (req._method == "GET" || req._method == "DELETE"))
-			req._code_to_send = 404;
+			req.code_to_send = 403;
+		else if (errno == ENOENT && (req.method == "GET" || req.method == "DELETE"))
+			req.code_to_send = 404;
 		else if (errno == ENOENT)
-			return (true);
+			;
+		else
+			req.code_to_send = 400;
 	}
 	close(fd);
-	return (true);
+	return ;
 }

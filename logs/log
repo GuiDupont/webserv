@@ -1,2 +1,23 @@
-12h27m12s: Following file provides this error No such file or directory
-12h27m12s: can't open file cause : No such file or directory
+18h54m39s: ------BEGINNING OF THE PROGRAM-------
+18h54m39s: Config successful
+18h54m39s: Epoll create successful			 | epfd  = 4
+18h54m39s: Ssock created           			 | ssock = 5
+18h54m39s: Ssock added to Epoll    			 | ssock = 5
+18h54m39s: Ssock created           			 | ssock = 6
+18h54m39s: Ssock added to Epoll    			 | ssock = 6
+18h54m39s: Ssock created           			 | ssock = 7
+18h54m39s: Ssock added to Epoll    			 | ssock = 7
+18h54m39s: Ssock created           			 | ssock = 8
+18h54m39s: Ssock added to Epoll    			 | ssock = 8
+18h54m39s: Ssock created           			 | ssock = 9
+18h54m39s: Ssock added to Epoll    			 | ssock = 9
+18h54m39s: Epoll is waiting for connection
+18h54m42s: No events
+18h54m45s: No events
+18h54m48s: No events
+18h54m49s:  cssock is closed: 5
+18h54m49s:  cssock is closed: 6
+18h54m49s:  cssock is closed: 7
+18h54m49s:  cssock is closed: 8
+18h54m49s:  cssock is closed: 9
+18h54m49s:  EPFD is closed: 4

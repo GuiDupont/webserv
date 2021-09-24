@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/23 18:20:24 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/24 18:43:42 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,27 @@
 
 std::ostream & operator<<(std::ostream & o,const request & r)
 {
-	o << "Methode: " << r._method << std::endl;
-	o << "Request_target: " << r._request_target << std::endl;
-	std::map<std::string, std::string>::const_iterator it = r._header_fields.begin();
-	for (; it != r._header_fields.end(); it++)
+	o << "Methode: " << r.method << std::endl;
+	o << "Request_target: " << r.request_target << std::endl;
+	std::map<std::string, std::string>::const_iterator it = r.header_fields.begin();
+	for (; it != r.header_fields.end(); it++)
 	{
 		std::cout << "Header field : -" << it->first << "-" << std::endl;
 		std::cout << "Field content: -" << it->second << std::endl;
 	}
-	std::cout << "Body: -" << r._body << "-" << std::endl;
+	std::cout << "Body: -" << r.body << "-" << std::endl;
 	return (o);
 }
 
-request::request() : stage(0), next_chunk(-1), nb_trailer_to_received(0), _code_to_send(0), close_csock(false), local_actions_done(false), conf(NULL), resp(NULL) {}
+request::request() : stage(0), next_chunk(-1), nb_trailer_to_received(0), code_to_send(0), close_csock(false), conf(NULL), resp(NULL), header_is_sent(false), body_is_sent(false) {}
 
-request::request(int csock) : stage(0), _csock(csock), next_chunk(-1), nb_trailer_to_received(0), _code_to_send(0), close_csock(false), local_actions_done(false), conf(NULL), resp(NULL){}
+request::request(int csock) :	stage(0), csock(csock), next_chunk(-1), nb_trailer_to_received(0), 
+								code_to_send(0), close_csock(false), conf(NULL), resp(NULL),
+								header_is_sent(false), body_is_sent(false) {}
 
-request::request(int csock, std::string left) : stage(0), _csock(csock), _left(left), next_chunk(-1), nb_trailer_to_received(0), _code_to_send(0), close_csock(false), local_actions_done(false), conf(NULL), resp(NULL) {}
+request::request(int csock, std::string left) : stage(0), csock(csock), left(left), next_chunk(-1),
+												nb_trailer_to_received(0), code_to_send(0), close_csock(false),
+												conf(NULL), resp(NULL), header_is_sent(false), body_is_sent(false) {}
 
 void request::param_trailer(std::string str) {
 
@@ -52,11 +56,11 @@ void request::param_trailer(std::string str) {
 		it3 = it2 - 1;
 		for (; it3 - it >= 0 && std::isspace(*it3) != 0; it3--) {}
 		substr = substr.substr(0, it3 - it + 1);
-		this->_trailer.push_back(substr);
+		this->trailer.push_back(substr);
 		it = (it2 == str.end() ? it2 - 1 : it2);
 	}
-	this->_trailer.unique();
-	this->nb_trailer_to_received = this->_trailer.size();
+	this->trailer.unique();
+	this->nb_trailer_to_received = this->trailer.size();
 	return ;
 }
 
@@ -77,7 +81,7 @@ bool request::is_valid_chunk_size(std::string &str) {
 
 bool request::find_trailer_in_list(std::string str) {
 
-	for (std::list<std::string>::iterator it = this->_trailer.begin(); it != this->_trailer.end(); it++) {
+	for (std::list<std::string>::iterator it = this->trailer.begin(); it != this->trailer.end(); it++) {
 		if (str == *it)
 			return (1);
 	}

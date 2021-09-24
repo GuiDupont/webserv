@@ -6,29 +6,31 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/23 18:37:52 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/24 18:53:39 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "config.hpp"
 
 
-config::config(void) :  validity_checked(true) { }
+config::config(void) :  validity_checked(true), return_activated(false), local_actions_done(false) { }
 
-config::config(request & request) : validity_checked(false) {
-	if (request._method == "GET")
-		_method = GET;
-	else if (request._method == "POST")
-		_method = POST;
-	else if (request._method == "DELETE")
-		_method = DELETE;
+config::config(request & request) : validity_checked(false), return_activated(false) {
+	if (request.method == "GET")
+		method = GET;
+	else if (request.method == "POST") {
+		method = POST;
+		local_actions_done = true;
+	}
+	else if (request.method == "DELETE")
+		method = DELETE;
 	_client_max_body_size = (g_webserv._client_max_body_size  == -1 ? 0: g_webserv._client_max_body_size);
 	_error_pages = g_webserv._error_pages;
 	_upload_pass = g_webserv._upload_pass;
 	_root = g_webserv._root;
 	_cgi_dir = g_webserv._cgi_dir;
-	_request_target = request._request_target;
-	code = request._code_to_send;
+	_request_target = request.request_target;
+	code = request.code_to_send;
 
 	int first = 1;
 	vHost chosen = get_associated_vhost(request);
@@ -76,17 +78,17 @@ std::string		config::update_path_to_target_with_root(const location & location) 
 
 	std::string path_to_target; 
 	int index_after_location = _request_target.find(_location, 0) + _location.size();
-	std::string end_of_path = _request_target.substr(index_after_location,_request_target.size() - index_after_location);
-	if (_method & GET) {
+	std::string end_of_path = _request_target.substr(index_after_location, _request_target.size() - index_after_location);
+	if (method & GET) {
 		path_to_target = from_two_str_to_path(_root, end_of_path);
 		if (is_directory(path_to_target))
 			path_to_target = from_two_str_to_path(path_to_target, _index);
 	}
-	else if (_method & POST) {
+	else if (method & POST) {
 		path_to_target = from_two_str_to_path(_root, _upload_pass);
 		path_to_target = from_two_str_to_path(path_to_target, end_of_path);
 	}
-	else if (_method & DELETE)
+	else if (method & DELETE)
 		path_to_target = from_two_str_to_path(_root, end_of_path);
 	return (path_to_target);
 }
@@ -109,7 +111,7 @@ std::ostream & operator<<(std::ostream & o, const config & c)
 	for (std::map<std::string, std::string>::const_iterator it = c._header_fields.begin(); it != c._header_fields.end(); it++)
 		o << "Header " << it->first << " | value :" << it->second << std::endl;
 	o << "Return: " << c._return.first << " | Link :" << c._return.second << std::endl;
-	o << "Method: " << ((c._method == GET) ? "GET" : (c._method == POST) ? "POST" : "DELETE") << std::endl;
+	o << "Method: " << ((c.method == GET) ? "GET" : (c.method == POST) ? "POST" : "DELETE") << std::endl;
 	o << "Request_target: " << c._request_target << std::endl;
 	o << "Final target: " << c.path_to_target << std::endl;
 	
@@ -120,16 +122,16 @@ vHost & config::get_associated_vhost(request & request) {
 	int first = 1;
 	vHost *chosen;
 	for (std::list<vHost>::iterator it = g_webserv._vhosts.begin(); it != g_webserv._vhosts.end(); it++) {
-		if (it->get_csock_list().find(request._csock) != it->get_csock_list().end())
+		if (it->get_csock_list().find(request.csock) != it->get_csock_list().end())
 		{
 			if (first) {
 				chosen = &(*it);;
 				first = 0;
 			}
-			if (it->get_server_names().find(request._host) 
+			if (it->get_server_names().find(request.host) 
 					!= it->get_server_names().end())
 			{
-				_server_name = request._host;
+				_server_name = request.host;
 				chosen = &(*it);
 				break;
 			}
@@ -144,9 +146,9 @@ std::map< std::string, location >::const_iterator config::get_most_accurate_loca
 	std::string most_precise_location;
 	std::map< std::string, location >::const_iterator it = host.get_locations().begin();
 	for (; it != host.get_locations().end(); it++) {
-		std::string begin_of_request_target = _request_target.substr(0, it->first.size());
-		if (begin_of_request_target == it->first && begin_of_request_target.size() > most_precise_location.size()) {	
-			most_precise_location = begin_of_request_target;
+		std::string begin_ofrequest_target = _request_target.substr(0, it->first.size());
+		if (begin_ofrequest_target == it->first && begin_ofrequest_target.size() > most_precise_location.size()) {	
+			most_precise_location = begin_ofrequest_target;
 		}
 	}
 	return (host.get_locations().find(most_precise_location));		
