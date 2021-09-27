@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:07:25 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/24 18:41:46 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/27 12:41:11 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ class request {
 		std::string 						HTTP_version;
 		std::map<std::string, std::string>	header_fields;
 		std::list<std::string>				trailer;
-		std::string							host;
+		std::string							host_name;
 		std::string							body;
 		std::string							left;
 		int									next_chunk; // -2 = trailer stage ; -1 = chunk stage
@@ -70,8 +70,9 @@ class request {
 		void	do_local_actions();
 		bool	header_is_not_sent();
 		void	generate_header();
-		void	send_header();
+		void	send_header(int csock, std::string & header);
 		void	send_body();
+		void	set_request_to_ended();
 		
 
 		

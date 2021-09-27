@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/24 18:47:44 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/27 11:23:09 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ class config {
 		std::string									_request_target;
 		std::map<std::string, std::string>			_header_fields;
 		std::pair<int, std::string>					_return;
+		std::pair< std::string, size_t>				host_port;
 		bool										return_activated;
 		std::set< std::string >						_cgi_ext;
 		std::string 								_location;

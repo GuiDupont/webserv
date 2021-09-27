@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/23 15:47:02 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/27 11:12:45 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,4 +291,216 @@ std::pair<std::string, std::string> webserv_parser::get_header_begin_body(int cs
 		last_index = (big_buffer.size() - 1 > 3) ? big_buffer.size() - 1 : 3;
 	}
 	return (std::pair<std::string, std::string>("", ""));
+}
+
+
+void	webserv_parser::analyse_body(request &req) {
+
+	std::string substr;
+	int index = 0;
+
+	if (req.header_fields.find("Content-Length") == req.header_fields.end() && !is_chunked(req)) {
+		req.set_request_to_ended();
+		if (req.left.size() != 0)
+			req.left.clear();
+	}
+	else if (is_chunked(req)) {
+		while (req.left.empty() != 1) {
+			if (req.next_chunk > -1) {
+				if (req.left.size() < req.next_chunk + 2)
+					break;
+				else {
+					if (req.next_chunk == 0) {
+						if (req.left[req.next_chunk] != '\r' && req.left[req.next_chunk + 1] != '\n') {
+							req.code_to_send = 400;
+							req.set_request_to_ended();
+							return ;
+						}
+						req.left = req.left.substr(2, req.left.size());
+						req.next_chunk = -2;
+						if (req.nb_trailer_to_received == 0) {
+							req.set_request_to_ended();
+							return ;
+						}
+					}
+					else {
+						req.body += req.left.substr(0, req.next_chunk);
+						if (req.body.size() > req.conf->_client_max_body_size) {
+								req.code_to_send = 413;
+								req.set_request_to_ended();
+								return ;
+						}
+						if (req.left[req.next_chunk] != '\r' || req.left[req.next_chunk + 1] != '\n') {
+							req.code_to_send = 400;
+							req.set_request_to_ended();
+							return ;
+						}
+						req.left = req.left.substr(req.next_chunk + 2, req.left.size() - (req.next_chunk + 2));
+						req.next_chunk = -1;
+					}
+				}
+			}
+			else if (req.next_chunk == -1) {
+				if (req.left.find("\r\n", 0) != std::string::npos) {
+					substr = req.left.substr(0, req.left.find("\r\n", 0));
+					if (req.is_valid_chunk_size(substr) == 0) {
+						req.code_to_send = 400;
+						req.set_request_to_ended();
+						return ;
+					}
+					for (std::string::iterator it = substr.begin(); it != substr.end(); it++) {
+						*it = std::tolower(*it);
+					}
+					req.next_chunk = ft_atoi_base(substr.c_str(), "0123456789abcdef");
+					req.left = req.left.substr(req.left.find("\r\n", 0) + 2, req.left.size() - (req.left.find("\r\n", 0) + 2));
+				}
+				else
+					break;
+			}
+			else {
+				if (req.left.find("\r\n", 0) != std::string::npos) {
+					std::pair<std::string, std::string> header_field;
+					std::string header_field_raw = get_word(req.left, index, std::string("\r\n"));
+					size_t semi_colon_index =  header_field_raw.find(":", 0);
+					if (semi_colon_index == std::string::npos) {
+						req.code_to_send = 400;
+						req.set_request_to_ended();
+						return ;
+					}
+					header_field = std::pair<std::string, std::string>(header_field_raw.substr(0, semi_colon_index), 
+					header_field_raw.substr(semi_colon_index + 1, header_field_raw.size() - semi_colon_index));
+					header_field.second = trims(header_field.second, " \t");
+					if (!header_field.first.size() || !header_field.second.size() 
+					|| header_field.first[header_field.first.size() - 1] == '\t'
+					|| !is_token(header_field.first) || !is_field_content(header_field.second) || req.find_trailer_in_list(header_field.first) == 0) {
+						req.code_to_send = 400;
+						req.set_request_to_ended();
+						return ;
+					}
+					req.header_fields.insert(header_field);
+					req.nb_trailer_to_received = req.nb_trailer_to_received - 1;
+					req.trailer.remove(header_field.first);
+					req.left = req.left.substr(req.left.find("\r\n", 0) + 2, req.left.size() - (req.left.find("\r\n", 0) + 2));
+					if (req.nb_trailer_to_received == 0) {
+						req.set_request_to_ended();
+						return ;
+					}
+				}
+				else
+					break;
+			}
+		}
+	}
+	else if (req.header_fields.find("Content-Length") != req.header_fields.end()) {
+		size_t length = std::atoi(req.header_fields.find("Content-Length")->second.c_str());
+		req.body += req.left;
+		req.left.clear();
+		if (req.body.size() > req.conf->_client_max_body_size) {
+			req.code_to_send = 413;
+			req.set_request_to_ended();
+			return ;
+		}
+		if (req.body.size() >= length) {
+			req.body = req.body.substr(0, length);
+			req.set_request_to_ended();
+			req.left.clear();
+		}
+	}
+}
+
+void	webserv_parser::analyse_header(request &req) {
+	g_logger.fd << g_logger.get_timestamp() + "We are parsing header from ccosk: " << req.csock << std::endl;// analyse_body(it->second); // a faire
+	if (req.left.find(std::string("\r\n\r\n"), 0) != std::string::npos) {
+		int index = 0;
+		req.method = get_word(req.left, index, std::string(" "));
+		if (req.method != "GET" && req.method != "DELETE" && req.method != "POST")
+		{
+			req.code_to_send = 400;
+			req.set_request_to_ended();
+			req.conf = new config(req);
+			return ;
+		}
+		req.request_target = get_word(req.left, index , std::string(" "));
+		if (req.request_target.empty() || req.request_target[0] != '/' || is_valid_request_target(req.request_target) == 0)  // test nginx with charset of segment wrong https://datatracker.ietf.org/doc/html/rfc3986#section-3.3
+		{
+			req.code_to_send = 400;
+			req.set_request_to_ended();
+			req.conf = new config(req);
+			return ;
+		}
+		req.HTTP_version = get_word(req.left, index, std::string("\r\n"));
+		if (req.HTTP_version.size() == 0)
+		{
+			req.code_to_send = 400;
+			req.set_request_to_ended();
+			req.conf = new config(req);
+			return ;
+		}
+		if (req.HTTP_version != "HTTP/1.1" && req.HTTP_version != "HTTP/1.0")
+		{
+			req.code_to_send = 505;
+			req.set_request_to_ended();
+			req.conf = new config(req);
+			return ;
+		}
+		while (index < req.left.size()) // parsing headerffields
+		{
+			std::pair<std::string, std::string> header_field;
+			std::string header_field_raw = get_word(req.left, index, std::string("\r\n"));
+			if (header_field_raw.size() == 0)
+				break ;
+			g_logger << header_field_raw;
+			size_t semi_colon_index =  header_field_raw.find(":", 0);
+			if (semi_colon_index == std::string::npos) {
+				req.code_to_send = 400;
+				req.set_request_to_ended();	
+				req.conf = new config(req);
+				return ;
+			}
+			header_field = std::pair<std::string, std::string>(header_field_raw.substr(0, semi_colon_index), 
+			header_field_raw.substr(semi_colon_index + 1, header_field_raw.size() - semi_colon_index));
+			header_field.second = trims(header_field.second, " \t");
+			if (!header_field.first.size() || !header_field.second.size() 
+			|| header_field.first[header_field.first.size() - 1] == '\t'
+			|| !is_token(header_field.first) || !is_field_content(header_field.second))
+			{
+				std::cout  << is_token(header_field.first) << is_field_content(header_field.second); // a supprimer
+				req.code_to_send = 400;
+				req.set_request_to_ended();
+				req.conf = new config(req);
+				return ;
+			}
+			if (req.header_fields.find(header_field.first) != req.header_fields.end())
+			{
+				req.code_to_send = 400;
+				req.set_request_to_ended();
+				req.conf = new config(req);
+				return ;
+			}
+			req.header_fields.insert(header_field);
+		}
+		if (req.header_fields.find("Host") == req.header_fields.end()) {
+			g_logger << "OK pb de Host sur csock : " << ft_itos(req.csock);
+			req.code_to_send = 400;
+			req.set_request_to_ended();
+			req.conf = new config(req);
+			return ;
+		}
+		if (req.header_fields.find("Content-Length") != req.header_fields.end()) {
+			if (is_valid_content_length(req.header_fields.find("Content-Length")->second) == 0) {
+				req.code_to_send = 400;
+				req.set_request_to_ended();
+				req.conf = new config(req);
+				return ;
+			}
+		}
+		if (req.header_fields.find("Trailer") != req.header_fields.end()) {
+			req.param_trailer(req.header_fields.find("Trailer")->second);
+		}
+		req.left = req.left.substr(index, req.left.size() - index);
+		g_logger << "POSITION DU LEFT APRES HEADER = " + req.left;
+		req.stage = 1;
+		req.conf = new config(req);
+		analyse_body(req);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/24 18:53:39 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/27 11:25:26 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ config::config(request & request) : validity_checked(false), return_activated(fa
 }
 
 void	config::put_vhost_and_location_in_config(vHost & host, request & request) {
+	host_port = *host._host_port.begin();
 	if (host.get_client_max_body_size() != -1)
 		_client_max_body_size = host.get_client_max_body_size();
 	if (!host.get_error_pages().empty())
@@ -49,6 +50,7 @@ void	config::put_vhost_and_location_in_config(vHost & host, request & request) {
 		_root = host.get_root();	
 	if (!_server_name.size())
 		_server_name = *host.get_server_names().begin();
+
 	std::map< std::string, location >::const_iterator it = get_most_accurate_location(host);
 	if (it != host.get_locations().end()) {
 		if (it->second.get_client_max_body_size() != -1)
@@ -128,12 +130,11 @@ vHost & config::get_associated_vhost(request & request) {
 				chosen = &(*it);;
 				first = 0;
 			}
-			if (it->get_server_names().find(request.host) 
-					!= it->get_server_names().end())
-			{
-				_server_name = request.host;
+			if (it->get_server_names().find(request.host_name) 
+					!= it->get_server_names().end()) {
+				_server_name = request.host_name;
 				chosen = &(*it);
-				break;
+				break ;
 			}
 		}
 	}

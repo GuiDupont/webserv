@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:10 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/23 15:46:53 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/27 11:06:53 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@ class webserv_parser {
 		std::string 						parse_upload_pass(std::string &line);
 		std::string							parse_ip(std::string str, vHost &host);
 		void 								check_server_line(std::string &line);
+		void								analyse_header(request &req);
+		void								analyse_body(request &req);
+
 		// std::string							parse_root(std::string & line); to delete
 
 

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/24 18:43:42 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/27 12:42:28 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,12 @@ bool request::find_trailer_in_list(std::string str) {
 	}
 	return (0);
 }
+
+void	send_header(int csock, std::string & header) {
+	send(csock, header.c_str(), header.size(), 0);
+}
+
+
 
 request::~request() {
 	delete conf;

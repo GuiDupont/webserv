@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 12:51:13 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/24 18:31:40 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/27 12:06:43 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,18 @@ int    							ft_atoi_base(const char *str, const char *base);
 bool                            is_directory(std::string & path);
 void	                        stop_program_sigint(int signum);
 std::string                     from_two_str_to_path(const std::string & str1, const std::string & str2);
-void		        			test_path(request & request);
+bool    	        			test_path(request & request);
+bool	                        is_valid_content_length(std::string val);
+bool	                        is_chunked(request &req);
+int                             find_word(std::string str, std::string word);
+bool        					test_path_get(request & req);
+bool        					test_path_delete(request & req);
+bool        					test_path_post(request & req);
+
+
+
+
+
 
 
 

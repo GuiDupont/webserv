@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/24 18:38:14 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/27 11:08:08 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ class webserv {
 		void	analyse_body(request &req);
 		void	set_request_to_ended(request &req);
 		void	clean_csock_from_server(int fd);
-		bool	is_chunked(request &req);
 		int		find_word(std::string str, std::string word);
 		bool	is_valid_content_length(std::string val);
 		void	insert_status_code();

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/24 18:56:36 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/27 12:10:47 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -380,14 +380,14 @@ std::string				from_two_str_to_path(const std::string & str1, const std::string 
 	return (str1 + str2_bis);
 }
 
-void					test_path(request & req) {
+bool					test_path_get(request & req) {
 	std::string path = req.conf->path_to_target;
 	if (is_directory(path)) {
 		if (req.conf->_auto_index == false)
 			req.code_to_send = 404;
 		else
-			req.body = response::generate_autoindex_body(path);
-		return ;
+			req.body = response::generate_autoindex_body(req);
+		return (false);
 	}
 	int fd = open(path.c_str(), O_WRONLY);
 	if (fd == -1) {
@@ -395,13 +395,98 @@ void					test_path(request & req) {
 		std::cout << errno << std::endl;
 		if (errno == EACCES)
 			req.code_to_send = 403;
-		else if (errno == ENOENT && (req.method == "GET" || req.method == "DELETE"))
-			req.code_to_send = 404;
 		else if (errno == ENOENT)
-			;
+			req.code_to_send = 404;
 		else
 			req.code_to_send = 400;
 	}
 	close(fd);
-	return ;
+	if (req.code_to_send != 0)
+		return (false);
+	return (true);
+}
+
+bool					test_path_delete(request & req) {
+	return (true);
+}
+
+bool					test_path_post(request & req) {
+	std::string path = req.conf->path_to_target;
+	// check case if path_to_target is a directory;
+	if (is_directory(path)) {
+		if (req.conf->_auto_index == false)
+			req.code_to_send = 404;
+		else
+			req.body = response::generate_autoindex_body(req);
+		return (false);
+	}
+	int fd = open(path.c_str(), O_WRONLY);
+	if (fd == -1) {
+		g_logger.fd << g_logger.get_timestamp() << "can't open file cause : " << strerror(errno) << std::endl;
+		std::cout << errno << std::endl;
+		if (errno == EACCES)
+			req.code_to_send = 403;
+		else if (errno == ENOENT)
+			req.code_to_send = 404;
+		else
+			req.code_to_send = 400;
+	}
+	close(fd);
+	if (req.code_to_send != 0)
+		return (false);
+	return (true);
+}
+
+
+bool	is_valid_content_length(std::string val) {
+
+    regex_t	regex;
+	int 	reti;
+
+	reti = regcomp(&regex, "^[0-9]\\{0,10\\}$", 0);
+    reti = regexec(&regex, val.c_str(), 0, NULL, 0);
+	if (reti) {
+    	regfree(&regex);
+		return (0);
+    }
+    regfree(&regex);
+	return (1);
+}
+
+bool is_chunked(request &req) {
+
+	std::map<std::string, std::string>::iterator it = req.header_fields.find("Transfer-Encoding");
+	if (it == req.header_fields.end())
+		return (0);
+	int index = find_word(it->second, "chunked");
+	if (index >= 0)
+		return (1);
+	else
+		return (0);
+}
+
+int find_word(std::string str, std::string word) {
+
+	std::string::iterator it = str.begin();
+	std::string::iterator it2;
+	std::string::iterator it3;
+	std::string substr;
+
+	if (str.size() == 0 || word.size() == 0)
+		return (-1);
+	for (; it != str.end(); it++) {
+		for (; it != str.end() && std::isspace(*it) != 0; it++) {}
+		if (str.find(',', it - str.begin()) != std::string::npos)
+			it2 = str.begin() + str.find(',', it - str.begin());
+		else
+			it2 = str.end();
+		substr = str.substr(it - str.begin(), it2 - it);
+		it3 = it2 - 1;
+		for (; it3 - it >= 0 && std::isspace(*it3) != 0; it3--) {}
+		substr = substr.substr(0, it3 - it + 1);
+		if (substr == word)
+			return (it - str.begin());
+		it = (it2 == str.end() ? it2 - 1 : it2);
+	}
+	return (-1);
 }
