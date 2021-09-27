@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/27 12:42:28 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/27 16:37:19 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,17 @@ std::ostream & operator<<(std::ostream & o,const request & r)
 	return (o);
 }
 
-request::request() : stage(0), next_chunk(-1), nb_trailer_to_received(0), code_to_send(0), close_csock(false), conf(NULL), resp(NULL), header_is_sent(false), body_is_sent(false) {}
+
+request::request() : stage(0), next_chunk(-1), nb_trailer_to_received(0), code_to_send(0), close_csock(false), conf(NULL), resp(NULL), header_is_sent(false), body_is_sent(false), body_fd(0) {}
 
 request::request(int csock) :	stage(0), csock(csock), next_chunk(-1), nb_trailer_to_received(0), 
 								code_to_send(0), close_csock(false), conf(NULL), resp(NULL),
-								header_is_sent(false), body_is_sent(false) {}
+								header_is_sent(false), body_is_sent(false), body_fd(0) {}
 
 request::request(int csock, std::string left) : stage(0), csock(csock), left(left), next_chunk(-1),
 												nb_trailer_to_received(0), code_to_send(0), close_csock(false),
-												conf(NULL), resp(NULL), header_is_sent(false), body_is_sent(false) {}
+												conf(NULL), resp(NULL), header_is_sent(false), body_is_sent(false), body_fd(0) {}
+
 
 void request::param_trailer(std::string str) {
 
@@ -88,10 +90,74 @@ bool request::find_trailer_in_list(std::string str) {
 	return (0);
 }
 
-void	send_header(int csock, std::string & header) {
+void	request::send_header(int csock, std::string & header) {
 	send(csock, header.c_str(), header.size(), 0);
+	g_logger.fd << g_logger.get_timestamp() << "We just sent an header\n";
 }
 
+void	request::send_body() {
+	if (body.empty() == false)
+		send_body_from_str();
+	else
+		send_body_from_file();
+}
+
+void	request::send_body_from_str() {
+	int amount_sent;
+	int to_send;
+	for (int i = 4; i != 0; i--) {
+		to_send = SEND_SPEED < body.size() ? SEND_SPEED : body.size();
+		amount_sent = send(csock, body.c_str(), to_send, 0);
+		if (amount_sent == -1) {
+			g_logger.fd << g_logger.get_timestamp() << "Issue while sending body on csock " << csock << ". Error: " << strerror(errno) << std::endl;
+			body_is_sent = true;
+			close_csock = true;
+			return ;
+		}
+		else if (amount_sent != SEND_SPEED) {
+			body_is_sent = true;
+			break;
+		}
+		body = body.substr(to_send, body.size() - to_send);
+	}
+	if (body.size() == 0 || body_is_sent == true) { 
+	amount_sent = send(csock, "\r\n", 2, 0);
+		if (amount_sent == -1)
+			g_logger.fd << g_logger.get_timestamp() << "Issue while sending body on csock " << csock << ". Error: " << strerror(errno) << std::endl;
+	}
+}
+
+void	request::send_body_from_file() {
+	int amount_read;
+	int amount_sent;
+
+	char buff[SEND_SPEED + 1];
+	g_logger.fd << g_logger.get_timestamp() << "We are going to send a body from a file\n";
+	
+	if (body_fd == 0)
+		body_fd = open(conf->path_to_target.c_str(), O_RDONLY);
+	if (body_fd == -1) {
+		g_logger.fd << g_logger.get_timestamp() << "Issue while opening file on csock " << csock << ". Error: " << strerror(errno) << std::endl; // end special cases ?
+		body_is_sent = true; // a check ce qu'on fait
+		close_csock = true;
+		return ;
+	}
+	std::cout << "we are sending a file\n";
+	for (int i = 4; i != 0; i--) {
+		amount_read = read(body_fd, buff, SEND_SPEED);
+		buff[amount_read] = '\0';
+		amount_sent = send(csock, buff, amount_read, 0);
+		if (amount_read != SEND_SPEED) {
+			body_is_sent = true;
+			break;
+		}
+	}
+	if (body_is_sent == true) { 
+	amount_sent = send(csock, "\r\n", 2, 0);
+		if (amount_sent == -1)
+			g_logger.fd << g_logger.get_timestamp() << "Issue while sending body on csock " << csock << ". Error: " << strerror(errno) << std::endl;
+	}
+}
 
 
 request::~request() {

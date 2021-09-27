@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/27 12:43:59 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/27 16:41:29 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,10 @@ void	webserv::answer_to_request(int csock) {
 	g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on csock: " << csock << std::endl;
 
 	request & req = g_webserv._requests.find(csock)->second;
-
 	if (req.conf->validity_checked == false)
 		req.control_config_validity();
 	req.response_request();
 	if (req.body_is_sent == true) {
-		g_webserv._requests.erase(csock);
 		if (req.close_csock == true)
 			g_webserv.clean_csock_from_server(csock); // timeout
 		else {
@@ -101,7 +99,7 @@ void	webserv::answer_to_request(int csock) {
 void	request::control_config_validity() {
 	conf->validity_checked = true;
 	if (code_to_send != 0)
-		;
+		std::cout << "code to sent :" << code_to_send << std::endl;
 	else if (common_validity_check() == false)
 		;
 	else if (conf->method & GET) {
@@ -116,12 +114,19 @@ void	request::control_config_validity() {
 	if (code_to_send != 0) {   // verifiy the logic : every path must lead to this condition
 		body = response::generate_error_body(g_webserv.status_code.find(code_to_send)->second);
 		conf->local_actions_done = true;
+		close_csock = true;
+	}
+	else {
+		conf->local_actions_done = true; // adjust for delete and post;
+		code_to_send = 200; // maybe a bit simple
 	}
 }
 
 bool	request::common_validity_check() {
-	if (conf->method & conf->_disable_methods && code_to_send == 0)
+	if (conf->method & conf->_disable_methods) {
 		code_to_send = 405;
+		return (false);
+	}
 	else if (conf->_return.second.empty() == false) {
 		code_to_send = conf->_return.first;
 		conf->return_activated = true;
@@ -137,11 +142,11 @@ void	request::response_request() {
 	if (conf->local_actions_done == true && header_is_sent == false) {
 		g_logger.fd << g_logger.get_timestamp() << "We are going to respond a request with code : " << code_to_send << std::endl;
 	 	std::string header = response::generate_header(*this);
-	 	send_header(header);
+	 	send_header(csock, header);
 		header_is_sent = true;
-	// }
-	// else if (local_actions_done == true && !header_is_not_sent()) {
-	// 	//send_body();
+	}
+	if (conf->local_actions_done == true && header_is_sent == true) {
+		send_body();
 	}
 }
 
@@ -338,8 +343,7 @@ void webserv::read_from_csock(int csock) {
 	std::map<int, request>::iterator it;
 
 	ret = recv(csock, c_buffer, 1024, 0);
-	if (ret < 0)
-	{
+	if (ret < 0) {
 		std::cout << strerror(errno) << std::endl;
 		return ;
 	}

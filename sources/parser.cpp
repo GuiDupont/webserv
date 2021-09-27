@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/27 11:12:45 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/27 15:47:52 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -439,6 +439,7 @@ void	webserv_parser::analyse_header(request &req) {
 		if (req.HTTP_version != "HTTP/1.1" && req.HTTP_version != "HTTP/1.0")
 		{
 			req.code_to_send = 505;
+			std::cout << "-" << req.HTTP_version << "-" << std::endl;
 			req.set_request_to_ended();
 			req.conf = new config(req);
 			return ;

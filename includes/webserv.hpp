@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/27 11:08:08 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/27 14:38:05 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@
 # define DELETE 4
 
 # define TIMEOUT 100
+
+# define SEND_SPEED 1024
 
 class vHost;
 class request;

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:07:25 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/27 12:41:11 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/27 15:04:51 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <map>
 # include <list>
 # include <iostream>
+# include <fcntl.h>
 
 # define HDER_REQUEST 0
 # define BDY_REQUEST 1
@@ -50,8 +51,10 @@ class request {
 		config								*conf;
 		response							*resp;
 		bool								close_csock;
+		bool								request_with_body;
 		bool								body_is_sent;
 		bool								header_is_sent;
+		int									body_fd;
 		friend std::ostream & operator<<(std::ostream & o,const request & r);
 		
     public:
@@ -73,6 +76,9 @@ class request {
 		void	send_header(int csock, std::string & header);
 		void	send_body();
 		void	set_request_to_ended();
+		void	send_body_from_str();
+		void	send_body_from_file();
+		
 		
 
 		

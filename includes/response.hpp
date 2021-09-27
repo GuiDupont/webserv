@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 14:51:32 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/27 10:51:09 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/27 14:33:11 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,12 @@ class response {
         static std::string					get_allowed_functions_header(size_t & disabled_method);
         static std::string					get_last_time_modified_header(std::string path);
 		static std::string					get_date_header();
-		static std::string         			get_server_header();
+		static std::string					get_server_header();
 		static std::string					get_content_length_header(int content_length);
+		static std::string					get_status_line(request & req);
+
+		static long							get_content_length(request & req);
+
 		static std::string					get_return_location_header(std::string & return_location);
 
 		static std::string					generate_header(request & request);

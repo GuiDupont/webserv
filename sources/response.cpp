@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 14:56:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/27 12:40:49 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/27 16:20:01 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ std::string			response::get_last_time_modified_header(std::string path) {
     ptm = gmtime (&sstat.st_mtim.tv_sec);
     ptm->tm_hour += 2;
     ptm->tm_hour %= 24;
-    header +=  asctime(ptm);
+    header += asctime(ptm);
     return (header + "\r\n");
 }
 
@@ -48,7 +48,9 @@ std::string			response::get_date_header() {
     ptm = gmtime (&rawtime);
     ptm->tm_hour += 2;
     ptm->tm_hour %= 24;
-    header +=  asctime(ptm);
+    std::string tmp = asctime(ptm);
+    tmp = tmp.substr(0, tmp.size() - 1);
+    header += tmp;
     return (header + "\r\n");
 }
 
@@ -70,13 +72,14 @@ long get_file_size(std::string filename)
     return rc == 0 ? stat_buf.st_size : -1;
 }
 
-int         response::get_content_length(request & req) { // make sure it's complete
+long            response::get_content_length(request & req) { // make sure it's complete
     if (!req.body.empty())
-        return body.size();
+        return req.body.size();
     long file_size = get_file_size(req.conf->path_to_target);
     if (file_size == -1) {
         req.code_to_send = 500;
         req.body = response::generate_error_body(g_webserv.status_code.find(req.code_to_send)->second);
+        return req.body.size();
     }
     else
         return (file_size);
@@ -108,7 +111,7 @@ std::string         response::generate_header(request & req) {
 }
 
 std::string         response::get_status_line(request & req) {
-    std::string status_line("HTTP/1.1");
+    std::string status_line("HTTP/1.1 ");
     status_line += g_webserv.status_code.find(req.code_to_send)->second;
     status_line += "\r\n";
     return (status_line);
