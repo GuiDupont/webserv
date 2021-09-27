@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/27 12:10:47 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/27 17:14:05 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -489,4 +489,14 @@ int find_word(std::string str, std::string word) {
 		it = (it2 == str.end() ? it2 - 1 : it2);
 	}
 	return (-1);
+}
+
+bool                true_one_time_per_x_secondes(int x) {
+	static time_t last_call = time(0);
+	if (time(0) - last_call >= x) {
+		last_call = time(0);
+		return (true);
+	}
+	return (false);
+	
 }

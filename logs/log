@@ -1,42 +1,44 @@
-16h37m42s: ------BEGINNING OF THE PROGRAM-------
-16h37m42s: Config successful
-16h37m42s: Epoll create successful			 | epfd  = 4
-16h37m42s: Ssock created           			 | ssock = 5
-16h37m42s: Ssock added to Epoll    			 | ssock = 5
-16h37m42s: Ssock created           			 | ssock = 6
-16h37m42s: Ssock added to Epoll    			 | ssock = 6
-16h37m42s: Ssock created           			 | ssock = 7
-16h37m42s: Ssock added to Epoll    			 | ssock = 7
-16h37m42s: Ssock created           			 | ssock = 8
-16h37m42s: Ssock added to Epoll    			 | ssock = 8
-16h37m42s: Epoll is waiting for connection
-16h37m46s: No events
-16h37m49s: No events
-16h37m52s: No events
-16h37m55s: No events
-16h37m57s: No events
-16h38m0s: No events
-16h38m3s: No events
-16h38m6s: No events
-16h38m9s: Epoll noticed new events     	| nb    = 1
-16h38m9s: We accepted a new client from ssock 7, new csock is = 9
-16h38m12s: Epoll noticed new events     	| nb    = 1
-16h38m12s: Epoll_wait identified an EPOLLIN on csock: 9
-16h38m12s: New request has been created on csock: 9
-16h38m12s: We are parsing header from ccosk: 9
-16h38m12s: Host: 127.0.0.3:1205
-16h38m12s: User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:92.0) Gecko/20100101 Firefox/92.0
-16h38m12s: Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
-16h38m12s: Accept-Language: en-US,en;q=0.5
-16h38m12s: Accept-Encoding: gzip, deflate
-16h38m12s: Connection: keep-alive
-16h38m12s: Upgrade-Insecure-Requests: 1
-16h38m12s: Sec-Fetch-Dest: document
-16h38m12s: Sec-Fetch-Mode: navigate
-16h38m12s: Sec-Fetch-Site: none
-16h38m12s: Sec-Fetch-User: ?1
-16h38m12s: POSITION DU LEFT APRES HEADER = 
-16h38m12s: HERE IS THE CONFIGURATION WE SET UP
+17h17m22s: ------BEGINNING OF THE PROGRAM-------
+17h17m22s: Config successful
+17h17m22s: Epoll create successful			 | epfd  = 4
+17h17m22s: Ssock created           			 | ssock = 5
+17h17m22s: Ssock added to Epoll    			 | ssock = 5
+17h17m22s: Ssock created           			 | ssock = 6
+17h17m22s: Ssock added to Epoll    			 | ssock = 6
+17h17m22s: Ssock created           			 | ssock = 7
+17h17m22s: Ssock added to Epoll    			 | ssock = 7
+17h17m22s: Ssock created           			 | ssock = 8
+17h17m22s: Ssock added to Epoll    			 | ssock = 8
+17h17m22s: Ssock created           			 | ssock = 9
+17h17m22s: Ssock added to Epoll    			 | ssock = 9
+17h17m22s: Epoll is waiting for connection
+17h17m25s: No events
+17h17m28s: No events
+17h17m31s: No events
+17h17m34s: No events
+17h17m35s: Epoll noticed new events     	| nb    = 1
+17h17m35s: We accepted a new client from ssock 8, new csock is = 10
+17h17m35s: Epoll noticed new events     	| nb    = 1
+17h17m35s: We accepted a new client from ssock 8, new csock is = 11
+17h17m35s: Epoll noticed new events     	| nb    = 1
+17h17m35s: Epoll_wait identified an EPOLLIN on csock: 10
+17h17m35s: New request has been created on csock: 10
+17h17m35s: We are parsing header from ccosk: 10
+17h17m35s: Host: 127.0.0.3:1205
+17h17m35s: Connection: keep-alive
+17h17m35s: sec-ch-ua: " Not;A Brand";v="99", "Google Chrome";v="91", "Chromium";v="91"
+17h17m35s: sec-ch-ua-mobile: ?0
+17h17m35s: Upgrade-Insecure-Requests: 1
+17h17m35s: User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36
+17h17m35s: Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+17h17m35s: Sec-Fetch-Site: none
+17h17m35s: Sec-Fetch-Mode: navigate
+17h17m35s: Sec-Fetch-User: ?1
+17h17m35s: Sec-Fetch-Dest: document
+17h17m35s: Accept-Encoding: gzip, deflate, br
+17h17m35s: Accept-Language: en-US,en;q=0.9
+17h17m35s: POSITION DU LEFT APRES HEADER = 
+17h17m35s: HERE IS THE CONFIGURATION WE SET UP
 Server name: localhost
 Location: /webserv
 Auto_index: 1
@@ -53,11 +55,16 @@ Method: GET
 Request_target: /webserv/alexandre.html
 Final target: /mnt/nfs/homes/gdupont/Desktop/webserv/alexandre.html
 
-16h38m15s: Epoll noticed new events     	| nb    = 1
-16h38m15s: Epoll_wait identified an EPOLLOUT on csock: 9
-16h38m15s: We are going to respond a request with code : 200
-16h38m16s: We just sent an header
-16h38m16s: We are going to send a body from a file
-16h38m19s: Epoll noticed new events     	| nb    = 1
-16h38m19s: Epoll_wait identified an EPOLLIN on csock: 9
-16h38m19s: New request has been created on csock: 9
+17h17m35s: Epoll noticed new events     	| nb    = 1
+17h17m35s: Epoll_wait identified an EPOLLOUT on csock: 10
+17h17m35s: We are going to respond a request with code : 200
+17h17m35s: We just sent an header
+17h17m35s: We are sending : /mnt/nfs/homes/gdupont/Desktop/webserv/alexandre.htmlto csock : 10
+17h17m35s: We are done sending : /mnt/nfs/homes/gdupont/Desktop/webserv/alexandre.htmlto csock : 10
+17h17m36s: Epoll noticed new events     	| nb    = 1
+17h17m36s: Epoll_wait identified an EPOLLIN on csock: 10
+17h17m36s: New request has been created on csock: 10
+We had an issue while using recv on csock 10 Connection reset by peer
+17h17m36s: Epoll noticed new events     	| nb    = 2
+17h17m36s: Epoll_wait identified an EPOLLIN on csock: 10
+17h17m36s: New request has been created on csock: 10

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/27 16:37:19 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/27 16:57:49 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,6 @@ void	request::send_body_from_file() {
 	int amount_sent;
 
 	char buff[SEND_SPEED + 1];
-	g_logger.fd << g_logger.get_timestamp() << "We are going to send a body from a file\n";
 	
 	if (body_fd == 0)
 		body_fd = open(conf->path_to_target.c_str(), O_RDONLY);
@@ -142,13 +141,14 @@ void	request::send_body_from_file() {
 		close_csock = true;
 		return ;
 	}
-	std::cout << "we are sending a file\n";
+	g_logger.fd << g_logger.get_timestamp() << "We are sending : " << conf->path_to_target << "to csock : " << csock << std::endl;
 	for (int i = 4; i != 0; i--) {
 		amount_read = read(body_fd, buff, SEND_SPEED);
 		buff[amount_read] = '\0';
 		amount_sent = send(csock, buff, amount_read, 0);
 		if (amount_read != SEND_SPEED) {
 			body_is_sent = true;
+			g_logger.fd << g_logger.get_timestamp() << "We are done sending : " << conf->path_to_target << "to csock : " << csock << std::endl;
 			break;
 		}
 	}

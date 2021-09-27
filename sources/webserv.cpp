@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/27 16:41:29 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/27 17:19:03 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,25 @@ void webserv::set_hosts() {
 
 void	webserv::wait_for_connection() {
 	g_logger << LOG_WAIT_CO;
+	time_t t = time(0);
 	struct epoll_event *revents;
 	SOCKADDR_IN csin;
 	socklen_t crecsize = sizeof(csin);
 	revents = (struct epoll_event *)calloc(64, sizeof(*revents)); // verifier quelle valeur mettre
 	char buffer[100] = "";
 	struct epoll_event ev;
+	
 	while (1)
 	{
-		sleep(3); // a supprimer
+		//sleep(0); // a supprimer
+		
 		control_time_out();
 		int nsfd = epoll_wait(this->_epfd, revents, 64, 0);
 		if (nsfd)
 			g_logger << LOG_EPOLL_EVENT + ft_itos(nsfd);
 		else if (nsfd == -1)
 			g_logger << LOG_ISSUE_EPOLL_WAIT + std::string(strerror(errno)) << std::endl;
-		else
+		else if (true_one_time_per_x_secondes(3))
 			g_logger << "No events";
 		for (int i = 0; i < nsfd; i++) {
 			if (revents[i].events & EPOLLIN && ft_is_ssock(revents[i].data.fd))
@@ -99,7 +102,7 @@ void	webserv::answer_to_request(int csock) {
 void	request::control_config_validity() {
 	conf->validity_checked = true;
 	if (code_to_send != 0)
-		std::cout << "code to sent :" << code_to_send << std::endl;
+		;
 	else if (common_validity_check() == false)
 		;
 	else if (conf->method & GET) {
@@ -111,13 +114,14 @@ void	request::control_config_validity() {
 	else if (conf->method & POST) {
 		test_path_post(*this);	
 	}
-	if (code_to_send != 0) {   // verifiy the logic : every path must lead to this condition
+	if (code_to_send != 0) {
 		body = response::generate_error_body(g_webserv.status_code.find(code_to_send)->second);
 		conf->local_actions_done = true;
 		close_csock = true;
 	}
 	else {
-		conf->local_actions_done = true; // adjust for delete and post;
+		if (conf->method & GET)
+			conf->local_actions_done = true;
 		code_to_send = 200; // maybe a bit simple
 	}
 }
@@ -344,7 +348,8 @@ void webserv::read_from_csock(int csock) {
 
 	ret = recv(csock, c_buffer, 1024, 0);
 	if (ret < 0) {
-		std::cout << strerror(errno) << std::endl;
+		g_logger.fd << "We had an issue while using recv on csock " << csock << " " << strerror(errno) << std::endl;
+		
 		return ;
 	}
 	std::time_t t = std::time(0);
@@ -360,9 +365,6 @@ void webserv::read_from_csock(int csock) {
 	else if (it->second.stage == 1)
 		g_parser.analyse_body(it->second);
 }
-
-
-
 
 bool	webserv::is_valid_content_length(std::string val) { // todelete
 
