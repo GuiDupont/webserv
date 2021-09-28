@@ -1,70 +1,53 @@
-17h17m22s: ------BEGINNING OF THE PROGRAM-------
-17h17m22s: Config successful
-17h17m22s: Epoll create successful			 | epfd  = 4
-17h17m22s: Ssock created           			 | ssock = 5
-17h17m22s: Ssock added to Epoll    			 | ssock = 5
-17h17m22s: Ssock created           			 | ssock = 6
-17h17m22s: Ssock added to Epoll    			 | ssock = 6
-17h17m22s: Ssock created           			 | ssock = 7
-17h17m22s: Ssock added to Epoll    			 | ssock = 7
-17h17m22s: Ssock created           			 | ssock = 8
-17h17m22s: Ssock added to Epoll    			 | ssock = 8
-17h17m22s: Ssock created           			 | ssock = 9
-17h17m22s: Ssock added to Epoll    			 | ssock = 9
-17h17m22s: Epoll is waiting for connection
-17h17m25s: No events
-17h17m28s: No events
-17h17m31s: No events
-17h17m34s: No events
-17h17m35s: Epoll noticed new events     	| nb    = 1
-17h17m35s: We accepted a new client from ssock 8, new csock is = 10
-17h17m35s: Epoll noticed new events     	| nb    = 1
-17h17m35s: We accepted a new client from ssock 8, new csock is = 11
-17h17m35s: Epoll noticed new events     	| nb    = 1
-17h17m35s: Epoll_wait identified an EPOLLIN on csock: 10
-17h17m35s: New request has been created on csock: 10
-17h17m35s: We are parsing header from ccosk: 10
-17h17m35s: Host: 127.0.0.3:1205
-17h17m35s: Connection: keep-alive
-17h17m35s: sec-ch-ua: " Not;A Brand";v="99", "Google Chrome";v="91", "Chromium";v="91"
-17h17m35s: sec-ch-ua-mobile: ?0
-17h17m35s: Upgrade-Insecure-Requests: 1
-17h17m35s: User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36
-17h17m35s: Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-17h17m35s: Sec-Fetch-Site: none
-17h17m35s: Sec-Fetch-Mode: navigate
-17h17m35s: Sec-Fetch-User: ?1
-17h17m35s: Sec-Fetch-Dest: document
-17h17m35s: Accept-Encoding: gzip, deflate, br
-17h17m35s: Accept-Language: en-US,en;q=0.9
-17h17m35s: POSITION DU LEFT APRES HEADER = 
-17h17m35s: HERE IS THE CONFIGURATION WE SET UP
-Server name: localhost
-Location: /webserv
-Auto_index: 1
-Client_max_body_size: 24000000
-Upload_pass: /lala/
-Root: /mnt/nfs/homes/gdupont/Desktop/webserv
-CGI_dir: 
-Index: 
-Error 403 | page :www/error_page_403.html
-Error 404 | page :www/error_page_404.html
-Error 500 | page :www/error_page_500.html
-Return: 0 | Link :
-Method: GET
-Request_target: /webserv/alexandre.html
-Final target: /mnt/nfs/homes/gdupont/Desktop/webserv/alexandre.html
-
-17h17m35s: Epoll noticed new events     	| nb    = 1
-17h17m35s: Epoll_wait identified an EPOLLOUT on csock: 10
-17h17m35s: We are going to respond a request with code : 200
-17h17m35s: We just sent an header
-17h17m35s: We are sending : /mnt/nfs/homes/gdupont/Desktop/webserv/alexandre.htmlto csock : 10
-17h17m35s: We are done sending : /mnt/nfs/homes/gdupont/Desktop/webserv/alexandre.htmlto csock : 10
-17h17m36s: Epoll noticed new events     	| nb    = 1
-17h17m36s: Epoll_wait identified an EPOLLIN on csock: 10
-17h17m36s: New request has been created on csock: 10
-We had an issue while using recv on csock 10 Connection reset by peer
-17h17m36s: Epoll noticed new events     	| nb    = 2
-17h17m36s: Epoll_wait identified an EPOLLIN on csock: 10
-17h17m36s: New request has been created on csock: 10
+10h32m12s: ------BEGINNING OF THE PROGRAM-------
+10h32m12s: Config successful
+10h32m12s: Epoll create successful			 | epfd  = 4
+10h32m12s: Ssock created           			 | ssock = 5
+10h32m12s: Ssock added to Epoll    			 | ssock = 5
+10h32m12s: Ssock created           			 | ssock = 6
+10h32m12s: Ssock added to Epoll    			 | ssock = 6
+10h32m12s: Ssock created           			 | ssock = 7
+10h32m12s: Ssock added to Epoll    			 | ssock = 7
+10h32m12s: Ssock created           			 | ssock = 8
+10h32m12s: Ssock added to Epoll    			 | ssock = 8
+10h32m12s: Epoll is waiting for connection
+10h32m15s: No events
+10h32m18s: No events
+10h32m21s: No events
+10h32m24s: No events
+10h32m25s: Epoll noticed new events     	| nb    = 1
+10h32m25s: We accepted a new client from ssock 8, new csock is = 9
+10h32m25s: Epoll noticed new events     	| nb    = 1
+10h32m25s: We accepted a new client from ssock 8, new csock is = 10
+10h32m25s: Epoll noticed new events     	| nb    = 1
+10h32m25s: New request has been created on csock: 9
+10h32m25s: Epoll_wait identified an EPOLLIN on csock: 9
+10h32m25s: We are parsing header from ccosk: 9
+10h32m25s: POSITION DU LEFT APRES HEADER = 
+10h32m25s: Following file provides this error No such file or directory
+10h32m25s: Epoll noticed new events     	| nb    = 1
+10h32m25s: Epoll_wait identified an EPOLLOUT on csock: 9
+10h32m25s: Following file provides this error No such file or directory
+10h32m25s: can't open file cause : No such file or directory
+10h32m25s: We are going to respond a request with code : 404
+10h32m25s: We just sent an header
+10h32m25s: Epoll noticed new events     	| nb    = 1
+10h32m25s: New request has been created on csock: 10
+10h32m25s: Epoll_wait identified an EPOLLIN on csock: 10
+10h32m25s: We are parsing header from ccosk: 10
+10h32m25s: POSITION DU LEFT APRES HEADER = 
+10h32m25s: Following file provides this error No such file or directory
+10h32m25s: Epoll noticed new events     	| nb    = 1
+10h32m25s: Epoll_wait identified an EPOLLOUT on csock: 10
+10h32m25s: Following file provides this error No such file or directory
+10h32m25s: can't open file cause : No such file or directory
+10h32m25s: We are going to respond a request with code : 404
+10h32m25s: We just sent an header
+10h32m27s: No events
+10h32m30s: No events
+10h32m33s: No events
+10h32m36s: No events
+10h32m39s: No events
+10h32m42s: No events
+10h32m45s: No events
+10h32m48s: No events
+10h32m51s: No events

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 17:55:12 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/23 15:46:24 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 10:21:33 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ location::location(std::ifstream & config_file, std::string & line, vHost & host
 			return ;
 		else
 		{
-			std::cout << "bad directive : " << first_word << std::endl;
+			g_logger.fd  << "bad directive : " << first_word << std::endl;
 			throw (bad_directive());
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/27 15:47:52 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 10:29:16 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,7 +278,7 @@ std::pair<std::string, std::string> webserv_parser::get_header_begin_body(int cs
 		ret = recv(csock, c_buffer, 1024, 0);
 		if (ret < 0)
 		{
-			std::cout << strerror(errno) << std::endl;
+			g_logger.fd << g_logger.get_timestamp() << "While parsing header on csock " << csock << " | " << errno << " " << strerror(errno) << std::endl;
 			return (std::pair<std::string, std::string>("", ""));
 		}
 		c_buffer[ret] = '\0';
@@ -439,7 +439,6 @@ void	webserv_parser::analyse_header(request &req) {
 		if (req.HTTP_version != "HTTP/1.1" && req.HTTP_version != "HTTP/1.0")
 		{
 			req.code_to_send = 505;
-			std::cout << "-" << req.HTTP_version << "-" << std::endl;
 			req.set_request_to_ended();
 			req.conf = new config(req);
 			return ;
@@ -450,7 +449,6 @@ void	webserv_parser::analyse_header(request &req) {
 			std::string header_field_raw = get_word(req.left, index, std::string("\r\n"));
 			if (header_field_raw.size() == 0)
 				break ;
-			g_logger << header_field_raw;
 			size_t semi_colon_index =  header_field_raw.find(":", 0);
 			if (semi_colon_index == std::string::npos) {
 				req.code_to_send = 400;
@@ -465,7 +463,6 @@ void	webserv_parser::analyse_header(request &req) {
 			|| header_field.first[header_field.first.size() - 1] == '\t'
 			|| !is_token(header_field.first) || !is_field_content(header_field.second))
 			{
-				std::cout  << is_token(header_field.first) << is_field_content(header_field.second); // a supprimer
 				req.code_to_send = 400;
 				req.set_request_to_ended();
 				req.conf = new config(req);

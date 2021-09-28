@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/27 11:25:26 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 10:31:40 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ config::config(request & request) : validity_checked(false), return_activated(fa
 	vHost chosen = get_associated_vhost(request);
 	put_vhost_and_location_in_config(chosen, request);
 	_client_max_body_size *= 1000000;
-	
-	g_logger.fd << g_logger.get_timestamp() << *this << std::endl;
 }
 
 void	config::put_vhost_and_location_in_config(vHost & host, request & request) {

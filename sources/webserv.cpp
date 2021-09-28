@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/27 17:19:03 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 10:26:54 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ void	webserv::wait_for_connection() {
 	
 	while (1)
 	{
-		//sleep(0); // a supprimer
-		
 		control_time_out();
 		int nsfd = epoll_wait(this->_epfd, revents, 64, 0);
 		if (nsfd)
@@ -48,16 +46,16 @@ void	webserv::wait_for_connection() {
 		for (int i = 0; i < nsfd; i++) {
 			if (revents[i].events & EPOLLIN && ft_is_ssock(revents[i].data.fd))
 				accept_new_client(revents[i].data.fd);
-			else if (revents[i].events & EPOLLOUT && (!ft_is_ssock(revents[i].data.fd)))
-				answer_to_request(revents[i].data.fd);
 			else if (revents[i].events & EPOLLIN && (!ft_is_ssock(revents[i].data.fd))) { // we have something to read
-				g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLIN on csock: " << revents[i].data.fd << std::endl;
 				if (is_new_request(revents[i].data.fd) == 1) {
 					g_logger.fd << g_logger.get_timestamp() << "New request has been created on csock: " + ft_itos(revents[i].data.fd) << std::endl;
 					_requests.insert(std::pair<int, request>(revents[i].data.fd, request(revents[i].data.fd)));
 				}
 				read_from_csock(revents[i].data.fd);
 			}
+			else if (revents[i].events & EPOLLOUT && (!ft_is_ssock(revents[i].data.fd)))
+				answer_to_request(revents[i].data.fd);
+			
 		}
 	}
 }
@@ -76,7 +74,7 @@ void	webserv::accept_new_client(int sock) {
 	ev.data.fd = csock;
 	fcntl(csock, F_SETFL, O_NONBLOCK);
 	if (epoll_ctl(_epfd, EPOLL_CTL_ADD, csock, &ev) == -1)
-		std::cout << errno << strerror(errno) << std::endl; // add an exception
+		g_logger.fd << g_logger.get_timestamp() << "We had an issue with EPOLL CTL, trying to add a csock to the pool. errno :" << errno << ": " << strerror(errno) << std::endl; // add an exception
 }
 
 void	webserv::answer_to_request(int csock) {
@@ -94,7 +92,7 @@ void	webserv::answer_to_request(int csock) {
 			ev.events = EPOLLIN;
 			ev.data.fd = csock;
 			if (epoll_ctl(_epfd, EPOLL_CTL_MOD, csock, &ev) == -1)
-				std::cout << errno << " " << strerror(errno) << std::endl; // add an exception
+				g_logger.fd << g_logger.get_timestamp() << " " << errno << " " << strerror(errno) << std::endl; // add an exception
 		}
 	}
 }
@@ -237,10 +235,10 @@ void	webserv::display_sock() {
 	int i = 1;
 
 	for (; it != this->_vhosts.end(); it++) {
-		std::cout << "SERVER " << i++ << std::endl;
+		g_logger.fd << g_logger.get_timestamp() << "SERVER " << i++ << std::endl;
 		std::map< int, std::pair< std::string, size_t> >::iterator it_sock = it->get_sock_list().begin();
 		for (; it_sock != it->get_sock_list().end(); it_sock++) {
-			std::cout << it_sock->second.first << ":" << it_sock->second.second << "is bind to sock: " << it_sock->first << std::endl;
+			g_logger.fd << g_logger.get_timestamp() << it_sock->second.first << ":" << it_sock->second.second << "is bind to sock: " << it_sock->first << std::endl;
 		}
 	}
 }
@@ -314,22 +312,22 @@ void	webserv::control_time_out(void) {
 		}
 	}
 	for (std::list<int>::iterator it = sock_to_close.begin(); it != sock_to_close.end(); it++)  {
-		g_logger.fd << g_logger.get_timestamp() << "TIMEOUT, csock closed : " << *it << std::endl;// analyse_body(it->second); // a faire
+		g_logger.fd << g_logger.get_timestamp() << "TIMEOUT, we closed csock : " << *it << std::endl;// analyse_body(it->second); // a faire
 		clean_csock_from_server(*it);
 	}
 }
 
-void	webserv::clean_csock_from_server(int fd) {
-		_requests.erase(fd);
-		_timeout.erase(fd);
+void	webserv::clean_csock_from_server(int csock) {
+		_requests.erase(csock);
+		_timeout.erase(csock);
 		for (std::list<vHost>::iterator it_vhost = _vhosts.begin(); it_vhost != _vhosts.end(); it_vhost++)
 		{
-			std::set<int>::iterator it_csock = it_vhost->get_csock_list().find(fd);
+			std::set<int>::iterator it_csock = it_vhost->get_csock_list().find(csock);
 			if (it_csock != it_vhost->get_csock_list().end())
 				it_vhost->get_csock_list().erase(it_csock);
 		}
-		epoll_ctl(_epfd, EPOLL_CTL_DEL, fd, NULL);
-		close(fd);
+		epoll_ctl(_epfd, EPOLL_CTL_DEL, csock, NULL);
+		close(csock);
 }
 
 webserv::webserv(void)	{ }
@@ -341,7 +339,7 @@ int					webserv::get_epfd() const { return (this->_epfd); }
 std::list<vHost>	&webserv::get_vhosts() 	{ return (this->_vhosts); }
 
 void webserv::read_from_csock(int csock) {
-
+	g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLIN on csock: " << csock << std::endl;
 	char c_buffer[1025];
 	int ret;
 	std::map<int, request>::iterator it;
@@ -349,7 +347,12 @@ void webserv::read_from_csock(int csock) {
 	ret = recv(csock, c_buffer, 1024, 0);
 	if (ret < 0) {
 		g_logger.fd << "We had an issue while using recv on csock " << csock << " " << strerror(errno) << std::endl;
-		
+		clean_csock_from_server(csock);
+		return ;
+	}
+	if (ret == 0) {
+		g_logger.fd << "While using recv on csock " << csock << " we received : 0" <<  std::endl;
+		clean_csock_from_server(csock);
 		return ;
 	}
 	std::time_t t = std::time(0);

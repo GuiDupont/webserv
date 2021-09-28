@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/27 16:57:49 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 10:25:10 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ std::ostream & operator<<(std::ostream & o,const request & r)
 	std::map<std::string, std::string>::const_iterator it = r.header_fields.begin();
 	for (; it != r.header_fields.end(); it++)
 	{
-		std::cout << "Header field : -" << it->first << "-" << std::endl;
-		std::cout << "Field content: -" << it->second << std::endl;
+		o << "Header field : -" << it->first << "-" << std::endl;
+		o << "Field content: -" << it->second << std::endl;
 	}
-	std::cout << "Body: -" << r.body << "-" << std::endl;
+	o << "Body: -" << r.body << "-" << std::endl;
 	return (o);
 }
 
