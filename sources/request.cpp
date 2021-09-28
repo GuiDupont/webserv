@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 10:25:10 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 11:53:40 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,5 +162,7 @@ void	request::send_body_from_file() {
 
 request::~request() {
 	delete conf;
+	conf = NULL;
 	delete resp;
+	conf = NULL;
 }

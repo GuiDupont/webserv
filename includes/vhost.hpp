@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 16:02:01 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/23 11:37:07 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 13:05:12 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,14 @@ public:
 	void 			map_sock_to_hostport(int sock, std::pair< std::string, size_t> host_port);
 	size_t 			setMax() const;
 	
-	std::list< std::pair<int, std::string> > const	& get_error_pages() const;
+	std::map< int, std::string > const	& get_error_pages() const;
 	std::map< std::string, location >	const	& get_locations() const;
 
 private:
 
 	std::map<std::string, location>						_locations;
 	int													_client_max_body_size;
-	std::list< std::pair<int, std::string> >			_error_pages;
+	std::map< int, std::string >						_error_pages;
 	std::list< std::pair< std::string, size_t> >		_host_port;
 	std::set<std::string>								_server_name;
 	std::map< int, std::pair< std::string, size_t> >	_sock_list;

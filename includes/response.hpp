@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 14:51:32 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/27 14:33:11 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 13:02:32 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ class response {
 
 		static std::string					generate_header(request & request);
 		static std::string					generate_error_body(std::string & message);
+		static std::string 						generate_body_as_string_from_file(std::string & path);
+
 		static std::string					generate_autoindex_body(request & req);
 		static std::string         			add_special_header(request & req, std::string & header);
 

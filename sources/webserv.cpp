@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 10:26:54 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 15:01:24 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ void	webserv::wait_for_connection() {
 		else if (true_one_time_per_x_secondes(3))
 			g_logger << "No events";
 		for (int i = 0; i < nsfd; i++) {
-			if (revents[i].events & EPOLLIN && ft_is_ssock(revents[i].data.fd))
+			if (revents[i].events & EPOLLIN && ft_is_ssock(revents[i].data.fd) && _stop == false)
 				accept_new_client(revents[i].data.fd);
-			else if (revents[i].events & EPOLLIN && (!ft_is_ssock(revents[i].data.fd))) { // we have something to read
+			else if (revents[i].events & EPOLLIN && (!ft_is_ssock(revents[i].data.fd)) && _stop == false) { // we have something to read
 				if (is_new_request(revents[i].data.fd) == 1) {
 					g_logger.fd << g_logger.get_timestamp() << "New request has been created on csock: " + ft_itos(revents[i].data.fd) << std::endl;
 					_requests.insert(std::pair<int, request>(revents[i].data.fd, request(revents[i].data.fd)));
@@ -113,9 +113,16 @@ void	request::control_config_validity() {
 		test_path_post(*this);	
 	}
 	if (code_to_send != 0) {
-		body = response::generate_error_body(g_webserv.status_code.find(code_to_send)->second);
 		conf->local_actions_done = true;
 		close_csock = true;
+		std::map< int, std::string>::iterator it;
+		if ((it = conf->_error_pages.find(code_to_send)) != conf->_error_pages.end()) {
+			body = response::generate_body_as_string_from_file(it->second);
+			if (body.empty() == false)
+				return;
+		}
+		body = response::generate_error_body(g_webserv.status_code.find(code_to_send)->second);
+		
 	}
 	else {
 		if (conf->method & GET)
@@ -279,13 +286,13 @@ void		webserv::set_config(std::ifstream & config_file) {
 		else if (first_word == "client_max_body_size")
 			this->_client_max_body_size = g_parser.get_max_body_size(line);
 		else if (first_word == "error_page")
-			this->_error_pages.push_back(g_parser.parse_error_page(line));
+			this->_error_pages.insert(g_parser.parse_error_page(line));
 		else if (first_word == "root")
 			_root = g_parser.parse_one_word(line);
 		else if (first_word == "}")
 			;
 		else if (first_word.size() != 0) {
-			if (first_word[0] == 123) 				// ascii value for {, it fixes issue at compilation with '{'
+			if (first_word[0] == '{') 	// 123 : ascii value for {, it fixes issue at compilation with '{'
 				throw (bad_brackets_conf());
 			else
 				throw (bad_directive());
@@ -369,23 +376,19 @@ void webserv::read_from_csock(int csock) {
 		g_parser.analyse_body(it->second);
 }
 
-bool	webserv::is_valid_content_length(std::string val) { // todelete
-
-    regex_t	regex;
-	int 	reti;
-
-	reti = regcomp(&regex, "^[0-9]\\{0,10\\}$", 0);
-    reti = regexec(&regex, val.c_str(), 0, NULL, 0);
-	if (reti) {
-    	regfree(&regex);
-		return (0);
-    }
-    regfree(&regex);
-	return (1);
-}
-
 std::string		&webserv::get_root() {
 	return (_root);
+}
+
+const bool		&webserv::get_stop() const {
+	return (_stop);
+}
+void			webserv::set_stop(bool value) {
+	_stop = value;
+}
+
+std::map< int, std::string > const	& webserv::get_error_pages() const {
+	return (this->_error_pages);
 }
 
 void	webserv::insert_status_code() {

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/27 11:23:09 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 14:05:57 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ class config {
 		std::string									_server_name;
 		bool										_auto_index;
 		long										_client_max_body_size;
-		std::list< std::pair<int, std::string> >	_error_pages;
+		std::map< int, std::string >				_error_pages;
 		std::string									_upload_pass;
 		std::string 								_root;
 		std::string									_cgi_dir;
@@ -43,7 +43,7 @@ class config {
 		std::string									_request_target;
 		std::map<std::string, std::string>			_header_fields;
 		std::pair<int, std::string>					_return;
-		std::pair< std::string, size_t>				host_port;
+		std::pair<std::string, size_t>				host_port;
 		bool										return_activated;
 		std::set< std::string >						_cgi_ext;
 		std::string 								_location;

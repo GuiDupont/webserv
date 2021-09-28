@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 11:18:29 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/23 15:46:42 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 14:58:20 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ vHost::vHost(std::ifstream &config_file, std::string &line) : _client_max_body_s
 			this->_client_max_body_size = g_parser.get_max_body_size(line);
 		}
 		else if (first_word == "error_page") {
-			_error_pages.push_back(g_parser.parse_error_page(line)); // a retoucher selon suite
+			_error_pages.insert(g_parser.parse_error_page(line));
 		}
 		else if (first_word == "server_name") {
 			_server_name.insert(g_parser.parse_server_name(line));
@@ -66,6 +66,7 @@ vHost::vHost(std::ifstream &config_file, std::string &line) : _client_max_body_s
 	if (_host_port.empty() == 1) {
 		throw (no_port_associated());
 	}
+	insert_map_into_map< int, std::string >(g_webserv.get_error_pages(), _error_pages);
 }
 
 vHost::~vHost() {
@@ -115,11 +116,11 @@ int	const						& vHost::get_client_max_body_size() const {
 	return (this->_client_max_body_size);
 }
 
-std::string	const						& vHost::get_root() const {
+std::string	const				& vHost::get_root() const {
 	return (this->_root);
 }
 
-std::list< std::pair<int, std::string> > const	& vHost::get_error_pages() const {
+std::map< int, std::string > const	& vHost::get_error_pages() const {
 	return (this->_error_pages);
 }
 

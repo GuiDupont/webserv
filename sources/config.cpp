@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 10:31:40 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 14:57:42 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ config::config(request & request) : validity_checked(false), return_activated(fa
 	vHost chosen = get_associated_vhost(request);
 	put_vhost_and_location_in_config(chosen, request);
 	_client_max_body_size *= 1000000;
+	g_logger.fd << g_logger.get_timestamp() << *this;
 }
 
 void	config::put_vhost_and_location_in_config(vHost & host, request & request) {
@@ -106,7 +107,7 @@ std::ostream & operator<<(std::ostream & o, const config & c)
 	for (std::set<std::string>::const_iterator it = c._cgi_ext.begin(); it != c._cgi_ext.end(); it++)
 		o << "CGI ext : " << *it << std::endl;
 	o << "Index: " << c._index << std::endl;
-	for (std::list<std::pair<int, std::string> >::const_iterator it = c._error_pages.begin(); it != c._error_pages.end(); it++)
+	for (std::map< int, std::string >::const_iterator it = c._error_pages.begin(); it != c._error_pages.end(); it++)
 		o << "Error " << it->first << " | page :" << it->second << std::endl;
 	for (std::map<std::string, std::string>::const_iterator it = c._header_fields.begin(); it != c._header_fields.end(); it++)
 		o << "Header " << it->first << " | value :" << it->second << std::endl;

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 14:56:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/27 16:20:01 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 13:00:56 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,27 +127,49 @@ std::string         response::generate_error_body(std::string & message) {
     return (body);
 }
 
+std::string response::generate_body_as_string_from_file(std::string & path) {
+    int fd = open(path.c_str(), O_RDONLY);
+    std::string body;
+	if (fd == -1) {
+		g_logger.fd << g_logger.get_timestamp() << "Issue while opening -"  << path <<  "- . Error: " << strerror(errno) << std::endl; // end special cases ?
+		return (body);
+	}
+    char buff[5000];
+    int amount_read;
+    while (1) {
+        amount_read = read(fd, buff, SEND_SPEED);
+        buff[amount_read] = '\0';
+        body += buff;
+        if (amount_read < SEND_SPEED) {
+            close(fd);
+            return (body);
+        }
+    }
+}
+
+
 std::string         response::generate_autoindex_body(request & req) {  //wip 
     std::string & path = req.conf->path_to_target;
-    std::string body = "<html><head><title>" + path + "</title></head>\n<body>\n<center><h1>";
+    std::string body = "<html><head><title>" + path + "</title></head>\n<body>\n<h1>";
    
     DIR *d;
     struct dirent *dir;
     d = opendir(path.c_str());
-    body += "AUTOINDEXING\n";
+    body += "AUTOINDEXING<br>\n";
     if (d) {
         while ((dir = readdir(d)) != NULL) {
             body += "<a href=\"";
-            body += dir->d_name + std::string("\">") + dir->d_name + "</a><br>\n"; 
+            std::string file_name(dir->d_name);
+            body += dir->d_name;
+            if (is_directory(file_name) && file_name[file_name.size() - 1] != '/')
+                body += "/";
+            body += "\">";
+            body += dir->d_name + std::string("</a><br>\n");
         }
     closedir(d);
     }
-    body += "</h1></center>\n<hr><center>webserv/1</center>\n</body>\n</html>";
+    body += "</h1></center>\n<hr><center>webserv/1\n</body>\n</html>";
     body += "\r\n";
-    std::ofstream    fd;
-    fd.open("/mnt/nfs/homes/gdupont/Desktop/webserv/logs/autoindex.html", std::ifstream::in | std::ifstream::trunc);
-    fd << body;
-    fd.close();
     return (body);
 }
 

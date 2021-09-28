@@ -1,53 +1,314 @@
-10h32m12s: ------BEGINNING OF THE PROGRAM-------
-10h32m12s: Config successful
-10h32m12s: Epoll create successful			 | epfd  = 4
-10h32m12s: Ssock created           			 | ssock = 5
-10h32m12s: Ssock added to Epoll    			 | ssock = 5
-10h32m12s: Ssock created           			 | ssock = 6
-10h32m12s: Ssock added to Epoll    			 | ssock = 6
-10h32m12s: Ssock created           			 | ssock = 7
-10h32m12s: Ssock added to Epoll    			 | ssock = 7
-10h32m12s: Ssock created           			 | ssock = 8
-10h32m12s: Ssock added to Epoll    			 | ssock = 8
-10h32m12s: Epoll is waiting for connection
-10h32m15s: No events
-10h32m18s: No events
-10h32m21s: No events
-10h32m24s: No events
-10h32m25s: Epoll noticed new events     	| nb    = 1
-10h32m25s: We accepted a new client from ssock 8, new csock is = 9
-10h32m25s: Epoll noticed new events     	| nb    = 1
-10h32m25s: We accepted a new client from ssock 8, new csock is = 10
-10h32m25s: Epoll noticed new events     	| nb    = 1
-10h32m25s: New request has been created on csock: 9
-10h32m25s: Epoll_wait identified an EPOLLIN on csock: 9
-10h32m25s: We are parsing header from ccosk: 9
-10h32m25s: POSITION DU LEFT APRES HEADER = 
-10h32m25s: Following file provides this error No such file or directory
-10h32m25s: Epoll noticed new events     	| nb    = 1
-10h32m25s: Epoll_wait identified an EPOLLOUT on csock: 9
-10h32m25s: Following file provides this error No such file or directory
-10h32m25s: can't open file cause : No such file or directory
-10h32m25s: We are going to respond a request with code : 404
-10h32m25s: We just sent an header
-10h32m25s: Epoll noticed new events     	| nb    = 1
-10h32m25s: New request has been created on csock: 10
-10h32m25s: Epoll_wait identified an EPOLLIN on csock: 10
-10h32m25s: We are parsing header from ccosk: 10
-10h32m25s: POSITION DU LEFT APRES HEADER = 
-10h32m25s: Following file provides this error No such file or directory
-10h32m25s: Epoll noticed new events     	| nb    = 1
-10h32m25s: Epoll_wait identified an EPOLLOUT on csock: 10
-10h32m25s: Following file provides this error No such file or directory
-10h32m25s: can't open file cause : No such file or directory
-10h32m25s: We are going to respond a request with code : 404
-10h32m25s: We just sent an header
-10h32m27s: No events
-10h32m30s: No events
-10h32m33s: No events
-10h32m36s: No events
-10h32m39s: No events
-10h32m42s: No events
-10h32m45s: No events
-10h32m48s: No events
-10h32m51s: No events
+14h45m37s: ------BEGINNING OF THE PROGRAM-------
+14h45m37s: Config successful
+14h45m37s: Epoll create successful			 | epfd  = 4
+14h45m37s: Ssock created           			 | ssock = 5
+14h45m37s: Ssock added to Epoll    			 | ssock = 5
+14h45m37s: Ssock created           			 | ssock = 6
+14h45m37s: Ssock added to Epoll    			 | ssock = 6
+14h45m37s: Ssock created           			 | ssock = 7
+14h45m37s: Ssock added to Epoll    			 | ssock = 7
+14h45m37s: Ssock created           			 | ssock = 8
+14h45m37s: Ssock added to Epoll    			 | ssock = 8
+14h45m37s: Ssock created           			 | ssock = 9
+14h45m37s: Ssock added to Epoll    			 | ssock = 9
+14h45m37s: Epoll is waiting for connection
+14h45m40s: No events
+14h45m43s: No events
+14h45m44s: Epoll noticed new events     	| nb    = 1
+14h45m44s: We accepted a new client from ssock 9, new csock is = 10
+14h45m44s: Epoll noticed new events     	| nb    = 1
+14h45m44s: New request has been created on csock: 10
+14h45m44s: Epoll_wait identified an EPOLLIN on csock: 10
+14h45m44s: We are parsing header from ccosk: 10
+14h45m44s: POSITION DU LEFT APRES HEADER = 
+14h45m44s: Following file provides this error No such file or directory
+14h45m44s: HERE IS THE CONFIGURATION WE SET UP
+Server name: localhost
+Location: /
+Auto_index: 1
+Client_max_body_size: 24000000
+Upload_pass: /lalala
+Root: /mnt/nfs/homes/gdupont/Desktop/webserv
+CGI_dir: 
+CGI ext : .jpg
+Index: 
+Error 404 | page :error_page_ma_bite.html
+Return: 0 | Link :
+Method: GET
+Request_target: /fgf
+Final target: /mnt/nfs/homes/gdupont/Desktop/webserv/fgf
+14h45m44s: Epoll noticed new events     	| nb    = 1
+14h45m44s: Epoll_wait identified an EPOLLOUT on csock: 10
+14h45m44s: Following file provides this error No such file or directory
+14h45m44s: can't open /mnt/nfs/homes/gdupont/Desktop/webserv/fgf - because : No such file or directory
+14h45m44s: We are going to respond a request with code : 404
+14h45m44s: We just sent an header
+14h45m44s: Epoll noticed new events     	| nb    = 1
+14h45m44s: We accepted a new client from ssock 9, new csock is = 10
+14h45m46s: No events
+14h45m49s: No events
+14h45m52s: No events
+14h45m55s: No events
+14h45m58s: No events
+14h46m1s: No events
+14h46m4s: No events
+14h46m5s: Epoll noticed new events     	| nb    = 1
+14h46m5s: New request has been created on csock: 10
+14h46m5s: Epoll_wait identified an EPOLLIN on csock: 10
+14h46m5s: We are parsing header from ccosk: 10
+14h46m5s: POSITION DU LEFT APRES HEADER = 
+14h46m5s: Following file provides this error No such file or directory
+14h46m5s: HERE IS THE CONFIGURATION WE SET UP
+Server name: localhost
+Location: /
+Auto_index: 1
+Client_max_body_size: 24000000
+Upload_pass: /lalala
+Root: /mnt/nfs/homes/gdupont/Desktop/webserv
+CGI_dir: 
+CGI ext : .jpg
+Index: 
+Error 404 | page :error_page_ma_bite.html
+Return: 0 | Link :
+Method: GET
+Request_target: /fgf
+Final target: /mnt/nfs/homes/gdupont/Desktop/webserv/fgf
+14h46m5s: Epoll noticed new events     	| nb    = 1
+14h46m5s: Epoll_wait identified an EPOLLOUT on csock: 10
+14h46m5s: Following file provides this error No such file or directory
+14h46m5s: can't open /mnt/nfs/homes/gdupont/Desktop/webserv/fgf - because : No such file or directory
+14h46m5s: We are going to respond a request with code : 404
+14h46m5s: We just sent an header
+14h46m5s: Epoll noticed new events     	| nb    = 1
+14h46m5s: We accepted a new client from ssock 9, new csock is = 10
+14h46m5s: Epoll noticed new events     	| nb    = 1
+14h46m5s: We accepted a new client from ssock 9, new csock is = 11
+14h46m7s: No events
+14h46m10s: No events
+14h46m13s: No events
+14h46m16s: No events
+14h46m19s: No events
+14h46m22s: No events
+14h46m25s: No events
+14h46m28s: No events
+14h46m31s: No events
+14h46m34s: No events
+14h46m37s: No events
+14h46m40s: No events
+14h46m43s: No events
+14h46m46s: No events
+14h46m49s: No events
+14h46m52s: No events
+14h46m55s: No events
+14h46m58s: No events
+14h47m1s: No events
+14h47m4s: No events
+14h47m7s: No events
+14h47m10s: No events
+14h47m13s: No events
+14h47m16s: No events
+14h47m19s: No events
+14h47m22s: No events
+14h47m25s: No events
+14h47m28s: No events
+14h47m31s: No events
+14h47m34s: No events
+14h47m37s: No events
+14h47m40s: No events
+14h47m43s: No events
+14h47m45s: TIMEOUT, we closed csock : 10
+14h47m45s: TIMEOUT, we closed csock : 11
+14h47m46s: No events
+14h47m49s: No events
+14h47m52s: No events
+14h47m55s: No events
+14h47m58s: No events
+14h48m1s: No events
+14h48m4s: No events
+14h48m7s: No events
+14h48m10s: No events
+14h48m13s: No events
+14h48m16s: No events
+14h48m19s: No events
+14h48m22s: No events
+14h48m25s: No events
+14h48m28s: No events
+14h48m31s: No events
+14h48m34s: No events
+14h48m37s: No events
+14h48m40s: No events
+14h48m43s: No events
+14h48m46s: No events
+14h48m49s: No events
+14h48m52s: No events
+14h48m55s: No events
+14h48m58s: No events
+14h49m1s: No events
+14h49m4s: No events
+14h49m7s: No events
+14h49m10s: No events
+14h49m13s: No events
+14h49m16s: No events
+14h49m19s: No events
+14h49m22s: No events
+14h49m25s: No events
+14h49m28s: No events
+14h49m31s: No events
+14h49m34s: No events
+14h49m37s: No events
+14h49m40s: No events
+14h49m43s: No events
+14h49m46s: No events
+14h49m49s: No events
+14h49m52s: No events
+14h49m55s: No events
+14h49m58s: No events
+14h50m1s: No events
+14h50m4s: No events
+14h50m7s: No events
+14h50m10s: No events
+14h50m13s: No events
+14h50m16s: No events
+14h50m19s: No events
+14h50m22s: No events
+14h50m25s: No events
+14h50m28s: No events
+14h50m31s: No events
+14h50m34s: No events
+14h50m37s: No events
+14h50m40s: No events
+14h50m43s: No events
+14h50m46s: No events
+14h50m49s: No events
+14h50m52s: No events
+14h50m55s: No events
+14h50m58s: No events
+14h51m1s: No events
+14h51m4s: No events
+14h51m7s: No events
+14h51m10s: No events
+14h51m13s: No events
+14h51m16s: No events
+14h51m19s: No events
+14h51m22s: No events
+14h51m25s: No events
+14h51m28s: No events
+14h51m31s: No events
+14h51m34s: No events
+14h51m37s: No events
+14h51m40s: No events
+14h51m43s: No events
+14h51m46s: No events
+14h51m49s: No events
+14h51m52s: No events
+14h51m55s: No events
+14h51m58s: No events
+14h52m1s: No events
+14h52m4s: No events
+14h52m7s: No events
+14h52m10s: No events
+14h52m13s: No events
+14h52m16s: No events
+14h52m19s: No events
+14h52m22s: No events
+14h52m25s: No events
+14h52m28s: No events
+14h52m31s: No events
+14h52m34s: No events
+14h52m37s: No events
+14h52m40s: No events
+14h52m43s: No events
+14h52m46s: No events
+14h52m49s: No events
+14h52m52s: No events
+14h52m55s: No events
+14h52m58s: No events
+14h53m1s: No events
+14h53m4s: No events
+14h53m7s: No events
+14h53m10s: No events
+14h53m13s: No events
+14h53m16s: No events
+14h53m19s: No events
+14h53m22s: No events
+14h53m25s: No events
+14h53m28s: No events
+14h53m31s: No events
+14h53m34s: No events
+14h53m37s: No events
+14h53m40s: No events
+14h53m43s: No events
+14h53m46s: No events
+14h53m49s: No events
+14h53m52s: No events
+14h53m55s: No events
+14h53m58s: No events
+14h54m1s: No events
+14h54m4s: No events
+14h54m7s: No events
+14h54m10s: No events
+14h54m13s: No events
+14h54m16s: No events
+14h54m19s: No events
+14h54m22s: No events
+14h54m25s: No events
+14h54m28s: No events
+14h54m31s: No events
+14h54m34s: No events
+14h54m37s: No events
+14h54m40s: No events
+14h54m43s: No events
+14h54m46s: No events
+14h54m49s: No events
+14h54m52s: No events
+14h54m55s: No events
+14h54m58s: No events
+14h55m1s: No events
+14h55m4s: No events
+14h55m7s: No events
+14h55m10s: No events
+14h55m13s: No events
+14h55m16s: No events
+14h55m19s: No events
+14h55m22s: No events
+14h55m25s: No events
+14h55m28s: No events
+14h55m31s: No events
+14h55m34s: No events
+14h55m37s: No events
+14h55m40s: No events
+14h55m43s: No events
+14h55m46s: No events
+14h55m49s: No events
+14h55m52s: No events
+14h55m55s: No events
+14h55m58s: No events
+14h56m1s: No events
+14h56m4s: No events
+14h56m7s: No events
+14h56m10s: No events
+14h56m13s: No events
+14h56m16s: No events
+14h56m19s: No events
+14h56m22s: No events
+14h56m25s: No events
+14h56m28s: No events
+14h56m31s: No events
+14h56m34s: No events
+14h56m37s: No events
+14h56m40s: No events
+14h56m43s: No events
+14h56m46s: No events
+14h56m49s: No events
+14h56m52s: No events
+14h56m55s: No events
+14h56m58s: No events
+14h57m1s: No events
+14h57m4s: No events
+14h57m4s:  We are about to quit
+14h57m4s:  cssock is closed: 5
+14h57m4s:  cssock is closed: 6
+14h57m4s:  cssock is closed: 7
+14h57m4s:  cssock is closed: 8
+14h57m4s:  cssock is closed: 9
+14h57m4s:  EPFD is closed: 4

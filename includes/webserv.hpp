@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/27 14:38:05 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 14:56:35 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,13 @@ class webserv {
 	private:
 		std::list<vHost> 							_vhosts;
 		int											_client_max_body_size;
-		std::list< std::pair<int, std::string> >	_error_pages;
+		std::map< int, std::string >				_error_pages;
 		std::string									_upload_pass;
 		std::string 								_root;
 		std::string									_cgi_dir;
 		int											_epfd;
-		std::map<int, std::tm>						_timeout;
+		std::map<int, std::tm>						_timeout;												
+		bool										_stop;											
 		
 	public:
 		webserv(const std::string & path_config);
@@ -85,10 +86,14 @@ class webserv {
 
 		void	set_config(std::ifstream & config_file);
 
-		void 							set_hosts();
-		int								get_epfd() const ;
-		std::list<vHost>				&get_vhosts() ;
-		std::string						&get_root();
+		void 								set_hosts();
+		int									get_epfd() const ;
+		std::list<vHost>					&get_vhosts() ;
+		std::string							&get_root();
+		std::map< int, std::string > const	&get_error_pages() const;
+		
+		const bool							&get_stop() const;
+		void								set_stop(bool);
 
 		void	wait_for_connection();
 		void	handle_new_client(int ssock, SOCKADDR* csin, socklen_t* crecsize);
@@ -108,7 +113,6 @@ class webserv {
 		void	set_request_to_ended(request &req);
 		void	clean_csock_from_server(int fd);
 		int		find_word(std::string str, std::string word);
-		bool	is_valid_content_length(std::string val);
 		void	insert_status_code();
 		void	accept_new_client(int sock);
 		

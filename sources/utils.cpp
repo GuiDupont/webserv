@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/28 10:36:14 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 14:29:10 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,6 +257,8 @@ bool	is_valid_request_target(std::string line) {
 void	stop_program_sigint(int signum) {
 	std::set<int> csock;
 	std::set<int> sock;
+	g_logger.fd << g_logger.get_timestamp() << " We are about to quit" << std::endl;
+	g_webserv.set_stop(true);
 	for (std::list<vHost>::iterator it = g_webserv.get_vhosts().begin(); it != g_webserv.get_vhosts().end(); it++) {
 		for (std::set<int>::iterator it_csock = it->get_csock_list().begin(); it_csock != it->get_csock_list().end(); it_csock++)
 			csock.insert(*it_csock);
@@ -295,7 +297,7 @@ static int     ft_retraitement(const char *str, int i, const char *base, int z)
                 {
                         if (str[i] == base[j])
                         {
-                                l = l * z + j;
+                                l = l * z + j;  // le retraitement a lieu ici
                                 m = 1;
                         }
                         j++;
@@ -391,7 +393,7 @@ bool					test_path_get(request & req) {
 	}
 	int fd = open(path.c_str(), O_WRONLY);
 	if (fd == -1) {
-		g_logger.fd << g_logger.get_timestamp() << "can't open " << path << "cause : " << strerror(errno) << std::endl;
+		g_logger.fd << g_logger.get_timestamp() << "can't open " << path << " - because : " << strerror(errno) << std::endl;
 		if (errno == EACCES)
 			req.code_to_send = 403;
 		else if (errno == ENOENT)
@@ -498,3 +500,5 @@ bool                true_one_time_per_x_secondes(int x) {
 	return (false);
 	
 }
+
+

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 10:29:16 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 14:18:36 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,7 @@ std::pair<int, std::string> webserv_parser::parse_error_page(std::string & line)
 	i = go_to_next_word(line, i);
 	if (line[i])
 		throw (bad_nb_argument("error_page"));
+	//std::cout << path << std::endl;
 	return (std::pair<int, std::string>(code, path));	
 	
 }
