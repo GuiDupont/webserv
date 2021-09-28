@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 17:55:12 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 14:55:01 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 15:26:58 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ location::location(std::ifstream & config_file, std::string & line, vHost & host
 			continue;
 		if (first_word == "disable_methods")
 			_disable_methods = g_parser.parse_disabled_methods(line);
-		else if (first_word == "cgi_dir") // a finir
-			_cgi_dir = first_word;
+		else if (first_word == "cgi_dir")
+			_cgi_dir = g_parser.parse_one_word(line);
 		else if (first_word == "cgi_ext")
 			g_parser.parse_cgi_extension(_cgi_ext, line);
 		else if (first_word == "return")

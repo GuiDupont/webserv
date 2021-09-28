@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 15:01:24 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 15:28:45 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,20 @@ void	webserv::wait_for_connection() {
 		for (int i = 0; i < nsfd; i++) {
 			if (revents[i].events & EPOLLIN && ft_is_ssock(revents[i].data.fd) && _stop == false)
 				accept_new_client(revents[i].data.fd);
-			else if (revents[i].events & EPOLLIN && (!ft_is_ssock(revents[i].data.fd)) && _stop == false) { // we have something to read
-				if (is_new_request(revents[i].data.fd) == 1) {
-					g_logger.fd << g_logger.get_timestamp() << "New request has been created on csock: " + ft_itos(revents[i].data.fd) << std::endl;
-					_requests.insert(std::pair<int, request>(revents[i].data.fd, request(revents[i].data.fd)));
-				}
-				read_from_csock(revents[i].data.fd);
-			}
+			else if (revents[i].events & EPOLLIN && (!ft_is_ssock(revents[i].data.fd)) && _stop == false) // we have something to read
+				handle_pollin_csock(revents[i].data.fd);
 			else if (revents[i].events & EPOLLOUT && (!ft_is_ssock(revents[i].data.fd)))
 				answer_to_request(revents[i].data.fd);
-			
 		}
 	}
+}
+
+void	webserv::handle_pollin_csock(int csock) {
+	g_logger.fd << g_logger.get_timestamp() << "New request has been created on csock: " + ft_itos(csock) << std::endl;
+	if (is_new_request(csock) == true) {
+		_requests.insert(std::pair<int, request>(csock, request(csock)));
+	}
+	read_from_csock(csock);
 }
 
 void	webserv::accept_new_client(int sock) {
@@ -366,8 +368,13 @@ void webserv::read_from_csock(int csock) {
 	_timeout.find(csock)->second = *std::localtime(&t);
 	c_buffer[ret] = '\0';
 	for (it = _requests.begin(); it != _requests.end(); it++) {
-		if (it->first == csock && it->second.stage != ENDED_REQUEST)
+		if (it->first == csock)
 			break ;
+	}
+	it = _requests.find(csock);   //&& it->second.stage != ENDED_REQUEST
+	if (it == _requests.end()) {
+		g_logger.fd << g_logger.get_timestamp() << "We can't match " << csock << " to any VHOST" << " that SHOULD NOT HAPPEN" << std::endl;
+		return ;
 	}
 	it->second.left += c_buffer;
 	if (it->second.stage == 0)

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 14:37:01 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 15:03:49 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include "webserv.hpp"
 # include "exceptions.hpp"
 # include "location.hpp"
-# include "../templates/insert_map_in_to_map.tpp"
+# include "insert_map_in_to_map.tpp"
 
 class vHost;
 class location {
@@ -36,7 +36,7 @@ class location {
 		int			const									& get_client_max_body_size() const;
 		bool		const									& get_auto_index() const;
 		size_t		const									& get_disable_methods() const;
-		std::map< int, std::string >	const	& get_error_pages() const;
+		std::map< int, std::string >				const	& get_error_pages() const;
 		std::string	const									& get_upload_pass() const;
 		std::string const									& get_root() const;
 		std::string const									& get_index() const;

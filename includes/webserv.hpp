@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 14:56:35 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 15:13:39 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,8 @@ class webserv {
 		int		find_word(std::string str, std::string word);
 		void	insert_status_code();
 		void	accept_new_client(int sock);
+		void	handle_pollin_csock(int csock);
+
 		
 
 	
