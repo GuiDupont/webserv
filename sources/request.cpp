@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 11:53:40 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 16:12:50 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	request::send_body() {
 void	request::send_body_from_str() {
 	int amount_sent;
 	int to_send;
-	for (int i = 4; i != 0; i--) {
+	for (int i = 10; i != 0; i--) {
 		to_send = SEND_SPEED < body.size() ? SEND_SPEED : body.size();
 		amount_sent = send(csock, body.c_str(), to_send, 0);
 		if (amount_sent == -1) {

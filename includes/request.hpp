@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:07:25 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/27 15:04:51 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 16:40:31 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ class request {
 		void	param_trailer(std::string str);
 		bool	is_valid_chunk_size(std::string &str);
 		bool	find_trailer_in_list(std::string str);
-		void	do_local_actions();
 		bool	header_is_not_sent();
 		void	generate_header();
 		void	send_header(int csock, std::string & header);
@@ -78,6 +77,10 @@ class request {
 		void	set_request_to_ended();
 		void	send_body_from_str();
 		void	send_body_from_file();
+		void	do_local_actions();
+		void	update_code_and_body();
+
+
 		
 		
 

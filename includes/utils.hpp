@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 12:51:13 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/28 14:34:19 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 16:29:42 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ bool        					test_path_get(request & req);
 bool        					test_path_delete(request & req);
 bool        					test_path_post(request & req);
 bool                            true_one_time_per_x_secondes(int x);
+bool                            is_valid_file(std::string & path);
 
 
 #endif

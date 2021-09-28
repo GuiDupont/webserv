@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 15:13:39 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 16:49:18 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@
 # include <csignal>
 # include <regex.h>
 # include <sys/socket.h>
+# include <stdio.h>
+
 
 # define WHITESPACE " \t\n\v\f\r"
 
@@ -44,7 +46,7 @@
 
 # define TIMEOUT 100
 
-# define SEND_SPEED 1024
+# define SEND_SPEED 10000
 
 class vHost;
 class request;

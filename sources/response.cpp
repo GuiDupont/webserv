@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 14:56:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 13:00:56 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 16:09:47 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ std::string response::generate_body_as_string_from_file(std::string & path) {
 		g_logger.fd << g_logger.get_timestamp() << "Issue while opening -"  << path <<  "- . Error: " << strerror(errno) << std::endl; // end special cases ?
 		return (body);
 	}
-    char buff[5000];
+    char buff[SEND_SPEED];
     int amount_read;
     while (1) {
         amount_read = read(fd, buff, SEND_SPEED);

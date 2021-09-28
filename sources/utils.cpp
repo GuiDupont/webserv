@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/28 14:29:10 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 16:32:42 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -501,4 +501,12 @@ bool                true_one_time_per_x_secondes(int x) {
 	
 }
 
-
+bool                            is_valid_file(std::string & path) {
+	if (is_directory(path))
+		return (false);
+	int fd = open(path.c_str(), O_WRONLY);
+	if (fd == -1)
+		return (false);
+	close(fd);
+	return (true);
+}

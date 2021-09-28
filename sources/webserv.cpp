@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 15:28:45 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 16:56:59 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,25 +41,18 @@ void	webserv::wait_for_connection() {
 			g_logger << LOG_EPOLL_EVENT + ft_itos(nsfd);
 		else if (nsfd == -1)
 			g_logger << LOG_ISSUE_EPOLL_WAIT + std::string(strerror(errno)) << std::endl;
-		else if (true_one_time_per_x_secondes(3))
+		else if (true_one_time_per_x_secondes(5))
 			g_logger << "No events";
+
 		for (int i = 0; i < nsfd; i++) {
 			if (revents[i].events & EPOLLIN && ft_is_ssock(revents[i].data.fd) && _stop == false)
 				accept_new_client(revents[i].data.fd);
 			else if (revents[i].events & EPOLLIN && (!ft_is_ssock(revents[i].data.fd)) && _stop == false) // we have something to read
-				handle_pollin_csock(revents[i].data.fd);
+				read_from_csock(revents[i].data.fd);
 			else if (revents[i].events & EPOLLOUT && (!ft_is_ssock(revents[i].data.fd)))
 				answer_to_request(revents[i].data.fd);
 		}
 	}
-}
-
-void	webserv::handle_pollin_csock(int csock) {
-	g_logger.fd << g_logger.get_timestamp() << "New request has been created on csock: " + ft_itos(csock) << std::endl;
-	if (is_new_request(csock) == true) {
-		_requests.insert(std::pair<int, request>(csock, request(csock)));
-	}
-	read_from_csock(csock);
 }
 
 void	webserv::accept_new_client(int sock) {
@@ -83,8 +76,10 @@ void	webserv::answer_to_request(int csock) {
 	g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on csock: " << csock << std::endl;
 
 	request & req = g_webserv._requests.find(csock)->second;
-	if (req.conf->validity_checked == false)
+	if (req.conf->validity_checked == false) {
 		req.control_config_validity();
+		req.update_code_and_body();
+	}
 	req.response_request();
 	if (req.body_is_sent == true) {
 		if (req.close_csock == true)
@@ -102,35 +97,34 @@ void	webserv::answer_to_request(int csock) {
 void	request::control_config_validity() {
 	conf->validity_checked = true;
 	if (code_to_send != 0)
-		;
+		return ;
 	else if (common_validity_check() == false)
-		;
+		return ;
 	else if (conf->method & GET) {
 		test_path_get(*this);
 	}
 	else if (conf->method & DELETE) {
-		test_path_delete(*this);	
+		test_path_delete(*this);
 	}
-	else if (conf->method & POST) {
-		test_path_post(*this);	
-	}
+	else if (conf->method & POST)
+		test_path_post(*this);
+}
+
+void	request::update_code_and_body() {
 	if (code_to_send != 0) {
 		conf->local_actions_done = true;
 		close_csock = true;
 		std::map< int, std::string>::iterator it;
 		if ((it = conf->_error_pages.find(code_to_send)) != conf->_error_pages.end()) {
-			body = response::generate_body_as_string_from_file(it->second);
-			if (body.empty() == false)
-				return;
+			if (is_valid_file(it->second)) {
+				conf->path_to_target = it->second;	
+				return ;
+			}
 		}
 		body = response::generate_error_body(g_webserv.status_code.find(code_to_send)->second);
-		
 	}
-	else {
-		if (conf->method & GET)
-			conf->local_actions_done = true;
-		code_to_send = 200; // maybe a bit simple
-	}
+	// else 
+	// 	code_to_send = 200;
 }
 
 bool	request::common_validity_check() {
@@ -143,13 +137,13 @@ bool	request::common_validity_check() {
 		conf->return_activated = true;
 		return (false);
 	}
+	
 	return (true);
 }
 
 void	request::response_request() {
-	if (conf->local_actions_done == false) {
-		//do_local_actions(); // dlelete ou post
-	}
+	if (conf->local_actions_done == false)
+		do_local_actions();
 	if (conf->local_actions_done == true && header_is_sent == false) {
 		g_logger.fd << g_logger.get_timestamp() << "We are going to respond a request with code : " << code_to_send << std::endl;
 	 	std::string header = response::generate_header(*this);
@@ -159,6 +153,25 @@ void	request::response_request() {
 	if (conf->local_actions_done == true && header_is_sent == true) {
 		send_body();
 	}
+}
+
+
+void	request::do_local_actions() {
+	if (conf->method & GET) {
+		conf->local_actions_done = true;
+		code_to_send = 200;
+	}
+	else if (conf->method & DELETE) {
+		int status;
+		std::cout << " We are about to delete " << conf->path_to_target << std::endl;
+		//status = remove(conf->path_to_target.c_str());
+		if (status != 0)
+			g_logger.fd << g_logger.get_timestamp() << "An error occured while deleting -" << conf->path_to_target.c_str() << " errno: " << errno << " " << strerror(errno) << std::endl;
+		code_to_send = 204;
+		conf->local_actions_done = true;
+	}
+	else if (conf->method & POST)
+		conf->local_actions_done = true;
 }
 
 /* REQUEST MANAGEMENT */
@@ -353,6 +366,11 @@ void webserv::read_from_csock(int csock) {
 	int ret;
 	std::map<int, request>::iterator it;
 
+	if (is_new_request(csock) == true) {
+	g_logger.fd << g_logger.get_timestamp() << "New request has been created from csock: " + ft_itos(csock) << std::endl;
+
+		_requests.insert(std::pair<int, request>(csock, request(csock)));
+	}
 	ret = recv(csock, c_buffer, 1024, 0);
 	if (ret < 0) {
 		g_logger.fd << "We had an issue while using recv on csock " << csock << " " << strerror(errno) << std::endl;
@@ -383,16 +401,11 @@ void webserv::read_from_csock(int csock) {
 		g_parser.analyse_body(it->second);
 }
 
-std::string		&webserv::get_root() {
-	return (_root);
-}
+std::string		&webserv::get_root() { return (_root); }
 
-const bool		&webserv::get_stop() const {
-	return (_stop);
-}
-void			webserv::set_stop(bool value) {
-	_stop = value;
-}
+const bool		&webserv::get_stop() const { return (_stop); }
+
+void			webserv::set_stop(bool value) { _stop = value; }
 
 std::map< int, std::string > const	& webserv::get_error_pages() const {
 	return (this->_error_pages);
