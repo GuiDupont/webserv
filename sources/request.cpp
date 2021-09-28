@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 16:12:50 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 18:37:31 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,35 @@ void	request::send_body_from_file() {
 	}
 }
 
+static int		unlink_or_rmdir(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf) {
+	std::string path(fpath);
+	int status;
+
+	if (is_directory(path))
+		status = rmdir(fpath);
+	else
+		status = unlink(fpath);
+	if (status != 0)
+		g_logger.fd << g_logger.get_timestamp() << "An error occured while deleting -" << path << " errno: " << errno << " " << strerror(errno) << std::endl;
+	return (status);
+}
+				
+void	request::delete_directory(std::string & path, request & req) {
+	std::cout << " We are about to delete " << path << std::endl;
+	nftw(path.c_str(), unlink_or_rmdir, 30, FTW_DEPTH);
+	req.code_to_send = 204;
+	req.body = response::generate_error_body(g_webserv.status_code.find(req.code_to_send)->second);
+	req.conf->local_actions_done = true;
+}
+
+void	request::delete_file(std::string & path, request & req) {
+	std::cout << " We are about to delete " << path << std::endl;
+	int status = unlink(path.c_str());
+	
+	req.code_to_send = 204;
+	req.body = response::generate_error_body(g_webserv.status_code.find(req.code_to_send)->second);
+	req.conf->local_actions_done = true;
+}
 
 request::~request() {
 	delete conf;

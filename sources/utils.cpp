@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/28 16:32:42 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 18:41:25 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -408,6 +408,23 @@ bool					test_path_get(request & req) {
 }
 
 bool					test_path_delete(request & req) {
+	std::string path = req.conf->path_to_target;
+	if (is_directory(path)) {
+		return (true);
+	}
+	int fd = open(path.c_str(), O_RDONLY);
+	if (fd == -1) {
+		g_logger.fd << g_logger.get_timestamp() << "can't open " << path << " - because : " << strerror(errno) << std::endl;
+		if (errno == EACCES)
+			req.code_to_send = 403;
+		else if (errno == ENOENT)
+			req.code_to_send = 404;
+		else
+			req.code_to_send = 400;
+	}
+	close(fd);
+	if (req.code_to_send != 0)
+		return (false);
 	return (true);
 }
 

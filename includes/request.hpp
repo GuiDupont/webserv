@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:07:25 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 16:40:31 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 18:35:24 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,8 @@ class request {
 		void	send_body_from_file();
 		void	do_local_actions();
 		void	update_code_and_body();
-
+		void	delete_directory(std::string & path, request & req);
+		void	delete_file(std::string & path, request & req);
 
 		
 		

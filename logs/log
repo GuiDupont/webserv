@@ -1,27 +1,39 @@
-16h37m2s: ------BEGINNING OF THE PROGRAM-------
-16h37m2s: Config successful
-16h37m2s: Epoll create successful			 | epfd  = 4
-16h37m2s: Ssock created           			 | ssock = 5
-16h37m2s: Ssock added to Epoll    			 | ssock = 5
-16h37m2s: Ssock created           			 | ssock = 6
-16h37m2s: Ssock added to Epoll    			 | ssock = 6
-16h37m2s: Ssock created           			 | ssock = 7
-16h37m2s: Ssock added to Epoll    			 | ssock = 7
-16h37m2s: Ssock created           			 | ssock = 8
-16h37m2s: Ssock added to Epoll    			 | ssock = 8
-16h37m2s: Epoll is waiting for connection
-16h37m5s: No events
-16h37m8s: No events
-16h37m11s: No events
-16h37m11s: Epoll noticed new events     	| nb    = 1
-16h37m11s: We accepted a new client from ssock 8, new csock is = 9
-16h37m11s: Epoll noticed new events     	| nb    = 1
-16h37m11s: Epoll_wait identified an EPOLLIN on csock: 9
-16h37m11s: New request has been created from csock: 9
-16h37m11s: We are parsing header from ccosk: 9
-16h37m11s: POSITION DU LEFT APRES HEADER = 
-16h37m11s: Following file provides this error No such file or directory
-16h37m11s: HERE IS THE CONFIGURATION WE SET UP
+18h52m49s: ------BEGINNING OF THE PROGRAM-------
+18h52m49s: Config successful
+18h52m49s: Epoll create successful			 | epfd  = 4
+18h52m49s: Ssock created           			 | ssock = 5
+18h52m49s: Ssock added to Epoll    			 | ssock = 5
+18h52m49s: Ssock created           			 | ssock = 6
+18h52m49s: Ssock added to Epoll    			 | ssock = 6
+18h52m49s: Ssock created           			 | ssock = 7
+18h52m49s: Ssock added to Epoll    			 | ssock = 7
+18h52m49s: Ssock created           			 | ssock = 8
+18h52m49s: Ssock added to Epoll    			 | ssock = 8
+18h52m49s: Epoll is waiting for connection
+18h52m54s: No events
+18h52m59s: No events
+18h53m4s: No events
+18h53m9s: No events
+18h53m14s: No events
+18h53m19s: No events
+18h53m21s: Epoll noticed new events     	| nb    = 1
+18h53m21s: We accepted a new client from ssock 7, new csock is = 9
+18h53m24s: No events
+18h53m29s: No events
+18h53m32s: Epoll noticed new events     	| nb    = 1
+18h53m32s: Epoll_wait identified an EPOLLIN on csock: 9
+18h53m32s: New request has been created from csock: 9
+18h53m32s: We are parsing header from ccosk: 9
+18h53m34s: No events
+18h53m39s: No events
+18h53m39s: Epoll noticed new events     	| nb    = 1
+18h53m39s: Epoll_wait identified an EPOLLIN on csock: 9
+18h53m39s: We are parsing header from ccosk: 9
+18h53m40s: Epoll noticed new events     	| nb    = 1
+18h53m40s: Epoll_wait identified an EPOLLIN on csock: 9
+18h53m40s: We are parsing header from ccosk: 9
+18h53m40s: POSITION DU LEFT APRES HEADER = 
+18h53m40s: HERE IS THE CONFIGURATION WE SET UP
 Server name: localhost
 Location: /
 Auto_index: 1
@@ -33,110 +45,44 @@ CGI ext : .jpg
 Index: 
 Error 404 | page :alexandre.html
 Return: 0 | Link :
-Method: GET
-Request_target: /df
-Final target: /mnt/nfs/homes/gdupont/Desktop/webserv/df
-16h37m11s: Epoll noticed new events     	| nb    = 1
-16h37m11s: Epoll_wait identified an EPOLLOUT on csock: 9
-16h37m11s: Following file provides this error No such file or directory
-16h37m11s: can't open /mnt/nfs/homes/gdupont/Desktop/webserv/df - because : No such file or directory
-16h37m11s: We are going to respond a request with code : 404
-16h37m11s: We just sent an header
-16h37m11s: We are sending : alexandre.htmlto csock : 9
-16h37m11s: We are done sending : alexandre.htmlto csock : 9
-16h37m14s: No events
-16h37m17s: No events
-16h37m20s: No events
-16h37m23s: No events
-16h37m26s: No events
-16h37m29s: No events
-16h37m32s: No events
-16h37m35s: No events
-16h37m38s: No events
-16h37m41s: No events
-16h37m44s: No events
-16h37m47s: No events
-16h37m50s: No events
-16h37m53s: No events
-16h37m56s: No events
-16h37m59s: No events
-16h38m2s: No events
-16h38m5s: No events
-16h38m8s: No events
-16h38m11s: No events
-16h38m14s: No events
-16h38m17s: No events
-16h38m20s: No events
-16h38m23s: No events
-16h38m26s: No events
-16h38m29s: No events
-16h38m32s: No events
-16h38m35s: No events
-16h38m38s: No events
-16h38m41s: No events
-16h38m44s: No events
-16h38m47s: No events
-16h38m50s: No events
-16h38m53s: No events
-16h38m56s: No events
-16h38m59s: No events
-16h39m2s: No events
-16h39m5s: No events
-16h39m8s: No events
-16h39m11s: No events
-16h39m14s: No events
-16h39m17s: No events
-16h39m20s: No events
-16h39m23s: No events
-16h39m26s: No events
-16h39m29s: No events
-16h39m32s: No events
-16h39m35s: No events
-16h39m38s: No events
-16h39m41s: No events
-16h39m44s: No events
-16h39m47s: No events
-16h39m50s: No events
-16h39m53s: No events
-16h39m56s: No events
-16h39m59s: No events
-16h40m2s: No events
-16h40m5s: No events
-16h40m8s: No events
-16h40m11s: No events
-16h40m14s: No events
-16h40m17s: No events
-16h40m20s: No events
-16h40m23s: No events
-16h40m26s: No events
-16h40m29s: No events
-16h40m32s: No events
-16h40m35s: No events
-16h40m38s: No events
-16h40m41s: No events
-16h40m44s: No events
-16h40m47s: No events
-16h40m50s: No events
-16h40m53s: No events
-16h40m56s: No events
-16h40m59s: No events
-16h41m2s: No events
-16h41m5s: No events
-16h41m8s: No events
-16h41m11s: No events
-16h41m14s: No events
-16h41m17s: No events
-16h41m20s: No events
-16h41m23s: No events
-16h41m26s: No events
-16h41m29s: No events
-16h41m32s: No events
-16h41m35s: No events
-16h41m38s: No events
-16h41m41s: No events
-16h41m42s:  We are about to quit
-16h41m42s:  cssock is closed: 5
-16h41m42s:  cssock is closed: 6
-16h41m42s:  cssock is closed: 7
-16h41m42s:  cssock is closed: 8
-16h41m42s:  EPFD is closed: 4
+Method: DELETE
+Request_target: /untouchable
+Final target: /mnt/nfs/homes/gdupont/Desktop/webserv/untouchable
+18h53m40s: Epoll noticed new events     	| nb    = 1
+18h53m40s: Epoll_wait identified an EPOLLOUT on csock: 9
+18h53m40s: We are going to respond a request with code : 204
+18h53m40s: We just sent an header
+18h53m44s: No events
+18h53m49s: No events
+18h53m54s: No events
+18h53m59s: No events
+18h54m4s: No events
+18h54m9s: No events
+18h54m14s: No events
+18h54m19s: No events
+18h54m24s: No events
+18h54m27s: Epoll noticed new events     	| nb    = 1
+18h54m27s: Epoll_wait identified an EPOLLIN on csock: 9
+18h54m27s: New request has been created from csock: 9
+18h54m29s: No events
+18h54m33s: Epoll noticed new events     	| nb    = 1
+18h54m33s: Epoll_wait identified an EPOLLIN on csock: 9
+18h54m33s: New request has been created from csock: 9
+18h54m33s: Epoll noticed new events     	| nb    = 1
+18h54m33s: Epoll_wait identified an EPOLLIN on csock: 9
+18h54m33s: New request has been created from csock: 9
+18h54m34s: No events
+18h54m39s: No events
+18h54m44s: No events
+18h54m49s: No events
+18h54m54s: No events
+18h54m59s: No events
+18h55m4s: No events
+18h55m9s: No events
+18h55m10s:  We are about to quit
+18h55m10s:  csock is closed: 9
+18h55m10s:  cssock is closed: 5
+18h55m10s:  cssock is closed: 6
+18h55m10s:  cssock is closed: 7
+18h55m10s:  cssock is closed: 8
+18h55m10s:  EPFD is closed: 4

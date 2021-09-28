@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 14:56:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 16:09:47 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 17:06:27 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,25 +127,25 @@ std::string         response::generate_error_body(std::string & message) {
     return (body);
 }
 
-std::string response::generate_body_as_string_from_file(std::string & path) {
-    int fd = open(path.c_str(), O_RDONLY);
-    std::string body;
-	if (fd == -1) {
-		g_logger.fd << g_logger.get_timestamp() << "Issue while opening -"  << path <<  "- . Error: " << strerror(errno) << std::endl; // end special cases ?
-		return (body);
-	}
-    char buff[SEND_SPEED];
-    int amount_read;
-    while (1) {
-        amount_read = read(fd, buff, SEND_SPEED);
-        buff[amount_read] = '\0';
-        body += buff;
-        if (amount_read < SEND_SPEED) {
-            close(fd);
-            return (body);
-        }
-    }
-}
+// std::string response::generate_body_as_string_from_file(std::string & path) {
+//     int fd = open(path.c_str(), O_RDONLY);
+//     std::string body;
+// 	if (fd == -1) {
+// 		g_logger.fd << g_logger.get_timestamp() << "Issue while opening -"  << path <<  "- . Error: " << strerror(errno) << std::endl; // end special cases ?
+// 		return (body);
+// 	}
+//     char buff[SEND_SPEED];
+//     int amount_read;
+//     while (1) {
+//         amount_read = read(fd, buff, SEND_SPEED);
+//         buff[amount_read] = '\0';
+//         body += buff;
+//         if (amount_read < SEND_SPEED) {
+//             close(fd);
+//             return (body);
+//         }
+//     }
+// }
 
 
 std::string         response::generate_autoindex_body(request & req) {  //wip 

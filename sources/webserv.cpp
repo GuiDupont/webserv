@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 16:56:59 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/28 18:47:48 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,25 +155,24 @@ void	request::response_request() {
 	}
 }
 
-
 void	request::do_local_actions() {
 	if (conf->method & GET) {
 		conf->local_actions_done = true;
 		code_to_send = 200;
 	}
 	else if (conf->method & DELETE) {
-		int status;
-		std::cout << " We are about to delete " << conf->path_to_target << std::endl;
-		//status = remove(conf->path_to_target.c_str());
-		if (status != 0)
-			g_logger.fd << g_logger.get_timestamp() << "An error occured while deleting -" << conf->path_to_target.c_str() << " errno: " << errno << " " << strerror(errno) << std::endl;
+		if (is_directory(conf->path_to_target))
+			delete_directory(conf->path_to_target, *this);
+		else
+			delete_file(conf->path_to_target, *this);
 		code_to_send = 204;
-		conf->local_actions_done = true;
+		
 	}
 	else if (conf->method & POST)
 		conf->local_actions_done = true;
 }
-
+// unlink
+// rmdir
 /* REQUEST MANAGEMENT */
 
 
@@ -202,10 +201,12 @@ bool webserv::is_new_request(int fd) {
 	for (std::map<int, request>::iterator it = _requests.begin(); it != _requests.end(); it++) {
 		if (it->first == fd) {
 			if (it->second.stage != ENDED_REQUEST)
-				return (0);
+				return (false);
 		}
 	}
-	return (1);
+	// if (_requests.find(fd) != _requests.end())
+	// 	return (true);
+	return (true);
 }
 
 bool	webserv::is_pending_request(int csock) {
@@ -367,8 +368,7 @@ void webserv::read_from_csock(int csock) {
 	std::map<int, request>::iterator it;
 
 	if (is_new_request(csock) == true) {
-	g_logger.fd << g_logger.get_timestamp() << "New request has been created from csock: " + ft_itos(csock) << std::endl;
-
+		g_logger.fd << g_logger.get_timestamp() << "New request has been created from csock: " + ft_itos(csock) << std::endl;
 		_requests.insert(std::pair<int, request>(csock, request(csock)));
 	}
 	ret = recv(csock, c_buffer, 1024, 0);
