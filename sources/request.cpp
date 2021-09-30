@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/29 19:07:39 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/30 16:10:59 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ bool request::find_trailer_in_list(std::string str) {
 
 void	request::send_header(int csock, std::string & header) {
 	send(csock, header.c_str(), header.size(), 0);
+	std::cout << "Header sent: -" << header.c_str() << "-" << std::endl;
 	g_logger.fd << g_logger.get_timestamp() << "We just sent an header" << std::endl;
 }
 
@@ -110,6 +111,7 @@ void	request::send_body_from_str() {
 	for (int i = 10; i != 0; i--) {
 		to_send = SEND_SPEED < body_response.size() ? SEND_SPEED : body_response.size();
 		amount_sent = send(csock, body_response.c_str(), to_send, 0);
+		std::cout << " We are sending from string : " << body_response.c_str() << std::endl;
 		if (amount_sent == -1) {
 			g_logger.fd << g_logger.get_timestamp() << "Issue while sending body on csock " << csock << ". Error: " << strerror(errno) << std::endl;
 			body_is_sent = true;
@@ -121,11 +123,6 @@ void	request::send_body_from_str() {
 			break;
 		}
 		body_response = body_response.substr(to_send, body_response.size() - to_send);
-	}
-	if (body_response.size() == 0 || body_is_sent == true) { 
-	amount_sent = send(csock, "\r\n", 2, 0);
-		if (amount_sent == -1)
-			g_logger.fd << g_logger.get_timestamp() << "Issue while sending body on csock " << csock << ". Error: " << strerror(errno) << std::endl;
 	}
 }
 
@@ -148,16 +145,12 @@ void	request::send_body_from_file() {
 		amount_read = read(body_fd, buff, SEND_SPEED);
 		buff[amount_read] = '\0';
 		amount_sent = send(csock, buff, amount_read, 0);
+		std::cout << " We are sending from file: " << buff << std::endl;
 		if (amount_read != SEND_SPEED) {
 			body_is_sent = true;
 			g_logger.fd << g_logger.get_timestamp() << "We are done sending : " << conf->path_to_target << "to csock : " << csock << std::endl;
 			break;
 		}
-	}
-	if (body_is_sent == true) { 
-	amount_sent = send(csock, "\r\n", 2, 0);
-		if (amount_sent == -1)
-			g_logger.fd << g_logger.get_timestamp() << "Issue while sending body on csock " << csock << ". Error: " << strerror(errno) << std::endl;
 	}
 }
 
