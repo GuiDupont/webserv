@@ -1,0 +1,6 @@
+- mettre une secu sur l URL rentree (moins de 5000 caracteres ?) -> quelle erreur renvoyer ?
+- potentiellement rework la logique a cause des POST de grand fichiers (surchage de heap si tout est mis dans la string body)
+- doit on envoyer host dans les reponses aux requetes ?
+- cas de query dans une requete -> presence d un "?" dans la request line ?
+- gerer les cas des lignes vides avant new requete
+- rajouter la fonction pour forcer l utilisation des sockets ?
