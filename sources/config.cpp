@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 14:57:42 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/29 18:58:37 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,11 @@
 
 config::config(void) :  validity_checked(true), return_activated(false), local_actions_done(false) { }
 
-config::config(request & request) : validity_checked(false), return_activated(false) {
+config::config(request & request) : validity_checked(false), return_activated(false), local_actions_done(false) {
 	if (request.method == "GET")
 		method = GET;
-	else if (request.method == "POST") {
+	else if (request.method == "POST")
 		method = POST;
-		local_actions_done = true;
-	}
 	else if (request.method == "DELETE")
 		method = DELETE;
 	_client_max_body_size = (g_webserv._client_max_body_size  == -1 ? 0: g_webserv._client_max_body_size);
@@ -36,7 +34,7 @@ config::config(request & request) : validity_checked(false), return_activated(fa
 	vHost chosen = get_associated_vhost(request);
 	put_vhost_and_location_in_config(chosen, request);
 	_client_max_body_size *= 1000000;
-	g_logger.fd << g_logger.get_timestamp() << *this;
+	g_logger.fd << g_logger.get_timestamp() << *this << std::endl;
 }
 
 void	config::put_vhost_and_location_in_config(vHost & host, request & request) {
@@ -138,7 +136,7 @@ vHost & config::get_associated_vhost(request & request) {
 		}
 	}
 	if (first == 1)
-		g_logger.fd << g_logger.get_timestamp() << "--------We could not find any matching vhost, THAT SHOULD NOT HAPPEN---------";
+		g_logger.fd << g_logger.get_timestamp() << "--------We could not find any matching vhost, THAT SHOULD NOT HAPPEN---------" << std::endl;
 	return (*chosen);
 }
 

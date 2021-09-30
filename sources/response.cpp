@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 14:56:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 17:06:27 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/29 15:41:31 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,13 @@ long get_file_size(std::string filename)
 }
 
 long            response::get_content_length(request & req) { // make sure it's complete
-    if (!req.body.empty())
-        return req.body.size();
+    if (!req.body_response.empty())
+        return req.body_response.size();
     long file_size = get_file_size(req.conf->path_to_target);
     if (file_size == -1) {
         req.code_to_send = 500;
-        req.body = response::generate_error_body(g_webserv.status_code.find(req.code_to_send)->second);
-        return req.body.size();
+        req.body_response = response::generate_error_body(g_webserv.status_code.find(req.code_to_send)->second);
+        return req.body_response.size();
     }
     else
         return (file_size);
@@ -118,13 +118,13 @@ std::string         response::get_status_line(request & req) {
 }
 
 std::string         response::generate_error_body(std::string & message) {
-    std::string body = "<html><head><title>";
-    body += message;
-    body += "</title></head>\n<body>\n<center><h1>";
-    body += message;
-    body += "</h1></center>\n<hr><center>webserv/1</center>\n</body>\n</html>";
-    body += "\r\n";
-    return (body);
+    std::string body_response = "<html><head><title>";
+    body_response += message;
+    body_response += "</title></head>\n<body>\n<center><h1>";
+    body_response += message;
+    body_response += "</h1></center>\n<hr><center>webserv/1</center>\n</body>\n</html>";
+    body_response += "\r\n";
+    return (body_response);
 }
 
 // std::string response::generate_body_as_string_from_file(std::string & path) {
@@ -150,27 +150,27 @@ std::string         response::generate_error_body(std::string & message) {
 
 std::string         response::generate_autoindex_body(request & req) {  //wip 
     std::string & path = req.conf->path_to_target;
-    std::string body = "<html><head><title>" + path + "</title></head>\n<body>\n<h1>";
+    std::string body_response = "<html><head><title>" + path + "</title></head>\n<body>\n<h1>";
    
     DIR *d;
     struct dirent *dir;
     d = opendir(path.c_str());
-    body += "AUTOINDEXING<br>\n";
+    body_response += "AUTOINDEXING<br>\n";
     if (d) {
         while ((dir = readdir(d)) != NULL) {
-            body += "<a href=\"";
+            body_response += "<a href=\"";
             std::string file_name(dir->d_name);
-            body += dir->d_name;
+            body_response += dir->d_name;
             if (is_directory(file_name) && file_name[file_name.size() - 1] != '/')
-                body += "/";
-            body += "\">";
-            body += dir->d_name + std::string("</a><br>\n");
+                body_response += "/";
+            body_response += "\">";
+            body_response += dir->d_name + std::string("</a><br>\n");
         }
     closedir(d);
     }
-    body += "</h1></center>\n<hr><center>webserv/1\n</body>\n</html>";
-    body += "\r\n";
-    return (body);
+    body_response += "</h1></center>\n<hr><center>webserv/1\n</body>\n</html>";
+    body_response += "\r\n";
+    return (body_response);
 }
 
 std::string         response::add_special_header(request & req, std::string & header) {

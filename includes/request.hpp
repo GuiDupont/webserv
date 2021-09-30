@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:07:25 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 18:35:24 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/29 15:45:25 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ class request {
 		std::map<std::string, std::string>	header_fields;
 		std::list<std::string>				trailer;
 		std::string							host_name;
-		std::string							body;
+		std::string							body_request;
 		std::string							left;
 		int									next_chunk; // -2 = trailer stage ; -1 = chunk stage
 		int									nb_trailer_to_received;
@@ -55,6 +55,8 @@ class request {
 		bool								body_is_sent;
 		bool								header_is_sent;
 		int									body_fd;
+		std::string							body_response;
+
 		friend std::ostream & operator<<(std::ostream & o,const request & r);
 		
     public:
@@ -81,6 +83,7 @@ class request {
 		void	update_code_and_body();
 		void	delete_directory(std::string & path, request & req);
 		void	delete_file(std::string & path, request & req);
+		void	write_body_inside_file();
 
 		
 		

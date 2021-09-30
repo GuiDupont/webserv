@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/28 18:41:25 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/29 18:47:23 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ int		go_to_next_word(const std::string & line, int index) {
 int		ft_string_is_alpha(const std::string & s)
 {
 	int i = 0;
-	while (s[i])
-	{
+	while (s[i]) {
 		if (!isalpha(s[i]))
 			return (0);
 		i++;
@@ -34,8 +33,7 @@ int		ft_string_is_alpha(const std::string & s)
 int		ft_string_is_digit(const std::string & s)
 {
 	int i = 0;
-	while (s[i])
-	{
+	while (s[i]) {
 		if (!isdigit(s[i]))
 			return (0);
 		i++;
@@ -106,14 +104,14 @@ void	param_socket_server(vHost &host) {
 				close(sock);
 				throw (cant_listen());
 			}
-			g_logger << LOG_LISTEN_SSOCK + ft_itos(sock);
+			g_logger.fd << g_logger.get_timestamp() << LOG_LISTEN_SSOCK << sock << std::endl;
 			host.map_sock_to_hostport(sock, *it);
 			static struct epoll_event ev;
 			ev.events = EPOLLIN | EPOLLET;
 			ev.data.fd = sock;
 			if (epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_ADD, sock, &ev) != 0)
 				throw (epoll_ctl_add_error());
-			g_logger << LOG_SSOCK_ADD_EPOLL + ft_itos(sock);
+			g_logger.fd << g_logger.get_timestamp() << LOG_SSOCK_ADD_EPOLL << sock << std::endl;
 		}
 	}
 }
@@ -388,7 +386,7 @@ bool					test_path_get(request & req) {
 		if (req.conf->_auto_index == false)
 			req.code_to_send = 404;
 		else
-			req.body = response::generate_autoindex_body(req);
+			req.body_response = response::generate_autoindex_body(req);
 		return (false);
 	}
 	int fd = open(path.c_str(), O_WRONLY);
@@ -430,15 +428,12 @@ bool					test_path_delete(request & req) {
 
 bool					test_path_post(request & req) {
 	std::string path = req.conf->path_to_target;
-	// check case if path_to_target is a directory;
 	if (is_directory(path)) {
-		if (req.conf->_auto_index == false)
-			req.code_to_send = 404;
-		else
-			req.body = response::generate_autoindex_body(req);
+		req.code_to_send = 400;
+		g_logger.fd << g_logger.get_timestamp() << "You can't POST a directory" << std::endl;
 		return (false);
 	}
-	int fd = open(path.c_str(), O_WRONLY);
+	int fd = open(path.c_str(), O_WRONLY | O_CREAT, S_IRWXU | S_IRGRP | S_IROTH);
 	if (fd == -1) {
 		g_logger.fd << g_logger.get_timestamp() << "can't open file cause : " << strerror(errno) << std::endl;
 		if (errno == EACCES)

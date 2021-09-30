@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 18:37:31 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/29 19:07:39 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ std::ostream & operator<<(std::ostream & o,const request & r)
 		o << "Header field : -" << it->first << "-" << std::endl;
 		o << "Field content: -" << it->second << std::endl;
 	}
-	o << "Body: -" << r.body << "-" << std::endl;
+	o << "Body: -" << r.body_request << "-" << std::endl;
 	return (o);
 }
 
@@ -92,22 +92,24 @@ bool request::find_trailer_in_list(std::string str) {
 
 void	request::send_header(int csock, std::string & header) {
 	send(csock, header.c_str(), header.size(), 0);
-	g_logger.fd << g_logger.get_timestamp() << "We just sent an header\n";
+	g_logger.fd << g_logger.get_timestamp() << "We just sent an header" << std::endl;
 }
 
 void	request::send_body() {
-	if (body.empty() == false)
+	if (body_response.empty() == false)
 		send_body_from_str();
-	else
+	else if (method != "POST")
 		send_body_from_file();
+	else
+		body_is_sent = true;
 }
 
 void	request::send_body_from_str() {
 	int amount_sent;
 	int to_send;
 	for (int i = 10; i != 0; i--) {
-		to_send = SEND_SPEED < body.size() ? SEND_SPEED : body.size();
-		amount_sent = send(csock, body.c_str(), to_send, 0);
+		to_send = SEND_SPEED < body_response.size() ? SEND_SPEED : body_response.size();
+		amount_sent = send(csock, body_response.c_str(), to_send, 0);
 		if (amount_sent == -1) {
 			g_logger.fd << g_logger.get_timestamp() << "Issue while sending body on csock " << csock << ". Error: " << strerror(errno) << std::endl;
 			body_is_sent = true;
@@ -118,9 +120,9 @@ void	request::send_body_from_str() {
 			body_is_sent = true;
 			break;
 		}
-		body = body.substr(to_send, body.size() - to_send);
+		body_response = body_response.substr(to_send, body_response.size() - to_send);
 	}
-	if (body.size() == 0 || body_is_sent == true) { 
+	if (body_response.size() == 0 || body_is_sent == true) { 
 	amount_sent = send(csock, "\r\n", 2, 0);
 		if (amount_sent == -1)
 			g_logger.fd << g_logger.get_timestamp() << "Issue while sending body on csock " << csock << ". Error: " << strerror(errno) << std::endl;
@@ -176,7 +178,7 @@ void	request::delete_directory(std::string & path, request & req) {
 	std::cout << " We are about to delete " << path << std::endl;
 	nftw(path.c_str(), unlink_or_rmdir, 30, FTW_DEPTH);
 	req.code_to_send = 204;
-	req.body = response::generate_error_body(g_webserv.status_code.find(req.code_to_send)->second);
+	req.body_response = response::generate_error_body(g_webserv.status_code.find(req.code_to_send)->second);
 	req.conf->local_actions_done = true;
 }
 
@@ -185,7 +187,7 @@ void	request::delete_file(std::string & path, request & req) {
 	int status = unlink(path.c_str());
 	
 	req.code_to_send = 204;
-	req.body = response::generate_error_body(g_webserv.status_code.find(req.code_to_send)->second);
+	req.body_response = response::generate_error_body(g_webserv.status_code.find(req.code_to_send)->second);
 	req.conf->local_actions_done = true;
 }
 

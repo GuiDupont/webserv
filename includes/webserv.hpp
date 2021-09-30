@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 16:49:18 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/09/29 17:21:27 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ class webserv {
 		std::string 								_root;
 		std::string									_cgi_dir;
 		int											_epfd;
-		std::map<int, std::tm>						_timeout;												
+		std::map<int, std::time_t>					_timeout;												
 		bool										_stop;											
 		
 	public:
