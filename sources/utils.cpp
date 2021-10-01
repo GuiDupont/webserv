@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/29 18:47:23 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/01 14:48:09 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -361,12 +361,12 @@ int     ft_atoi_base(const char *str, const char *base)
 bool	is_directory(std::string & path) {
 	struct stat s;
 	if( stat(path.c_str(), &s) == 0 ) {
-		if( s.st_mode & S_IFDIR )
+		if( S_ISDIR(s.st_mode))
 			return (true);
 		return (false);
 		}
 	else {
-		g_logger.fd << g_logger.get_timestamp() << "Following file provides this error " << strerror(errno) << std::endl; 
+		g_logger.fd << g_logger.get_timestamp() << "Stat on " << path << " provides this error " << strerror(errno) << std::endl; 
 	}
 	return (false);
 }

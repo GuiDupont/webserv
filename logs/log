@@ -1,56 +1,553 @@
-16h11m21s: ------BEGINNING OF THE PROGRAM-------
-16h11m21s: Config successful
-16h11m21s: Epoll create successful			 | epfd  = 4
-16h11m21s: Ssock created           			 | ssock = 5
-16h11m21s: Ssock added to Epoll    			 | ssock = 5
-16h11m21s: Ssock created           			 | ssock = 6
-16h11m21s: Ssock added to Epoll    			 | ssock = 6
-16h11m21s: Ssock created           			 | ssock = 7
-16h11m21s: Ssock added to Epoll    			 | ssock = 7
-16h11m21s: Ssock created           			 | ssock = 8
-16h11m21s: Ssock added to Epoll    			 | ssock = 8
-16h11m21s: Epoll is waiting for connection
-16h11m26s: No events
-16h11m31s: No events
-16h11m36s: No events
-16h11m41s: No events
-16h11m46s: No events
-16h11m51s: No events
-16h11m56s: No events
-16h12m1s: No events
-16h12m6s: No events
-16h12m11s: No events
-16h12m16s: No events
-16h12m21s: No events
-16h12m26s: No events
-16h12m31s: No events
-16h12m36s: No events
-16h12m41s: No events
-16h12m46s: No events
-16h12m51s: No events
-16h12m56s: No events
-16h13m1s: No events
-16h13m6s: No events
-16h13m11s: No events
-16h13m16s: No events
-16h13m21s: No events
-16h13m26s: No events
-16h13m31s: No events
-16h13m36s: No events
-16h13m41s: No events
-16h13m46s: No events
-16h13m51s: No events
-16h13m56s: No events
-16h14m1s: No events
-16h14m6s: No events
-16h14m11s: No events
-16h14m16s: No events
-16h14m21s: No events
-16h14m26s: No events
-16h14m31s: No events
-16h14m31s:  We are about to quit
-16h14m31s:  cssock is closed: 5
-16h14m31s:  cssock is closed: 6
-16h14m31s:  cssock is closed: 7
-16h14m31s:  cssock is closed: 8
-16h14m31s:  EPFD is closed: 4
+15h29m59s: ------BEGINNING OF THE PROGRAM-------
+15h29m59s: Config successful
+15h29m59s: Epoll create successful			 | epfd  = 6
+15h29m59s: Ssock created           			 | ssock = 7
+15h29m59s: Ssock added to Epoll    			 | ssock = 7
+15h29m59s: Ssock created           			 | ssock = 8
+15h29m59s: Ssock added to Epoll    			 | ssock = 8
+15h29m59s: Ssock created           			 | ssock = 9
+15h29m59s: Ssock added to Epoll    			 | ssock = 9
+15h29m59s: Ssock created           			 | ssock = 10
+15h29m59s: Ssock added to Epoll    			 | ssock = 10
+15h29m59s: Ssock created           			 | ssock = 11
+15h29m59s: Ssock added to Epoll    			 | ssock = 11
+15h29m59s: Ssock created           			 | ssock = 21
+15h29m59s: Ssock added to Epoll    			 | ssock = 21
+15h29m59s: Epoll is waiting for connection
+15h30m4s: No events
+15h30m4s: Epoll noticed new events     	| nb    = 1
+15h30m4s: We accepted a new client from ssock 9, new csock is = 22
+15h30m9s: No events
+15h30m9s: Epoll noticed new events     	| nb    = 1
+15h30m9s: Epoll_wait identified an EPOLLIN on csock: 22
+15h30m9s: New request has been created from csock: 22
+While using recv on csock 22 we received : 0
+15h30m14s: No events
+15h30m19s: No events
+15h30m24s: No events
+15h30m29s: No events
+15h30m34s: No events
+15h30m39s: No events
+15h30m39s: Epoll noticed new events     	| nb    = 1
+15h30m39s: We accepted a new client from ssock 9, new csock is = 22
+15h30m40s: Epoll noticed new events     	| nb    = 1
+15h30m40s: Epoll_wait identified an EPOLLIN on csock: 22
+15h30m40s: New request has been created from csock: 22
+15h30m40s: We are parsing header from ccosk: 22
+15h30m40s: HERE IS THE CONFIGURATION WE SET UP
+Server name: no_root
+Location: 
+Auto_index: 0
+Client_max_body_size: 12000000
+Upload_pass: 
+Root: 
+CGI_dir: 
+Index: 
+Error 403 | page :www/error_page_403.html
+Error 404 | page :www/error_page_404.html
+Error 500 | page :www/error_page_501.html
+Return: 0 | Link :
+Method: GET
+Request_target: /sgsg
+Final target: 
+
+15h30m40s: Epoll noticed new events     	| nb    = 1
+15h30m40s: Epoll_wait identified an EPOLLOUT on csock: 22
+15h30m40s: Stat on  provides this error No such file or directory
+15h30m40s: can't open  - because : No such file or directory
+15h30m40s: Stat on www/error_page_404.html provides this error No such file or directory
+15h30m40s: We are going to respond a request with code : 404
+15h30m40s: We just sent an header
+15h30m44s: No events
+15h30m49s: No events
+15h30m51s: Epoll noticed new events     	| nb    = 1
+15h30m51s: We accepted a new client from ssock 11, new csock is = 22
+15h30m51s: Epoll noticed new events     	| nb    = 1
+15h30m51s: Epoll_wait identified an EPOLLIN on csock: 22
+15h30m51s: New request has been created from csock: 22
+15h30m51s: We are parsing header from ccosk: 22
+15h30m51s: Stat on /home/user42/webserv_42/demo/filedoesntexists provides this error No such file or directory
+15h30m51s: HERE IS THE CONFIGURATION WE SET UP
+Server name: localhost
+Location: /
+Auto_index: 1
+Client_max_body_size: 24000000
+Upload_pass: /documentation
+Root: /home/user42/webserv_42
+CGI_dir: 
+CGI ext : .jpg
+Index: 
+Error 404 | page :documentation
+Return: 0 | Link :
+Method: GET
+Request_target: /demo/filedoesntexists
+Final target: /home/user42/webserv_42/demo/filedoesntexists
+
+15h30m51s: Epoll noticed new events     	| nb    = 1
+15h30m51s: Epoll_wait identified an EPOLLOUT on csock: 22
+15h30m51s: Stat on /home/user42/webserv_42/demo/filedoesntexists provides this error No such file or directory
+15h30m51s: can't open /home/user42/webserv_42/demo/filedoesntexists - because : No such file or directory
+15h30m51s: We are going to respond a request with code : 404
+15h30m51s: We just sent an header
+15h30m51s: Epoll noticed new events     	| nb    = 1
+15h30m51s: We accepted a new client from ssock 11, new csock is = 22
+15h30m51s: Epoll noticed new events     	| nb    = 1
+15h30m51s: Epoll_wait identified an EPOLLIN on csock: 22
+15h30m51s: New request has been created from csock: 22
+15h30m51s: We are parsing header from ccosk: 22
+15h30m51s: HERE IS THE CONFIGURATION WE SET UP
+Server name: localhost
+Location: /
+Auto_index: 1
+Client_max_body_size: 24000000
+Upload_pass: /documentation
+Root: /home/user42/webserv_42
+CGI_dir: 
+CGI ext : .jpg
+Index: 
+Error 404 | page :documentation
+Return: 0 | Link :
+Method: GET
+Request_target: /demo/file_no_access_rights.html
+Final target: /home/user42/webserv_42/demo/file_no_access_rights.html
+
+15h30m51s: Epoll noticed new events     	| nb    = 1
+15h30m51s: Epoll_wait identified an EPOLLOUT on csock: 22
+15h30m51s: can't open /home/user42/webserv_42/demo/file_no_access_rights.html - because : Permission denied
+15h30m51s: We are going to respond a request with code : 403
+15h30m51s: We just sent an header
+15h30m51s: Epoll noticed new events     	| nb    = 1
+15h30m51s: We accepted a new client from ssock 11, new csock is = 22
+15h30m51s: Epoll noticed new events     	| nb    = 1
+15h30m51s: Epoll_wait identified an EPOLLIN on csock: 22
+15h30m51s: New request has been created from csock: 22
+15h30m51s: We are parsing header from ccosk: 22
+15h30m51s: HERE IS THE CONFIGURATION WE SET UP
+Server name: localhost
+Location: /
+Auto_index: 1
+Client_max_body_size: 24000000
+Upload_pass: /documentation
+Root: /home/user42/webserv_42
+CGI_dir: 
+CGI ext : .jpg
+Index: 
+Error 404 | page :documentation
+Return: 0 | Link :
+Method: GET
+Request_target: /demo/dir_no_access_rights/youcantseeme.html
+Final target: /home/user42/webserv_42/demo/dir_no_access_rights/youcantseeme.html
+
+15h30m51s: Epoll noticed new events     	| nb    = 1
+15h30m51s: Epoll_wait identified an EPOLLOUT on csock: 22
+15h30m51s: We are going to respond a request with code : 200
+15h30m51s: We just sent an header
+15h30m51s: We are sending : /home/user42/webserv_42/demo/dir_no_access_rights/youcantseeme.htmlto csock : 22
+15h30m51s: We are done sending : /home/user42/webserv_42/demo/dir_no_access_rights/youcantseeme.htmlto csock : 22
+15h30m51s: Epoll noticed new events     	| nb    = 1
+15h30m51s: Epoll_wait identified an EPOLLIN on csock: 22
+15h30m51s: New request has been created from csock: 22
+15h30m51s: We are parsing header from ccosk: 22
+15h30m51s: Stat on /home/user42/webserv_42/demo/dirdoesntexist provides this error No such file or directory
+15h30m51s: HERE IS THE CONFIGURATION WE SET UP
+Server name: localhost
+Location: /
+Auto_index: 1
+Client_max_body_size: 24000000
+Upload_pass: /documentation
+Root: /home/user42/webserv_42
+CGI_dir: 
+CGI ext : .jpg
+Index: 
+Error 404 | page :documentation
+Return: 0 | Link :
+Method: GET
+Request_target: /demo/dirdoesntexist
+Final target: /home/user42/webserv_42/demo/dirdoesntexist
+
+15h30m51s: Epoll noticed new events     	| nb    = 1
+15h30m51s: Epoll_wait identified an EPOLLOUT on csock: 22
+15h30m51s: Stat on /home/user42/webserv_42/demo/dirdoesntexist provides this error No such file or directory
+15h30m51s: can't open /home/user42/webserv_42/demo/dirdoesntexist - because : No such file or directory
+15h30m51s: We are going to respond a request with code : 404
+15h30m51s: We just sent an header
+15h30m51s: Epoll noticed new events     	| nb    = 1
+15h30m51s: We accepted a new client from ssock 11, new csock is = 22
+15h30m51s: Epoll noticed new events     	| nb    = 1
+15h30m51s: Epoll_wait identified an EPOLLIN on csock: 22
+15h30m51s: New request has been created from csock: 22
+15h30m51s: We are parsing header from ccosk: 22
+15h30m51s: HERE IS THE CONFIGURATION WE SET UP
+Server name: localhost
+Location: /
+Auto_index: 1
+Client_max_body_size: 24000000
+Upload_pass: /documentation
+Root: /home/user42/webserv_42
+CGI_dir: 
+CGI ext : .jpg
+Index: 
+Error 404 | page :documentation
+Return: 0 | Link :
+Method: GET
+Request_target: /demo/dir_no_access_rights
+Final target: /home/user42/webserv_42/demo/dir_no_access_rights/
+
+15h30m51s: Epoll noticed new events     	| nb    = 1
+15h30m51s: Epoll_wait identified an EPOLLOUT on csock: 22
+15h30m51s: We are going to respond a request with code : 200
+15h30m51s: We just sent an header
+15h30m51s: Epoll noticed new events     	| nb    = 1
+15h30m51s: Epoll_wait identified an EPOLLIN on csock: 22
+15h30m51s: New request has been created from csock: 22
+15h30m51s: We are parsing header from ccosk: 22
+15h30m51s: HERE IS THE CONFIGURATION WE SET UP
+Server name: localhost
+Location: /
+Auto_index: 1
+Client_max_body_size: 24000000
+Upload_pass: /documentation
+Root: /home/user42/webserv_42
+CGI_dir: 
+CGI ext : .jpg
+Index: 
+Error 404 | page :documentation
+Return: 0 | Link :
+Method: GET
+Request_target: /demo/dir_no_access_rights
+Final target: /home/user42/webserv_42/demo/dir_no_access_rights/
+
+15h30m51s: Epoll noticed new events     	| nb    = 1
+15h30m51s: Epoll_wait identified an EPOLLOUT on csock: 22
+15h30m51s: We are going to respond a request with code : 200
+15h30m51s: We just sent an header
+15h30m51s: Epoll noticed new events     	| nb    = 1
+15h30m51s: Epoll_wait identified an EPOLLIN on csock: 22
+15h30m51s: New request has been created from csock: 22
+15h30m51s: We are parsing header from ccosk: 22
+15h30m51s: Stat on /home/user42/webserv_42/demo/get_not_allowed/get_not_allowed.html provides this error No such file or directory
+15h30m51s: HERE IS THE CONFIGURATION WE SET UP
+Server name: localhost
+Location: /
+Auto_index: 1
+Client_max_body_size: 24000000
+Upload_pass: /documentation
+Root: /home/user42/webserv_42
+CGI_dir: 
+CGI ext : .jpg
+Index: 
+Error 404 | page :documentation
+Return: 0 | Link :
+Method: GET
+Request_target: /demo/get_not_allowed/get_not_allowed.html
+Final target: /home/user42/webserv_42/demo/get_not_allowed/get_not_allowed.html
+
+15h30m51s: Epoll noticed new events     	| nb    = 1
+15h30m51s: Epoll_wait identified an EPOLLOUT on csock: 22
+15h30m51s: Stat on /home/user42/webserv_42/demo/get_not_allowed/get_not_allowed.html provides this error No such file or directory
+15h30m51s: can't open /home/user42/webserv_42/demo/get_not_allowed/get_not_allowed.html - because : No such file or directory
+15h30m51s: We are going to respond a request with code : 404
+15h30m51s: We just sent an header
+15h30m51s: Epoll noticed new events     	| nb    = 1
+15h30m51s: We accepted a new client from ssock 9, new csock is = 22
+15h30m51s: Epoll noticed new events     	| nb    = 1
+15h30m51s: Epoll_wait identified an EPOLLIN on csock: 22
+15h30m51s: New request has been created from csock: 22
+15h30m51s: We are parsing header from ccosk: 22
+15h30m51s: HERE IS THE CONFIGURATION WE SET UP
+Server name: no_root
+Location: 
+Auto_index: 0
+Client_max_body_size: 12000000
+Upload_pass: 
+Root: 
+CGI_dir: 
+Index: 
+Error 403 | page :www/error_page_403.html
+Error 404 | page :www/error_page_404.html
+Error 500 | page :www/error_page_501.html
+Return: 0 | Link :
+Method: GET
+Request_target: /demo/whatever
+Final target: 
+
+15h30m51s: Epoll noticed new events     	| nb    = 1
+15h30m51s: Epoll_wait identified an EPOLLOUT on csock: 22
+15h30m51s: Stat on  provides this error No such file or directory
+15h30m51s: can't open  - because : No such file or directory
+15h30m51s: Stat on www/error_page_404.html provides this error No such file or directory
+15h30m51s: We are going to respond a request with code : 404
+15h30m51s: We just sent an header
+15h30m54s: No events
+15h30m59s: No events
+15h31m4s: No events
+15h31m9s: No events
+15h31m14s: No events
+15h31m19s: No events
+15h31m24s: No events
+15h31m29s: No events
+15h31m34s: No events
+15h31m39s: No events
+15h31m44s: No events
+15h31m49s: No events
+15h31m54s: No events
+15h31m59s: No events
+15h32m4s: No events
+15h32m9s: No events
+15h32m14s: No events
+15h32m19s: No events
+15h32m24s: No events
+15h32m29s: No events
+15h32m34s: No events
+15h32m39s: No events
+15h32m44s: No events
+15h32m49s: No events
+15h32m54s: No events
+15h32m59s: No events
+15h33m4s: No events
+15h33m9s: No events
+15h33m14s: No events
+15h33m19s: No events
+15h33m24s: No events
+15h33m29s: No events
+15h33m34s: No events
+15h33m39s: No events
+15h33m44s: No events
+15h33m49s: No events
+15h33m54s: No events
+15h33m59s: No events
+15h34m4s: No events
+15h34m9s: No events
+15h34m14s: No events
+15h34m19s: No events
+15h34m24s: No events
+15h34m25s: Epoll noticed new events     	| nb    = 1
+15h34m25s: We accepted a new client from ssock 11, new csock is = 22
+15h34m25s: Epoll noticed new events     	| nb    = 1
+15h34m25s: Epoll_wait identified an EPOLLIN on csock: 22
+15h34m25s: New request has been created from csock: 22
+15h34m25s: We are parsing header from ccosk: 22
+15h34m25s: Stat on /home/user42/webserv_42/demo/filedoesntexists provides this error No such file or directory
+15h34m25s: HERE IS THE CONFIGURATION WE SET UP
+Server name: localhost
+Location: /
+Auto_index: 1
+Client_max_body_size: 24000000
+Upload_pass: /documentation
+Root: /home/user42/webserv_42
+CGI_dir: 
+CGI ext : .jpg
+Index: 
+Error 404 | page :documentation
+Return: 0 | Link :
+Method: GET
+Request_target: /demo/filedoesntexists
+Final target: /home/user42/webserv_42/demo/filedoesntexists
+
+15h34m25s: Epoll noticed new events     	| nb    = 1
+15h34m25s: Epoll_wait identified an EPOLLOUT on csock: 22
+15h34m25s: Stat on /home/user42/webserv_42/demo/filedoesntexists provides this error No such file or directory
+15h34m25s: can't open /home/user42/webserv_42/demo/filedoesntexists - because : No such file or directory
+15h34m25s: We are going to respond a request with code : 404
+15h34m25s: We just sent an header
+15h34m25s: Epoll noticed new events     	| nb    = 1
+15h34m25s: We accepted a new client from ssock 11, new csock is = 22
+15h34m25s: Epoll noticed new events     	| nb    = 1
+15h34m25s: Epoll_wait identified an EPOLLIN on csock: 22
+15h34m25s: New request has been created from csock: 22
+15h34m25s: We are parsing header from ccosk: 22
+15h34m25s: HERE IS THE CONFIGURATION WE SET UP
+Server name: localhost
+Location: /
+Auto_index: 1
+Client_max_body_size: 24000000
+Upload_pass: /documentation
+Root: /home/user42/webserv_42
+CGI_dir: 
+CGI ext : .jpg
+Index: 
+Error 404 | page :documentation
+Return: 0 | Link :
+Method: GET
+Request_target: /demo/file_no_access_rights.html
+Final target: /home/user42/webserv_42/demo/file_no_access_rights.html
+
+15h34m25s: Epoll noticed new events     	| nb    = 1
+15h34m25s: Epoll_wait identified an EPOLLOUT on csock: 22
+15h34m25s: can't open /home/user42/webserv_42/demo/file_no_access_rights.html - because : Permission denied
+15h34m25s: We are going to respond a request with code : 403
+15h34m25s: We just sent an header
+15h34m25s: Epoll noticed new events     	| nb    = 1
+15h34m25s: We accepted a new client from ssock 11, new csock is = 22
+15h34m25s: Epoll noticed new events     	| nb    = 1
+15h34m25s: Epoll_wait identified an EPOLLIN on csock: 22
+15h34m25s: New request has been created from csock: 22
+15h34m25s: We are parsing header from ccosk: 22
+15h34m25s: HERE IS THE CONFIGURATION WE SET UP
+Server name: localhost
+Location: /
+Auto_index: 1
+Client_max_body_size: 24000000
+Upload_pass: /documentation
+Root: /home/user42/webserv_42
+CGI_dir: 
+CGI ext : .jpg
+Index: 
+Error 404 | page :documentation
+Return: 0 | Link :
+Method: GET
+Request_target: /demo/dir_no_access_rights/youcantseeme.html
+Final target: /home/user42/webserv_42/demo/dir_no_access_rights/youcantseeme.html
+
+15h34m25s: Epoll noticed new events     	| nb    = 1
+15h34m25s: Epoll_wait identified an EPOLLOUT on csock: 22
+15h34m25s: We are going to respond a request with code : 200
+15h34m25s: We just sent an header
+15h34m25s: We are sending : /home/user42/webserv_42/demo/dir_no_access_rights/youcantseeme.htmlto csock : 22
+15h34m25s: We are done sending : /home/user42/webserv_42/demo/dir_no_access_rights/youcantseeme.htmlto csock : 22
+15h34m25s: Epoll noticed new events     	| nb    = 1
+15h34m25s: Epoll_wait identified an EPOLLIN on csock: 22
+15h34m25s: New request has been created from csock: 22
+15h34m25s: We are parsing header from ccosk: 22
+15h34m25s: Stat on /home/user42/webserv_42/demo/dirdoesntexist provides this error No such file or directory
+15h34m25s: HERE IS THE CONFIGURATION WE SET UP
+Server name: localhost
+Location: /
+Auto_index: 1
+Client_max_body_size: 24000000
+Upload_pass: /documentation
+Root: /home/user42/webserv_42
+CGI_dir: 
+CGI ext : .jpg
+Index: 
+Error 404 | page :documentation
+Return: 0 | Link :
+Method: GET
+Request_target: /demo/dirdoesntexist
+Final target: /home/user42/webserv_42/demo/dirdoesntexist
+
+15h34m25s: Epoll noticed new events     	| nb    = 1
+15h34m25s: Epoll_wait identified an EPOLLOUT on csock: 22
+15h34m25s: Stat on /home/user42/webserv_42/demo/dirdoesntexist provides this error No such file or directory
+15h34m25s: can't open /home/user42/webserv_42/demo/dirdoesntexist - because : No such file or directory
+15h34m25s: We are going to respond a request with code : 404
+15h34m25s: We just sent an header
+15h34m25s: Epoll noticed new events     	| nb    = 1
+15h34m25s: We accepted a new client from ssock 11, new csock is = 22
+15h34m25s: Epoll noticed new events     	| nb    = 1
+15h34m25s: Epoll_wait identified an EPOLLIN on csock: 22
+15h34m25s: New request has been created from csock: 22
+15h34m25s: We are parsing header from ccosk: 22
+15h34m25s: HERE IS THE CONFIGURATION WE SET UP
+Server name: localhost
+Location: /
+Auto_index: 1
+Client_max_body_size: 24000000
+Upload_pass: /documentation
+Root: /home/user42/webserv_42
+CGI_dir: 
+CGI ext : .jpg
+Index: 
+Error 404 | page :documentation
+Return: 0 | Link :
+Method: GET
+Request_target: /demo/dir_no_access_rights
+Final target: /home/user42/webserv_42/demo/dir_no_access_rights/
+
+15h34m25s: Epoll noticed new events     	| nb    = 1
+15h34m25s: Epoll_wait identified an EPOLLOUT on csock: 22
+15h34m25s: We are going to respond a request with code : 200
+15h34m25s: We just sent an header
+15h34m25s: Epoll noticed new events     	| nb    = 1
+15h34m25s: Epoll_wait identified an EPOLLIN on csock: 22
+15h34m25s: New request has been created from csock: 22
+15h34m25s: We are parsing header from ccosk: 22
+15h34m25s: HERE IS THE CONFIGURATION WE SET UP
+Server name: localhost
+Location: /
+Auto_index: 1
+Client_max_body_size: 24000000
+Upload_pass: /documentation
+Root: /home/user42/webserv_42
+CGI_dir: 
+CGI ext : .jpg
+Index: 
+Error 404 | page :documentation
+Return: 0 | Link :
+Method: GET
+Request_target: /demo/dir_no_access_rights
+Final target: /home/user42/webserv_42/demo/dir_no_access_rights/
+
+15h34m25s: Epoll noticed new events     	| nb    = 1
+15h34m25s: Epoll_wait identified an EPOLLOUT on csock: 22
+15h34m25s: We are going to respond a request with code : 200
+15h34m25s: We just sent an header
+15h34m25s: Epoll noticed new events     	| nb    = 1
+15h34m25s: Epoll_wait identified an EPOLLIN on csock: 22
+15h34m25s: New request has been created from csock: 22
+15h34m25s: We are parsing header from ccosk: 22
+15h34m25s: Stat on /home/user42/webserv_42/demo/get_not_allowed/get_not_allowed.html provides this error No such file or directory
+15h34m25s: HERE IS THE CONFIGURATION WE SET UP
+Server name: localhost
+Location: /
+Auto_index: 1
+Client_max_body_size: 24000000
+Upload_pass: /documentation
+Root: /home/user42/webserv_42
+CGI_dir: 
+CGI ext : .jpg
+Index: 
+Error 404 | page :documentation
+Return: 0 | Link :
+Method: GET
+Request_target: /demo/get_not_allowed/get_not_allowed.html
+Final target: /home/user42/webserv_42/demo/get_not_allowed/get_not_allowed.html
+
+15h34m25s: Epoll noticed new events     	| nb    = 1
+15h34m25s: Epoll_wait identified an EPOLLOUT on csock: 22
+15h34m25s: Stat on /home/user42/webserv_42/demo/get_not_allowed/get_not_allowed.html provides this error No such file or directory
+15h34m25s: can't open /home/user42/webserv_42/demo/get_not_allowed/get_not_allowed.html - because : No such file or directory
+15h34m25s: We are going to respond a request with code : 404
+15h34m25s: We just sent an header
+15h34m25s: Epoll noticed new events     	| nb    = 1
+15h34m25s: We accepted a new client from ssock 9, new csock is = 22
+15h34m25s: Epoll noticed new events     	| nb    = 1
+15h34m25s: Epoll_wait identified an EPOLLIN on csock: 22
+15h34m25s: New request has been created from csock: 22
+15h34m25s: We are parsing header from ccosk: 22
+15h34m25s: HERE IS THE CONFIGURATION WE SET UP
+Server name: no_root
+Location: 
+Auto_index: 0
+Client_max_body_size: 12000000
+Upload_pass: 
+Root: 
+CGI_dir: 
+Index: 
+Error 403 | page :www/error_page_403.html
+Error 404 | page :www/error_page_404.html
+Error 500 | page :www/error_page_501.html
+Return: 0 | Link :
+Method: GET
+Request_target: /demo/whatever
+Final target: 
+
+15h34m25s: Epoll noticed new events     	| nb    = 1
+15h34m25s: Epoll_wait identified an EPOLLOUT on csock: 22
+15h34m25s: Stat on  provides this error No such file or directory
+15h34m25s: can't open  - because : No such file or directory
+15h34m25s: Stat on www/error_page_404.html provides this error No such file or directory
+15h34m25s: We are going to respond a request with code : 404
+15h34m25s: We just sent an header
+15h34m29s: No events
+15h34m34s: No events
+15h34m39s: No events
+15h34m44s: No events
+15h34m44s:  We are about to quit
+15h34m44s:  cssock is closed: 7
+15h34m44s:  cssock is closed: 8
+15h34m44s:  cssock is closed: 9
+15h34m44s:  cssock is closed: 10
+15h34m44s:  cssock is closed: 11
+15h34m44s:  cssock is closed: 21
+15h34m44s:  EPFD is closed: 6

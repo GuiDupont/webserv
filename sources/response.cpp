@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 14:56:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/30 16:10:26 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/01 14:56:12 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ std::string         response::generate_error_body(std::string & message) {
 // }
 
 
-std::string         response::generate_autoindex_body(request & req) {  //wip 
+std::string         response::generate_autoindex_body(request & req) {
     std::string & path = req.conf->path_to_target;
     std::string body_response = "<html><head><title>" + path + "</title></head>\n<body>\n<h1>";
    
@@ -160,6 +160,9 @@ std::string         response::generate_autoindex_body(request & req) {  //wip
         while ((dir = readdir(d)) != NULL) {
             body_response += "<a href=\"";
             std::string file_name(dir->d_name);
+			body_response += req.request_target;
+			if (req.request_target[req.request_target.size() - 1] != '/')
+                body_response += "/";
             body_response += dir->d_name;
             if (is_directory(file_name) && file_name[file_name.size() - 1] != '/')
                 body_response += "/";
