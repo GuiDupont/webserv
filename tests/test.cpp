@@ -1,8 +1,7 @@
 #include <unistd.h>
 #include <string>
 #include <map>
-
-class Request;
+#include "../includes/request.hpp"
 
 class CGI {
 
@@ -27,7 +26,6 @@ public:
 
 private:
 
-	std::map<std::string, std::string> metaV;
 	std::string CONTENT_LENGTH; // seulement si bdy
 	std::string CONTENT_TYPE; // seulement si present dans client request
 	std::string GATEWAY_INTERFACE = "CGI/1.1";
@@ -38,28 +36,41 @@ private:
 	std::string REQUEST_METHOD; // GET ou POST
 	std::string SCRIPT_NAME; // path to script
 	std::string SERVER_NAME = "42webserv";
-	int SERVER_PORT;
+	std::string SERVER_PORT;
 	std::string SERVER_PROTOCOL = "HTTP/1.1";
 	std::string SERVER_SOFTWARE = "42webserv";
+	char *env[14];
 
 }
 
-CGI::param_CONTENT_LENGTH() {
+CGI::param_CONTENT_LENGTH(Request &req) {
+
+	if (req.method == "GET") {
+		this->CONTENT_LENGTH = "CONTENT_LENGTH=";
+	else {
+		this->CONTENT_LENGTH = "CONTENT_LENGTH=" + req.body.size(); // à modif possiblement
+	}
+	}
+}
+
+void	perform_CGI(Request &req, std::string::iterator it) {
+
+	CGI cgi;
+
+	cgi.param_CONTENT_LENGTH(req)
 
 
 }
 
 int main(int argc, char **argv, char **env) {
 
-	char arg1[] = "/usr/bin/php";
-	char *arg2[] = {"/usr/bin/php", "hello.php"};
-	execve(arg1, arg2, NULL);
+	// char arg1[] = "/usr/bin/php";
+	// char *arg2[] = {"/usr/bin/php", "hello.php"};
+	// execve(arg1, arg2, NULL);
 
+	Request req;
 	std::string REQUEST = "/hello.php";
-
-
-
-
-
+	std::string::iterator it = REQUEST.end();
+	perform_CGI(req, it);
 	return (0);
 }
