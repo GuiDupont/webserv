@@ -1,24 +1,76 @@
-15h4m23s: ------BEGINNING OF THE PROGRAM-------
-15h4m23s: Config successful
-15h4m23s: Epoll create successful			 | epfd  = 4
-15h4m23s: Ssock created           			 | ssock = 5
-15h4m23s: Ssock added to Epoll    			 | ssock = 5
-15h4m23s: Ssock created           			 | ssock = 6
-15h4m23s: Ssock added to Epoll    			 | ssock = 6
-15h4m23s: Ssock created           			 | ssock = 7
-15h4m23s: Ssock added to Epoll    			 | ssock = 7
-15h4m23s: Ssock created           			 | ssock = 8
-15h4m23s: Ssock added to Epoll    			 | ssock = 8
-15h4m23s: Ssock created           			 | ssock = 9
-15h4m23s: Ssock added to Epoll    			 | ssock = 9
-15h4m23s: Ssock created           			 | ssock = 10
-15h4m23s: Ssock added to Epoll    			 | ssock = 10
-15h4m23s: Epoll is waiting for connection
-15h4m28s: No events
-15h4m31s: Epoll noticed new events     	| nb    = 1
-15h4m31s: We accepted a new client from ssock 9, new csock is = 11
-15h4m31s: Epoll noticed new events     	| nb    = 1
-15h4m31s: Epoll_wait identified an EPOLLIN on csock: 11
-15h4m31s: New request has been created from csock: 11
-15h4m31s: We are parsing header from ccosk: 11
-15h4m31s: Stat on /mnt/nfs/homes/gdupont/Desktop/webserv/demo/autoindex.php/apth_infoici/sgagga?query_string provides this error No such file or directory
+16h43m45s: ------BEGINNING OF THE PROGRAM-------
+16h43m45s: Config successful
+16h43m45s: Epoll create successful			 | epfd  = 6
+16h43m45s: Ssock created           			 | ssock = 7
+16h43m45s: Ssock added to Epoll    			 | ssock = 7
+16h43m45s: Ssock created           			 | ssock = 8
+16h43m45s: Ssock added to Epoll    			 | ssock = 8
+16h43m45s: Ssock created           			 | ssock = 9
+16h43m45s: Ssock added to Epoll    			 | ssock = 9
+16h43m45s: Ssock created           			 | ssock = 10
+16h43m45s: Ssock added to Epoll    			 | ssock = 10
+16h43m45s: Ssock created           			 | ssock = 11
+16h43m45s: Ssock added to Epoll    			 | ssock = 11
+16h43m45s: Ssock created           			 | ssock = 21
+16h43m45s: Ssock added to Epoll    			 | ssock = 21
+16h43m45s: Epoll is waiting for connection
+16h43m48s: Epoll noticed new events     	| nb    = 1
+16h43m48s: We accepted a new client from ssock 11, new csock is = 22
+16h43m48s: Epoll noticed new events     	| nb    = 1
+16h43m48s: Epoll_wait identified an EPOLLIN on csock: 22
+16h43m48s: New request has been created from csock: 22
+16h43m48s: We are parsing header from ccosk: 22
+16h43m48s: Stat on /mnt/nfs/homes/gdupont/Desktop/webserv/index/cou?cco/index.php?34545345 provides this error No such file or directory
+16h43m48s: Epoll noticed new events     	| nb    = 1
+16h43m48s: Epoll_wait identified an EPOLLOUT on csock: 22
+16h43m48s: Stat on /mnt/nfs/homes/gdupont/Desktop/webserv/index/cou?cco/index.php provides this error No such file or directory
+16h43m48s: can't open /mnt/nfs/homes/gdupont/Desktop/webserv/index/cou?cco/index.php - because : No such file or directory
+16h43m48s: We are going to respond a request with code : 404
+16h43m48s: We just sent an header
+16h43m50s: No events
+16h43m55s: No events
+16h44m0s: No events
+16h44m1s: Epoll noticed new events     	| nb    = 1
+16h44m1s: We accepted a new client from ssock 11, new csock is = 22
+16h44m1s: Epoll noticed new events     	| nb    = 1
+16h44m1s: Epoll_wait identified an EPOLLIN on csock: 22
+16h44m1s: New request has been created from csock: 22
+16h44m1s: We are parsing header from ccosk: 22
+16h44m1s: Stat on /mnt/nfs/homes/gdupont/Desktop/webserv/index/cou?cco/index.php/23455 provides this error No such file or directory
+16h44m1s: Epoll noticed new events     	| nb    = 1
+16h44m1s: Epoll_wait identified an EPOLLOUT on csock: 22
+16h44m1s: Stat on /mnt/nfs/homes/gdupont/Desktop/webserv/index/cou?cco/index.php provides this error No such file or directory
+16h44m1s: can't open /mnt/nfs/homes/gdupont/Desktop/webserv/index/cou?cco/index.php - because : No such file or directory
+16h44m1s: We are going to respond a request with code : 404
+16h44m1s: We just sent an header
+16h44m5s: No events
+16h44m10s: No events
+16h44m15s: No events
+16h44m20s: No events
+16h44m25s: No events
+16h44m30s: No events
+16h44m35s: No events
+16h44m40s: No events
+16h44m43s: Epoll noticed new events     	| nb    = 1
+16h44m43s: We accepted a new client from ssock 11, new csock is = 22
+16h44m43s: Epoll noticed new events     	| nb    = 1
+16h44m43s: Epoll_wait identified an EPOLLIN on csock: 22
+16h44m43s: New request has been created from csock: 22
+16h44m43s: We are parsing header from ccosk: 22
+16h44m43s: Stat on /mnt/nfs/homes/gdupont/Desktop/webserv/index/coucco/index.php/23455/toputo/sgs?couco provides this error No such file or directory
+16h44m43s: Epoll noticed new events     	| nb    = 1
+16h44m43s: Epoll_wait identified an EPOLLOUT on csock: 22
+16h44m43s: Stat on /mnt/nfs/homes/gdupont/Desktop/webserv/index/coucco/index.php provides this error No such file or directory
+16h44m43s: can't open /mnt/nfs/homes/gdupont/Desktop/webserv/index/coucco/index.php - because : No such file or directory
+16h44m43s: We are going to respond a request with code : 404
+16h44m43s: We just sent an header
+16h44m45s: No events
+16h44m50s: No events
+16h44m51s:  We are about to quit
+16h44m51s:  cssock is closed: 7
+16h44m51s:  cssock is closed: 8
+16h44m51s:  cssock is closed: 9
+16h44m51s:  cssock is closed: 10
+16h44m51s:  cssock is closed: 11
+16h44m51s:  cssock is closed: 21
+16h44m51s:  EPFD is closed: 6

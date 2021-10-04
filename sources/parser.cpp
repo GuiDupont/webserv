@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/29 18:51:43 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/04 16:08:17 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -325,7 +325,7 @@ void	webserv_parser::analyse_body(request &req) {
 					}
 					else {
 						req.body_request += req.left.substr(0, req.next_chunk);
-						if (req.body_request.size() > req.conf->_client_max_body_size) {
+						if (req.body_request.size() > req.conf->client_max_body_size) {
 								req.code_to_send = 413;
 								req.set_request_to_ended();
 								return ;
@@ -395,7 +395,7 @@ void	webserv_parser::analyse_body(request &req) {
 		size_t length = std::atoi(req.header_fields.find("Content-Length")->second.c_str());
 		req.body_request += req.left;
 		req.left.clear();
-		if (req.body_request.size() > req.conf->_client_max_body_size) {
+		if (req.body_request.size() > req.conf->client_max_body_size) {
 			req.code_to_send = 413;
 			req.set_request_to_ended();
 			return ;

@@ -6,16 +6,16 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/04 15:07:48 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/04 16:43:37 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "config.hpp"
 
 
-config::config(void) :  validity_checked(true), return_activated(false), local_actions_done(false) { }
+config::config(void) :  validity_checked(true), return_activated(false), local_actions_done(false), cgi_activated(false) { }
 
-config::config(request & request) : validity_checked(false), return_activated(false), local_actions_done(false) {
+config::config(request & request) : validity_checked(false), return_activated(false), local_actions_done(false), cgi_activated(false) {
 	if (request.method == "GET")
 		method = GET;
 	else if (request.method == "POST")
@@ -35,56 +35,56 @@ config::config(request & request) : validity_checked(false), return_activated(fa
 	put_vhost_and_location_in_config(chosen, request);
 	client_max_body_size *= 1000000;
 	set_cgi_params(request);
-	g_logger.fd << g_logger.get_timestamp() << *this << std::endl;
+	//g_logger.fd
+	std::cout << g_logger.get_timestamp() << *this << std::endl;
 	
 }
 
 void	config::set_cgi_params(request & req) {
 	// virer ce qu' il y a apres le premier diez
 	// sauvegarder ce qu' il y a apres le 1er ?
-	// std::cout << "avant ";
-	// req.conf->path_to_target.size();
-	// std::cout << "apres ";
+	std::string &target = path_to_target;
+	size_t end_cgi_ext = 0;
+
+	int cgi_activated = 0;        // remove everything after #
+	std::cout << path_to_target.size() << "\n";
+
+	size_t first_diez = target.find_first_of("#", 0);
+
+	if (first_diez != std::string::npos && first_diez != 0)
+		target = target.substr(0, first_diez - 1);
+
+	// std::cout << "target : " << ;
+
+	end_cgi_ext = target.find(CGI_EXT, 0);
 	
-	// std::string &target = req.conf->path_to_target;
-	// size_t end_cgi_ext = 0;
-	// // int cgi_activated = 0;
-
-
-	// int cgi_activated = 0;        // remove everything after #
-	// std::cout << req.conf->path_to_target.size() << "\n";
-
-	// size_t first_diez = target.find_first_of("#", 0);
-	// std::cout << " okay \n";
-
-	// if (first_diez != std::string::npos && first_diez != 0)
-	// 	target = target.substr(0, first_diez - 1);
-
-	// std::cout << " okay1 \n";
-	// if (req.conf->cgi_ext.find(CGI_EXT) != req.conf->cgi_ext.end())  { //find ext pos
-	// 	end_cgi_ext = req.conf->path_to_target.find_first_of(CGI_EXT, 0);
-	// 	if (end_cgi_ext != std::string::npos) {
-	// 		end_cgi_ext += 4; // cgi_ext lenght;
-	// 		// cgi_activated = 1;
-	// 	}
-	// }
-
-	// std::cout << " okay2 \n";
-
-
-	// size_t first_query = target.find_first_of("?", end_cgi_ext);
-	// if (first_query != std::string::npos) {
-	// 	req.conf->query_string = target.substr(first_query + 1, target.length() - first_query + 1);
-	// 	if (first_query != 0)
-	// 		target = target.substr(0, first_query - 1);
-	// }
-
-	// std::cout << " okay3 \n";
+	if (end_cgi_ext != std::string::npos) {
+		end_cgi_ext += 4;
+		if (cgi_ext.find(CGI_EXT) != cgi_ext.end())
+			cgi_activated = true;
+	}
+	else
+		end_cgi_ext = 0;
 	
-	// if (first_query - end_cgi_ext >= 2)
-	// 	req.conf->path_info = target.substr(end_cgi_ext, first_query);
-	// if (end_cgi_ext != std::string::npos)
-	// 	target = target.substr(0, end_cgi_ext);
+
+	std::cout << "cegi _ext = " << &target[end_cgi_ext] << std::endl;
+	
+
+	size_t first_query = target.find_first_of("?", end_cgi_ext);
+
+	if (first_query != std::string::npos) {
+		query_string = target.substr(first_query + 1, target.length() - (first_query + 1));
+
+		if (first_query != 0)
+			target = target.substr(0, first_query);
+	}
+	// else
+	// 	return ;
+	
+	if (first_query - end_cgi_ext >= 2)
+		path_info = target.substr(end_cgi_ext, first_query);
+	if (end_cgi_ext != 0)
+		target = target.substr(0, end_cgi_ext);
 }
 
 

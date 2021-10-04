@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/04 15:05:04 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/04 16:31:53 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ class config {
 		bool										local_actions_done;
 		std::string									query_string;
 		std::string									path_info;
+		bool										cgi_activated;
 
 		
 		
