@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/29 17:21:27 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/04 14:21:15 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@
 
 
 # define WHITESPACE " \t\n\v\f\r"
+
+# define CGI_EXT ".php"
 
 # define GET 1
 # define POST 2

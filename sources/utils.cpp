@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/01 14:48:09 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/04 13:06:26 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -383,8 +383,8 @@ std::string				from_two_str_to_path(const std::string & str1, const std::string 
 bool					test_path_get(request & req) {
 	std::string path = req.conf->path_to_target;
 	if (is_directory(path)) {
-		if (req.conf->_auto_index == false)
-			req.code_to_send = 404;
+		if (req.conf->_auto_index == false) // a changer tp body_resp = ""
+			req.body_response = " ";
 		else
 			req.body_response = response::generate_autoindex_body(req);
 		return (false);

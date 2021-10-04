@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 14:05:57 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/04 15:05:04 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ class config {
 	public:
 		std::string									_server_name;
 		bool										_auto_index;
-		long										_client_max_body_size;
+		long										client_max_body_size;
 		std::map< int, std::string >				_error_pages;
 		std::string									_upload_pass;
 		std::string 								_root;
@@ -45,12 +45,16 @@ class config {
 		std::pair<int, std::string>					_return;
 		std::pair<std::string, size_t>				host_port;
 		bool										return_activated;
-		std::set< std::string >						_cgi_ext;
+		std::set< std::string >						cgi_ext;
 		std::string 								_location;
 		std::string									path_to_target;
 		int											code;
 		bool										validity_checked;
 		bool										local_actions_done;
+		std::string									query_string;
+		std::string									path_info;
+
+		
 		
 	
 		config(request & req);
@@ -60,6 +64,7 @@ class config {
 		std::map< std::string, location >::const_iterator get_most_accurate_location(vHost & host);
 		std::string						update_path_to_target_with_root(const location & location);
 		vHost						&	get_associated_vhost(request & request);
+		void							set_cgi_params(request & request);
 
 
 	private:
