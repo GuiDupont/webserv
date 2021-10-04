@@ -71,6 +71,11 @@
 		"concepts": "cpp",
 		"memory_resource": "cpp",
 		"filesystem": "cpp",
-		"*.tpp": "cpp"
+		"*.tpp": "cpp",
+		"csignal": "cpp",
+		"map": "cpp",
+		"set": "cpp",
+		"numeric": "cpp",
+		"random": "cpp"
 	}
 }

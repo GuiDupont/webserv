@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 15:28:21 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/01 15:07:58 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -428,6 +428,7 @@ void	webserv_parser::analyse_header(request &req) {
 			req.conf = new config(req);
 			return ;
 		}
+		g_logger.fd << req.request_target;
 		req.HTTP_version = get_word(req.left, index, std::string("\r\n"));
 		if (req.HTTP_version.size() == 0)
 		{
