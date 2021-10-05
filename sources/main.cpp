@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:42:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/29 16:43:28 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/05 13:25:11 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 webserv			g_webserv;
 webserv_parser	g_parser;
 logger			g_logger("logs/log"); // to fix
+
+
 
 int main(int ac, char **av) {
 	signal(SIGINT, stop_program_sigint);

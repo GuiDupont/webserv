@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/04 16:43:37 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/05 13:26:22 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,53 +40,50 @@ config::config(request & request) : validity_checked(false), return_activated(fa
 	
 }
 
+static size_t get_cgi_ext_pos(const std::string & target) {
+	size_t start_search = 0;
+	size_t start_cgi_ext = 0;
+
+	while (1) {
+		start_cgi_ext = target.find(CGI_EXT, start_search);
+		if (start_cgi_ext == std::string::npos)
+			return (start_cgi_ext);
+		else
+		{
+			start_search = start_cgi_ext + strlen(CGI_EXT);
+			std::string candidate = target.substr(0, start_search);
+			if (is_file(candidate) || is_symlink(candidate))
+				return (start_search);
+		}
+	}
+	return (std::string::npos);
+}
+
 void	config::set_cgi_params(request & req) {
-	// virer ce qu' il y a apres le premier diez
-	// sauvegarder ce qu' il y a apres le 1er ?
+
 	std::string &target = path_to_target;
 	size_t end_cgi_ext = 0;
-
-	int cgi_activated = 0;        // remove everything after #
-	std::cout << path_to_target.size() << "\n";
-
+	int cgi_activated = 0;
 	size_t first_diez = target.find_first_of("#", 0);
-
 	if (first_diez != std::string::npos && first_diez != 0)
 		target = target.substr(0, first_diez - 1);
-
-	// std::cout << "target : " << ;
-
-	end_cgi_ext = target.find(CGI_EXT, 0);
-	
-	if (end_cgi_ext != std::string::npos) {
-		end_cgi_ext += 4;
-		if (cgi_ext.find(CGI_EXT) != cgi_ext.end())
-			cgi_activated = true;
-	}
-	else
+	end_cgi_ext = get_cgi_ext_pos(target);
+	if (end_cgi_ext == std::string::npos)
 		end_cgi_ext = 0;
-	
-
-	std::cout << "cegi _ext = " << &target[end_cgi_ext] << std::endl;
-	
-
+	else if (cgi_ext.find(CGI_EXT) != cgi_ext.end())
+		cgi_activated = true;
 	size_t first_query = target.find_first_of("?", end_cgi_ext);
-
 	if (first_query != std::string::npos) {
 		query_string = target.substr(first_query + 1, target.length() - (first_query + 1));
 
 		if (first_query != 0)
 			target = target.substr(0, first_query);
 	}
-	// else
-	// 	return ;
-	
 	if (first_query - end_cgi_ext >= 2)
 		path_info = target.substr(end_cgi_ext, first_query);
 	if (end_cgi_ext != 0)
 		target = target.substr(0, end_cgi_ext);
 }
-
 
 void	config::put_vhost_and_location_in_config(vHost & host, request & request) {
 	host_port = *host._host_port.begin();
