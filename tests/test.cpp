@@ -35,13 +35,18 @@ class CGI {
 
 public:
 
-	CGI() {}
+	CGI() {
+
+		for (int i = 0; i < 14; i++) {
+			env[i] = 0;
+		}
+	}
 	~CGI() {}
 
 	void param_CONTENT_LENGTH(request &req);
 	void param_CONTENT_TYPE(request &req);
 	void param_GATEWAY_INTERFACE();
-	void param_PATH_INFO();
+	void param_PATH_INFO(request &req);
 	void param_PATH_TRANSLATED();
 	void param_QUERY_STRING();
 	void param_REMOTE_ADDR();
@@ -120,6 +125,18 @@ char **CGI::getenv() {
 	return (this->env);
 }
 
+void CGI::param_PATH_INFO(request &req) {
+
+	return ;
+}
+
+void	CGI::param_GATEWAY_INTERFACE() {
+
+	this->GATEWAY_INTERFACE = "GATEWAY_INTERFACE=CGI/1.1";
+	this->env[2] = (char *)this->GATEWAY_INTERFACE.c_str();
+	return ;
+}
+
 void	CGI::param_CONTENT_TYPE(request &req) {
 
 	if (req.method == "GET")
@@ -150,6 +167,8 @@ void	perform_CGI(request &req) {
 
 	cgi.param_CONTENT_LENGTH(req);
 	cgi.param_CONTENT_TYPE(req);
+	cgi.param_GATEWAY_INTERFACE();
+	cgi.param_PATH_INFO(req);
 	for (int i = 0; cgi.getenv()[i] != 0; i++) {
 		std::cout << cgi.getenv()[i] << std::endl;
 	}
@@ -170,7 +189,7 @@ int main(int argc, char **argv, char **env) {
 	// req.method = "GET";
 	req.method = "POST";
 	req.body = "12345678";
-	req.header_fields.insert(std::pair<std::string, std::string>("Content-Type", "txt"));
+	req.header_fields.insert(std::pair<std::string, std::string>("Content-Type", "txt, jpg"));
 	// std::string::iterator it = REQUEST.end();
 	perform_CGI(req);
 	return (0);

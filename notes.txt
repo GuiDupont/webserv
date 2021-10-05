@@ -20,3 +20,10 @@ CGI :
 		-> faire 2 pipes + fork
 			-> un premier pipe pour écrire depuis le père dans le fils le contenu du body
 			-> un deuxième pour lire stdout du fils / lire / send (comme dans un get)
+
+
+
+---
+
+A voir avec Guillaume :
+	- comment est paramétrer PATH_INFO (nom de la variable dans config, valeur si pas de PATH, présence de / au début, etc..)
