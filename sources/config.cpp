@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/06 15:56:12 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/06 15:56:35 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,23 +70,23 @@ size_t	config::get_query_index(const std::string & target, size_t index) {
 
 void	config::set_cgi_params(request & req) {
 
-	// std::string &target = path_to_target;
-	// size_t begin_cgi_ext = 0;
-	// int cgi_activated = 0;
-	// size_t first_diez = target.find_first_of("#", 0);
-	// if (first_diez != std::string::npos && first_diez != 0)
-	// 	target = target.substr(0, first_diez - 1);
-	// begin_cgi_ext = get_cgi_ext_pos(target);
-	// size_t query_index = get_query_index(target, begin_cgi_ext);
-	// query_string = target.substr(query_index, target.size() - query_index);
-	// target = target.substr(0, query_index);
-	// size_t path_info_index = 0;
-	// if (begin_cgi_ext == std::string::npos)
-	// 	path_info_index = req.conf->_root.size();
-	// else
-	// 	path_info_index = begin_cgi_ext + strlen(CGI_EXT);	
-	// path_info = target.substr(path_info_index, target.size() - path_info_index);
-	// target = target.substr(0, path_info_index);
+	std::string &target = path_to_target;
+	size_t begin_cgi_ext = 0;
+	int cgi_activated = 0;
+	size_t first_diez = target.find_first_of("#", 0);
+	if (first_diez != std::string::npos && first_diez != 0)
+		target = target.substr(0, first_diez - 1);
+	begin_cgi_ext = get_cgi_ext_pos(target);
+	size_t query_index = get_query_index(target, begin_cgi_ext);
+	query_string = target.substr(query_index, target.size() - query_index);
+	target = target.substr(0, query_index);
+	size_t path_info_index = 0;
+	if (begin_cgi_ext == std::string::npos)
+		path_info_index = req.conf->_root.size();
+	else
+		path_info_index = begin_cgi_ext + strlen(CGI_EXT);	
+	path_info = target.substr(path_info_index, target.size() - path_info_index);
+	target = target.substr(0, path_info_index);
 
 	// if (begin_cgi_ext == std::string::npos)
 	// 	return (no_cgi_ext(req, path));
