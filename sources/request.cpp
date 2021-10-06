@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/30 16:10:59 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/06 15:38:34 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,15 @@ std::ostream & operator<<(std::ostream & o,const request & r)
 }
 
 
-request::request() : stage(0), next_chunk(-1), nb_trailer_to_received(0), code_to_send(0), close_csock(false), conf(NULL), resp(NULL), header_is_sent(false), body_is_sent(false), body_fd(0) {}
+request::request() : stage(0), next_chunk(-1), nb_trailer_to_received(0), code_to_send(0), close_csock(false), conf(NULL), resp(NULL), cgi(NULL), header_is_sent(false), body_is_sent(false), body_fd(0) {}
 
 request::request(int csock) :	stage(0), csock(csock), next_chunk(-1), nb_trailer_to_received(0), 
-								code_to_send(0), close_csock(false), conf(NULL), resp(NULL),
+								code_to_send(0), close_csock(false), conf(NULL), resp(NULL), cgi(NULL),
 								header_is_sent(false), body_is_sent(false), body_fd(0) {}
 
 request::request(int csock, std::string left) : stage(0), csock(csock), left(left), next_chunk(-1),
 												nb_trailer_to_received(0), code_to_send(0), close_csock(false),
-												conf(NULL), resp(NULL), header_is_sent(false), body_is_sent(false), body_fd(0) {}
+												conf(NULL), resp(NULL), cgi(NULL), header_is_sent(false), body_is_sent(false), body_fd(0) {}
 
 
 void request::param_trailer(std::string str) {
@@ -189,4 +189,6 @@ request::~request() {
 	conf = NULL;
 	delete resp;
 	conf = NULL;
+	delete cgi;
+	cgi = NULL;
 }

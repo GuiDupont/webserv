@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:07:25 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/04 11:54:40 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/06 15:31:17 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "utils.hpp"
 # include "config.hpp"
 # include "response.hpp"
-
+# include "CGI.hpp"
 
 
 # include <string>
@@ -30,6 +30,8 @@
 # define ENDED_REQUEST 2
 
 class config;
+
+class CGI;
 
 class request {
     
@@ -50,6 +52,7 @@ class request {
 		int									stage; // 0 = new requete, header en cours ; 1 = body en cours ; 2 = requete complete
 		config								*conf;
 		response							*resp;
+		CGI									*cgi;
 		bool								close_csock;
 		bool								request_with_body;
 		bool								body_is_sent;
