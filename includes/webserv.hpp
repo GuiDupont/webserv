@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/04 14:21:15 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/06 16:49:18 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,8 @@ class webserv {
 		std::string									_cgi_dir;
 		int											_epfd;
 		std::map<int, std::time_t>					_timeout;												
-		bool										_stop;											
+		bool										_stop;
+		struct epoll_event							*_revents;									
 		
 	public:
 		webserv(const std::string & path_config);
@@ -120,10 +121,7 @@ class webserv {
 		void	insert_status_code();
 		void	accept_new_client(int sock);
 		void	handle_pollin_csock(int csock);
-
-		
-
-	
+		struct epoll_event							*get_revents();	
 	private:
 
 

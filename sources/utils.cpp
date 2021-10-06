@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/05 13:10:18 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/06 18:03:12 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,6 +277,7 @@ void	stop_program_sigint(int signum) {
 	!close(g_webserv.get_epfd()) ? g_logger.fd << g_logger.get_timestamp() << " EPFD is closed: " << g_webserv.get_epfd() << std::endl : 
 		g_logger.fd << g_logger.get_timestamp() << " EPFD not closed: " << g_webserv.get_epfd() << " error: " << strerror(errno) << std::endl;;
 	g_logger.fd.close();
+	free(g_webserv.get_revents());
 	exit(1);
 }
 
@@ -418,10 +419,10 @@ bool					test_path_get(request & req) {
 	}
 	int fd = open(path.c_str(), O_WRONLY);
 	if (fd == -1) {
-		g_logger.fd << g_logger.get_timestamp() << "can't open " << path << " - because : " << strerror(errno) << std::endl;
+		g_logger.fd << g_logger.get_timestamp() << "can't open " << path << " - because : " << strerror(errno) << errno << std::endl;
 		if (errno == EACCES)
 			req.code_to_send = 403;
-		else if (errno == ENOENT)
+		else if (errno == ENOENT || errno == ENOTDIR)
 			req.code_to_send = 404;
 		else
 			req.code_to_send = 400;
