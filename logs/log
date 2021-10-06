@@ -1,0 +1,32 @@
+15h55m20s: ------BEGINNING OF THE PROGRAM-------
+15h55m20s: Config successful
+15h55m20s: Epoll create successful			 | epfd  = 4
+15h55m20s: Ssock created           			 | ssock = 5
+15h55m20s: Ssock added to Epoll    			 | ssock = 5
+15h55m20s: Ssock created           			 | ssock = 6
+15h55m20s: Ssock added to Epoll    			 | ssock = 6
+15h55m20s: Ssock created           			 | ssock = 7
+15h55m20s: Ssock added to Epoll    			 | ssock = 7
+15h55m20s: Ssock created           			 | ssock = 8
+15h55m20s: Ssock added to Epoll    			 | ssock = 8
+15h55m20s: Ssock created           			 | ssock = 9
+15h55m20s: Ssock added to Epoll    			 | ssock = 9
+15h55m20s: Epoll is waiting for connection
+15h55m25s: No events
+15h55m30s: No events
+15h55m35s: No events
+15h55m40s: No events
+15h55m45s: No events
+15h55m50s: No events
+15h55m55s: No events
+15h56m0s: No events
+15h56m5s: No events
+15h56m10s: No events
+15h56m15s: No events
+15h56m19s:  We are about to quit
+15h56m19s:  cssock is closed: 5
+15h56m19s:  cssock is closed: 6
+15h56m19s:  cssock is closed: 7
+15h56m19s:  cssock is closed: 8
+15h56m19s:  cssock is closed: 9
+15h56m19s:  EPFD is closed: 4
