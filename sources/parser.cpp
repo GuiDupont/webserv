@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/04 16:08:17 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/06 16:20:29 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,6 +299,8 @@ void	webserv_parser::analyse_body(request &req) {
 	std::string substr;
 	int index = 0;
 
+	g_logger.fd << g_logger.get_timestamp() + "We are parsing body from ccosk: " << req.csock << std::endl;// analyse_body(it->second); // a faire
+
 	if (req.header_fields.find("Content-Length") == req.header_fields.end() && !is_chunked(req)) {
 		req.set_request_to_ended();
 		if (req.left.size() != 0)
@@ -436,6 +438,8 @@ void	webserv_parser::analyse_header(request &req) { // fix : empty lines should 
 			req.conf = new config(req);
 			return ;
 		}
+			g_logger.fd << g_logger.get_timestamp() + "Coucou1 " << req.csock << std::endl;
+
 		if (req.HTTP_version != "HTTP/1.1" && req.HTTP_version != "HTTP/1.0") {
 			req.code_to_send = 505;
 			req.set_request_to_ended();
@@ -444,6 +448,7 @@ void	webserv_parser::analyse_header(request &req) { // fix : empty lines should 
 		}
 		while (index < req.left.size()) // parsing headerffields
 		{
+			g_logger.fd << g_logger.get_timestamp() + "Coucou2 " << req.csock << std::endl;// analyse_body(it->second); // a faire
 			std::pair<std::string, std::string> header_field;
 			std::string header_field_raw = get_word(req.left, index, std::string("\r\n"));
 			if (header_field_raw.size() == 0)
@@ -488,6 +493,7 @@ void	webserv_parser::analyse_header(request &req) { // fix : empty lines should 
 				req.code_to_send = 400;
 				req.set_request_to_ended();
 				req.conf = new config(req);
+						
 				return ;
 			}
 		}
@@ -496,7 +502,11 @@ void	webserv_parser::analyse_header(request &req) { // fix : empty lines should 
 		}
 		req.left = req.left.substr(index, req.left.size() - index);
 		req.stage = 1;
+		g_logger.fd << g_logger.get_timestamp() + "We are going to create a config " << req.csock << std::endl;// analyse_body(it->second); // a faire
+
 		req.conf = new config(req);
+		g_logger.fd << g_logger.get_timestamp() + "We are done parsing header from ccosk: " << req.csock << std::endl;// analyse_body(it->second); // a faire
+
 		analyse_body(req);
 	}
 }

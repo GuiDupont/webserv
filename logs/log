@@ -1,32 +1,90 @@
-15h55m20s: ------BEGINNING OF THE PROGRAM-------
-15h55m20s: Config successful
-15h55m20s: Epoll create successful			 | epfd  = 4
-15h55m20s: Ssock created           			 | ssock = 5
-15h55m20s: Ssock added to Epoll    			 | ssock = 5
-15h55m20s: Ssock created           			 | ssock = 6
-15h55m20s: Ssock added to Epoll    			 | ssock = 6
-15h55m20s: Ssock created           			 | ssock = 7
-15h55m20s: Ssock added to Epoll    			 | ssock = 7
-15h55m20s: Ssock created           			 | ssock = 8
-15h55m20s: Ssock added to Epoll    			 | ssock = 8
-15h55m20s: Ssock created           			 | ssock = 9
-15h55m20s: Ssock added to Epoll    			 | ssock = 9
-15h55m20s: Epoll is waiting for connection
-15h55m25s: No events
-15h55m30s: No events
-15h55m35s: No events
-15h55m40s: No events
-15h55m45s: No events
-15h55m50s: No events
-15h55m55s: No events
-15h56m0s: No events
-15h56m5s: No events
-15h56m10s: No events
-15h56m15s: No events
-15h56m19s:  We are about to quit
-15h56m19s:  cssock is closed: 5
-15h56m19s:  cssock is closed: 6
-15h56m19s:  cssock is closed: 7
-15h56m19s:  cssock is closed: 8
-15h56m19s:  cssock is closed: 9
-15h56m19s:  EPFD is closed: 4
+18h0m58s: ------BEGINNING OF THE PROGRAM-------
+18h0m58s: Config successful
+18h0m58s: Epoll create successful			 | epfd  = 4
+18h0m58s: Ssock created           			 | ssock = 5
+18h0m58s: Ssock added to Epoll    			 | ssock = 5
+18h0m58s: Ssock created           			 | ssock = 6
+18h0m58s: Ssock added to Epoll    			 | ssock = 6
+18h0m58s: Ssock created           			 | ssock = 7
+18h0m58s: Ssock added to Epoll    			 | ssock = 7
+18h0m58s: Ssock created           			 | ssock = 8
+18h0m58s: Ssock added to Epoll    			 | ssock = 8
+18h0m58s: Ssock created           			 | ssock = 9
+18h0m58s: Ssock added to Epoll    			 | ssock = 9
+18h0m58s: Epoll is waiting for connection
+18h1m3s: No events
+18h1m5s: Epoll noticed new events     	| nb    = 1
+18h1m5s: We accepted a new client from ssock 8, new csock is = 10
+18h1m5s: Epoll noticed new events     	| nb    = 1
+18h1m5s: We accepted a new client from ssock 8, new csock is = 11
+18h1m5s: Epoll noticed new events     	| nb    = 1
+18h1m5s: Epoll_wait identified an EPOLLIN on csock: 10
+18h1m5s: New request has been created from csock: 10
+18h1m5s: We are parsing header from ccosk: 10
+18h1m5s: Coucou1 10
+18h1m5s: Coucou2 10
+18h1m5s: Coucou2 10
+18h1m5s: Coucou2 10
+18h1m5s: Coucou2 10
+18h1m5s: Coucou2 10
+18h1m5s: Coucou2 10
+18h1m5s: Coucou2 10
+18h1m5s: Coucou2 10
+18h1m5s: Coucou2 10
+18h1m5s: Coucou2 10
+18h1m5s: Coucou2 10
+18h1m5s: Coucou2 10
+18h1m5s: Coucou2 10
+18h1m5s: Coucou2 10
+18h1m5s: Coucou2 10
+18h1m5s: We are going to create a config 10
+18h1m5s: after associated vhost: 
+18h1m5s: Stat on /mnt/nfs/homes/gdupont/Desktop/webserv/portable/cgi.php/cgi.php/pathinfor/de/mes/couillaiski?jeanluc provides this error Not a directory
+18h1m5s: after vhost config: 
+18h1m5s:  Setting CGI params
+18h1m5s: We are done parsing header from ccosk: 10
+18h1m5s: We are parsing body from ccosk: 10
+18h1m5s: We are done parsing the req from ccosk: 10
+18h1m5s: Epoll noticed new events     	| nb    = 1
+18h1m5s: Epoll_wait identified an EPOLLOUT on csock: 10
+18h1m5s: Stat on /mnt/nfs/homes/gdupont/Desktop/webserv/portable/cgi.php/cgi.php/pathinfor/de/mes/couillaiski provides this error Not a directory
+18h1m5s: can't open /mnt/nfs/homes/gdupont/Desktop/webserv/portable/cgi.php/cgi.php/pathinfor/de/mes/couillaiski - because : Not a directory20
+18h1m5s: We are going to respond a request with code : 401
+18h1m5s: We just sent an header
+18h1m8s: No events
+18h1m13s: No events
+18h1m18s: No events
+18h1m23s: No events
+18h1m28s: No events
+18h1m33s: No events
+18h1m38s: No events
+18h1m43s: No events
+18h1m48s: No events
+18h1m53s: No events
+18h1m58s: No events
+18h2m3s: No events
+18h2m8s: No events
+18h2m9s: Epoll noticed new events     	| nb    = 1
+18h2m9s: Epoll_wait identified an EPOLLIN on csock: 11
+18h2m9s: New request has been created from csock: 11
+While using recv on csock 11 we received : 0
+18h2m13s: No events
+18h2m18s: No events
+18h2m23s: No events
+18h2m28s: No events
+18h2m33s: No events
+18h2m38s: No events
+18h2m43s: No events
+18h2m48s: No events
+18h2m53s: No events
+18h2m58s: No events
+18h3m3s: No events
+18h3m8s: No events
+18h3m13s: No events
+18h3m17s:  We are about to quit
+18h3m17s:  cssock is closed: 5
+18h3m17s:  cssock is closed: 6
+18h3m17s:  cssock is closed: 7
+18h3m17s:  cssock is closed: 8
+18h3m17s:  cssock is closed: 9
+18h3m17s:  EPFD is closed: 4
