@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:07:25 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/06 15:31:17 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/06 19:31:19 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 # include "response.hpp"
 # include "CGI.hpp"
 
-
+# include <sys/types.h>
+# include <sys/wait.h>
 # include <string>
 # include <map>
 # include <list>
@@ -87,6 +88,7 @@ class request {
 		void	delete_directory(std::string & path, request & req);
 		void	delete_file(std::string & path, request & req);
 		void	write_body_inside_file();
+		void	initiate_CGI();
 
 		
 		

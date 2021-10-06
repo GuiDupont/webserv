@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/06 17:57:09 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/06 19:45:15 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	config::set_cgi_params(request & req) {
 	if (query_index != target.size())
 		query_string = target.substr(query_index + 1, target.size() - (query_index + 1));
 	target = target.substr(0, query_index);
-	if (begin_cgi_ext == std::string::npos || cgi_ext.find(CGI_EXT) == cgi_ext.end())
+	if (begin_cgi_ext == std::string::npos || cgi_ext.find(CGI_EXT) == cgi_ext.end() || method & DELETE)
 		return;
 	size_t path_info_index = 0;
 	if (begin_cgi_ext == std::string::npos)
@@ -96,8 +96,7 @@ void	config::set_cgi_params(request & req) {
 	path_info = target.substr(path_info_index, target.size() - path_info_index);
 	path_info = _root + path_info;
 	target = target.substr(0, path_info_index);
-	if (begin_cgi_ext == std::string::npos)
-		path_info = "";
+	cgi_activated = true;
 	size_t begin_of_script_name = _root.size();
 	script_name = target.substr(begin_of_script_name, target.size() - begin_of_script_name);
 	script_name = _location + script_name;

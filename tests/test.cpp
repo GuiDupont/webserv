@@ -248,25 +248,25 @@ void	perform_CGI(request &req) {
 	// for (int i = 0; cgi.getenv()[i] != 0; i++) {
 	// 	std::cout << cgi.getenv()[i] << std::endl;
 	// }
-	if (req.method == "GET") {
-		// pipe (rajouter variable pipefd[2])
-		if retour == -1 => a voir 
-		// fork (rajouter variable pid_t)
-		if retour == -1 => à voir
-		if (var == 0) //(fils)
-		{
-			close(pipefd[0]);
-			dup2(pipefd[1], 1);
-			close(pipefd[1])
-			execve => si -1, à voir
-		}
-		if (var != 0) //(père)
-		{
-			close(pipefd[1]);
-			lire pipefd[0] puis send => directement ? on repasse par poll?
-			rajouter le fait qu il faille changer le status en HTTP
-		}
-	}
+	// if (req.method == "GET") {
+	// 	// pipe (rajouter variable pipefd[2])
+	// 	if retour == -1 => a voir
+	// 	// fork (rajouter variable pid_t)
+	// 	if retour == -1 => à voir
+	// 	if (var == 0) //(fils)
+	// 	{
+	// 		close(pipefd[0]);
+	// 		dup2(pipefd[1], 1);
+	// 		close(pipefd[1])
+	// 		execve => si -1, à voir
+	// 	}
+	// 	if (var != 0) //(père)
+	// 	{
+	// 		close(pipefd[1]);
+	// 		lire pipefd[0] puis send => directement ? on repasse par poll?
+	// 		rajouter le fait qu il faille changer le status en HTTP
+	// 	}
+	// }
 
 
 
@@ -275,15 +275,15 @@ void	perform_CGI(request &req) {
 
 int main(int argc, char **argv, char **env) {
 
-	char arg1[] = "/usr/bin/php";
+	char arg1[] = "";
 	// char arg1[] = "ubuntu_cgi_tester";
 	std::string s1 = "/usr/bin/php";
 	// std::string s1 = "ubuntu_cgi_tester";
 	std::string s2 = "hello.php";
 	char *arg2[] = {(char *)s1.c_str(), (char *)s2.c_str(), NULL};
 	// char *arg2[] = {"/usr/bin/php", "hello.php", NULL};
-	// execve(arg1, arg2, NULL);
-
+	int ret = execve(arg1, arg2, NULL);
+	std::cout << ret << std::endl;
 	request req;
 	std::string REQUEST = "/hello.php";
 

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/06 16:49:56 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/06 19:42:30 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,10 @@ void	webserv::answer_to_request(int csock) {
 
 	if (req.conf->validity_checked == false) {
 		req.control_config_validity();
-		req.update_code_and_body();
+		req.update_code_and_body(); // a voir si on peut pas bouger pour retomber sur les erreurs liees aux fonctions du CGI
 	}
-
+	if (req.conf->local_actions_done == false)
+		req.do_local_actions();
 	req.response_request();
 	if (req.body_is_sent == true) {
 		if (req.close_csock == true)
@@ -142,8 +143,7 @@ bool	request::common_validity_check() {
 }
 
 void	request::response_request() {
-	if (conf->local_actions_done == false)
-		do_local_actions();
+
 	if (conf->local_actions_done == true && header_is_sent == false) {
 		g_logger.fd << g_logger.get_timestamp() << "We are going to respond a request with code : " << code_to_send << std::endl;
 	 	std::string header = response::generate_header(*this);
@@ -156,7 +156,10 @@ void	request::response_request() {
 }
 
 void	request::do_local_actions() {
-	if (conf->method & GET) {
+	if (conf->cgi_activated == true) { // ne pas mettre true a cgi_activated dans config
+		initiate_CGI();
+	}
+	else if (conf->method & GET) {
 		conf->local_actions_done = true;
 		code_to_send = 200;
 	}

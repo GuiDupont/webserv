@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/06 15:38:34 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/06 19:50:54 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,4 +191,64 @@ request::~request() {
 	conf = NULL;
 	delete cgi;
 	cgi = NULL;
+}
+
+void request::initiate_CGI() {
+
+	if (cgi == NULL) {
+		cgi = new CGI();
+		cgi->setCgi_stage("WRITEIN");
+		cgi->param_CONTENT_LENGTH(*this);
+		cgi->param_CONTENT_TYPE(*this);
+		cgi->param_GATEWAY_INTERFACE();
+		cgi->param_PATH_INFO(*this);
+		cgi->param_PATH_TRANSLATED(*this);
+		cgi->param_QUERY_STRING(*this);
+		cgi->param_REMOTE_ADDR();
+		cgi->param_REQUEST_METHOD(*this);
+		cgi->param_SCRIPT_NAME(*this);
+		cgi->param_SERVER_NAME();
+		cgi->param_SERVER_PORT();
+		cgi->param_SERVER_PROTOCOL();
+		cgi->param_SERVER_SOFTWARE();
+		if (method == "GET") {
+			int ret = pipe(cgi->pipefd);
+			if (ret == -1) {
+				code_to_send = 500; // a voir/tester avec suite du programme
+				conf->local_actions_done = true;
+				return ;
+			}
+			cgi->pid = fork();
+			if (cgi->pid == -1) {
+				code_to_send = 500; // a voir/tester avec suite du programme
+				conf->local_actions_done = true;
+				return ;
+			}
+			if (cgi->pid == 0) //(fils)
+			{
+				close(cgi->pipefd[0]);
+				dup2(cgi->pipefd[1], 1);
+				close(cgi->pipefd[1]);
+				char *arg2[] = {(char *)conf->_cgi_dir.c_str(), (char *)conf->path_to_target.c_str(), NULL};
+				ret = execve(conf->_cgi_dir.c_str(), arg2, cgi->getenv());
+				if (ret == -1)
+					exit(1);
+			}
+			if (cgi->pid != 0) //(daron)
+			{
+				waitpid(cgi->pid, &cgi->pid_status, WNOHANG);
+				if (WEXITSTATUS(cgi->pid_status) != 0) {
+					code_to_send = 500; // a voir/tester avec suite du programme
+					conf->local_actions_done = true;
+					return ;
+				}
+				conf->local_actions_done = true;
+				cgi->setCgi_stage("readfrom");
+				return ;
+			}
+		}
+		if (method == "POST") {
+
+	}		
+	return ;
 }

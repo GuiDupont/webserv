@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 15:34:17 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/06 15:36:27 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/06 18:46:52 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void CGI::param_SERVER_PROTOCOL() {
 
 void CGI::param_SERVER_PORT() {
 
-	this->SERVER_PORT = "SERVER_PORT=0"; // a voir si possible d'avoir bon port
+	this->SERVER_PORT = "SERVER_PORT=0";
 	this->env[10] = (char *)this->SERVER_PORT.c_str();
 	return ;
 }
@@ -60,7 +60,7 @@ void CGI::param_SERVER_NAME() {
 
 void CGI::param_SCRIPT_NAME(request &req) {
 
-	// this->SCRIPT_NAME = "SCRIPT_NAME=" + req.conf.?????; // a voir avec Guillaume si paramétré
+	this->SCRIPT_NAME = "SCRIPT_NAME=" + req.conf->script_name;
 	this->env[8] = (char *)this->SCRIPT_NAME.c_str();
 	return ;
 }
@@ -74,7 +74,7 @@ void CGI::param_REQUEST_METHOD(request &req) {
 
 void CGI::param_REMOTE_ADDR() {
 
-	this->REMOTE_ADDR = "REMOTE_ADDR=0.0.0.0"; // a voir si possible d'avoir bonne IP
+	this->REMOTE_ADDR = "REMOTE_ADDR=0.0.0.0";
 	this->env[6] = (char *)this->REMOTE_ADDR.c_str();
 	return ;
 }
@@ -82,21 +82,21 @@ void CGI::param_REMOTE_ADDR() {
 
 void CGI::param_QUERY_STRING(request &req) {
 
-	// this->QUERY_STRING = "QUERY_STRING=" + this->conf->query_string; // à voir avec Guillaume et test avec branch main
+	this->QUERY_STRING = "QUERY_STRING=" + req.conf->query_string;
 	this->env[5] = (char *)this->QUERY_STRING.c_str();
 	return ;
 }
 
 void CGI::param_PATH_TRANSLATED(request &req) {
 
-	// this->PATH_TRANSLATED = "PATH_TRANSLATED=" + this->conf->path_to_target; // à voir avec Guillaume et test avec branch main
+	this->PATH_TRANSLATED = "PATH_TRANSLATED=" + req.conf->path_to_target;
 	this->env[4] = (char *)this->PATH_TRANSLATED.c_str();
 	return ;
 }
 
 void CGI::param_PATH_INFO(request &req) {
 
-	//this->PATH_INFO = "PATH_INFO=" + this->conf->path_info; // à voir avec Guillaume et test avec branch main
+	this->PATH_INFO = "PATH_INFO=" + req.conf->path_info;
 	this->env[3] = (char *)this->PATH_INFO.c_str();
 	return ;
 }
@@ -127,7 +127,13 @@ void	CGI::param_CONTENT_LENGTH(request &req) {
 	if (req.method == "GET")
 		this->CONTENT_LENGTH = "CONTENT_LENGTH=";
 	else
-		this->CONTENT_LENGTH = "CONTENT_LENGTH=" + ft_itos(req.body.size());
+		this->CONTENT_LENGTH = "CONTENT_LENGTH=" + ft_itos(req.body_request.size());
 	this->env[0] = (char *)this->CONTENT_LENGTH.c_str();
+	return ;
+}
+
+void CGI::setCgi_stage(std::string s) {
+	
+	cgi_stage = s;
 	return ;
 }
