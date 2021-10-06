@@ -4,3 +4,5 @@
 - cas de query dans une requete -> presence d un "?" dans la request line ?
 - gerer les cas des lignes vides avant new requete
 - rajouter la fonction pour forcer l utilisation des sockets ?
+- vérifier si tout fonctionne pour HTTP 1.1/1.0 (impact sur CGI)
+- faire une vérification de la longueur du body à write / content length / cgi suivant les /r/n

@@ -47,11 +47,11 @@ public:
 	void param_CONTENT_TYPE(request &req);
 	void param_GATEWAY_INTERFACE();
 	void param_PATH_INFO(request &req);
-	void param_PATH_TRANSLATED();
-	void param_QUERY_STRING();
+	void param_PATH_TRANSLATED(request &req);
+	void param_QUERY_STRING(request &req);
 	void param_REMOTE_ADDR();
-	void param_REQUEST_METHOD();
-	void param_SCRIPT_NAME();
+	void param_REQUEST_METHOD(request &req);
+	void param_SCRIPT_NAME(request &req);
 	void param_SERVER_NAME();
 	void param_SERVER_PORT();
 	void param_SERVER_PROTOCOL();
@@ -64,7 +64,7 @@ private:
 	std::string CONTENT_TYPE; // seulement si present dans client request
 	std::string GATEWAY_INTERFACE; // = "GATEWAY_INTERFACE=CGI/1.1";
 	std::string PATH_INFO; // = ce qui suit le nom du script/fichier
-	std::string PATH_TRANSLATED; // obligatoire ? = transformation in server document
+	std::string PATH_TRANSLATED; // = transformation in server document
 	std::string QUERY_STRING; // = ce qui suit le '?' ou bien ""
 	std::string REMOTE_ADDR; // obligatoire ? = host
 	std::string REQUEST_METHOD; // GET ou POST
@@ -125,8 +125,74 @@ char **CGI::getenv() {
 	return (this->env);
 }
 
+void CGI::param_SERVER_SOFTWARE() {
+
+	this->SERVER_SOFTWARE = "SERVER_SOFTWARE=42webserv";
+	this->env[12] = (char *)this->SERVER_SOFTWARE.c_str();
+	return ;
+}
+
+void CGI::param_SERVER_PROTOCOL() {
+
+	this->SERVER_PROTOCOL = "SERVER_PROTOCOL=HTTP/1.1";
+	this->env[11] = (char *)this->SERVER_PROTOCOL.c_str();
+	return ;
+}
+
+void CGI::param_SERVER_PORT() {
+
+	this->SERVER_PORT = "SERVER_PORT=0"; // a voir si possible d'avoir bon port
+	this->env[10] = (char *)this->SERVER_PORT.c_str();
+	return ;
+}
+
+void CGI::param_SERVER_NAME() {
+
+	this->SERVER_NAME = "SERVER_NAME=42webserv";
+	this->env[9] = (char *)this->SERVER_NAME.c_str();
+	return ;
+}
+
+void CGI::param_SCRIPT_NAME(request &req) {
+
+	// this->SCRIPT_NAME = "SCRIPT_NAME=" + req.conf.?????; // a voir avec Guillaume si paramétré
+	this->env[8] = (char *)this->SCRIPT_NAME.c_str();
+	return ;
+}
+
+void CGI::param_REQUEST_METHOD(request &req) {
+
+	this->REQUEST_METHOD = "REQUEST_METHOD=" + req.method;
+	this->env[7] = (char *)this->REQUEST_METHOD.c_str();
+	return ;
+}
+
+void CGI::param_REMOTE_ADDR() {
+
+	this->REMOTE_ADDR = "REMOTE_ADDR=0.0.0.0"; // a voir si possible d'avoir bonne IP
+	this->env[6] = (char *)this->REMOTE_ADDR.c_str();
+	return ;
+}
+
+
+void CGI::param_QUERY_STRING(request &req) {
+
+	// this->QUERY_STRING = "QUERY_STRING=" + this->conf->query_string; // à voir avec Guillaume et test avec branch main
+	this->env[5] = (char *)this->QUERY_STRING.c_str();
+	return ;
+}
+
+void CGI::param_PATH_TRANSLATED(request &req) {
+
+	// this->PATH_TRANSLATED = "PATH_TRANSLATED=" + this->conf->path_to_target; // à voir avec Guillaume et test avec branch main
+	this->env[4] = (char *)this->PATH_TRANSLATED.c_str();
+	return ;
+}
+
 void CGI::param_PATH_INFO(request &req) {
 
+	//this->PATH_INFO = "PATH_INFO=" + this->conf->path_info; // à voir avec Guillaume et test avec branch main
+	this->env[3] = (char *)this->PATH_INFO.c_str();
 	return ;
 }
 
@@ -163,21 +229,56 @@ void	CGI::param_CONTENT_LENGTH(request &req) {
 
 void	perform_CGI(request &req) {
 
-	CGI cgi;
+	// if (new_CGI == 0) // flag à paramétrer et à rajouter dans req
+	CGI cgi; // ajouter une variable CGI a requête + faire un new
 
 	cgi.param_CONTENT_LENGTH(req);
 	cgi.param_CONTENT_TYPE(req);
 	cgi.param_GATEWAY_INTERFACE();
 	cgi.param_PATH_INFO(req);
-	for (int i = 0; cgi.getenv()[i] != 0; i++) {
-		std::cout << cgi.getenv()[i] << std::endl;
+	cgi.param_PATH_TRANSLATED(req);
+	cgi.param_QUERY_STRING(req);
+	cgi.param_REMOTE_ADDR();
+	cgi.param_REQUEST_METHOD(req);
+	cgi.param_SCRIPT_NAME(req);
+	cgi.param_SERVER_NAME();
+	cgi.param_SERVER_PORT();
+	cgi.param_SERVER_PROTOCOL();
+	cgi.param_SERVER_SOFTWARE();
+	// for (int i = 0; cgi.getenv()[i] != 0; i++) {
+	// 	std::cout << cgi.getenv()[i] << std::endl;
+	// }
+	if (req.method == "GET") {
+		// pipe (rajouter variable pipefd[2])
+		if retour == -1 => a voir 
+		// fork (rajouter variable pid_t)
+		if retour == -1 => à voir
+		if (var == 0) //(fils)
+		{
+			close(pipefd[0]);
+			dup2(pipefd[1], 1);
+			close(pipefd[1])
+			execve => si -1, à voir
+		}
+		if (var != 0) //(père)
+		{
+			close(pipefd[1]);
+			lire pipefd[0] puis send => directement ? on repasse par poll?
+			rajouter le fait qu il faille changer le status en HTTP
+		}
 	}
+
+
+
+	// if (new_CGI == 1)
 }
 
 int main(int argc, char **argv, char **env) {
 
 	char arg1[] = "/usr/bin/php";
+	// char arg1[] = "ubuntu_cgi_tester";
 	std::string s1 = "/usr/bin/php";
+	// std::string s1 = "ubuntu_cgi_tester";
 	std::string s2 = "hello.php";
 	char *arg2[] = {(char *)s1.c_str(), (char *)s2.c_str(), NULL};
 	// char *arg2[] = {"/usr/bin/php", "hello.php", NULL};

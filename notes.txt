@@ -27,3 +27,6 @@ CGI :
 
 A voir avec Guillaume :
 	- comment est paramétrer PATH_INFO (nom de la variable dans config, valeur si pas de PATH, présence de / au début, etc..)
+	- idem pour PATH_TRANSLATED
+	- idem pour QUERY_STRING
+	- pareil pour script name
