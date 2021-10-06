@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/05 13:26:22 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/06 15:37:11 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,30 +59,65 @@ static size_t get_cgi_ext_pos(const std::string & target) {
 	return (std::string::npos);
 }
 
+
+void	config::no_cgi_ext(request & req, std::string & target) {
+	size_t first_query = target.find_first_of("?", begin_cgi_ext);
+	if (first_query == std::string::npos)
+		return ;
+	
+	query_string = target.substr(first_query + 1, target.length() - (first_query + 1));
+	target = target.substr(0, first_query);
+}
+
+size_t	config::get_query_index(const std::string & target, size_t index) {
+	if (index == std::string::npos)
+		index = 0;
+	size_t index_query = target.find_first_of("?", index);
+	if (index_query == std::string::npos)
+		return (target.size() - 1);
+	return (index_query);
+}
+
 void	config::set_cgi_params(request & req) {
 
 	std::string &target = path_to_target;
-	size_t end_cgi_ext = 0;
+	size_t begin_cgi_ext = 0;
 	int cgi_activated = 0;
 	size_t first_diez = target.find_first_of("#", 0);
 	if (first_diez != std::string::npos && first_diez != 0)
 		target = target.substr(0, first_diez - 1);
-	end_cgi_ext = get_cgi_ext_pos(target);
-	if (end_cgi_ext == std::string::npos)
-		end_cgi_ext = 0;
-	else if (cgi_ext.find(CGI_EXT) != cgi_ext.end())
-		cgi_activated = true;
-	size_t first_query = target.find_first_of("?", end_cgi_ext);
-	if (first_query != std::string::npos) {
-		query_string = target.substr(first_query + 1, target.length() - (first_query + 1));
+	begin_cgi_ext = get_cgi_ext_pos(target);
+	size_t query_index = get_query_index(target, begin_cgi_ext);
+	query_string = path.substr(query_index, path.size() - query_index);
+	target = target.substr(0, query_index);
+	size_t path_info_index = 0;
+	if (begin_cgi_ext == std::string::npos)
+		path_info_index = req.conf->_root.size();
+	else
+		path_info_index = begin_cgi_ext + strlen(CGI_EXT);	
+	path_info = target.substr(path_info_index, target.size() - path_info_index);
+	target = target.substr(0, path_info_index);
 
-		if (first_query != 0)
-			target = target.substr(0, first_query);
-	}
-	if (first_query - end_cgi_ext >= 2)
-		path_info = target.substr(end_cgi_ext, first_query);
-	if (end_cgi_ext != 0)
-		target = target.substr(0, end_cgi_ext);
+	// if (begin_cgi_ext == std::string::npos)
+	// 	return (no_cgi_ext(req, path));
+	
+
+
+	// if (cgi_ext.find(CGI_EXT) != cgi_ext.end())
+	// 	cgi_activated = true;
+	// size_t first_query = target.find_first_of("?", begin_cgi_ext);
+	// if (first_query != std::string::npos) {
+	// 	query_string = target.substr(first_query + 1, target.length() - (first_query + 1));
+	// 	if (first_query != 0)
+	// 		target = target.substr(0, first_query);
+	// }
+	// // else
+	// if (first_query - begin_cgi_ext >= 2)
+	// 	path_info = target.substr(begin_cgi_ext, first_query);
+	// if (begin_cgi_ext != 0)
+	// 	target = target.substr(0, begin_cgi_ext);
+	// if (begin_cgi_ext != std::string::npos)
+	// 	path_info += req.conf->_root;
 }
 
 void	config::put_vhost_and_location_in_config(vHost & host, request & request) {

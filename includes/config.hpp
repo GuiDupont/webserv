@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/04 16:31:53 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/06 15:14:42 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ class config {
 		std::string									query_string;
 		std::string									path_info;
 		bool										cgi_activated;
+		
 
 		
 		
@@ -66,6 +67,8 @@ class config {
 		std::string						update_path_to_target_with_root(const location & location);
 		vHost						&	get_associated_vhost(request & request);
 		void							set_cgi_params(request & request);
+		size_t							get_query_index(const std::string & target, size_t index);
+
 
 
 	private:
