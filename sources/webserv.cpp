@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/29 19:01:27 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/06 16:49:56 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,16 @@ void webserv::set_hosts() {
 void	webserv::wait_for_connection() {
 	g_logger.fd << g_logger.get_timestamp() << LOG_WAIT_CO << std::endl;
 	time_t t = time(0);
-	struct epoll_event *revents;
 	SOCKADDR_IN csin;
 	socklen_t crecsize = sizeof(csin);
-	revents = (struct epoll_event *)calloc(64, sizeof(*revents)); // verifier quelle valeur mettre
+	_revents = (struct epoll_event *)calloc(64, sizeof(*_revents)); // verifier quelle valeur mettre
 	char buffer[100] = "";
 	struct epoll_event ev;
 	
 	while (1)
 	{
 		control_time_out();
-		int nsfd = epoll_wait(this->_epfd, revents, 64, 0);
+		int nsfd = epoll_wait(this->_epfd, _revents, 64, 0);
 		if (nsfd)
 			g_logger.fd << g_logger.get_timestamp() << LOG_EPOLL_EVENT << nsfd << std::endl;
 		else if (nsfd == -1)
@@ -45,12 +44,12 @@ void	webserv::wait_for_connection() {
 			g_logger.fd << g_logger.get_timestamp() << "No events" << std::endl;
 
 		for (int i = 0; i < nsfd; i++) {
-			if (revents[i].events & EPOLLIN && ft_is_ssock(revents[i].data.fd) && _stop == false)
-				accept_new_client(revents[i].data.fd);
-			else if (revents[i].events & EPOLLIN && (!ft_is_ssock(revents[i].data.fd)) && _stop == false) // we have something to read
-				read_from_csock(revents[i].data.fd);
-			else if (revents[i].events & EPOLLOUT && (!ft_is_ssock(revents[i].data.fd)))
-				answer_to_request(revents[i].data.fd);
+			if (_revents[i].events & EPOLLIN && ft_is_ssock(_revents[i].data.fd) && _stop == false)
+				accept_new_client(_revents[i].data.fd);
+			else if (_revents[i].events & EPOLLIN && (!ft_is_ssock(_revents[i].data.fd)) && _stop == false) // we have something to read
+				read_from_csock(_revents[i].data.fd);
+			else if (_revents[i].events & EPOLLOUT && (!ft_is_ssock(_revents[i].data.fd)))
+				answer_to_request(_revents[i].data.fd);
 		}
 	}
 }
@@ -405,11 +404,14 @@ void webserv::read_from_csock(int csock) {
 		g_logger.fd << g_logger.get_timestamp() << "We can't match " << csock << " to any VHOST" << " that SHOULD NOT HAPPEN" << std::endl;
 		return ;
 	}
+
 	it->second.left += c_buffer;
 	if (it->second.stage == 0)
 		g_parser.analyse_header(it->second);
 	else if (it->second.stage == 1)
 		g_parser.analyse_body(it->second);
+	g_logger.fd << g_logger.get_timestamp() + "We are done parsing the req from ccosk: " << csock << std::endl;
+
 }
 
 std::string		&webserv::get_root() { return (_root); }
@@ -472,3 +474,7 @@ void	webserv::insert_status_code() {
 	status_code.insert(std::make_pair(504, "504 Gateway Timeout"));
 	status_code.insert(std::make_pair(505, "505 HTTP Version Not Supported"));
 }
+
+struct epoll_event				*webserv::get_revents(){
+	return (_revents);
+}	
