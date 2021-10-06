@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 12:51:13 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/28 14:34:19 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/05 13:10:51 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@
 # include <sys/stat.h>
 # include <unistd.h>
 # include <map>
+# include <ftw.h>
+# include <stdlib.h>
+# include <stdint.h>
 
 # define INVALID_SOCKET -1 // a bouger ?
 # define SOCKET_ERROR -1 // a bouger ?
@@ -74,6 +77,11 @@ bool        					test_path_get(request & req);
 bool        					test_path_delete(request & req);
 bool        					test_path_post(request & req);
 bool                            true_one_time_per_x_secondes(int x);
+bool                            is_valid_file(std::string & path);
+bool							is_symlink(std::string & path);
+bool							is_file(std::string & path);
+
+
 
 
 #endif

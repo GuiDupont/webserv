@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/01 15:07:58 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/06 13:24:28 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -324,8 +324,8 @@ void	webserv_parser::analyse_body(request &req) {
 						}
 					}
 					else {
-						req.body += req.left.substr(0, req.next_chunk);
-						if (req.body.size() > req.conf->_client_max_body_size) {
+						req.body_request += req.left.substr(0, req.next_chunk);
+						if (req.body_request.size() > req.conf->client_max_body_size) {
 								req.code_to_send = 413;
 								req.set_request_to_ended();
 								return ;
@@ -393,22 +393,22 @@ void	webserv_parser::analyse_body(request &req) {
 	}
 	else if (req.header_fields.find("Content-Length") != req.header_fields.end()) {
 		size_t length = std::atoi(req.header_fields.find("Content-Length")->second.c_str());
-		req.body += req.left;
+		req.body_request += req.left;
 		req.left.clear();
-		if (req.body.size() > req.conf->_client_max_body_size) {
+		if (req.body_request.size() > req.conf->client_max_body_size) {
 			req.code_to_send = 413;
 			req.set_request_to_ended();
 			return ;
 		}
-		if (req.body.size() >= length) {
-			req.body = req.body.substr(0, length);
+		if (req.body_request.size() >= length) {
+			req.body_request = req.body_request.substr(0, length);
 			req.set_request_to_ended();
 			req.left.clear();
 		}
 	}
 }
 
-void	webserv_parser::analyse_header(request &req) {
+void	webserv_parser::analyse_header(request &req) { // fix : empty lines should not be an issue
 	g_logger.fd << g_logger.get_timestamp() + "We are parsing header from ccosk: " << req.csock << std::endl;// analyse_body(it->second); // a faire
 	if (req.left.find(std::string("\r\n\r\n"), 0) != std::string::npos) {
 		int index = 0;
@@ -437,8 +437,7 @@ void	webserv_parser::analyse_header(request &req) {
 			req.conf = new config(req);
 			return ;
 		}
-		if (req.HTTP_version != "HTTP/1.1" && req.HTTP_version != "HTTP/1.0")
-		{
+		if (req.HTTP_version != "HTTP/1.1" && req.HTTP_version != "HTTP/1.0") {
 			req.code_to_send = 505;
 			req.set_request_to_ended();
 			req.conf = new config(req);
@@ -479,7 +478,7 @@ void	webserv_parser::analyse_header(request &req) {
 			req.header_fields.insert(header_field);
 		}
 		if (req.header_fields.find("Host") == req.header_fields.end()) {
-			g_logger << "OK pb de Host sur csock : " << ft_itos(req.csock);
+			g_logger.fd << g_logger.get_timestamp() << "Pb de Host sur csock : " << req.csock << std::endl;
 			req.code_to_send = 400;
 			req.set_request_to_ended();
 			req.conf = new config(req);
@@ -497,7 +496,6 @@ void	webserv_parser::analyse_header(request &req) {
 			req.param_trailer(req.header_fields.find("Trailer")->second);
 		}
 		req.left = req.left.substr(index, req.left.size() - index);
-		g_logger << "POSITION DU LEFT APRES HEADER = " + req.left;
 		req.stage = 1;
 		req.conf = new config(req);
 		analyse_body(req);

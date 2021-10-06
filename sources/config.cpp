@@ -6,25 +6,23 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 14:57:42 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/05 13:26:22 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "config.hpp"
 
 
-config::config(void) :  validity_checked(true), return_activated(false), local_actions_done(false) { }
+config::config(void) :  validity_checked(true), return_activated(false), local_actions_done(false), cgi_activated(false) { }
 
-config::config(request & request) : validity_checked(false), return_activated(false) {
+config::config(request & request) : validity_checked(false), return_activated(false), local_actions_done(false), cgi_activated(false) {
 	if (request.method == "GET")
 		method = GET;
-	else if (request.method == "POST") {
+	else if (request.method == "POST")
 		method = POST;
-		local_actions_done = true;
-	}
 	else if (request.method == "DELETE")
 		method = DELETE;
-	_client_max_body_size = (g_webserv._client_max_body_size  == -1 ? 0: g_webserv._client_max_body_size);
+	client_max_body_size = (g_webserv._client_max_body_size  == -1 ? 0: g_webserv._client_max_body_size);
 	_error_pages = g_webserv._error_pages;
 	_upload_pass = g_webserv._upload_pass;
 	_root = g_webserv._root;
@@ -35,14 +33,62 @@ config::config(request & request) : validity_checked(false), return_activated(fa
 	int first = 1;
 	vHost chosen = get_associated_vhost(request);
 	put_vhost_and_location_in_config(chosen, request);
-	_client_max_body_size *= 1000000;
-	g_logger.fd << g_logger.get_timestamp() << *this;
+	client_max_body_size *= 1000000;
+	set_cgi_params(request);
+	//g_logger.fd
+	std::cout << g_logger.get_timestamp() << *this << std::endl;
+	
+}
+
+static size_t get_cgi_ext_pos(const std::string & target) {
+	size_t start_search = 0;
+	size_t start_cgi_ext = 0;
+
+	while (1) {
+		start_cgi_ext = target.find(CGI_EXT, start_search);
+		if (start_cgi_ext == std::string::npos)
+			return (start_cgi_ext);
+		else
+		{
+			start_search = start_cgi_ext + strlen(CGI_EXT);
+			std::string candidate = target.substr(0, start_search);
+			if (is_file(candidate) || is_symlink(candidate))
+				return (start_search);
+		}
+	}
+	return (std::string::npos);
+}
+
+void	config::set_cgi_params(request & req) {
+
+	std::string &target = path_to_target;
+	size_t end_cgi_ext = 0;
+	int cgi_activated = 0;
+	size_t first_diez = target.find_first_of("#", 0);
+	if (first_diez != std::string::npos && first_diez != 0)
+		target = target.substr(0, first_diez - 1);
+	end_cgi_ext = get_cgi_ext_pos(target);
+	if (end_cgi_ext == std::string::npos)
+		end_cgi_ext = 0;
+	else if (cgi_ext.find(CGI_EXT) != cgi_ext.end())
+		cgi_activated = true;
+	size_t first_query = target.find_first_of("?", end_cgi_ext);
+	if (first_query != std::string::npos) {
+		query_string = target.substr(first_query + 1, target.length() - (first_query + 1));
+
+		if (first_query != 0)
+			target = target.substr(0, first_query);
+	}
+	if (first_query - end_cgi_ext >= 2)
+		path_info = target.substr(end_cgi_ext, first_query);
+	if (end_cgi_ext != 0)
+		target = target.substr(0, end_cgi_ext);
 }
 
 void	config::put_vhost_and_location_in_config(vHost & host, request & request) {
 	host_port = *host._host_port.begin();
 	if (host.get_client_max_body_size() != -1)
-		_client_max_body_size = host.get_client_max_body_size();
+		client_max_body_size = host.get_client_max_body_size();
 	if (!host.get_error_pages().empty())
 		_error_pages = host.get_error_pages();
 	if (!host.get_root().empty())
@@ -53,7 +99,7 @@ void	config::put_vhost_and_location_in_config(vHost & host, request & request) {
 	std::map< std::string, location >::const_iterator it = get_most_accurate_location(host);
 	if (it != host.get_locations().end()) {
 		if (it->second.get_client_max_body_size() != -1)
-			_client_max_body_size = it->second.get_client_max_body_size();
+			client_max_body_size = it->second.get_client_max_body_size();
 		_auto_index = it->second.get_auto_index();
 		_disable_methods = it->second.get_disable_methods(); 
 		if (!it->second.get_error_pages().empty())
@@ -68,7 +114,7 @@ void	config::put_vhost_and_location_in_config(vHost & host, request & request) {
 		_index = it->second.get_index();
 		path_to_target = update_path_to_target_with_root(it->second);
 		_return = it->second.get_return();
-		_cgi_ext = it->second.get_cgi_ext();
+		cgi_ext = it->second.get_cgi_ext();
 		return ;
 	}
 }
@@ -100,11 +146,11 @@ std::ostream & operator<<(std::ostream & o, const config & c)
 	o << "Server name: " << c._server_name << std::endl;
 	o << "Location: " << c._location << std::endl;
 	o << "Auto_index: " << c._auto_index << std::endl;
-	o << "Client_max_body_size: " << c._client_max_body_size << std::endl;
+	o << "Client_max_body_size: " << c.client_max_body_size << std::endl;
 	o << "Upload_pass: " << c._upload_pass << std::endl;
 	o << "Root: " << c._root << std::endl;
 	o << "CGI_dir: " << c._cgi_dir << std::endl;
-	for (std::set<std::string>::const_iterator it = c._cgi_ext.begin(); it != c._cgi_ext.end(); it++)
+	for (std::set<std::string>::const_iterator it = c.cgi_ext.begin(); it != c.cgi_ext.end(); it++)
 		o << "CGI ext : " << *it << std::endl;
 	o << "Index: " << c._index << std::endl;
 	for (std::map< int, std::string >::const_iterator it = c._error_pages.begin(); it != c._error_pages.end(); it++)
@@ -115,6 +161,8 @@ std::ostream & operator<<(std::ostream & o, const config & c)
 	o << "Method: " << ((c.method == GET) ? "GET" : (c.method == POST) ? "POST" : "DELETE") << std::endl;
 	o << "Request_target: " << c._request_target << std::endl;
 	o << "Final target: " << c.path_to_target << std::endl;
+	o << "Query string: " << c.query_string << std::endl;
+	o << "Path info: " << c.path_info << std::endl;
 	
 	return (o);
 }
@@ -138,7 +186,7 @@ vHost & config::get_associated_vhost(request & request) {
 		}
 	}
 	if (first == 1)
-		g_logger.fd << g_logger.get_timestamp() << "--------We could not find any matching vhost, THAT SHOULD NOT HAPPEN---------";
+		g_logger.fd << g_logger.get_timestamp() << "--------We could not find any matching vhost, THAT SHOULD NOT HAPPEN---------" << std::endl;
 	return (*chosen);
 }
 

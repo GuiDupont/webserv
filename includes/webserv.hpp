@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 15:13:39 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/04 14:21:15 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,12 @@
 # include <csignal>
 # include <regex.h>
 # include <sys/socket.h>
+# include <stdio.h>
+
 
 # define WHITESPACE " \t\n\v\f\r"
+
+# define CGI_EXT ".php"
 
 # define GET 1
 # define POST 2
@@ -44,7 +48,7 @@
 
 # define TIMEOUT 100
 
-# define SEND_SPEED 1024
+# define SEND_SPEED 10000
 
 class vHost;
 class request;
@@ -76,7 +80,7 @@ class webserv {
 		std::string 								_root;
 		std::string									_cgi_dir;
 		int											_epfd;
-		std::map<int, std::tm>						_timeout;												
+		std::map<int, std::time_t>					_timeout;												
 		bool										_stop;											
 		
 	public:
