@@ -6,15 +6,15 @@
 #    By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/07 11:26:53 by gdupont           #+#    #+#              #
-#    Updated: 2021/09/22 16:28:11 by gdupont          ###   ########.fr        #
+#    Updated: 2021/10/06 12:17:04 by gdupont          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = webserv
 
 # CXX = clang++-9
-CXX = clang++
-#CXX = /usr/lib/llvm-12/bin/clang++
+#CXX = clang++
+CXX = /usr/lib/llvm-12/bin/clang++
 
 FLAGS = 
 #-Wall -Wextra -Werror
