@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 15:34:17 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/06 18:46:52 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/07 13:57:00 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CGI.hpp"
 
-CGI::CGI() {
+CGI::CGI() : status_read(false) {
 
     for (int i = 0; i < 14; i++) {
 	    env[i] = 0;

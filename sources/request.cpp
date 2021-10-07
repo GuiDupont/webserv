@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/06 19:50:54 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/07 15:38:08 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,15 @@ std::ostream & operator<<(std::ostream & o,const request & r)
 }
 
 
-request::request() : stage(0), next_chunk(-1), nb_trailer_to_received(0), code_to_send(0), close_csock(false), conf(NULL), resp(NULL), cgi(NULL), header_is_sent(false), body_is_sent(false), body_fd(0) {}
+request::request() : stage(0), next_chunk(-1), nb_trailer_to_received(0), code_to_send(0), close_csock(false), conf(NULL), resp(NULL), cgi(NULL), header_is_sent(false), body_is_sent(false), body_fd(0), body_written_cgi(0) {}
 
 request::request(int csock) :	stage(0), csock(csock), next_chunk(-1), nb_trailer_to_received(0), 
 								code_to_send(0), close_csock(false), conf(NULL), resp(NULL), cgi(NULL),
-								header_is_sent(false), body_is_sent(false), body_fd(0) {}
+								header_is_sent(false), body_is_sent(false), body_fd(0), body_written_cgi(0) {}
 
 request::request(int csock, std::string left) : stage(0), csock(csock), left(left), next_chunk(-1),
 												nb_trailer_to_received(0), code_to_send(0), close_csock(false),
-												conf(NULL), resp(NULL), cgi(NULL), header_is_sent(false), body_is_sent(false), body_fd(0) {}
+												conf(NULL), resp(NULL), cgi(NULL), header_is_sent(false), body_is_sent(false), body_fd(0), body_written_cgi(0) {}
 
 
 void request::param_trailer(std::string str) {
@@ -193,6 +193,105 @@ request::~request() {
 	cgi = NULL;
 }
 
+void request::initiate_CGI_GET() {
+
+	int ret = pipe(cgi->pipefd);
+	fcntl(cgi->pipefd[0], F_SETFL, O_NONBLOCK);
+	if (ret == -1) {
+		code_to_send = 500; // a voir/tester avec suite du programme
+		conf->local_actions_done = true;
+		return ;
+	}
+	cgi->pid = fork();
+	if (cgi->pid == -1) {
+		code_to_send = 500; // a voir/tester avec suite du programme
+		conf->local_actions_done = true;
+		close(cgi->pipefd[0]);
+		close(cgi->pipefd[1]);
+		return ;
+	}
+	if (cgi->pid == 0) //(fils)
+	{
+		close(cgi->pipefd[0]);
+		dup2(cgi->pipefd[1], 1);
+		close(cgi->pipefd[1]);
+		char *arg2[] = {(char *)conf->_cgi_dir.c_str(), (char *)conf->path_to_target.c_str(), NULL};
+		ret = execve(conf->_cgi_dir.c_str(), arg2, cgi->getenv());
+		if (ret == -1)
+			exit(1);
+	}
+	if (cgi->pid != 0) //(daron)
+	{
+		close(cgi->pipefd[1]);
+		waitpid(cgi->pid, &cgi->pid_status, WNOHANG);
+		if (WIFEXITED(cgi->pid_status) == true && WEXITSTATUS(cgi->pid_status) != 0) {
+			code_to_send = 500; // a voir/tester avec suite du programme
+			conf->local_actions_done = true;
+			close(cgi->pipefd[0]);
+			return ;
+		}
+		conf->local_actions_done = true;
+		cgi->setCgi_stage("READFROM");
+		return ;
+	}
+}
+
+void request::initiate_CGI_POST() {
+
+	int ret = pipe(cgi->pipefd);
+	fcntl(cgi->pipefd[0], F_SETFL, O_NONBLOCK);
+	if (ret == -1) {
+		code_to_send = 500; // a voir/tester avec suite du programme
+		conf->local_actions_done = true;
+		return ;
+	}		
+	ret = pipe(cgi->pipefd_post);
+	if (ret == -1) {
+		code_to_send = 500; // a voir/tester avec suite du programme
+		conf->local_actions_done = true;
+		close(cgi->pipefd[0]);
+		close(cgi->pipefd[1]);
+		return ;
+	}
+	cgi->pid = fork();
+	if (cgi->pid == -1) {
+		code_to_send = 500; // a voir/tester avec suite du programme
+		conf->local_actions_done = true;
+		close(cgi->pipefd[0]);
+		close(cgi->pipefd[1]);
+		close(cgi->pipefd_post[0]);
+		close(cgi->pipefd_post[1]);
+		return ;
+	}
+	if (cgi->pid == 0) //(fils)
+	{
+		close(cgi->pipefd[0]);
+		dup2(cgi->pipefd[1], 1);
+		close(cgi->pipefd[1]);
+		close(cgi->pipefd_post[1]);
+		dup2(cgi->pipefd_post[0], 0);
+		close(cgi->pipefd_post[0]);
+		char *arg2[] = {(char *)conf->_cgi_dir.c_str(), (char *)conf->path_to_target.c_str(), NULL};
+		ret = execve(conf->_cgi_dir.c_str(), arg2, cgi->getenv());
+		if (ret == -1)
+			exit(1);
+	}
+	if (cgi->pid != 0) //(daron)
+	{
+		close(cgi->pipefd[1]);
+		close(cgi->pipefd_post[0]);
+		waitpid(cgi->pid, &cgi->pid_status, WNOHANG);
+		if (WIFEXITED(cgi->pid_status) == true && WEXITSTATUS(cgi->pid_status) != 0) {
+			code_to_send = 500; // a voir/tester avec suite du programme
+			conf->local_actions_done = true;
+			close(cgi->pipefd[0]);
+			close(cgi->pipefd_post[1]);
+			return ;
+		}
+		return ;
+	}
+}
+
 void request::initiate_CGI() {
 
 	if (cgi == NULL) {
@@ -211,44 +310,111 @@ void request::initiate_CGI() {
 		cgi->param_SERVER_PORT();
 		cgi->param_SERVER_PROTOCOL();
 		cgi->param_SERVER_SOFTWARE();
-		if (method == "GET") {
-			int ret = pipe(cgi->pipefd);
+		if (method == "GET")
+			initiate_CGI_GET();
+		if (method == "POST")
+			initiate_CGI_POST();
+	}
+	else {
+		waitpid(cgi->pid, &cgi->pid_status, WNOHANG);
+		if (WIFEXITED(cgi->pid_status) == true && WEXITSTATUS(cgi->pid_status) != 0) {
+			code_to_send = 500; // a voir/tester avec suite du programme
+			conf->local_actions_done = true;
+			close(cgi->pipefd[0]);
+			close(cgi->pipefd_post[1]);
+			return ;
+		}
+		std::string towrite = body_request.substr(body_written_cgi, SEND_SPEED);
+		int ret = write(cgi->pipefd_post[1], towrite.c_str(), towrite.size());
+		body_written_cgi += ret;
+		if (body_written_cgi == body_request.size()) {
+			conf->local_actions_done = true;
+			close(cgi->pipefd_post[1]);
+			cgi->setCgi_stage("READFROM");
+		}
+	}
+	return ;
+}
+
+void request::readfrom_CGI() {
+
+	char buf[SEND_SPEED + 1];
+	int ret;
+
+	if (cgi->status_read == false) {
+		read_first_line_cgi();
+	}
+	else {
+		if (cgi->left_from_first_line.empty() == false) {
+			ret = send(csock, cgi->left_from_first_line.c_str(), SEND_SPEED, 0);
 			if (ret == -1) {
-				code_to_send = 500; // a voir/tester avec suite du programme
-				conf->local_actions_done = true;
-				return ;
-			}
-			cgi->pid = fork();
-			if (cgi->pid == -1) {
-				code_to_send = 500; // a voir/tester avec suite du programme
-				conf->local_actions_done = true;
-				return ;
-			}
-			if (cgi->pid == 0) //(fils)
-			{
+				close_csock = true;
 				close(cgi->pipefd[0]);
-				dup2(cgi->pipefd[1], 1);
-				close(cgi->pipefd[1]);
-				char *arg2[] = {(char *)conf->_cgi_dir.c_str(), (char *)conf->path_to_target.c_str(), NULL};
-				ret = execve(conf->_cgi_dir.c_str(), arg2, cgi->getenv());
-				if (ret == -1)
-					exit(1);
+				body_is_sent = true;
+				return ;
 			}
-			if (cgi->pid != 0) //(daron)
-			{
-				waitpid(cgi->pid, &cgi->pid_status, WNOHANG);
-				if (WEXITSTATUS(cgi->pid_status) != 0) {
-					code_to_send = 500; // a voir/tester avec suite du programme
-					conf->local_actions_done = true;
-					return ;
-				}
-				conf->local_actions_done = true;
-				cgi->setCgi_stage("readfrom");
+			cgi->left_from_first_line = cgi->left_from_first_line.substr(ret, cgi->left_from_first_line.size() - ret);
+		}
+		else {
+			ret = read(cgi->pipefd[0], buf, SEND_SPEED);
+			if (ret == -1) {
+				close_csock = true;
+				close(cgi->pipefd[0]);
+				body_is_sent = true;
+				return ;
+			}
+			if (ret == 0) {
+				body_is_sent = true;
+				close(cgi->pipefd[0]);
+				return ;
+			}
+			ret = send(csock, buf, SEND_SPEED, 0);
+			if (ret == -1) {
+				close_csock = true;
+				close(cgi->pipefd[0]);
+				body_is_sent = true;
 				return ;
 			}
 		}
-		if (method == "POST") {
+	}
 
-	}		
 	return ;
+}
+
+
+void request::read_first_line_cgi() {
+	char buf[SEND_SPEED + 1];
+	int ret;
+
+	ret = read(cgi->pipefd[0], buf, SEND_SPEED);
+	if ((ret == -1 && errno != EAGAIN) || ret == 0) {
+		close_csock = true;
+		close(cgi->pipefd[0]);
+		body_is_sent = true;
+		return ;
+	}
+	if (ret == -1 && errno == EAGAIN)
+		return ;
+	buf[ret] = '\0';
+	cgi->first_line += buf;
+	size_t end_of_first_line = cgi->first_line.find("\r\n", 0);
+	if (end_of_first_line == std::string::npos)
+		return ;
+	if (cgi->first_line.substr(0, 7) != "Status:")
+		code_to_send = 200;
+	else if (ft_string_is_digit(get_word(cgi->first_line, go_to_next_word(cgi->first_line, 0))))
+		code_to_send = std::atoi(get_word(cgi->first_line, go_to_next_word(cgi->first_line, 0)).c_str());
+	else
+		code_to_send = 200;
+	std::string status_line = 	response::get_status_line(*this);
+	ret = send(csock, status_line.c_str(), status_line.size(), 0);
+	if (ret == -1) {
+		close_csock = true;
+		close(cgi->pipefd[0]);
+		body_is_sent = true;
+		return ;
+	}
+	cgi->status_read = true;
+	end_of_first_line += std::strlen("\r\n");
+	cgi->left_from_first_line = cgi->first_line.substr(end_of_first_line, cgi->first_line.size() - end_of_first_line); 
 }

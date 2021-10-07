@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 14:56:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/01 14:56:12 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/07 14:57:55 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,11 @@ std::string         response::generate_header(request & req) {
 }
 
 std::string         response::get_status_line(request & req) {
+    std::map<int, std::string>::iterator it = g_webserv.status_code.find(req.code_to_send);
+    if (it == g_webserv.status_code.end()) {
+        req.code_to_send = 500;
+        req.close_csock = true;
+    }
     std::string status_line("HTTP/1.1 ");
     status_line += g_webserv.status_code.find(req.code_to_send)->second;
     status_line += "\r\n";

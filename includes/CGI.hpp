@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 15:32:44 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/06 19:31:31 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/07 15:37:33 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,15 @@ public:
 	void param_SERVER_PROTOCOL();
 	void param_SERVER_SOFTWARE();
 	char **getenv();
-	void setCgi_stage(std::string s);
+	void setCgi_stage(std::string s); // a voir si a garder
 
 	int pipefd[2];
+	int pipefd_post[2];
 	pid_t pid;
 	int	pid_status;
+	bool status_read;
+	std::string first_line;
+	std::string left_from_first_line;
 
 private:
 
@@ -61,7 +65,7 @@ private:
 	std::string SERVER_PROTOCOL; // = "SERVER_PROTOCOL=HTTP/1.1";
 	std::string SERVER_SOFTWARE; // = "SERVER_SOFTWARE=42webserv";
 	char		*env[14];
-	std::string	cgi_stage; // "writein" ; "readfrom"
+	std::string	cgi_stage; // "writein" ; "readfrom" // a voir si a garder
 
 };
 

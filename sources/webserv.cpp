@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/06 19:42:30 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/07 15:39:25 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,10 @@ void	webserv::answer_to_request(int csock) {
 	}
 	if (req.conf->local_actions_done == false)
 		req.do_local_actions();
-	req.response_request();
+
+	if (req.conf->local_actions_done == true)
+		req.response_request();
+
 	if (req.body_is_sent == true) {
 		if (req.close_csock == true)
 			g_webserv.clean_csock_from_server(csock); 
@@ -144,19 +147,25 @@ bool	request::common_validity_check() {
 
 void	request::response_request() {
 
-	if (conf->local_actions_done == true && header_is_sent == false) {
+	if (conf->cgi_activated == true) {
+		readfrom_CGI();
+	}
+	else {
+		if (header_is_sent == false) {
 		g_logger.fd << g_logger.get_timestamp() << "We are going to respond a request with code : " << code_to_send << std::endl;
 	 	std::string header = response::generate_header(*this);
 	 	send_header(csock, header);
 		header_is_sent = true;
-	}
-	if (conf->local_actions_done == true && header_is_sent == true) {
-		send_body();
+		}
+		if (header_is_sent == true) {
+			send_body();
+		}
 	}
 }
 
 void	request::do_local_actions() {
-	if (conf->cgi_activated == true) { // ne pas mettre true a cgi_activated dans config
+
+	if (conf->cgi_activated == true) {
 		initiate_CGI();
 	}
 	else if (conf->method & GET) {

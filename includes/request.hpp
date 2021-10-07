@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:07:25 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/06 19:31:19 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/07 15:21:38 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ class request {
 		bool								body_is_sent;
 		bool								header_is_sent;
 		int									body_fd;
+		size_t								body_written_cgi;
 		std::string							body_response;
 
 		friend std::ostream & operator<<(std::ostream & o,const request & r);
@@ -89,13 +90,11 @@ class request {
 		void	delete_file(std::string & path, request & req);
 		void	write_body_inside_file();
 		void	initiate_CGI();
+		void	initiate_CGI_GET();
+		void	initiate_CGI_POST();
+		void	readfrom_CGI();
+		void	read_first_line_cgi();
 
-		
-		
-
-		
-		// ~request();
-		// request & operator=()
 };
 
 
