@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/06 19:45:15 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/07 19:36:34 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,9 @@ size_t	config::get_query_index(const std::string & target, size_t index) {
 
 void	config::set_cgi_params(request & req) {
 	std::string &target = path_to_target;
-	g_logger.fd << g_logger.get_timestamp() << " Setting CGI params" << std::endl;
+	g_logger.fd << g_logger.get_timestamp() << "Setting CGI params" << std::endl;
 
 	size_t begin_cgi_ext = 0;
-	int cgi_activated = 0;
 	size_t first_diez = target.find_first_of("#", 0);
 	if (first_diez != std::string::npos && first_diez)
 		target = target.substr(0, first_diez - 1);
@@ -93,13 +92,16 @@ void	config::set_cgi_params(request & req) {
 		path_info_index = _root.size();
 	else
 		path_info_index = begin_cgi_ext;
+	std::cout << " path info index: " << path_info_index << std::endl;
 	path_info = target.substr(path_info_index, target.size() - path_info_index);
-	path_info = _root + path_info;
+	if (path_info.empty() != true)
+		path_info = from_two_str_to_path(_root, path_info);
 	target = target.substr(0, path_info_index);
 	cgi_activated = true;
 	size_t begin_of_script_name = _root.size();
 	script_name = target.substr(begin_of_script_name, target.size() - begin_of_script_name);
-	script_name = _location + script_name;
+	script_name = from_two_str_to_path(_location, script_name);
+		g_logger.fd << g_logger.get_timestamp() << "1 conf->cgi_activated :" << cgi_activated << std::endl;
 }
 
 void	config::put_vhost_and_location_in_config(vHost & host, request & request) {
@@ -131,6 +133,8 @@ void	config::put_vhost_and_location_in_config(vHost & host, request & request) {
 		path_to_target = update_path_to_target_with_root(it->second);
 		_return = it->second.get_return();
 		cgi_ext = it->second.get_cgi_ext();
+		_cgi_dir = it->second.get_cgi_dir();
+
 		return ;
 	}
 }

@@ -6,13 +6,13 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 15:34:17 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/07 13:57:00 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/07 18:50:29 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CGI.hpp"
 
-CGI::CGI() : status_read(false) {
+CGI::CGI() : status_read(false), started_answering_cgi(false) {
 
     for (int i = 0; i < 14; i++) {
 	    env[i] = 0;

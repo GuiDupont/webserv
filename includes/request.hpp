@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:07:25 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/07 15:21:38 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/07 18:49:45 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <list>
 # include <iostream>
 # include <fcntl.h>
+# include <unistd.h>
 
 # define HDER_REQUEST 0
 # define BDY_REQUEST 1

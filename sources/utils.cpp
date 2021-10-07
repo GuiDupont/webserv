@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/06 18:03:12 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/07 17:45:30 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -411,7 +411,7 @@ std::string				from_two_str_to_path(const std::string & str1, const std::string 
 bool					test_path_get(request & req) {
 	std::string path = req.conf->path_to_target;
 	if (is_directory(path)) {
-		if (req.conf->_auto_index == false) // a changer tp body_resp = ""
+		if (req.conf->_auto_index == false)
 			req.body_response = " ";
 		else
 			req.body_response = response::generate_autoindex_body(req);

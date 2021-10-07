@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/07 15:39:25 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/07 18:29:45 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,9 @@ void	webserv::answer_to_request(int csock) {
 	}
 	if (req.conf->local_actions_done == false)
 		req.do_local_actions();
-
+	req.update_code_and_body();
 	if (req.conf->local_actions_done == true)
 		req.response_request();
-
 	if (req.body_is_sent == true) {
 		if (req.close_csock == true)
 			g_webserv.clean_csock_from_server(csock); 
@@ -117,7 +116,7 @@ void	request::control_config_validity() {
 }
 
 void	request::update_code_and_body() {
-	if (code_to_send != 0) {
+	if (code_to_send != 0 && code_to_send != 200 && code_to_send != 204) { // dod some test to see if it is good
 		conf->local_actions_done = true;
 		close_csock = true;
 		std::map< int, std::string>::iterator it;
@@ -164,6 +163,8 @@ void	request::response_request() {
 }
 
 void	request::do_local_actions() {
+
+	g_logger.fd << g_logger.get_timestamp() << "We are going to do local actions\n";
 
 	if (conf->cgi_activated == true) {
 		initiate_CGI();
@@ -364,6 +365,8 @@ void	webserv::control_time_out(void) {
 }
 
 void	webserv::clean_csock_from_server(int csock) {
+		g_logger.fd << g_logger.get_timestamp() << "We are going to delete csock " << csock << std::endl;
+
 		_requests.erase(csock);
 		_timeout.erase(csock);
 		for (std::list<vHost>::iterator it_vhost = _vhosts.begin(); it_vhost != _vhosts.end(); it_vhost++)
@@ -385,7 +388,7 @@ int					webserv::get_epfd() const { return (this->_epfd); }
 std::list<vHost>	&webserv::get_vhosts() 	{ return (this->_vhosts); }
 
 void webserv::read_from_csock(int csock) {
-	g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLIN on csock: " << csock << std::endl;
+	// g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLIN on csock: " << csock << std::endl;
 	char c_buffer[1025];
 	int ret;
 	std::map<int, request>::iterator it;
@@ -396,12 +399,12 @@ void webserv::read_from_csock(int csock) {
 	}
 	ret = recv(csock, c_buffer, 1024, 0);
 	if (ret < 0) {
-		g_logger.fd << "We had an issue while using recv on csock " << csock << " " << strerror(errno) << std::endl;
+		g_logger.fd << g_logger.get_timestamp() << "We had an issue while using recv on csock " << csock << " " << strerror(errno) << std::endl;
 		clean_csock_from_server(csock);
 		return ;
 	}
 	if (ret == 0) {
-		g_logger.fd << "While using recv on csock " << csock << " we received : 0" <<  std::endl;
+		g_logger.fd << g_logger.get_timestamp() << "While using recv on csock " << csock << " we received : 0" <<  std::endl;
 		clean_csock_from_server(csock);
 		return ;
 	}
@@ -422,7 +425,7 @@ void webserv::read_from_csock(int csock) {
 		g_parser.analyse_header(it->second);
 	else if (it->second.stage == 1)
 		g_parser.analyse_body(it->second);
-	g_logger.fd << g_logger.get_timestamp() + "We are done parsing the req from ccosk: " << csock << std::endl;
+	g_logger.fd << g_logger.get_timestamp() << "We are done parsing the req from ccosk: " << csock << std::endl;
 
 }
 

@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 15:32:44 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/07 15:37:33 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/07 18:52:40 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ public:
 	bool status_read;
 	std::string first_line;
 	std::string left_from_first_line;
+	bool		started_answering_cgi;
 
 private:
 
@@ -66,6 +67,7 @@ private:
 	std::string SERVER_SOFTWARE; // = "SERVER_SOFTWARE=42webserv";
 	char		*env[14];
 	std::string	cgi_stage; // "writein" ; "readfrom" // a voir si a garder
+	
 
 };
 

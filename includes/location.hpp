@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   location.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 15:03:49 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/07 19:12:29 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ class location {
 		std::string const									& get_index() const;
 		std::pair<int, std::string>					const	& get_return() const;
 		std::set< std::string >	const						& get_cgi_ext() const;
+		std::string 								const   & get_cgi_dir() const;
 
 	private:
 

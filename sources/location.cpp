@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 17:55:12 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/28 15:26:58 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/07 19:12:41 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,4 +107,8 @@ std::pair<int, std::string> 			const		& location::get_return() const {
 
 std::set< std::string >					const		& location::get_cgi_ext() const {
 	return (this->_cgi_ext);
+}
+
+std::string								const		& location::get_cgi_dir() const {
+	return (this->_cgi_dir);
 }

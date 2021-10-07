@@ -6,3 +6,8 @@
 - rajouter la fonction pour forcer l utilisation des sockets ?
 - vérifier si tout fonctionne pour HTTP 1.1/1.0 (impact sur CGI)
 - faire une vérification de la longueur du body à write / content length / cgi suivant les /r/n
+- verifier les fins de reponses envoyees : pas de \r\n a la fin?
+- verifier le changement vers erreur 500 depuis cgi
+- modif la gestion du execve du fils
+- parametrer un client max body size au minimum
+- modifier la logique sur l'envoie du reste de first line du cgi de mes balls

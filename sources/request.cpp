@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/07 15:38:08 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/07 19:37:05 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,36 +198,51 @@ void request::initiate_CGI_GET() {
 	int ret = pipe(cgi->pipefd);
 	fcntl(cgi->pipefd[0], F_SETFL, O_NONBLOCK);
 	if (ret == -1) {
+		g_logger.fd << g_logger.get_timestamp() << "The pipe didn't work\n";
 		code_to_send = 500; // a voir/tester avec suite du programme
 		conf->local_actions_done = true;
+		close_csock = true;
 		return ;
 	}
 	cgi->pid = fork();
 	if (cgi->pid == -1) {
+		g_logger.fd << g_logger.get_timestamp() << "The fork didn't work\n";
 		code_to_send = 500; // a voir/tester avec suite du programme
 		conf->local_actions_done = true;
+		close_csock = true;		
 		close(cgi->pipefd[0]);
 		close(cgi->pipefd[1]);
 		return ;
 	}
 	if (cgi->pid == 0) //(fils)
 	{
+		g_logger.fd << g_logger.get_timestamp() << "I am child and I am about to execve CGI\n";
 		close(cgi->pipefd[0]);
 		dup2(cgi->pipefd[1], 1);
 		close(cgi->pipefd[1]);
 		char *arg2[] = {(char *)conf->_cgi_dir.c_str(), (char *)conf->path_to_target.c_str(), NULL};
+		g_logger.fd << g_logger.get_timestamp() << conf->_cgi_dir << std::endl;
+		g_logger.fd << g_logger.get_timestamp() << conf->path_to_target << std::endl;
+		for (int i = 0; i < 14; i++) {
+			g_logger.fd << g_logger.get_timestamp() << cgi->getenv()[i] << std::endl;
+		}
 		ret = execve(conf->_cgi_dir.c_str(), arg2, cgi->getenv());
+		g_logger.fd << g_logger.get_timestamp() << "I am child and execve returned :" << ret << std::endl;
 		if (ret == -1)
 			exit(1);
+		g_logger.fd << g_logger.get_timestamp() << "I am child and THIS SHOULD NOT HAPPEN\n";
 	}
 	if (cgi->pid != 0) //(daron)
 	{
+		g_logger.fd << g_logger.get_timestamp() << "I am father\n";
 		close(cgi->pipefd[1]);
 		waitpid(cgi->pid, &cgi->pid_status, WNOHANG);
 		if (WIFEXITED(cgi->pid_status) == true && WEXITSTATUS(cgi->pid_status) != 0) {
 			code_to_send = 500; // a voir/tester avec suite du programme
 			conf->local_actions_done = true;
+			close_csock = true;
 			close(cgi->pipefd[0]);
+			g_logger.fd << g_logger.get_timestamp() << "I am father and child " << cgi->pid << " exited with " << cgi->pid_status << std::endl;
 			return ;
 		}
 		conf->local_actions_done = true;
@@ -237,26 +252,33 @@ void request::initiate_CGI_GET() {
 }
 
 void request::initiate_CGI_POST() {
+	g_logger.fd << g_logger.get_timestamp() << "We are about to write body_request inside the pipe for cgi" << std::endl;
 
 	int ret = pipe(cgi->pipefd);
 	fcntl(cgi->pipefd[0], F_SETFL, O_NONBLOCK);
 	if (ret == -1) {
+		g_logger.fd << g_logger.get_timestamp() << "The 1ST pipe for POST didn't work\n";
 		code_to_send = 500; // a voir/tester avec suite du programme
 		conf->local_actions_done = true;
+		close_csock = true;
 		return ;
 	}		
 	ret = pipe(cgi->pipefd_post);
 	if (ret == -1) {
+		g_logger.fd << g_logger.get_timestamp() << "The 2nd pipe for POST didn't work\n";
 		code_to_send = 500; // a voir/tester avec suite du programme
 		conf->local_actions_done = true;
+		close_csock = true;
 		close(cgi->pipefd[0]);
 		close(cgi->pipefd[1]);
 		return ;
 	}
 	cgi->pid = fork();
 	if (cgi->pid == -1) {
+		g_logger.fd << g_logger.get_timestamp() << "The fork for POST didn't work\n";
 		code_to_send = 500; // a voir/tester avec suite du programme
 		conf->local_actions_done = true;
+		close_csock = true;
 		close(cgi->pipefd[0]);
 		close(cgi->pipefd[1]);
 		close(cgi->pipefd_post[0]);
@@ -284,6 +306,7 @@ void request::initiate_CGI_POST() {
 		if (WIFEXITED(cgi->pid_status) == true && WEXITSTATUS(cgi->pid_status) != 0) {
 			code_to_send = 500; // a voir/tester avec suite du programme
 			conf->local_actions_done = true;
+			close_csock = true;
 			close(cgi->pipefd[0]);
 			close(cgi->pipefd_post[1]);
 			return ;
@@ -293,7 +316,7 @@ void request::initiate_CGI_POST() {
 }
 
 void request::initiate_CGI() {
-
+	g_logger.fd << g_logger.get_timestamp() << "We are about to handle a CGI request\n";
 	if (cgi == NULL) {
 		cgi = new CGI();
 		cgi->setCgi_stage("WRITEIN");
@@ -314,11 +337,17 @@ void request::initiate_CGI() {
 			initiate_CGI_GET();
 		if (method == "POST")
 			initiate_CGI_POST();
+		g_logger.fd << g_logger.get_timestamp() << "We are done initiating the CGI\n";
+
 	}
 	else {
+		g_logger.fd << g_logger.get_timestamp() << "I am father and I am waiting for my child\n";
+
 		waitpid(cgi->pid, &cgi->pid_status, WNOHANG);
 		if (WIFEXITED(cgi->pid_status) == true && WEXITSTATUS(cgi->pid_status) != 0) {
+			g_logger.fd << g_logger.get_timestamp() << "The child exited with an error\n";
 			code_to_send = 500; // a voir/tester avec suite du programme
+			close_csock = true;
 			conf->local_actions_done = true;
 			close(cgi->pipefd[0]);
 			close(cgi->pipefd_post[1]);
@@ -337,16 +366,29 @@ void request::initiate_CGI() {
 }
 
 void request::readfrom_CGI() {
+	g_logger.fd << g_logger.get_timestamp() << "I am about to read from CGI\n";
 
 	char buf[SEND_SPEED + 1];
 	int ret;
-
+	waitpid(cgi->pid, &cgi->pid_status, WNOHANG);
+	if (WIFEXITED(cgi->pid_status) == true && WEXITSTATUS(cgi->pid_status) != 0) {
+	g_logger.fd << g_logger.get_timestamp() << "Child exited badly\n";
+		if (cgi->started_answering_cgi == true)
+			body_is_sent = true;
+		code_to_send = 500;
+		update_code_and_body();
+		conf->local_actions_done = true;
+		conf->cgi_activated = false;
+		close_csock = true;
+		close(cgi->pipefd[0]);
+		return ;
+	}
 	if (cgi->status_read == false) {
 		read_first_line_cgi();
 	}
 	else {
 		if (cgi->left_from_first_line.empty() == false) {
-			ret = send(csock, cgi->left_from_first_line.c_str(), SEND_SPEED, 0);
+			ret = send(csock, cgi->left_from_first_line.c_str(), cgi->left_from_first_line.size(), 0);
 			if (ret == -1) {
 				close_csock = true;
 				close(cgi->pipefd[0]);
@@ -357,7 +399,12 @@ void request::readfrom_CGI() {
 		}
 		else {
 			ret = read(cgi->pipefd[0], buf, SEND_SPEED);
-			if (ret == -1) {
+			if (ret == -1 && errno == EAGAIN){
+				g_logger.fd << g_logger.get_timestamp() << "there is nothing to read in pipe from cgi but I will try again\n";		
+				return ;
+			}
+			if (ret == -1 ) {
+				g_logger.fd << g_logger.get_timestamp() << "We could not read form CGI\n";
 				close_csock = true;
 				close(cgi->pipefd[0]);
 				body_is_sent = true;
@@ -368,8 +415,10 @@ void request::readfrom_CGI() {
 				close(cgi->pipefd[0]);
 				return ;
 			}
-			ret = send(csock, buf, SEND_SPEED, 0);
+			buf[ret] = '\0';
+			ret = send(csock, buf, ret, 0);
 			if (ret == -1) {
+				g_logger.fd << g_logger.get_timestamp() << "We could not send in csock " << csock << std::endl;
 				close_csock = true;
 				close(cgi->pipefd[0]);
 				body_is_sent = true;
@@ -377,10 +426,8 @@ void request::readfrom_CGI() {
 			}
 		}
 	}
-
 	return ;
 }
-
 
 void request::read_first_line_cgi() {
 	char buf[SEND_SPEED + 1];
@@ -393,8 +440,10 @@ void request::read_first_line_cgi() {
 		body_is_sent = true;
 		return ;
 	}
-	if (ret == -1 && errno == EAGAIN)
+	if (ret == -1 && errno == EAGAIN) {
+		g_logger.fd << g_logger.get_timestamp() << "there is nothing to read in pipe from cgi first_line but I will try again\n";
 		return ;
+	}
 	buf[ret] = '\0';
 	cgi->first_line += buf;
 	size_t end_of_first_line = cgi->first_line.find("\r\n", 0);
@@ -406,7 +455,7 @@ void request::read_first_line_cgi() {
 		code_to_send = std::atoi(get_word(cgi->first_line, go_to_next_word(cgi->first_line, 0)).c_str());
 	else
 		code_to_send = 200;
-	std::string status_line = 	response::get_status_line(*this);
+	std::string status_line = response::get_status_line(*this);
 	ret = send(csock, status_line.c_str(), status_line.size(), 0);
 	if (ret == -1) {
 		close_csock = true;
@@ -414,6 +463,7 @@ void request::read_first_line_cgi() {
 		body_is_sent = true;
 		return ;
 	}
+	cgi->started_answering_cgi = true;
 	cgi->status_read = true;
 	end_of_first_line += std::strlen("\r\n");
 	cgi->left_from_first_line = cgi->first_line.substr(end_of_first_line, cgi->first_line.size() - end_of_first_line); 
