@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 15:34:17 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/07 18:50:29 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/08 17:26:06 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 CGI::CGI() : status_read(false), started_answering_cgi(false) {
 
-    for (int i = 0; i < 14; i++) {
+    for (int i = 0; i < 15; i++) {
 	    env[i] = 0;
     }
     return ;
@@ -28,6 +28,12 @@ CGI::~CGI() {
 char **CGI::getenv() {
 
 	return (this->env);
+}
+void CGI::param_REDIRECT_STATUS() {
+
+	this->REDIRECT_STATUS = "REDIRECT_STATUS=200";
+	this->env[13] = (char *)this->REDIRECT_STATUS.c_str();
+	return ;
 }
 
 void CGI::param_SERVER_SOFTWARE() {

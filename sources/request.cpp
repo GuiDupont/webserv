@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/08 15:31:19 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/08 17:29:22 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -327,6 +327,7 @@ void request::initiate_CGI() {
 		cgi->param_SERVER_PORT();
 		cgi->param_SERVER_PROTOCOL();
 		cgi->param_SERVER_SOFTWARE();
+		cgi->param_REDIRECT_STATUS();
 		if (method == "GET")
 			initiate_CGI_GET();
 		if (method == "POST")
@@ -367,7 +368,6 @@ void request::readfrom_CGI() {
 	char buf[SEND_SPEED + 1];
 	int ret;
 	waitpid(cgi->pid, &cgi->pid_status, WNOHANG);
-	g_logger.fd << g_logger.get_timestamp() << " Son exited normaly: " << WIFEXITED(cgi->pid_status) << std::endl;
 	if (WIFEXITED(cgi->pid_status) == true && WEXITSTATUS(cgi->pid_status) != 0) {
 		g_logger.fd << g_logger.get_timestamp() << "Child exited badly\n";
 		if (cgi->started_answering_cgi == true)
@@ -381,6 +381,8 @@ void request::readfrom_CGI() {
 		return ;
 	}
 	else if (WIFEXITED(cgi->pid_status) && can_I_read_from_fd(cgi->pipefd[0]) == false){
+		g_logger.fd << g_logger.get_timestamp() << " Son exited normaly: " << WIFEXITED(cgi->pid_status) << std::endl;
+		// envoyer un send \r\n
 		body_is_sent = true;
 		return ;
 	}

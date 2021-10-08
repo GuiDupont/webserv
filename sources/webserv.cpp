@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/08 14:37:45 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/08 17:49:01 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	webserv::wait_for_connection() {
 			g_logger.fd << g_logger.get_timestamp() << LOG_ISSUE_EPOLL_WAIT + std::string(strerror(errno)) << std::endl;
 		else if (true_one_time_per_x_secondes(5))
 			g_logger.fd << g_logger.get_timestamp() << "No events" << std::endl;
-
 		for (int i = 0; i < nsfd; i++) {
 			if (_revents[i].events & EPOLLIN && ft_is_ssock(_revents[i].data.fd) && _stop == false)
 				accept_new_client(_revents[i].data.fd);
@@ -216,13 +215,15 @@ webserv::webserv(const std::string & path_config) : _client_max_body_size(-1) {
 
 
 void webserv::read_from_csock(int csock) {
-	// g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLIN on csock: " << csock << std::endl;
 	char c_buffer[1025];
 	int ret;
 	std::map<int, request>::iterator it;
 
-	if (ft_is_static_fd(csock))
+	if (ft_is_static_fd(csock)) {
+		g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLIN on static fd: " << csock << std::endl;
 		return ;
+	}
+	g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLIN on csock: " << csock << std::endl;
 	if (is_new_request(csock) == true) {
 		g_logger.fd << g_logger.get_timestamp() << "New request has been created from csock: " + ft_itos(csock) << std::endl;
 		_requests.insert(std::pair<int, request>(csock, request(csock)));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 15:32:44 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/07 18:52:40 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/08 17:23:49 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ public:
 	void param_SERVER_PORT();
 	void param_SERVER_PROTOCOL();
 	void param_SERVER_SOFTWARE();
+	void param_REDIRECT_STATUS();
 	char **getenv();
 	void setCgi_stage(std::string s); // a voir si a garder
 
@@ -65,7 +66,8 @@ private:
 	std::string SERVER_PORT;
 	std::string SERVER_PROTOCOL; // = "SERVER_PROTOCOL=HTTP/1.1";
 	std::string SERVER_SOFTWARE; // = "SERVER_SOFTWARE=42webserv";
-	char		*env[14];
+	std::string REDIRECT_STATUS; // = "REDIRECT_STATUS=200";  => a voir
+	char		*env[15];
 	std::string	cgi_stage; // "writein" ; "readfrom" // a voir si a garder
 	
 

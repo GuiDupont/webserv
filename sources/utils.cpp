@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/08 14:44:24 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/08 17:42:08 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -377,9 +377,9 @@ bool	is_directory(std::string & path) {
 			return (true);
 		return (false);
 		}
-	else {
-		g_logger.fd << g_logger.get_timestamp() << "Stat on " << path << " provides this error " << strerror(errno) << std::endl; 
-	}
+	// else {
+	// 	g_logger.fd << g_logger.get_timestamp() << "Stat on " << path << " provides this error " << strerror(errno) << std::endl; 
+	// }
 	return (false);
 }
 
@@ -390,9 +390,9 @@ bool	is_file(std::string & path) {
 			return (true);
 		return (false);
 		}
-	else {
-		g_logger.fd << g_logger.get_timestamp() << "Stat on " << path << " provides this error " << strerror(errno) << std::endl; 
-	}
+	// else {
+	// 	g_logger.fd << g_logger.get_timestamp() << "Stat on " << path << " provides this error " << strerror(errno) << std::endl; 
+	// }
 	return (false);
 }
 
@@ -404,9 +404,9 @@ bool	is_symlink(std::string & path) {
 			return (true);
 		return (false);
 		}
-	else {
-		g_logger.fd << g_logger.get_timestamp() << "Stat on " << path << " provides this error " << strerror(errno) << std::endl; 
-	}
+	// else {
+	// 	g_logger.fd << g_logger.get_timestamp() << "Stat on " << path << " provides this error " << strerror(errno) << std::endl; 
+	// }
 	return (false);
 }
 
