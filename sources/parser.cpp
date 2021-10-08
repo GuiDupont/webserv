@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/06 18:04:30 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/08 12:08:53 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -430,7 +430,6 @@ void	webserv_parser::analyse_header(request &req) { // fix : empty lines should 
 			req.conf = new config(req);
 			return ;
 		}
-		g_logger.fd << req.request_target;
 		req.HTTP_version = get_word(req.left, index, std::string("\r\n"));
 		if (req.HTTP_version.size() == 0)
 		{
@@ -439,8 +438,6 @@ void	webserv_parser::analyse_header(request &req) { // fix : empty lines should 
 			req.conf = new config(req);
 			return ;
 		}
-			g_logger.fd << g_logger.get_timestamp() + "Coucou1 " << req.csock << std::endl;
-
 		if (req.HTTP_version != "HTTP/1.1" && req.HTTP_version != "HTTP/1.0") {
 			req.code_to_send = 505;
 			req.set_request_to_ended();
@@ -449,7 +446,6 @@ void	webserv_parser::analyse_header(request &req) { // fix : empty lines should 
 		}
 		while (index < req.left.size()) // parsing headerffields
 		{
-			g_logger.fd << g_logger.get_timestamp() + "Coucou2 " << req.csock << std::endl;// analyse_body(it->second); // a faire
 			std::pair<std::string, std::string> header_field;
 			std::string header_field_raw = get_word(req.left, index, std::string("\r\n"));
 			if (header_field_raw.size() == 0)

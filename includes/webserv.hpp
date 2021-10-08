@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/06 16:49:18 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/08 11:36:45 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@
 
 # define SEND_SPEED 10000
 
+# define REVENT_SIZE 64
+
 class vHost;
 class request;
 class response;
@@ -70,6 +72,9 @@ class webserv {
 	public:
 		std::map<int, std::string>					status_code;
 		std::map<int, request>						_requests;
+		std::set<int>								static_fds;
+		int											nsfd;
+
 
 
 	private:
@@ -106,6 +111,7 @@ class webserv {
 
 
 		bool	ft_is_ssock(int fd);
+		bool	ft_is_static_fd(int fd);
 		void	ft_add_csock_to_vhost(int sock, int csock);
 		int		get_sock_by_matching_host_ip(std::pair< std::string, size_t> host_port);
 		void	display_sock();
@@ -121,7 +127,7 @@ class webserv {
 		void	insert_status_code();
 		void	accept_new_client(int sock);
 		void	handle_pollin_csock(int csock);
-		struct epoll_event							*get_revents();	
+		struct epoll_event							*get_revents();
 	private:
 
 

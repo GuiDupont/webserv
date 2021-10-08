@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/07 18:29:45 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/08 11:39:34 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,12 @@ void	webserv::wait_for_connection() {
 	time_t t = time(0);
 	SOCKADDR_IN csin;
 	socklen_t crecsize = sizeof(csin);
-	_revents = (struct epoll_event *)calloc(64, sizeof(*_revents)); // verifier quelle valeur mettre
-	char buffer[100] = "";
 	struct epoll_event ev;
 	
 	while (1)
 	{
 		control_time_out();
-		int nsfd = epoll_wait(this->_epfd, _revents, 64, 0);
+		nsfd = epoll_wait(this->_epfd, _revents, 64, 0);
 		if (nsfd)
 			g_logger.fd << g_logger.get_timestamp() << LOG_EPOLL_EVENT << nsfd << std::endl;
 		else if (nsfd == -1)
@@ -202,95 +200,6 @@ void	request::write_body_inside_file() {
 /* REQUEST MANAGEMENT */
 
 
-void	request::set_request_to_ended() {
-
-	struct epoll_event ev;
-
-	stage = ENDED_REQUEST;
-	ev.events = EPOLLOUT;
-	ev.data.fd = csock;
-	epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_MOD, csock, &ev); // check return
-}
-
-void	webserv::set_request_to_ended(request &req) {
-
-	struct epoll_event ev;
-
-	req.stage = ENDED_REQUEST;
-	ev.events = EPOLLOUT;
-	ev.data.fd = req.csock;
-	epoll_ctl(_epfd, EPOLL_CTL_MOD, req.csock, &ev);
-}
-
-bool 	webserv::is_new_request(int fd) {
-
-	for (std::map<int, request>::iterator it = _requests.begin(); it != _requests.end(); it++) {
-		if (it->first == fd) {
-			if (it->second.stage != ENDED_REQUEST)
-				return (false);
-		}
-	}
-	// if (_requests.find(fd) != _requests.end())
-	// 	return (true);
-	return (true);
-}
-
-bool	webserv::is_pending_request(int csock) {
-	if (_requests.find(csock) != _requests.end())
-		return (true);
-	return (false);
-}
-
-void	webserv::ft_add_csock_to_vhost(int sock, int csock) {
-	std::list<vHost>::iterator it = this->_vhosts.begin();
-
-	for (; it != this->_vhosts.end(); it++) {
-		std::map< int, std::pair< std::string, size_t> >::iterator it_sock = it->get_sock_list().begin();
-		for (; it_sock != it->get_sock_list().end(); it_sock++) {
-			if (sock == it_sock->first)
-				it->get_csock_list().insert(csock);	
-		}
-	}
-}
-
-bool	webserv::ft_is_ssock(int fd) {
-	std::list<vHost>::iterator it = this->_vhosts.begin();
-
-	for (; it != this->_vhosts.end(); it++) {
-		std::map< int, std::pair< std::string, size_t> >::iterator it_sock = it->get_sock_list().begin();
-		for (; it_sock != it->get_sock_list().end(); it_sock++) {
-			if (fd == it_sock->first)
-				return (true);
-		}
-	}
-	return (false);
-}
-
-int		webserv::get_sock_by_matching_host_ip(std::pair< std::string, size_t> host_port) {
-	std::list<vHost>::iterator it = this->_vhosts.begin();
-
-	for (; it != this->_vhosts.end(); it++) {
-		std::map< int, std::pair< std::string, size_t> >::iterator it_sock = it->get_sock_list().begin();
-		for (; it_sock != it->get_sock_list().end(); it_sock++) {
-			if (host_port == it_sock->second)
-				return (it_sock->first);
-		}
-	}
-	return (-1);
-}
-
-void	webserv::display_sock() {
-	std::list<vHost>::iterator it = this->_vhosts.begin();
-	int i = 1;
-
-	for (; it != this->_vhosts.end(); it++) {
-		g_logger.fd << g_logger.get_timestamp() << "SERVER " << i++ << std::endl;
-		std::map< int, std::pair< std::string, size_t> >::iterator it_sock = it->get_sock_list().begin();
-		for (; it_sock != it->get_sock_list().end(); it_sock++) {
-			g_logger.fd << g_logger.get_timestamp() << it_sock->second.first << ":" << it_sock->second.second << "is bind to sock: " << it_sock->first << std::endl;
-		}
-	}
-}
 
 webserv::webserv(const std::string & path_config) : _client_max_body_size(-1) {
 	std::ifstream	config_file;
@@ -304,88 +213,10 @@ webserv::webserv(const std::string & path_config) : _client_max_body_size(-1) {
 		throw (bad_brackets_conf());
 	set_config(config_file);
 	insert_status_code();
+	_revents = (struct epoll_event *)calloc(REVENT_SIZE, sizeof(*_revents));
 	g_logger.fd << g_logger.get_timestamp() << LOG_CONFIG_DONE << std::endl;
 }
 
-void		webserv::set_config(std::ifstream & config_file) {
-	std::string		line;
-	std::string		first_word;
-
-	g_line = 0;
-	config_file.clear();
-	config_file.seekg(0);
-	while (!config_file.eof())
-	{
-		std::getline(config_file, line, '\n');
-		g_line++;
-		int i = 0;
-		while (isspace(line[i])) 
-			i++;
-		first_word = line.substr(i, line.find_first_of(" \t\n\v\f\r", i) - i);
-		if (first_word == "server") {
-			this->_vhosts.push_back(vHost(config_file, line));
-		}
-		else if (first_word == "client_max_body_size")
-			this->_client_max_body_size = g_parser.get_max_body_size(line);
-		else if (first_word == "error_page")
-			this->_error_pages.insert(g_parser.parse_error_page(line));
-		else if (first_word == "root")
-			_root = g_parser.parse_one_word(line);
-		else if (first_word == "}")
-			;
-		else if (first_word.size() != 0) {
-			if (first_word[0] == '{') 	// 123 : ascii value for {, it fixes issue at compilation with '{'
-				throw (bad_brackets_conf());
-			else
-				throw (bad_directive());
-		}
-	}
-	if (this->_vhosts.empty() == 1)
-		throw (no_port_associated()); // changer par la suite par une vraie exception pour vhost, comme recommande par Guillaume.
-}
-
-void	webserv::control_time_out(void) {
-    std::time_t t = std::time(0);
-	std::list<int>	sock_to_close;
-
-	for (std::map<int, std::time_t>::iterator it = _timeout.begin(); it != _timeout.end(); it++) {
-		if (t - it->second >= TIMEOUT)
-		{ //ajouter une securite si nous sommes en epollout : ne pas fermer le csock;
-			std::map<int, request>::iterator it_req = _requests.find(it->first);
-			if (it_req == _requests.end())
-				sock_to_close.push_back(it->first);
-			else if (it_req->second.stage != ENDED_REQUEST)
-				sock_to_close.push_back(it->first);		
-		}
-	}
-	for (std::list<int>::iterator it = sock_to_close.begin(); it != sock_to_close.end(); it++)  {
-		g_logger.fd << g_logger.get_timestamp() << "TIMEOUT, we closed csock : " << *it << std::endl;
-		clean_csock_from_server(*it);
-	}
-}
-
-void	webserv::clean_csock_from_server(int csock) {
-		g_logger.fd << g_logger.get_timestamp() << "We are going to delete csock " << csock << std::endl;
-
-		_requests.erase(csock);
-		_timeout.erase(csock);
-		for (std::list<vHost>::iterator it_vhost = _vhosts.begin(); it_vhost != _vhosts.end(); it_vhost++)
-		{
-			std::set<int>::iterator it_csock = it_vhost->get_csock_list().find(csock);
-			if (it_csock != it_vhost->get_csock_list().end())
-				it_vhost->get_csock_list().erase(it_csock);
-		}
-		epoll_ctl(_epfd, EPOLL_CTL_DEL, csock, NULL);
-		close(csock);
-}
-
-webserv::webserv(void)	{ }
-
-webserv::~webserv(void)	{ }
-
-int					webserv::get_epfd() const { return (this->_epfd); }
-
-std::list<vHost>	&webserv::get_vhosts() 	{ return (this->_vhosts); }
 
 void webserv::read_from_csock(int csock) {
 	// g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLIN on csock: " << csock << std::endl;
@@ -393,6 +224,8 @@ void webserv::read_from_csock(int csock) {
 	int ret;
 	std::map<int, request>::iterator it;
 
+	if (ft_is_static_fd(csock))
+		return ;
 	if (is_new_request(csock) == true) {
 		g_logger.fd << g_logger.get_timestamp() << "New request has been created from csock: " + ft_itos(csock) << std::endl;
 		_requests.insert(std::pair<int, request>(csock, request(csock)));
@@ -493,3 +326,182 @@ void	webserv::insert_status_code() {
 struct epoll_event				*webserv::get_revents(){
 	return (_revents);
 }	
+
+bool	webserv::ft_is_static_fd(int fd) {
+	std::set<int>::iterator it	= static_fds.begin();
+
+	for (; it != static_fds.end(); it++)
+		if (fd == *it)
+			return true;
+	return false;
+}
+
+
+void	request::set_request_to_ended() {
+
+	struct epoll_event ev;
+
+	stage = ENDED_REQUEST;
+	ev.events = EPOLLOUT;
+	ev.data.fd = csock;
+	if (epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_MOD, csock, &ev) == -1) // check return
+		g_logger.fd << g_logger.get_timestamp() << "We had an issue with EPOLL CTL, trying to chg a csock associated event. errno :" << errno << ": " << strerror(errno) << std::endl; // add an exception
+}
+
+
+bool 	webserv::is_new_request(int fd) {
+
+	for (std::map<int, request>::iterator it = _requests.begin(); it != _requests.end(); it++) {
+		if (it->first == fd) {
+			if (it->second.stage != ENDED_REQUEST)
+				return (false);
+		}
+	}
+	// if (_requests.find(fd) != _requests.end())
+	// 	return (true);
+	return (true);
+}
+
+bool	webserv::is_pending_request(int csock) {
+	if (_requests.find(csock) != _requests.end())
+		return (true);
+	return (false);
+}
+
+void	webserv::ft_add_csock_to_vhost(int sock, int csock) {
+	std::list<vHost>::iterator it = this->_vhosts.begin();
+
+	for (; it != this->_vhosts.end(); it++) {
+		std::map< int, std::pair< std::string, size_t> >::iterator it_sock = it->get_sock_list().begin();
+		for (; it_sock != it->get_sock_list().end(); it_sock++) {
+			if (sock == it_sock->first)
+				it->get_csock_list().insert(csock);	
+		}
+	}
+}
+
+bool	webserv::ft_is_ssock(int fd) {
+	std::list<vHost>::iterator it = this->_vhosts.begin();
+
+	for (; it != this->_vhosts.end(); it++) {
+		std::map< int, std::pair< std::string, size_t> >::iterator it_sock = it->get_sock_list().begin();
+		for (; it_sock != it->get_sock_list().end(); it_sock++) {
+			if (fd == it_sock->first)
+				return (true);
+		}
+	}
+
+	// std::set<vHost>::iterator it = this->_vhosts.begin();
+	// for (; it_sock != it->get_sock_list().end(); it_sock++) {
+	// 		if (fd == it_sock->first)
+	// 			return (true);
+	// 	}
+	return (false);
+}
+
+int		webserv::get_sock_by_matching_host_ip(std::pair< std::string, size_t> host_port) {
+	std::list<vHost>::iterator it = this->_vhosts.begin();
+
+	for (; it != this->_vhosts.end(); it++) {
+		std::map< int, std::pair< std::string, size_t> >::iterator it_sock = it->get_sock_list().begin();
+		for (; it_sock != it->get_sock_list().end(); it_sock++) {
+			if (host_port == it_sock->second)
+				return (it_sock->first);
+		}
+	}
+	return (-1);
+}
+
+void	webserv::display_sock() {
+	std::list<vHost>::iterator it = this->_vhosts.begin();
+	int i = 1;
+
+	for (; it != this->_vhosts.end(); it++) {
+		g_logger.fd << g_logger.get_timestamp() << "SERVER " << i++ << std::endl;
+		std::map< int, std::pair< std::string, size_t> >::iterator it_sock = it->get_sock_list().begin();
+		for (; it_sock != it->get_sock_list().end(); it_sock++) {
+			g_logger.fd << g_logger.get_timestamp() << it_sock->second.first << ":" << it_sock->second.second << "is bind to sock: " << it_sock->first << std::endl;
+		}
+	}
+}
+
+void	webserv::control_time_out(void) {
+    std::time_t t = std::time(0);
+	std::list<int>	sock_to_close;
+
+	for (std::map<int, std::time_t>::iterator it = _timeout.begin(); it != _timeout.end(); it++) {
+		if (t - it->second >= TIMEOUT)
+		{ //ajouter une securite si nous sommes en epollout : ne pas fermer le csock;
+			std::map<int, request>::iterator it_req = _requests.find(it->first);
+			if (it_req == _requests.end())
+				sock_to_close.push_back(it->first);
+			else if (it_req->second.stage != ENDED_REQUEST)
+				sock_to_close.push_back(it->first);		
+		}
+	}
+	for (std::list<int>::iterator it = sock_to_close.begin(); it != sock_to_close.end(); it++)  {
+		g_logger.fd << g_logger.get_timestamp() << "TIMEOUT, we closed csock : " << *it << std::endl;
+		clean_csock_from_server(*it);
+	}
+}
+
+void	webserv::clean_csock_from_server(int csock) {
+		g_logger.fd << g_logger.get_timestamp() << "We are going to delete csock " << csock << std::endl;
+
+		_requests.erase(csock);
+		_timeout.erase(csock);
+		for (std::list<vHost>::iterator it_vhost = _vhosts.begin(); it_vhost != _vhosts.end(); it_vhost++)
+		{
+			std::set<int>::iterator it_csock = it_vhost->get_csock_list().find(csock);
+			if (it_csock != it_vhost->get_csock_list().end())
+				it_vhost->get_csock_list().erase(it_csock);
+		}
+		epoll_ctl(_epfd, EPOLL_CTL_DEL, csock, NULL);
+		close(csock);
+}
+
+webserv::webserv(void)	{ }
+
+webserv::~webserv(void)	{ }
+
+int					webserv::get_epfd() const { return (this->_epfd); }
+
+std::list<vHost>	&webserv::get_vhosts() 	{ return (this->_vhosts); }
+
+
+void		webserv::set_config(std::ifstream & config_file) {
+	std::string		line;
+	std::string		first_word;
+
+	g_line = 0;
+	config_file.clear();
+	config_file.seekg(0);
+	while (!config_file.eof())
+	{
+		std::getline(config_file, line, '\n');
+		g_line++;
+		int i = 0;
+		while (isspace(line[i])) 
+			i++;
+		first_word = line.substr(i, line.find_first_of(" \t\n\v\f\r", i) - i);
+		if (first_word == "server") {
+			this->_vhosts.push_back(vHost(config_file, line));
+		}
+		else if (first_word == "client_max_body_size")
+			this->_client_max_body_size = g_parser.get_max_body_size(line);
+		else if (first_word == "error_page")
+			this->_error_pages.insert(g_parser.parse_error_page(line));
+		else if (first_word == "root")
+			_root = g_parser.parse_one_word(line);
+		else if (first_word == "}")
+			;
+		else if (first_word.size() != 0) {
+			if (first_word[0] == '{') 	// 123 : ascii value for {, it fixes issue at compilation with '{'
+				throw (bad_brackets_conf());
+			else
+				throw (bad_directive());
+		}
+	}
+	if (this->_vhosts.empty() == 1)
+		throw (no_port_associated()); // changer par la suite par une vraie exception pour vhost, comme recommande par Guillaume.
+}

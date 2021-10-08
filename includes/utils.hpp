@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 12:51:13 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/05 13:10:51 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/08 10:24:23 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,12 @@ bool                            true_one_time_per_x_secondes(int x);
 bool                            is_valid_file(std::string & path);
 bool							is_symlink(std::string & path);
 bool							is_file(std::string & path);
+void                            add_fd_epollin_to_pool(int fd);
+void                            add_fd_epollout_to_pool(int fd);
+bool                            can_I_read_from_fd(int fd);
+bool                            can_I_write_in_fd(int fd);
+
+
 
 
 

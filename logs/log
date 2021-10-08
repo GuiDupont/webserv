@@ -1,37 +1,1073 @@
-19h45m53s: ------BEGINNING OF THE PROGRAM-------
-19h45m53s: Config successful
-19h45m53s: Epoll create successful			 | epfd  = 4
-19h45m53s: Ssock created           			 | ssock = 5
-19h45m53s: Ssock added to Epoll    			 | ssock = 5
-19h45m53s: Ssock created           			 | ssock = 6
-19h45m53s: Ssock added to Epoll    			 | ssock = 6
-19h45m53s: Ssock created           			 | ssock = 7
-19h45m53s: Ssock added to Epoll    			 | ssock = 7
-19h45m53s: Ssock created           			 | ssock = 8
-19h45m53s: Ssock added to Epoll    			 | ssock = 8
-19h45m53s: Ssock created           			 | ssock = 9
-19h45m53s: Ssock added to Epoll    			 | ssock = 9
-19h45m53s: Ssock created           			 | ssock = 10
-19h45m53s: Ssock added to Epoll    			 | ssock = 10
-19h45m53s: Epoll is waiting for connection
-19h45m58s: No events
-19h45m59s: Epoll noticed new events     	| nb    = 1
-19h45m59s: We accepted a new client from ssock 7, new csock is = 11
-19h46m0s: Epoll noticed new events     	| nb    = 1
-19h46m0s: New request has been created from csock: 11
-19h46m0s: We are parsing header from ccosk: 11
-19h46m0s: We are done parsing the req from ccosk: 11
-19h46m1s: Epoll noticed new events     	| nb    = 1
-19h46m1s: We are parsing header from ccosk: 11
-19h46m1s: We are done parsing the req from ccosk: 11
-19h46m2s: Epoll noticed new events     	| nb    = 1
-19h46m2s: We are parsing header from ccosk: 11
-/portable/cgi.php/cgi.php/19h46m2s: Coucou1 11
-19h46m2s: after associated vhost: 
-19h46m2s: Stat on /mnt/nfs/homes/ade-garr/42/github/webserv/portable/cgi.php/cgi.php/ provides this error Not a directory
-19h46m2s: after vhost config: 
-19h46m2s: Setting CGI params
-19h46m2s: 1 conf->cgi_activated :1
-19h46m2s: We are done parsing the req from ccosk: 11
-19h46m2s: Epoll noticed new events     	| nb    = 1
-19h46m2s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m9s: ------BEGINNING OF THE PROGRAM-------
+12h33m9s: Config successful
+12h33m9s: Epoll create successful			 | epfd  = 4
+12h33m9s: Ssock created           			 | ssock = 5
+12h33m9s: Ssock added to Epoll    			 | ssock = 5
+12h33m9s: Ssock created           			 | ssock = 6
+12h33m9s: Ssock added to Epoll    			 | ssock = 6
+12h33m9s: Ssock created           			 | ssock = 7
+12h33m9s: Ssock added to Epoll    			 | ssock = 7
+12h33m9s: Ssock created           			 | ssock = 8
+12h33m9s: Ssock added to Epoll    			 | ssock = 8
+12h33m9s: Ssock created           			 | ssock = 9
+12h33m9s: Ssock added to Epoll    			 | ssock = 9
+12h33m9s: Ssock created           			 | ssock = 10
+12h33m9s: Ssock added to Epoll    			 | ssock = 10
+12h33m9s: Epoll is waiting for connection
+12h33m14s: No events
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: We accepted a new client from ssock 7, new csock is = 11
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: New request has been created from csock: 11
+12h33m14s: We are parsing header from ccosk: 11
+12h33m14s: We are going to create a config 11
+12h33m14s: after associated vhost: 
+12h33m14s: after vhost config: 
+12h33m14s: Setting CGI params
+12h33m14s: 1 conf->cgi_activated :1
+12h33m14s: We are done parsing header from ccosk: 11
+12h33m14s: We are parsing body from ccosk: 11
+12h33m14s: We are done parsing the req from ccosk: 11
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: We are going to do local actions
+12h33m14s: We are about to handle a CGI request
+12h33m14s: I am father
+12h33m14s: We are done initiating the CGI
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: We are going to do local actions
+12h33m14s: We are about to handle a CGI request
+12h33m14s: I am child and I am about to execve CGI
+12h33m14s: /mnt/nfs/homes/gdupont/Desktop/webserv/tests/ubuntu_cgi_tester
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: /mnt/nfs/homes/gdupont/Desktop/webserv/tests/hello.php
+12h33m14s: CONTENT_LENGTH=
+12h33m14s: CONTENT_TYPE=
+12h33m14s: GATEWAY_INTERFACE=CGI/1.1
+12h33m14s: PATH_INFO=
+12h33m14s: PATH_TRANSLATED=/mnt/nfs/homes/gdupont/Desktop/webserv/tests/hello.php
+12h33m14s: QUERY_STRING=
+12h33m14s: REMOTE_ADDR=0.0.0.0
+12h33m14s: REQUEST_METHOD=GET
+12h33m14s: SCRIPT_NAME=/tests/hello.php
+12h33m14s: SERVER_NAME=42webserv
+12h33m14s: SERVER_PORT=0
+12h33m14s: SERVER_PROTOCOL=HTTP/1.1
+12h33m14s: SERVER_SOFTWARE=42webserv
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: 12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: there is nothing to read in pipe from cgi but I will try again
+12h33m14s: Epoll noticed new events     	| nb    = 2
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: We check a fd from _revents
+12h33m14s: We check a fd from _revents
+12h33m14s: We check a fd from _revents
+12h33m14s: New request has been created from csock: 12
+12h33m14s: We had an issue while using recv on csock 12 Socket operation on non-socket
+12h33m14s: We are going to delete csock 12
+12h33m14s: Epoll noticed new events     	| nb    = 1
+12h33m14s: Epoll_wait identified an EPOLLOUT on csock: 11
+12h33m14s: I am about to read from CGI
+12h33m14s: We check a fd from _revents
+12h33m14s: fd 12 is not ready for reading
+12h33m14s: We are going to delete csock 11
+12h33m19s: No events
+12h33m20s:  We are about to quit
+12h33m20s:  cssock is closed: 5
+12h33m20s:  cssock is closed: 6
+12h33m20s:  cssock is closed: 7
+12h33m20s:  cssock is closed: 8
+12h33m20s:  cssock is closed: 9
+12h33m20s:  cssock is closed: 10
+12h33m20s:  EPFD is closed: 4

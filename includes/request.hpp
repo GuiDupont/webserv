@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:07:25 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/07 18:49:45 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/08 10:28:00 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ class request {
 		void	initiate_CGI_POST();
 		void	readfrom_CGI();
 		void	read_first_line_cgi();
+		void	erase_static_fd_from_request(int fd);
+
 
 };
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/07 19:37:05 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/08 12:33:47 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,15 @@ std::ostream & operator<<(std::ostream & o,const request & r)
 }
 
 
-request::request() : stage(0), next_chunk(-1), nb_trailer_to_received(0), code_to_send(0), close_csock(false), conf(NULL), resp(NULL), cgi(NULL), header_is_sent(false), body_is_sent(false), body_fd(0), body_written_cgi(0) {}
+request::request() : stage(0), next_chunk(-1), nb_trailer_to_received(0), code_to_send(0), close_csock(false), conf(NULL), resp(NULL), cgi(NULL), header_is_sent(false), body_is_sent(false), body_fd(-1), body_written_cgi(0) {}
 
 request::request(int csock) :	stage(0), csock(csock), next_chunk(-1), nb_trailer_to_received(0), 
 								code_to_send(0), close_csock(false), conf(NULL), resp(NULL), cgi(NULL),
-								header_is_sent(false), body_is_sent(false), body_fd(0), body_written_cgi(0) {}
+								header_is_sent(false), body_is_sent(false), body_fd(-1), body_written_cgi(0) {}
 
 request::request(int csock, std::string left) : stage(0), csock(csock), left(left), next_chunk(-1),
 												nb_trailer_to_received(0), code_to_send(0), close_csock(false),
-												conf(NULL), resp(NULL), cgi(NULL), header_is_sent(false), body_is_sent(false), body_fd(0), body_written_cgi(0) {}
+												conf(NULL), resp(NULL), cgi(NULL), header_is_sent(false), body_is_sent(false), body_fd(-1), body_written_cgi(0) {}
 
 
 void request::param_trailer(std::string str) {
@@ -131,22 +131,26 @@ void	request::send_body_from_file() {
 	int amount_sent;
 
 	char buff[SEND_SPEED + 1];
-	
-	if (body_fd == 0)
-		body_fd = open(conf->path_to_target.c_str(), O_RDONLY);
+
+	g_logger.fd << g_logger.get_timestamp() << "We are trying to send body from file: -" << conf->path_to_target.c_str() << std::endl;
+
 	if (body_fd == -1) {
-		g_logger.fd << g_logger.get_timestamp() << "Issue while opening file on csock " << csock << ". Error: " << strerror(errno) << std::endl; // end special cases ?
-		body_is_sent = true; // a check ce qu'on fait
-		close_csock = true;
-		return ;
+		body_fd = open(conf->path_to_target.c_str(), O_RDONLY);
+		if (body_fd == -1) {
+			g_logger.fd << g_logger.get_timestamp() << "Issue while opening -" << conf->path_to_target.c_str() << "- file on csock " << csock << ". Error: " << strerror(errno) << std::endl; // end special cases ?
+			body_is_sent = true; // a check ce qu'on fait plutot envoyer une erreur 500
+			close_csock = true;
+			return ;
+		}
+		g_logger.fd << g_logger.get_timestamp() << "We opened file -" << conf->path_to_target.c_str() << "- file on fd " << body_fd << std::endl; // end special cases ?
 	}
-	g_logger.fd << g_logger.get_timestamp() << "We are sending : " << conf->path_to_target << "to csock : " << csock << std::endl;
 	for (int i = 4; i != 0; i--) {
+		g_logger.fd << g_logger.get_timestamp() << "We are reading : " << conf->path_to_target << std::endl;
 		amount_read = read(body_fd, buff, SEND_SPEED);
 		buff[amount_read] = '\0';
 		amount_sent = send(csock, buff, amount_read, 0);
 		std::cout << " We are sending from file: " << buff << std::endl;
-		if (amount_read != SEND_SPEED) {
+		if (amount_read != SEND_SPEED) { // a voir avec ALEXXXXXXXXX-----------------------------------------------------------
 			body_is_sent = true;
 			g_logger.fd << g_logger.get_timestamp() << "We are done sending : " << conf->path_to_target << "to csock : " << csock << std::endl;
 			break;
@@ -154,37 +158,14 @@ void	request::send_body_from_file() {
 	}
 }
 
-static int		unlink_or_rmdir(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf) {
-	std::string path(fpath);
-	int status;
-
-	if (is_directory(path))
-		status = rmdir(fpath);
-	else
-		status = unlink(fpath);
-	if (status != 0)
-		g_logger.fd << g_logger.get_timestamp() << "An error occured while deleting -" << path << " errno: " << errno << " " << strerror(errno) << std::endl;
-	return (status);
-}
-				
-void	request::delete_directory(std::string & path, request & req) {
-	std::cout << " We are about to delete " << path << std::endl;
-	nftw(path.c_str(), unlink_or_rmdir, 30, FTW_DEPTH);
-	req.code_to_send = 204;
-	req.body_response = response::generate_error_body(g_webserv.status_code.find(req.code_to_send)->second);
-	req.conf->local_actions_done = true;
-}
-
-void	request::delete_file(std::string & path, request & req) {
-	std::cout << " We are about to delete " << path << std::endl;
-	int status = unlink(path.c_str());
-	
-	req.code_to_send = 204;
-	req.body_response = response::generate_error_body(g_webserv.status_code.find(req.code_to_send)->second);
-	req.conf->local_actions_done = true;
-}
-
 request::~request() {
+	if (body_fd != -1)
+		close(body_fd);
+	if (conf && conf->cgi_activated == true && cgi) {
+		erase_static_fd_from_request(cgi->pipefd[0]);
+		if (method == "POST")
+			erase_static_fd_from_request(cgi->pipefd_post[1]);
+	}
 	delete conf;
 	conf = NULL;
 	delete resp;
@@ -193,10 +174,15 @@ request::~request() {
 	cgi = NULL;
 }
 
+void	request::erase_static_fd_from_request(int fd) {
+	g_webserv.static_fds.erase(fd);
+	epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_DEL, fd, NULL);
+}
+
 void request::initiate_CGI_GET() {
 
 	int ret = pipe(cgi->pipefd);
-	fcntl(cgi->pipefd[0], F_SETFL, O_NONBLOCK);
+	//fcntl(cgi->pipefd[0], F_SETFL, O_NONBLOCK);
 	if (ret == -1) {
 		g_logger.fd << g_logger.get_timestamp() << "The pipe didn't work\n";
 		code_to_send = 500; // a voir/tester avec suite du programme
@@ -236,6 +222,7 @@ void request::initiate_CGI_GET() {
 	{
 		g_logger.fd << g_logger.get_timestamp() << "I am father\n";
 		close(cgi->pipefd[1]);
+		
 		waitpid(cgi->pid, &cgi->pid_status, WNOHANG);
 		if (WIFEXITED(cgi->pid_status) == true && WEXITSTATUS(cgi->pid_status) != 0) {
 			code_to_send = 500; // a voir/tester avec suite du programme
@@ -245,6 +232,7 @@ void request::initiate_CGI_GET() {
 			g_logger.fd << g_logger.get_timestamp() << "I am father and child " << cgi->pid << " exited with " << cgi->pid_status << std::endl;
 			return ;
 		}
+		add_fd_epollin_to_pool(cgi->pipefd[0]);
 		conf->local_actions_done = true;
 		cgi->setCgi_stage("READFROM");
 		return ;
@@ -311,6 +299,10 @@ void request::initiate_CGI_POST() {
 			close(cgi->pipefd_post[1]);
 			return ;
 		}
+		add_fd_epollin_to_pool(cgi->pipefd[0]);
+		g_webserv.static_fds.insert(cgi->pipefd_post[1]); /////////////////////////////ici
+		add_fd_epollout_to_pool(cgi->pipefd_post[1]);
+		g_webserv.static_fds.insert(cgi->pipefd[0]);
 		return ;
 	}
 }
@@ -354,6 +346,8 @@ void request::initiate_CGI() {
 			return ;
 		}
 		std::string towrite = body_request.substr(body_written_cgi, SEND_SPEED);
+		if (can_I_write_in_fd(cgi->pipefd_post[1]) == false)
+			return ;
 		int ret = write(cgi->pipefd_post[1], towrite.c_str(), towrite.size());
 		body_written_cgi += ret;
 		if (body_written_cgi == body_request.size()) {
@@ -372,7 +366,7 @@ void request::readfrom_CGI() {
 	int ret;
 	waitpid(cgi->pid, &cgi->pid_status, WNOHANG);
 	if (WIFEXITED(cgi->pid_status) == true && WEXITSTATUS(cgi->pid_status) != 0) {
-	g_logger.fd << g_logger.get_timestamp() << "Child exited badly\n";
+		g_logger.fd << g_logger.get_timestamp() << "Child exited badly\n";
 		if (cgi->started_answering_cgi == true)
 			body_is_sent = true;
 		code_to_send = 500;
@@ -383,6 +377,12 @@ void request::readfrom_CGI() {
 		close(cgi->pipefd[0]);
 		return ;
 	}
+	else if (WIFEXITED(cgi->pid_status) && can_I_read_from_fd(cgi->pipefd[0]) == false){
+		body_is_sent = true;
+		return ;
+	}
+	else
+		
 	if (cgi->status_read == false) {
 		read_first_line_cgi();
 	}
@@ -398,12 +398,16 @@ void request::readfrom_CGI() {
 			cgi->left_from_first_line = cgi->left_from_first_line.substr(ret, cgi->left_from_first_line.size() - ret);
 		}
 		else {
-			ret = read(cgi->pipefd[0], buf, SEND_SPEED);
-			if (ret == -1 && errno == EAGAIN){
+			if (can_I_read_from_fd(cgi->pipefd[0]) == false) {
 				g_logger.fd << g_logger.get_timestamp() << "there is nothing to read in pipe from cgi but I will try again\n";		
 				return ;
 			}
-			if (ret == -1 ) {
+			ret = read(cgi->pipefd[0], buf, SEND_SPEED);
+			if (ret == -1 && errno == EAGAIN){ // todel !!!!!!!!
+				g_logger.fd << g_logger.get_timestamp() << "THIS SHOULD NOT HAPPEN : -1 after epoll told pipefd[0] is readable\n";		
+				return ;
+			}
+			if (ret == -1) {
 				g_logger.fd << g_logger.get_timestamp() << "We could not read form CGI\n";
 				close_csock = true;
 				close(cgi->pipefd[0]);
@@ -433,6 +437,10 @@ void request::read_first_line_cgi() {
 	char buf[SEND_SPEED + 1];
 	int ret;
 
+	if (can_I_read_from_fd(cgi->pipefd[0]) == false) {
+		g_logger.fd << g_logger.get_timestamp() << "there is nothing to read in pipe from cgi but I will try again\n";		
+		return ;
+	}
 	ret = read(cgi->pipefd[0], buf, SEND_SPEED);
 	if ((ret == -1 && errno != EAGAIN) || ret == 0) {
 		close_csock = true;
@@ -467,4 +475,35 @@ void request::read_first_line_cgi() {
 	cgi->status_read = true;
 	end_of_first_line += std::strlen("\r\n");
 	cgi->left_from_first_line = cgi->first_line.substr(end_of_first_line, cgi->first_line.size() - end_of_first_line); 
+}
+
+
+static int		unlink_or_rmdir(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf) {
+	std::string path(fpath);
+	int status;
+
+	if (is_directory(path))
+		status = rmdir(fpath);
+	else
+		status = unlink(fpath);
+	if (status != 0)
+		g_logger.fd << g_logger.get_timestamp() << "An error occured while deleting -" << path << " errno: " << errno << " " << strerror(errno) << std::endl;
+	return (status);
+}
+				
+void	request::delete_directory(std::string & path, request & req) {
+	std::cout << " We are about to delete " << path << std::endl;
+	nftw(path.c_str(), unlink_or_rmdir, 30, FTW_DEPTH);
+	req.code_to_send = 204;
+	req.body_response = response::generate_error_body(g_webserv.status_code.find(req.code_to_send)->second);
+	req.conf->local_actions_done = true;
+}
+
+void	request::delete_file(std::string & path, request & req) {
+	std::cout << " We are about to delete " << path << std::endl;
+	int status = unlink(path.c_str());
+	
+	req.code_to_send = 204;
+	req.body_response = response::generate_error_body(g_webserv.status_code.find(req.code_to_send)->second);
+	req.conf->local_actions_done = true;
 }
