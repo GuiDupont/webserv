@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/08 14:08:02 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/08 15:31:19 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -433,6 +433,8 @@ void request::read_first_line_cgi() {
 		g_logger.fd << g_logger.get_timestamp() << "there is nothing to read in pipe from cgi but I will try again\n";		
 		return ;
 	}
+	g_logger.fd << g_logger.get_timestamp() << "there is something to read in pipe from cgi\n";		
+	
 	ret = read(cgi->pipefd[0], buf, SEND_SPEED);
 	if (ret == -1 || ret == 0) {
 		close_csock = true;
@@ -453,6 +455,8 @@ void request::read_first_line_cgi() {
 	else
 		code_to_send = 200;
 	std::string status_line = response::get_status_line(*this);
+	if (cgi->first_line.substr(0, 7) != "Status:")
+		status_line += cgi->first_line;
 	ret = send(csock, status_line.c_str(), status_line.size(), 0);
 	if (ret == -1) {
 		close_csock = true;

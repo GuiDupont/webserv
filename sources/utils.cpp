@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/08 13:53:38 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/08 14:44:24 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,17 @@ int		ft_string_is_digit(const std::string & s)
 		i++;
 	}
 	return (1);
+}
+
+bool		ft_string_has_whitespace(const std::string & s)
+{
+	int i = 0;
+	while (s[i]) {
+		if (std::iswspace(s[i]))
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
 int count_words(std::string &line) {

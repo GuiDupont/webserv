@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/07 19:36:34 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/08 14:38:41 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ void	config::set_cgi_params(request & req) {
 	if (query_index != target.size())
 		query_string = target.substr(query_index + 1, target.size() - (query_index + 1));
 	target = target.substr(0, query_index);
-	if (begin_cgi_ext == std::string::npos || cgi_ext.find(CGI_EXT) == cgi_ext.end() || method & DELETE)
+	if (begin_cgi_ext == std::string::npos || cgi_ext.find(CGI_EXT) == cgi_ext.end() || method & DELETE
+		|| req.code_to_send != 0)
 		return;
 	size_t path_info_index = 0;
 	if (begin_cgi_ext == std::string::npos)

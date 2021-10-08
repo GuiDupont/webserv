@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/08 12:08:53 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/08 14:45:57 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -431,7 +431,7 @@ void	webserv_parser::analyse_header(request &req) { // fix : empty lines should 
 			return ;
 		}
 		req.HTTP_version = get_word(req.left, index, std::string("\r\n"));
-		if (req.HTTP_version.size() == 0)
+		if (req.HTTP_version.size() == 0 || ft_string_has_whitespace(req.HTTP_version))
 		{
 			req.code_to_send = 400;
 			req.set_request_to_ended();
