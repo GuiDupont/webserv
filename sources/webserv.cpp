@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/08 17:49:01 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/08 20:06:53 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,7 @@ void	webserv::accept_new_client(int sock) {
 	_timeout.insert(std::pair<int, std::time_t>(csock, std::time(0)));
 	g_logger.fd << g_logger.get_timestamp() << "We accepted a new client from ssock " << sock << ", new csock is = " << csock << std::endl;
 	ft_add_csock_to_vhost(sock, csock);
-	ev.events = EPOLLIN;
-	ev.data.fd = csock;
-	fcntl(csock, F_SETFL, O_NONBLOCK);
-	if (epoll_ctl(_epfd, EPOLL_CTL_ADD, csock, &ev) == -1)
-		g_logger.fd << g_logger.get_timestamp() << "We had an issue with EPOLL CTL, trying to add a csock to the pool. errno :" << errno << ": " << strerror(errno) << std::endl; // add an exception
+	add_fd_epollin_to_pool(csock);
 }
 
 void	webserv::answer_to_request(int csock) {
@@ -70,15 +66,18 @@ void	webserv::answer_to_request(int csock) {
 
 	if (req.conf->validity_checked == false) {
 		req.control_config_validity();
-		req.update_code_and_body(); // a voir si on peut pas bouger pour retomber sur les erreurs liees aux fonctions du CGI
+		if (req.code_to_send != 0 && req.code_to_send != 200 && req.code_to_send != 204)
+			req.conf->local_actions_done = true;
+		//req.update_code_and_body();
 	}
 	if (req.conf->local_actions_done == false)
 		req.do_local_actions();
+
 	req.update_code_and_body();
+
 	if (req.conf->local_actions_done == true)
 		req.response_request();
 	if (req.body_is_sent == true) {
-		g_logger.fd << g_logger.get_timestamp() << "Body is sent\n";
 		if (req.close_csock == true)
 			g_webserv.clean_csock_from_server(csock); 
 		else {
@@ -98,19 +97,19 @@ void	request::control_config_validity() {
 		return ;
 	else if (common_validity_check() == false)
 		return ;
-	else if (conf->method & GET) {
+	else if (conf->method & GET)
 		test_path_get(*this);
-	}
-	else if (conf->method & DELETE) {
+	else if (conf->method & DELETE)
 		test_path_delete(*this);
-	}
 	else if (conf->method & POST)
 		test_path_post(*this);
+
 	// g_logger.fd << g_logger.get_timestamp() << " at the end of control config validity : " << conf->local_actions_done << std::endl;
 }
 
 void	request::update_code_and_body() {
 	if (code_to_send != 0 && code_to_send != 200 && code_to_send != 204) { // dod some test to see if it is good
+		g_logger.fd << g_logger.get_timestamp() << "We identified following code: " << code_to_send << "for csock " << csock << std::endl;
 		conf->local_actions_done = true;
 		close_csock = true;
 		std::map< int, std::string>::iterator it;
@@ -140,9 +139,8 @@ bool	request::common_validity_check() {
 
 void	request::response_request() {
 
-	if (conf->cgi_activated == true) {
-		readfrom_CGI();
-	}
+	if (conf->cgi_activated == true)
+		read_and_send_from_CGI();
 	else {
 		if (header_is_sent == false) {
 		g_logger.fd << g_logger.get_timestamp() << "We are going to respond a request with code : " << code_to_send << std::endl;
@@ -158,12 +156,14 @@ void	request::response_request() {
 
 void	request::do_local_actions() {
 
-	g_logger.fd << g_logger.get_timestamp() << "We are going to do local actions\n";
+	if (conf->cgi_activated == true)
+		return (handle_CGI());
+	else
+		handle_standard_response();
+}
 
-	if (conf->cgi_activated == true) {
-		initiate_CGI();
-	}
-	else if (conf->method & GET) {
+void	request::handle_standard_response() {
+	if (conf->method & GET) {
 		conf->local_actions_done = true;
 		code_to_send = 200;
 	}
@@ -180,22 +180,6 @@ void	request::do_local_actions() {
 		code_to_send = 200;			
 	}
 }
-
-void	request::write_body_inside_file() {
-	std::ofstream file(conf->path_to_target.c_str());
-	if (file.is_open() == false) {
-		g_logger.fd << g_logger.get_timestamp() << "Can't open :" << conf->path_to_target.c_str();
-		return ;
-	}
-	file << body_request;
-	file.close();
-	conf->local_actions_done = true;
-}
-
-
-/* REQUEST MANAGEMENT */
-
-
 
 webserv::webserv(const std::string & path_config) : _client_max_body_size(-1) {
 	std::ifstream	config_file;

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/08 14:45:57 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/08 19:37:03 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -499,11 +499,8 @@ void	webserv_parser::analyse_header(request &req) { // fix : empty lines should 
 		}
 		req.left = req.left.substr(index, req.left.size() - index);
 		req.stage = 1;
-		g_logger.fd << g_logger.get_timestamp() + "We are going to create a config " << req.csock << std::endl;// analyse_body(it->second); // a faire
-
 		req.conf = new config(req);
-		g_logger.fd << g_logger.get_timestamp() + "We are done parsing header from ccosk: " << req.csock << std::endl;// analyse_body(it->second); // a faire
-
+		g_logger.fd << g_logger.get_timestamp() << "We are done parsing header from ccosk: " << req.csock << std::endl;// analyse_body(it->second); // a faire
 		analyse_body(req);
 	}
 }

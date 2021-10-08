@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/08 17:42:08 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/08 18:17:25 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -567,7 +567,9 @@ void	add_fd_epollin_to_pool(int fd) {
 	ev.events = EPOLLIN ;
 	ev.data.fd = fd;
 	if (epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_ADD, fd, &ev) == -1)
-		g_logger.fd << g_logger.get_timestamp() << "We had an issue with EPOLL CTL, trying to add " << fd << " to the pool. errno :" << errno << ": " << strerror(errno) << std::endl; // add an exception
+		g_logger.fd << g_logger.get_timestamp() << "We had an issue with EPOLL CTL, trying to add " << fd << " to the pool. errno :" << errno << ": " << strerror(errno) << std::endl;
+	else
+		g_logger.fd << g_logger.get_timestamp() << "We added " << fd << " to the pool looking, for Epollin." << std::endl; 
 }
 
 void	add_fd_epollout_to_pool(int fd) {
@@ -576,6 +578,8 @@ void	add_fd_epollout_to_pool(int fd) {
 	ev.data.fd = fd;
 	if (epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_ADD, fd, &ev) == -1)
 		g_logger.fd << g_logger.get_timestamp() << "We had an issue with EPOLL CTL EPOLLOUT, trying to add " << fd << " to the pool. errno :" << errno << ": " << strerror(errno) << std::endl; // add an exception
+	else
+		g_logger.fd << g_logger.get_timestamp() << "We added " << fd << " to the pool looking, for Epollout." << std::endl;
 }
 
 bool   can_I_write_in_fd(int fd) {
@@ -586,7 +590,7 @@ bool   can_I_write_in_fd(int fd) {
 		if (_revents[i].data.fd == fd && _revents[i].events & EPOLLOUT)
 			return true;
 	}
-	g_logger.fd << g_logger.get_timestamp() << "fd " << fd << "id not ready for writing" << std::endl; // end special cases ?
+	g_logger.fd << g_logger.get_timestamp() << "fd " << fd << "id not ready for writing" << std::endl;
 
 	return false;
 }
@@ -596,10 +600,9 @@ bool   can_I_read_from_fd(int fd) {
 	int nsfd					= g_webserv.nsfd;
 
 	for (int i = 0; i < nsfd; i++) {
-		g_logger.fd << g_logger.get_timestamp() << "We check a fd from _revents" << std::endl;
 		if (_revents[i].data.fd == fd && _revents[i].events & EPOLLIN)
 			return true;
 	}
-	g_logger.fd << g_logger.get_timestamp() << "fd " << fd << " is not ready for reading" << std::endl; // end special cases ?
+	g_logger.fd << g_logger.get_timestamp() << "fd " << fd << " is not ready for reading" << std::endl;
 	return false;
 }

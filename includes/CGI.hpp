@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 15:32:44 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/08 17:23:49 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/08 19:05:19 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,9 @@ class CGI {
 public:
 
 	CGI();
+	CGI(request & req);
 	~CGI();
-
+	
 	void param_CONTENT_LENGTH(request &req);
 	void param_CONTENT_TYPE(request &req);
 	void param_GATEWAY_INTERFACE();

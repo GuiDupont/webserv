@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/08 14:38:41 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/08 18:16:59 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,9 @@ config::config(request & request) : validity_checked(false), return_activated(fa
 
 	int first = 1;
 	vHost chosen = get_associated_vhost(request);
-	g_logger.fd << g_logger.get_timestamp() + "after associated vhost: " << std::endl;// analyse_body(it->second); // a faire
-	
 	put_vhost_and_location_in_config(chosen, request);
-	g_logger.fd << g_logger.get_timestamp() + "after vhost config: " << std::endl;// analyse_body(it->second); // a faire
-
 	client_max_body_size *= 1000000;
 	set_cgi_params(request);
-	//g_logger.fd
 	std::cout << g_logger.get_timestamp() << *this << std::endl;
 	
 }
@@ -93,7 +88,6 @@ void	config::set_cgi_params(request & req) {
 		path_info_index = _root.size();
 	else
 		path_info_index = begin_cgi_ext;
-	std::cout << " path info index: " << path_info_index << std::endl;
 	path_info = target.substr(path_info_index, target.size() - path_info_index);
 	if (path_info.empty() != true)
 		path_info = from_two_str_to_path(_root, path_info);
@@ -102,7 +96,6 @@ void	config::set_cgi_params(request & req) {
 	size_t begin_of_script_name = _root.size();
 	script_name = target.substr(begin_of_script_name, target.size() - begin_of_script_name);
 	script_name = from_two_str_to_path(_location, script_name);
-		g_logger.fd << g_logger.get_timestamp() << "1 conf->cgi_activated :" << cgi_activated << std::endl;
 }
 
 void	config::put_vhost_and_location_in_config(vHost & host, request & request) {

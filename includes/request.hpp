@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:07:25 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/08 10:28:00 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/08 20:06:03 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,12 +90,14 @@ class request {
 		void	delete_directory(std::string & path, request & req);
 		void	delete_file(std::string & path, request & req);
 		void	write_body_inside_file();
-		void	initiate_CGI();
+		void	handle_CGI();
 		void	initiate_CGI_GET();
 		void	initiate_CGI_POST();
-		void	readfrom_CGI();
+		void	read_and_send_from_CGI();
 		void	read_first_line_cgi();
 		void	erase_static_fd_from_request(int fd);
+		void	handle_standard_response();
+
 
 
 };
