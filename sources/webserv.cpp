@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/08 11:39:34 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/08 13:54:59 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,6 @@ void webserv::set_hosts() {
 
 void	webserv::wait_for_connection() {
 	g_logger.fd << g_logger.get_timestamp() << LOG_WAIT_CO << std::endl;
-	time_t t = time(0);
-	SOCKADDR_IN csin;
-	socklen_t crecsize = sizeof(csin);
-	struct epoll_event ev;
 	
 	while (1)
 	{
@@ -83,6 +79,7 @@ void	webserv::answer_to_request(int csock) {
 	if (req.conf->local_actions_done == true)
 		req.response_request();
 	if (req.body_is_sent == true) {
+		g_logger.fd << g_logger.get_timestamp() << "Body is sent\n";
 		if (req.close_csock == true)
 			g_webserv.clean_csock_from_server(csock); 
 		else {

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/08 12:33:47 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/08 14:08:02 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,6 +233,7 @@ void request::initiate_CGI_GET() {
 			return ;
 		}
 		add_fd_epollin_to_pool(cgi->pipefd[0]);
+		g_webserv.static_fds.insert(cgi->pipefd[0]);
 		conf->local_actions_done = true;
 		cgi->setCgi_stage("READFROM");
 		return ;
@@ -300,9 +301,10 @@ void request::initiate_CGI_POST() {
 			return ;
 		}
 		add_fd_epollin_to_pool(cgi->pipefd[0]);
-		g_webserv.static_fds.insert(cgi->pipefd_post[1]); /////////////////////////////ici
-		add_fd_epollout_to_pool(cgi->pipefd_post[1]);
 		g_webserv.static_fds.insert(cgi->pipefd[0]);
+		add_fd_epollout_to_pool(cgi->pipefd_post[1]);
+		g_webserv.static_fds.insert(cgi->pipefd_post[1]);
+		
 		return ;
 	}
 }
@@ -365,6 +367,7 @@ void request::readfrom_CGI() {
 	char buf[SEND_SPEED + 1];
 	int ret;
 	waitpid(cgi->pid, &cgi->pid_status, WNOHANG);
+	g_logger.fd << g_logger.get_timestamp() << " Son exited normaly: " << WIFEXITED(cgi->pid_status) << std::endl;
 	if (WIFEXITED(cgi->pid_status) == true && WEXITSTATUS(cgi->pid_status) != 0) {
 		g_logger.fd << g_logger.get_timestamp() << "Child exited badly\n";
 		if (cgi->started_answering_cgi == true)
@@ -381,8 +384,6 @@ void request::readfrom_CGI() {
 		body_is_sent = true;
 		return ;
 	}
-	else
-		
 	if (cgi->status_read == false) {
 		read_first_line_cgi();
 	}
@@ -403,20 +404,11 @@ void request::readfrom_CGI() {
 				return ;
 			}
 			ret = read(cgi->pipefd[0], buf, SEND_SPEED);
-			if (ret == -1 && errno == EAGAIN){ // todel !!!!!!!!
-				g_logger.fd << g_logger.get_timestamp() << "THIS SHOULD NOT HAPPEN : -1 after epoll told pipefd[0] is readable\n";		
-				return ;
-			}
 			if (ret == -1) {
 				g_logger.fd << g_logger.get_timestamp() << "We could not read form CGI\n";
 				close_csock = true;
 				close(cgi->pipefd[0]);
 				body_is_sent = true;
-				return ;
-			}
-			if (ret == 0) {
-				body_is_sent = true;
-				close(cgi->pipefd[0]);
 				return ;
 			}
 			buf[ret] = '\0';
@@ -442,14 +434,11 @@ void request::read_first_line_cgi() {
 		return ;
 	}
 	ret = read(cgi->pipefd[0], buf, SEND_SPEED);
-	if ((ret == -1 && errno != EAGAIN) || ret == 0) {
+	if (ret == -1 || ret == 0) {
 		close_csock = true;
+		code_to_send = 500;
 		close(cgi->pipefd[0]);
-		body_is_sent = true;
-		return ;
-	}
-	if (ret == -1 && errno == EAGAIN) {
-		g_logger.fd << g_logger.get_timestamp() << "there is nothing to read in pipe from cgi first_line but I will try again\n";
+		conf->cgi_activated = false;
 		return ;
 	}
 	buf[ret] = '\0';

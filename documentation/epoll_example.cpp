@@ -173,7 +173,7 @@ main (int argc, char *argv[])
 					char hbuf[NI_MAXHOST], sbuf[NI_MAXSERV];
 
 					in_len = sizeof in_addr;
-					infd = accept (sfd, &in_addr, &in_len);
+					infd = accept(sfd, &in_addr, &in_len);
 					if (infd == -1)
 					{
 						if ((errno == EAGAIN) ||

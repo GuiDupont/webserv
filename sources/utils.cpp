@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/08 12:16:21 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/08 13:53:38 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -583,11 +583,7 @@ bool   can_I_write_in_fd(int fd) {
 bool   can_I_read_from_fd(int fd) {
 	struct epoll_event* _revents = g_webserv.get_revents();
 	int nsfd					= g_webserv.nsfd;
-	int static quit = 10000;
 
-	if (quit-- == 0)
-		exit(1);
-	std::cout << nsfd << std::endl;
 	for (int i = 0; i < nsfd; i++) {
 		g_logger.fd << g_logger.get_timestamp() << "We check a fd from _revents" << std::endl;
 		if (_revents[i].data.fd == fd && _revents[i].events & EPOLLIN)
