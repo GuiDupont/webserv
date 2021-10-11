@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/11 10:38:08 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/11 18:29:57 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,13 @@ request::request(int csock, std::string left) : stage(0), csock(csock), left(lef
 
 void	request::send_header(int csock, std::string & header) {
 	send(csock, header.c_str(), header.size(), 0);
-	g_logger.fd << g_logger.get_timestamp() << "We just sent an header on csock:" << csock << std::endl;
+	g_logger.fd << g_logger.get_timestamp() << "We just sent an header on csock: " << csock << std::endl;
 }
 
 void	request::send_body() {
 	if (body_response.empty() == false)
 		send_body_from_str();
-	else if (method == "GET" || method == "DELETE")
+	else if (method == "GET") //
 		send_body_from_file();
 	else
 		body_is_sent = true;

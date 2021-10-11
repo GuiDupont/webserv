@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/11 10:46:15 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/11 18:26:11 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ void	webserv::wait_for_connection() {
 			g_logger.fd << g_logger.get_timestamp() << LOG_EPOLL_EVENT << nsfd << std::endl;
 		else if (nsfd == -1)
 			g_logger.fd << g_logger.get_timestamp() << LOG_ISSUE_EPOLL_WAIT + std::string(strerror(errno)) << std::endl;
-		else if (true_one_time_per_x_secondes(5))
+		else if (true_one_time_per_x_secondes(4))
 			g_logger.fd << g_logger.get_timestamp() << "No events" << std::endl;
 		for (int i = 0; i < nsfd; i++) {
 			if (_revents[i].events & EPOLLIN && ft_is_ssock(_revents[i].data.fd) && _stop == false)
 				accept_new_client(_revents[i].data.fd);
-			else if (_revents[i].events & EPOLLIN && (!ft_is_ssock(_revents[i].data.fd)) && _stop == false) // we have something to read
+			else if (_revents[i].events & EPOLLIN && (!ft_is_ssock(_revents[i].data.fd)) && _stop == false)
 				read_from_csock(_revents[i].data.fd);
 			else if (_revents[i].events & EPOLLOUT && (!ft_is_ssock(_revents[i].data.fd)))
 				answer_to_request(_revents[i].data.fd);
@@ -66,15 +66,15 @@ void	webserv::answer_to_request(int csock) {
 
 	if (req.conf->validity_checked == false) {
 		req.control_config_validity();
-		if (req.code_to_send != 0 && req.code_to_send != 200 && req.code_to_send != 204)
+		if (req.code_to_send != 0 && req.code_to_send != 200 && req.code_to_send != 204) {
 			req.conf->local_actions_done = true;
+			req.conf->cgi_activated = false;
+		}
 		//req.update_code_and_body();
 	}
 	if (req.conf->local_actions_done == false)
 		req.do_local_actions();
-
 	req.update_code_and_body();
-
 	if (req.conf->local_actions_done == true)
 		req.response_request();
 	if (req.body_is_sent == true) {
@@ -126,11 +126,13 @@ void	request::update_code_and_body() {
 bool	request::common_validity_check() {
 	if (conf->method & conf->_disable_methods) {
 		code_to_send = 405;
+		conf->cgi_activated = false;
 		return (false);
 	}
 	else if (conf->_return.second.empty() == false) {
 		code_to_send = conf->_return.first;
 		conf->return_activated = true;
+		conf->cgi_activated = false;
 		return (false);
 	}
 	
@@ -139,25 +141,21 @@ bool	request::common_validity_check() {
 
 void	request::response_request() {
 
-	if (conf->cgi_activated == true)
-		read_and_send_from_CGI();
-	else {
-		if (header_is_sent == false) {
+	if (header_is_sent == false) {
 		g_logger.fd << g_logger.get_timestamp() << "We are going to respond a request with code : " << code_to_send << std::endl;
 	 	std::string header = response::generate_header(*this);
 	 	send_header(csock, header);
 		header_is_sent = true;
-		}
-		if (header_is_sent == true) {
-			send_body();
-		}
+	}
+	if (header_is_sent == true) {
+		send_body();
 	}
 }
 
 void	request::do_local_actions() {
 
 	if (conf->cgi_activated == true)
-		return (handle_CGI());
+		handle_CGI();
 	else
 		handle_standard_response();
 }
@@ -199,7 +197,7 @@ webserv::webserv(const std::string & path_config) : _client_max_body_size(-1) {
 
 
 void webserv::read_from_csock(int csock) {
-	char c_buffer[1025];
+	char c_buffer[SEND_SPEED + 1];
 	int ret;
 	std::map<int, request>::iterator it;
 
@@ -212,7 +210,7 @@ void webserv::read_from_csock(int csock) {
 		g_logger.fd << g_logger.get_timestamp() << "New request has been created from csock: " + ft_itos(csock) << std::endl;
 		_requests.insert(std::pair<int, request>(csock, request(csock)));
 	}
-	ret = recv(csock, c_buffer, 1024, 0);
+	ret = recv(csock, c_buffer, SEND_SPEED, 0);
 	if (ret < 0) {
 		g_logger.fd << g_logger.get_timestamp() << "We had an issue while using recv on csock " << csock << " " << strerror(errno) << std::endl;
 		clean_csock_from_server(csock);
@@ -428,18 +426,18 @@ void	webserv::control_time_out(void) {
 }
 
 void	webserv::clean_csock_from_server(int csock) {
-		g_logger.fd << g_logger.get_timestamp() << "We are going to delete csock " << csock << std::endl;
+	g_logger.fd << g_logger.get_timestamp() << "We are going to delete csock " << csock << std::endl;
 
-		_requests.erase(csock);
-		_timeout.erase(csock);
-		for (std::list<vHost>::iterator it_vhost = _vhosts.begin(); it_vhost != _vhosts.end(); it_vhost++)
-		{
-			std::set<int>::iterator it_csock = it_vhost->get_csock_list().find(csock);
-			if (it_csock != it_vhost->get_csock_list().end())
-				it_vhost->get_csock_list().erase(it_csock);
-		}
-		epoll_ctl(_epfd, EPOLL_CTL_DEL, csock, NULL);
-		close(csock);
+	_requests.erase(csock);
+	_timeout.erase(csock);
+	for (std::list<vHost>::iterator it_vhost = _vhosts.begin(); it_vhost != _vhosts.end(); it_vhost++)
+	{
+		std::set<int>::iterator it_csock = it_vhost->get_csock_list().find(csock);
+		if (it_csock != it_vhost->get_csock_list().end())
+			it_vhost->get_csock_list().erase(it_csock);
+	}
+	epoll_ctl(_epfd, EPOLL_CTL_DEL, csock, NULL);
+	close(csock);
 }
 
 webserv::webserv(void)	{ }

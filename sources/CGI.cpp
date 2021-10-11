@@ -6,13 +6,13 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 15:34:17 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/11 11:09:39 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/11 17:24:57 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CGI.hpp"
 
-CGI::CGI(request & req) : status_read(false), started_answering_cgi(false) {
+CGI::CGI(request & req) : status_read(false) {
 
     for (int i = 0; i < 15; i++) {
 	    env[i] = 0;
@@ -34,7 +34,7 @@ CGI::CGI(request & req) : status_read(false), started_answering_cgi(false) {
 	param_REDIRECT_STATUS();
 }
 
-CGI::CGI() : status_read(false), started_answering_cgi(false) { }
+CGI::CGI() : status_read(false), cgi_stage("WRITEIN") { }
 CGI::~CGI() { }
 
 void clear_fork_post(request & req) {
@@ -119,7 +119,6 @@ void	cgi_father_get(request & req) {
 	}
 	add_fd_epollin_to_pool(req.cgi->pipefd[0]);
 	g_webserv.static_fds.insert(req.cgi->pipefd[0]);
-	req.conf->local_actions_done = true;
 	req.cgi->setCgi_stage("READFROM");
 	g_logger.fd << g_logger.get_timestamp() << "CGI GET is done setting up we are waiting for cgi" << std::endl;
 }
@@ -188,6 +187,10 @@ void request::initiate_CGI_POST() {
 }
 
 void request::handle_CGI() {
+
+	char buf[SEND_SPEED + 1];
+	int ret;
+
 	g_logger.fd << g_logger.get_timestamp() << "We are about to handle a CGI request\n";
 	if (cgi == NULL) {
 		cgi = new CGI(*this);
@@ -197,7 +200,7 @@ void request::handle_CGI() {
 			initiate_CGI_POST();
 		g_logger.fd << g_logger.get_timestamp() << "We are done initiating the CGI\n";
 	}
-	else {
+	else if (this->cgi->getCgi_stage() == "WRITEIN") {
 		g_logger.fd << g_logger.get_timestamp() << "Only in POST| I am going to send the content CGI via a pipe \n";
 		waitpid(cgi->pid, &cgi->pid_status, WNOHANG);
 		if (WIFEXITED(cgi->pid_status) == true && WEXITSTATUS(cgi->pid_status) != 0) {
@@ -212,13 +215,35 @@ void request::handle_CGI() {
 		std::string towrite = body_request.substr(body_written_cgi, SEND_SPEED);
 		if (can_I_write_in_fd(cgi->pipefd_post[1]) == false)
 			return ;
-		int ret = write(cgi->pipefd_post[1], towrite.c_str(), towrite.size());
+		ret = write(cgi->pipefd_post[1], towrite.c_str(), towrite.size());
 		body_written_cgi += ret;
 		if (body_written_cgi == body_request.size()) {
-			conf->local_actions_done = true;
 			close(cgi->pipefd_post[1]);
 			g_logger.fd << g_logger.get_timestamp() << "I am father and I am done writing content to the CGI.\n";
 			cgi->setCgi_stage("READFROM");
+		}
+	}
+	else if (this->cgi->getCgi_stage() == "READFROM") {
+		waitpid(cgi->pid, &cgi->pid_status, WNOHANG);
+		if (child_exited_badly())
+			return ;
+		if (can_I_read_from_fd(cgi->pipefd[0]) == true) {
+			ret = read(cgi->pipefd[0], buf, SEND_SPEED);
+			if (ret == -1) {
+				close_csock = true;
+				code_to_send = 500;
+				close(cgi->pipefd[0]);
+				conf->cgi_activated = false;
+				conf->local_actions_done = true;
+				return ;
+			}
+			buf[ret] = '\0';
+			body_response += buf;
+		}
+		else if (WIFEXITED(cgi->pid_status) == true) {
+			close(cgi->pipefd[0]);
+			webserv_parser::parse_cgi_body_response(*this);
+			conf->local_actions_done = true;
 		}
 	}
 }
@@ -226,10 +251,7 @@ void request::handle_CGI() {
 bool request::child_exited_badly() {
 	if (WIFEXITED(cgi->pid_status) == true && WEXITSTATUS(cgi->pid_status) != 0) {
 		g_logger.fd << g_logger.get_timestamp() << "Child exited badly\n";
-		if (cgi->started_answering_cgi == true)
-			body_is_sent = true;
 		code_to_send = 500;
-		update_code_and_body(); // maybe not necessary
 		conf->cgi_activated = false;
 		close_csock = true;
 		close(cgi->pipefd[0]);
@@ -237,119 +259,6 @@ bool request::child_exited_badly() {
 	}
 	return false;
 }
-
-void request::read_and_send_from_CGI() {
-
-	char buf[SEND_SPEED + 1];
-	int ret;
-	waitpid(cgi->pid, &cgi->pid_status, WNOHANG);
-	if (child_exited_badly())
-		return ;
-	else if (WIFEXITED(cgi->pid_status) && can_I_read_from_fd(cgi->pipefd[0]) == false && cgi->left_from_first_line.empty()){
-		g_logger.fd << g_logger.get_timestamp() << "Son exited normaly: " << WIFEXITED(cgi->pid_status) << std::endl;
-	//	send(csock, "\r\n", 2, 0);
-		//close_csock = true; // new !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//	body_is_sent = true;
-		return ;
-	}
-	if (cgi->status_read == false) {
-		read_first_line_cgi();
-	}
-	else {
-		if (cgi->left_from_first_line.empty() == false) {
-			ret = send(csock, cgi->left_from_first_line.c_str(), cgi->left_from_first_line.size(), 0);
-			if (ret == -1) {
-				close_csock = true;
-				close(cgi->pipefd[0]);
-				body_is_sent = true;
-				return ;
-			}
-			g_logger.fd << g_logger.get_timestamp() << "CGI| We just sent : " << cgi->left_from_first_line.c_str() << "- from left_from_first_line to csock " << csock << std::endl;
-			cgi->left_from_first_line = cgi->left_from_first_line.substr(ret, cgi->left_from_first_line.size() - ret);
-			g_logger.fd << g_logger.get_timestamp() << "CGI| Here is what is left: " << cgi->left_from_first_line.c_str() << "- from left_from_first_line to csock " << csock << std::endl;
-			
-		}
-		else {
-			if (can_I_read_from_fd(cgi->pipefd[0]) == false) {
-				if (first)
-					g_logger.fd << g_logger.get_timestamp() << "There is nothing to read in pipe from CGI but I will try again\n";		
-				else
-					first = false;
-
-				return ;
-			}
-			ret = read(cgi->pipefd[0], buf, SEND_SPEED);
-			if (ret == -1) {
-				g_logger.fd << g_logger.get_timestamp() << "We could not read form CGI\n";
-				close_csock = true;
-				close(cgi->pipefd[0]);
-				body_is_sent = true;
-				return ;
-			}
-			buf[ret] = '\0';
-			ret = send(csock, buf, ret, 0);
-			g_logger.fd << g_logger.get_timestamp() << "CGI| We just sent : " << buf << "- from buf to csock " << csock << std::endl;
-			if (ret == -1) {
-				g_logger.fd << g_logger.get_timestamp() << "We could not send in csock " << csock << std::endl;
-				close_csock = true;
-				close(cgi->pipefd[0]);
-				body_is_sent = true;
-				return ;
-			}
-		}
-	}
-}
-
-void request::read_first_line_cgi() {
-	char buf[SEND_SPEED + 1];
-	int ret;
-
-	if (can_I_read_from_fd(cgi->pipefd[0]) == false)
-		return ;	
-	ret = read(cgi->pipefd[0], buf, SEND_SPEED);
-	if (ret == -1 || ret == 0) {
-		close_csock = true;
-		code_to_send = 500;
-		close(cgi->pipefd[0]);
-		conf->cgi_activated = false;
-		return ;
-	}
-	buf[ret] = '\0';
-	cgi->first_line += buf;
-	size_t end_of_first_line = cgi->first_line.find("\r\n", 0);
-	if (end_of_first_line == std::string::npos) {
-		g_logger.fd << g_logger.get_timestamp() << "There is no \\r\\n -- in what cgi sent" << csock << std::endl;
-		return ;
-	}
-	if (cgi->first_line.substr(0, 7) != "Status:")
-		code_to_send = 200;
-	else if (ft_string_is_digit(get_word(cgi->first_line, go_to_next_word(cgi->first_line, 0))))
-		code_to_send = std::atoi(get_word(cgi->first_line, go_to_next_word(cgi->first_line, 0)).c_str());
-	else
-		code_to_send = 200;
-	std::string status_line = response::get_status_line(*this);
-	if (cgi->first_line.substr(0, 7) != "Status:") {
-		status_line += cgi->first_line.substr(0, end_of_first_line);
-	}
-	status_line += response::get_content_length_header(100);
-	ret = send(csock, status_line.c_str(), status_line.size(), 0);
-	if (ret == -1) {
-		close_csock = true;
-		close(cgi->pipefd[0]);
-		body_is_sent = true;
-		g_logger.fd << g_logger.get_timestamp() << "ret de send from CGI est = -1;" << csock << std::endl;
-		return ;
-	}
-	g_logger.fd << g_logger.get_timestamp() << "I am sending -" << status_line << "- (status_line + first line) to csock: " << csock << std::endl;
-	cgi->started_answering_cgi = true;
-	cgi->status_read = true;
-	end_of_first_line += std::strlen("\r\n");
-	cgi->left_from_first_line = cgi->first_line.substr(end_of_first_line, cgi->first_line.size() - end_of_first_line);
-	g_logger.fd << g_logger.get_timestamp() << "--Here is what is leftover from first line: -" << cgi->left_from_first_line << "-" << std::endl;
-}
-
-
-
 
 char **CGI::getenv() {
 
@@ -470,3 +379,7 @@ void CGI::setCgi_stage(std::string s) {
 	return ;
 }
 
+std::string &CGI::getCgi_stage() {
+
+	return (this->cgi_stage);
+}

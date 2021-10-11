@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:10 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/27 11:06:53 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/11 17:33:36 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ class webserv_parser {
 		void 								check_server_line(std::string &line);
 		void								analyse_header(request &req);
 		void								analyse_body(request &req);
+		static void							parse_cgi_body_response(request &req);
+		void								cancel_double_dots_in_request_target(std::string & target);
 
 		// std::string							parse_root(std::string & line); to delete
 

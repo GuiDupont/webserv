@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 14:56:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/07 14:57:55 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/11 15:34:00 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,13 +97,13 @@ std::string         response::generate_header(request & req) {
     header += get_server_header();
     header += get_date_header();
     add_special_header(req, header);
-    if (req.method == "GET") {
+    if (req.method == "GET" || req.conf->cgi_activated == true) {
         header += get_content_length_header(get_content_length(req));
     }
     else if (req.method == "DELETE") {
         ;
     }
-    else if (req.method == "POST") {
+    else if (req.method == "POST" ) {
         ;
     }
     header += "\r\n";
@@ -186,5 +186,7 @@ std::string         response::add_special_header(request & req, std::string & he
         header += response::get_return_location_header(req.conf->_return.second);
     else if (req.code_to_send == 405)
        header += response::get_allowed_functions_header(req.conf->_disable_methods);
+	else if (req.conf->cgi_activated == true)
+		header += req.cgi->cgi_header_fields;
     return (header);
 }

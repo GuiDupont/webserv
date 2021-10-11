@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/11 10:52:26 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/11 18:50:30 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void	param_socket_server(vHost &host) {
 				host.map_sock_to_hostport(sock, *it);
 		}
 		else {
-			sock_err = listen(sock, 5); // 5 ? quel chiffre mettre ??
+			sock_err = listen(sock, 100); // 5 ? quel chiffre mettre ??
 			if (sock_err == SOCKET_ERROR) {
 				close(sock);
 				throw (cant_listen());

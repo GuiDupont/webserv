@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 15:32:44 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/08 19:05:19 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/11 14:37:32 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ public:
 	void param_SERVER_SOFTWARE();
 	void param_REDIRECT_STATUS();
 	char **getenv();
-	void setCgi_stage(std::string s); // a voir si a garder
+	void setCgi_stage(std::string s);
+	std::string &getCgi_stage();
 
 	int pipefd[2];
 	int pipefd_post[2];
@@ -50,7 +51,8 @@ public:
 	bool status_read;
 	std::string first_line;
 	std::string left_from_first_line;
-	bool		started_answering_cgi;
+	std::string cgi_header_fields;
+
 
 private:
 
@@ -69,7 +71,7 @@ private:
 	std::string SERVER_SOFTWARE; // = "SERVER_SOFTWARE=42webserv";
 	std::string REDIRECT_STATUS; // = "REDIRECT_STATUS=200";  => a voir
 	char		*env[15];
-	std::string	cgi_stage; // "writein" ; "readfrom" // a voir si a garder
+	std::string	cgi_stage; // "writein" ; "readfrom"
 	
 
 };

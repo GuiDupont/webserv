@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/08 19:37:03 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/11 18:18:51 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -430,6 +430,7 @@ void	webserv_parser::analyse_header(request &req) { // fix : empty lines should 
 			req.conf = new config(req);
 			return ;
 		}
+		cancel_double_dots_in_request_target(req.request_target);
 		req.HTTP_version = get_word(req.left, index, std::string("\r\n"));
 		if (req.HTTP_version.size() == 0 || ft_string_has_whitespace(req.HTTP_version))
 		{
@@ -502,5 +503,63 @@ void	webserv_parser::analyse_header(request &req) { // fix : empty lines should 
 		req.conf = new config(req);
 		g_logger.fd << g_logger.get_timestamp() << "We are done parsing header from ccosk: " << req.csock << std::endl;// analyse_body(it->second); // a faire
 		analyse_body(req);
+	}
+}
+
+void webserv_parser::parse_cgi_body_response(request &req) {
+	
+	std::string status_code;
+	size_t		status_pos;
+
+	size_t end_of_hf = req.body_response.find("\r\n\r\n");
+	if (end_of_hf == std::string::npos) {
+		req.close_csock = true;
+		req.code_to_send = 500;
+		req.conf->cgi_activated = false;
+		return ;
+	}	
+	req.cgi->cgi_header_fields = req.body_response.substr(0, end_of_hf + 2);
+	req.body_response = req.body_response.substr(end_of_hf + 4, req.body_response.size() - (end_of_hf + 4));
+	if (req.cgi->cgi_header_fields.substr(0, 7) == "Status:") {
+		status_code = get_word(req.cgi->cgi_header_fields, go_to_next_word(req.cgi->cgi_header_fields, 7));
+		if (ft_string_is_digit(status_code))
+			req.code_to_send = std::atoi(status_code.c_str());
+		else
+			req.code_to_send = 200;
+	}
+	else if ((status_pos = req.cgi->cgi_header_fields.find("\r\nStatus:", 0)) != std::string::npos) {
+		status_code = get_word(req.cgi->cgi_header_fields, go_to_next_word(req.cgi->cgi_header_fields, status_pos + 9));
+		if (ft_string_is_digit(status_code))
+			req.code_to_send = std::atoi(status_code.c_str());
+		else
+			req.code_to_send = 200;
+	}
+	else
+		req.code_to_send = 200;
+}
+
+void	webserv_parser::cancel_double_dots_in_request_target(std::string & target) {
+	size_t pos_next_location;
+	size_t begin_previous_location;
+
+	while (1) {
+		pos_next_location = target.find("/../", 0);
+		if (pos_next_location == std::string::npos) {
+			pos_next_location = target.find("/..", 0);
+			if (pos_next_location != std::string::npos && (pos_next_location + 3 == target.size())) {
+				target += '/';
+			}
+			else
+				return ;
+		}
+		begin_previous_location = pos_next_location - 1;
+		pos_next_location += 3;
+		
+		while (target[begin_previous_location]) {
+			if (target[begin_previous_location] == '/')
+				break ;
+			begin_previous_location--;		
+		}
+		target = target.substr(0, begin_previous_location) + target.substr(pos_next_location, target.size() - pos_next_location);
 	}
 }

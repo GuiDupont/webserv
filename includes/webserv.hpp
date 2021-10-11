@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/08 11:36:45 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/11 16:44:41 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@
 # define POST 2
 # define DELETE 4
 
-# define TIMEOUT 100
+# define TIMEOUT 50
 
 # define SEND_SPEED 10000
 
