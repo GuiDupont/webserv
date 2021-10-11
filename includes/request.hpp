@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:07:25 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/08 20:06:03 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/11 10:37:13 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ class request {
 		int									body_fd;
 		size_t								body_written_cgi;
 		std::string							body_response;
+		bool								first; // to delete
 
 		friend std::ostream & operator<<(std::ostream & o,const request & r);
 		
@@ -97,6 +98,8 @@ class request {
 		void	read_first_line_cgi();
 		void	erase_static_fd_from_request(int fd);
 		void	handle_standard_response();
+		bool 	child_exited_badly();
+
 
 
 

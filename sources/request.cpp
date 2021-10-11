@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/08 19:17:17 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/11 10:38:08 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,15 @@ request::~request() {
 	cgi = NULL;
 }
 
-request::request() : stage(0), next_chunk(-1), nb_trailer_to_received(0), code_to_send(0), close_csock(false), conf(NULL), resp(NULL), cgi(NULL), header_is_sent(false), body_is_sent(false), body_fd(-1), body_written_cgi(0) {}
+request::request() : stage(0), next_chunk(-1), nb_trailer_to_received(0), code_to_send(0), close_csock(false), conf(NULL), resp(NULL), cgi(NULL), header_is_sent(false), body_is_sent(false), body_fd(-1), body_written_cgi(0), first(false) {}
 
 request::request(int csock) :	stage(0), csock(csock), next_chunk(-1), nb_trailer_to_received(0), 
 								code_to_send(0), close_csock(false), conf(NULL), resp(NULL), cgi(NULL),
-								header_is_sent(false), body_is_sent(false), body_fd(-1), body_written_cgi(0) {}
+								header_is_sent(false), body_is_sent(false), body_fd(-1), body_written_cgi(0), first(false) {}
 
 request::request(int csock, std::string left) : stage(0), csock(csock), left(left), next_chunk(-1),
 												nb_trailer_to_received(0), code_to_send(0), close_csock(false),
-												conf(NULL), resp(NULL), cgi(NULL), header_is_sent(false), body_is_sent(false), body_fd(-1), body_written_cgi(0) {}
+												conf(NULL), resp(NULL), cgi(NULL), header_is_sent(false), body_is_sent(false), body_fd(-1), body_written_cgi(0), first(false) {}
 
 
 void	request::send_header(int csock, std::string & header) {

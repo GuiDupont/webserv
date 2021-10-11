@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/08 18:17:25 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/11 10:52:26 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -600,9 +600,11 @@ bool   can_I_read_from_fd(int fd) {
 	int nsfd					= g_webserv.nsfd;
 
 	for (int i = 0; i < nsfd; i++) {
-		if (_revents[i].data.fd == fd && _revents[i].events & EPOLLIN)
+		if (_revents[i].data.fd == fd && _revents[i].events & EPOLLIN) {
+			g_logger.fd << g_logger.get_timestamp() << "fd " << fd << " is ready for reading" << std::endl;
 			return true;
+		}
 	}
-	g_logger.fd << g_logger.get_timestamp() << "fd " << fd << " is not ready for reading" << std::endl;
+	//g_logger.fd << g_logger.get_timestamp() << "fd " << fd << " is not ready for reading" << std::endl;
 	return false;
 }
