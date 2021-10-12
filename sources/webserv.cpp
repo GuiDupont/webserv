@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/11 18:26:11 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/12 21:13:45 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,16 @@ void	webserv::wait_for_connection() {
 	{
 		control_time_out();
 		nsfd = epoll_wait(this->_epfd, _revents, 64, 0);
-		if (nsfd)
+		if (nsfd) {
 			g_logger.fd << g_logger.get_timestamp() << LOG_EPOLL_EVENT << nsfd << std::endl;
+		}
 		else if (nsfd == -1)
 			g_logger.fd << g_logger.get_timestamp() << LOG_ISSUE_EPOLL_WAIT + std::string(strerror(errno)) << std::endl;
-		else if (true_one_time_per_x_secondes(4))
+		else if (true_one_time_per_x_secondes(4)) {
 			g_logger.fd << g_logger.get_timestamp() << "No events" << std::endl;
+		}
 		for (int i = 0; i < nsfd; i++) {
+			g_logger.fd << g_logger.get_timestamp() << "I go here" << std::endl;
 			if (_revents[i].events & EPOLLIN && ft_is_ssock(_revents[i].data.fd) && _stop == false)
 				accept_new_client(_revents[i].data.fd);
 			else if (_revents[i].events & EPOLLIN && (!ft_is_ssock(_revents[i].data.fd)) && _stop == false)
@@ -181,7 +184,7 @@ void	request::handle_standard_response() {
 	}
 }
 
-webserv::webserv(const std::string & path_config) : _client_max_body_size(-1) {
+webserv::webserv(const std::string & path_config) : _client_max_body_size(-1), _stop(false) {
 	std::ifstream	config_file;
 	std::string		all_file;
 	
