@@ -14,7 +14,8 @@ NAME = webserv
 
 # CXX = clang++-9
 #CXX = clang++
-CXX = /usr/lib/llvm-12/bin/clang++
+# CXX = /usr/lib/llvm-12/bin/clang++
+CXX = /usr/bin/clang++
 
 FLAGS = 
 #-Wall -Wextra -Werror

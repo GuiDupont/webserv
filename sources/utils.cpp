@@ -84,6 +84,7 @@ void	param_socket_server(vHost &host) {
     socklen_t recsize = sizeof(sin);
 	std::list< std::pair< std::string, size_t> >::iterator it = host.getHost_Port().begin();
 	
+	memset(&sin, 0, sizeof(sin));
 	for (; it != host.getHost_Port().end(); it++) {
 		sock = socket(AF_INET, SOCK_STREAM, 0);
 		if (sock == INVALID_SOCKET)

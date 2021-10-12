@@ -78,6 +78,8 @@ void	webserv::answer_to_request(int csock) {
 	if (req.conf->local_actions_done == true)
 		req.response_request();
 	if (req.body_is_sent == true) {
+		g_logger.fd << g_logger.get_timestamp() << "body has been sent" << std::endl; // add an exception
+		// req.close_csock = true; // pour test close socket, a virer
 		if (req.close_csock == true)
 			g_webserv.clean_csock_from_server(csock); 
 		else {
@@ -232,8 +234,9 @@ void webserv::read_from_csock(int csock) {
 		g_logger.fd << g_logger.get_timestamp() << "We can't match " << csock << " to any VHOST" << " that SHOULD NOT HAPPEN" << std::endl;
 		return ;
 	}
-
 	it->second.left += c_buffer;
+	g_logger.fd << g_logger.get_timestamp() << "c_buffer :\n " << c_buffer << std::endl;
+	g_logger.fd << g_logger.get_timestamp() << "Requete parsee :\n " << it->second.left << std::endl;
 	if (it->second.stage == 0)
 		g_parser.analyse_header(it->second);
 	else if (it->second.stage == 1)
@@ -437,7 +440,9 @@ void	webserv::clean_csock_from_server(int csock) {
 			it_vhost->get_csock_list().erase(it_csock);
 	}
 	epoll_ctl(_epfd, EPOLL_CTL_DEL, csock, NULL);
+	// fsync(csock);
 	close(csock);
+	// shutdown(csock, 0);
 }
 
 webserv::webserv(void)	{ }

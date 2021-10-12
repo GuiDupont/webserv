@@ -69,11 +69,13 @@ void	request::send_body() {
 }
 
 void	request::send_body_from_str() {
+	g_logger.fd << g_logger.get_timestamp() << "We are going to send a body from str: " << csock << std::endl;
 	int amount_sent;
 	int to_send;
 	for (int i = 10; i != 0; i--) {
 		to_send = SEND_SPEED < body_response.size() ? SEND_SPEED : body_response.size();
 		amount_sent = send(csock, body_response.c_str(), to_send, 0);
+		g_logger.fd << g_logger.get_timestamp() << "We have sent something from str: " << csock << std::endl;
 		if (amount_sent == -1) {
 			g_logger.fd << g_logger.get_timestamp() << "Issue while sending body on csock " << csock << ". Error: " << strerror(errno) << std::endl;
 			body_is_sent = true;
@@ -86,6 +88,7 @@ void	request::send_body_from_str() {
 			return;
 		}
 		body_response = body_response.substr(to_send, body_response.size() - to_send);
+		g_logger.fd << g_logger.get_timestamp() << "We have sent a body from str: " << csock << std::endl;
 	}
 }
 

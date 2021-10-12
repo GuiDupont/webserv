@@ -1,666 +1,284 @@
-15h30m27s: ------BEGINNING OF THE PROGRAM-------
-15h30m27s: Config successful
-15h30m27s: Epoll create successful			 | epfd  = 4
-15h30m27s: Ssock created           			 | ssock = 5
-15h30m27s: Ssock added to Epoll    			 | ssock = 5
-15h30m27s: Ssock created           			 | ssock = 6
-15h30m27s: Ssock added to Epoll    			 | ssock = 6
-15h30m27s: Ssock created           			 | ssock = 7
-15h30m27s: Ssock added to Epoll    			 | ssock = 7
-15h30m27s: Ssock created           			 | ssock = 8
-15h30m27s: Ssock added to Epoll    			 | ssock = 8
-15h30m27s: Ssock created           			 | ssock = 9
-15h30m27s: Ssock added to Epoll    			 | ssock = 9
-15h30m27s: Epoll is waiting for connection
-15h30m32s: No events
-15h30m37s: No events
-15h30m42s: No events
-15h30m45s: Epoll noticed new events     	| nb    = 1
-15h30m45s: We accepted a new client from ssock 7, new csock is = 10
-15h30m47s: No events
-15h30m52s: No events
-15h30m52s: Epoll noticed new events     	| nb    = 1
-15h30m52s: New request has been created from csock: 10
-15h30m52s: We are parsing header from ccosk: 10
-15h30m52s: We are done parsing the req from ccosk: 10
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: We are parsing header from ccosk: 10
-15h30m54s: We are done parsing the req from ccosk: 10
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: We are parsing header from ccosk: 10
-15h30m54s: We are going to create a config 10
-15h30m54s: after associated vhost: 
-15h30m54s: after vhost config: 
-15h30m54s: Setting CGI params
-15h30m54s: 1 conf->cgi_activated :1
-15h30m54s: We are done parsing header from ccosk: 10
-15h30m54s: We are parsing body from ccosk: 10
-15h30m54s: We are done parsing the req from ccosk: 10
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: We are going to do local actions
-15h30m54s: We are about to handle a CGI request
-15h30m54s: I am father
-15h30m54s: We are done initiating the CGI
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: We are going to do local actions
-15h30m54s: We are about to handle a CGI request
-15h30m54s: I am child and I am about to execve CGI
-15h30m54s: /mnt/nfs/homes/gdupont/bin/perl
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: /mnt/nfs/homes/gdupont/Desktop/webserv/tests/perl.php
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: CONTENT_LENGTH=
-15h30m54s: We check a fd from _revents
-15h30m54s: CONTENT_TYPE=
-15h30m54s: GATEWAY_INTERFACE=CGI/1.1
-15h30m54s: PATH_INFO=
-15h30m54s: PATH_TRANSLATED=/mnt/nfs/homes/gdupont/Desktop/webserv/tests/perl.php
-15h30m54s: QUERY_STRING=
-15h30m54s: REMOTE_ADDR=0.0.0.0
-15h30m54s: REQUEST_METHOD=GET
-15h30m54s: SCRIPT_NAME=/tests/perl.php
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: SERVER_NAME=42webserv
-15h30m54s: SERVER_PORT=0
-15h30m54s: SERVER_PROTOCOL=HTTP/1.1
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: SERVER_SOFTWARE=42webserv
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: 15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 2
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: We check a fd from _revents
-15h30m54s: there is something to read in pipe from cgi
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 1
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 2
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 2
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 2
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 0
-15h30m54s: We check a fd from _revents
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: there is nothing to read in pipe from cgi but I will try again
-15h30m54s: Epoll noticed new events     	| nb    = 2
-15h30m54s: Epoll_wait identified an EPOLLOUT on csock: 10
-15h30m54s: I am about to read from CGI
-15h30m54s:  Son exited normaly: 1
-15h30m54s: We check a fd from _revents
-15h30m54s: We check a fd from _revents
-15h30m54s: fd 11 is not ready for reading
-15h30m54s: Body is sent
-15h30m57s: No events
-15h31m2s: No events
-15h31m7s: No events
-15h31m12s: No events
-15h31m17s: No events
-15h31m22s: No events
-15h31m26s:  We are about to quit
-15h31m26s:  csock is closed: 10
-15h31m26s:  cssock is closed: 5
-15h31m26s:  cssock is closed: 6
-15h31m26s:  cssock is closed: 7
-15h31m26s:  cssock is closed: 8
-15h31m26s:  cssock is closed: 9
-15h31m26s:  EPFD is closed: 4
+18h18m39s: ------BEGINNING OF THE PROGRAM-------
+18h18m39s: Config successful
+18h18m39s: Epoll create successful			 | epfd  = 6
+18h18m39s: Ssock created           			 | ssock = 7
+18h18m39s: Ssock added to Epoll    			 | ssock = 7
+18h18m39s: Ssock created           			 | ssock = 8
+18h18m39s: Ssock added to Epoll    			 | ssock = 8
+18h18m39s: Ssock created           			 | ssock = 9
+18h18m39s: Ssock added to Epoll    			 | ssock = 9
+18h18m39s: Ssock created           			 | ssock = 10
+18h18m39s: Ssock added to Epoll    			 | ssock = 10
+18h18m39s: Ssock created           			 | ssock = 11
+18h18m39s: Ssock added to Epoll    			 | ssock = 11
+18h18m39s: Ssock created           			 | ssock = 21
+18h18m39s: Ssock added to Epoll    			 | ssock = 21
+18h18m39s: Epoll is waiting for connection
+18h18m43s: No events
+18h18m47s: No events
+18h18m51s: No events
+18h18m55s: No events
+18h18m59s: No events
+18h19m3s: No events
+18h19m7s: No events
+18h19m11s: No events
+18h19m15s: No events
+18h19m19s: No events
+18h19m23s: No events
+18h19m27s: No events
+18h19m27s: Epoll noticed new events     	| nb    = 1
+18h19m27s: We accepted a new client from ssock 11, new csock is = 22
+18h19m27s: We added 22 to the pool looking, for Epollin.
+18h19m27s: Epoll noticed new events     	| nb    = 1
+18h19m27s: Epoll_wait identified an EPOLLIN on csock: 22
+18h19m27s: New request has been created from csock: 22
+18h19m27s: c_buffer :
+ GET / HTTP/1.1
+Host: 127.0.0.1:1208
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.162 Safari/537.36
+Sec-Fetch-Dest: document
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Purpose: prefetch
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Accept-Encoding: gzip, deflate, br
+Accept-Language: fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7
+
+
+18h19m27s: Requete parsee :
+ GET / HTTP/1.1
+Host: 127.0.0.1:1208
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.162 Safari/537.36
+Sec-Fetch-Dest: document
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Purpose: prefetch
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Accept-Encoding: gzip, deflate, br
+Accept-Language: fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7
+
+
+18h19m27s: We are parsing header from ccosk: 22
+18h19m27s: Setting CGI params
+18h19m27s: We are done parsing header from ccosk: 22
+18h19m27s: We are parsing body from ccosk: 22
+18h19m27s: We are done parsing the req from ccosk: 22
+18h19m27s: Epoll noticed new events     	| nb    = 1
+18h19m27s: We are going to respond a request with code : 200
+18h19m27s: We just sent an header on csock: 22
+18h19m27s: We are going to send a body from str: 22
+18h19m27s: We have sent something from str: 22
+18h19m27s: Body sending is done on csock : 22
+18h19m27s: body has been sent
+18h19m27s: We are going to delete csock 22
+18h19m29s: Epoll noticed new events     	| nb    = 1
+18h19m29s: We accepted a new client from ssock 11, new csock is = 22
+18h19m29s: We added 22 to the pool looking, for Epollin.
+18h19m29s: Epoll noticed new events     	| nb    = 1
+18h19m29s: Epoll_wait identified an EPOLLIN on csock: 22
+18h19m29s: New request has been created from csock: 22
+18h19m29s: c_buffer :
+ GET /favicon.ico HTTP/1.1
+Host: 127.0.0.1:1208
+Connection: keep-alive
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.162 Safari/537.36
+Sec-Fetch-Dest: image
+Accept: image/webp,image/apng,image/*,*/*;q=0.8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Referer: http://127.0.0.1:1208/
+Accept-Encoding: gzip, deflate, br
+Accept-Language: fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7
+
+
+18h19m29s: Requete parsee :
+ GET /favicon.ico HTTP/1.1
+Host: 127.0.0.1:1208
+Connection: keep-alive
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.162 Safari/537.36
+Sec-Fetch-Dest: image
+Accept: image/webp,image/apng,image/*,*/*;q=0.8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Referer: http://127.0.0.1:1208/
+Accept-Encoding: gzip, deflate, br
+Accept-Language: fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7
+
+
+18h19m29s: We are parsing header from ccosk: 22
+18h19m29s: Setting CGI params
+18h19m29s: We are done parsing header from ccosk: 22
+18h19m29s: We are parsing body from ccosk: 22
+18h19m29s: We are done parsing the req from ccosk: 22
+18h19m29s: Epoll noticed new events     	| nb    = 1
+18h19m29s: can't open /favicon.ico - because : No such file or directory2
+18h19m29s: We identified following code: 404for csock 22
+18h19m29s: We are going to respond a request with code : 404
+18h19m29s: We just sent an header on csock: 22
+18h19m29s: We are going to send a body from str: 22
+18h19m29s: We have sent something from str: 22
+18h19m29s: Body sending is done on csock : 22
+18h19m29s: body has been sent
+18h19m29s: We are going to delete csock 22
+18h19m31s: No events
+18h19m35s: No events
+18h19m39s: No events
+18h19m43s: No events
+18h19m47s: No events
+18h19m51s: No events
+18h19m55s: No events
+18h19m59s: No events
+18h20m3s: No events
+18h20m7s: No events
+18h20m11s: No events
+18h20m15s: No events
+18h20m15s: Epoll noticed new events     	| nb    = 1
+18h20m15s: We accepted a new client from ssock 11, new csock is = 22
+18h20m15s: We added 22 to the pool looking, for Epollin.
+18h20m15s: Epoll noticed new events     	| nb    = 1
+18h20m15s: Epoll_wait identified an EPOLLIN on csock: 22
+18h20m15s: New request has been created from csock: 22
+18h20m15s: While using recv on csock 22 we received : 0
+18h20m15s: We are going to delete csock 22
+18h20m19s: No events
+18h20m23s: No events
+18h20m27s: No events
+18h20m31s: No events
+18h20m35s: No events
+18h20m39s: No events
+18h20m43s: No events
+18h20m47s: No events
+18h20m51s: No events
+18h20m55s: No events
+18h20m58s: Epoll noticed new events     	| nb    = 1
+18h20m58s: We accepted a new client from ssock 11, new csock is = 22
+18h20m58s: We added 22 to the pool looking, for Epollin.
+18h20m58s: Epoll noticed new events     	| nb    = 1
+18h20m58s: Epoll_wait identified an EPOLLIN on csock: 22
+18h20m58s: New request has been created from csock: 22
+18h20m58s: c_buffer :
+ GET / HTTP/1.1
+Host: 127.0.0.1:1208
+Connection: keep-alive
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.162 Safari/537.36
+Sec-Fetch-Dest: document
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Accept-Encoding: gzip, deflate, br
+Accept-Language: fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7
+
+
+18h20m58s: Requete parsee :
+ GET / HTTP/1.1
+Host: 127.0.0.1:1208
+Connection: keep-alive
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.162 Safari/537.36
+Sec-Fetch-Dest: document
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Accept-Encoding: gzip, deflate, br
+Accept-Language: fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7
+
+
+18h20m58s: We are parsing header from ccosk: 22
+18h20m58s: Setting CGI params
+18h20m58s: We are done parsing header from ccosk: 22
+18h20m58s: We are parsing body from ccosk: 22
+18h20m58s: We are done parsing the req from ccosk: 22
+18h20m58s: Epoll noticed new events     	| nb    = 1
+18h20m58s: We are going to respond a request with code : 200
+18h20m58s: We just sent an header on csock: 22
+18h20m58s: We are going to send a body from str: 22
+18h20m58s: We have sent something from str: 22
+18h20m58s: Issue while sending body on csock 22. Error: Broken pipe
+18h20m58s: body has been sent
+18h20m58s: We are going to delete csock 22
+18h20m59s: No events
+18h21m3s: No events
+18h21m7s: No events
+18h21m11s: No events
+18h21m15s: No events
+18h21m18s: Epoll noticed new events     	| nb    = 1
+18h21m18s: We accepted a new client from ssock 11, new csock is = 22
+18h21m18s: We added 22 to the pool looking, for Epollin.
+18h21m19s: No events
+18h21m23s: No events
+18h21m27s: No events
+18h21m31s: No events
+18h21m35s: No events
+18h21m36s: Epoll noticed new events     	| nb    = 1
+18h21m36s: We accepted a new client from ssock 11, new csock is = 23
+18h21m36s: We added 23 to the pool looking, for Epollin.
+18h21m36s: Epoll noticed new events     	| nb    = 1
+18h21m36s: Epoll_wait identified an EPOLLIN on csock: 23
+18h21m36s: New request has been created from csock: 23
+18h21m36s: c_buffer :
+ GET / HTTP/1.1
+Host: 127.0.0.1:1208
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.162 Safari/537.36
+Sec-Fetch-Dest: document
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Accept-Encoding: gzip, deflate, br
+Accept-Language: fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7
+
+
+18h21m36s: Requete parsee :
+ GET / HTTP/1.1
+Host: 127.0.0.1:1208
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.162 Safari/537.36
+Sec-Fetch-Dest: document
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Accept-Encoding: gzip, deflate, br
+Accept-Language: fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7
+
+
+18h21m36s: We are parsing header from ccosk: 23
+18h21m36s: Setting CGI params
+18h21m36s: We are done parsing header from ccosk: 23
+18h21m36s: We are parsing body from ccosk: 23
+18h21m36s: We are done parsing the req from ccosk: 23
+18h21m36s: Epoll noticed new events     	| nb    = 1
+18h21m36s: We are going to respond a request with code : 200
+18h21m36s: We just sent an header on csock: 23
+18h21m36s: We are going to send a body from str: 23
+18h21m36s: We have sent something from str: 23
+18h21m36s: Issue while sending body on csock 23. Error: Broken pipe
+18h21m36s: body has been sent
+18h21m36s: We are going to delete csock 23
+18h21m39s: No events
+18h21m43s: No events
+18h21m47s: No events
+18h21m51s: No events
+18h21m52s:  We are about to quit
+18h21m52s:  csock is closed: 22
+18h21m52s:  cssock is closed: 7
+18h21m52s:  cssock is closed: 8
+18h21m52s:  cssock is closed: 9
+18h21m52s:  cssock is closed: 10
+18h21m52s:  cssock is closed: 11
+18h21m52s:  cssock is closed: 21
+18h21m52s:  EPFD is closed: 6
