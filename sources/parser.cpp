@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/13 12:43:08 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/13 16:13:47 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -414,6 +414,13 @@ void	webserv_parser::analyse_header(request &req) { // fix : empty lines should 
 	g_logger.fd << g_logger.get_timestamp() + "We are parsing header from ccosk: " << req.csock << std::endl;// analyse_body(it->second); // a faire
 	if (req.left.find(std::string("\r\n\r\n"), 0) != std::string::npos) {
 		int index = 0;
+		std::string request_line = req.left.substr(0, req.left.find(std::string("\r\n")));
+		if (request_line.size() > 8000) {
+			req.code_to_send = 400;
+			req.set_request_to_ended();
+			req.conf = new config(req);
+			return ;
+		}
 		req.method = get_word(req.left, index, std::string(" "));
 		if (req.method != "GET" && req.method != "DELETE" && req.method != "POST")
 		{

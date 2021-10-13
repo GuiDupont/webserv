@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/13 14:24:52 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/13 16:13:30 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,9 @@ void	param_socket_server(vHost &host) {
 		sock = socket(AF_INET, SOCK_STREAM, 0);
 		if (sock == INVALID_SOCKET)
 			throw (cant_create_socket());
+		int optval = 1;
+		if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<const char*>(&optval), sizeof(optval)))
+			throw (cant_create_socket());
 		sin.sin_addr.s_addr = inet_addr(it->first.c_str());
 		if (sin.sin_addr.s_addr == INADDR_NONE && it->first != "255.255.255.255") {
 			close(sock);
@@ -101,11 +104,10 @@ void	param_socket_server(vHost &host) {
 			throw (cant_bind_address());
 		}
 		else if (sock_err == SOCKET_ERROR && errno == EADDRINUSE) {
-			close(sock);
+			// close(sock);
 			sock = g_webserv.get_sock_by_matching_host_ip(std::pair< std::string, size_t> (*it));
 			if (sock == -1)
 				throw (port_already_used());
-				// ;
 			else
 				host.map_sock_to_hostport(sock, *it);
 		}
