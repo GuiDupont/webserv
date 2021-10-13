@@ -414,7 +414,7 @@ void	webserv_parser::analyse_header(request &req) { // fix : empty lines should 
 	g_logger.fd << g_logger.get_timestamp() + "We are parsing header from ccosk: " << req.csock << std::endl;// analyse_body(it->second); // a faire
 	if (req.left.find(std::string("\r\n\r\n"), 0) != std::string::npos) {
 		int index = 0;
-		std::string request_line = req.left.substr(0, req.left.find(std::string("\r\n"));
+		std::string request_line = req.left.substr(0, req.left.find(std::string("\r\n")));
 		if (request_line.size() > 8000) {
 			req.code_to_send = 400;
 			req.set_request_to_ended();
