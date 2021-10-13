@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/11 18:26:11 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/13 14:19:36 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,23 +223,18 @@ void webserv::read_from_csock(int csock) {
 	}
 	_timeout.find(csock)->second = std::time(0);
 	c_buffer[ret] = '\0';
-	for (it = _requests.begin(); it != _requests.end(); it++) {
-		if (it->first == csock)
-			break ;
-	}
 	it = _requests.find(csock);   // && it->second.stage != ENDED_REQUEST
 	if (it == _requests.end()) {
 		g_logger.fd << g_logger.get_timestamp() << "We can't match " << csock << " to any VHOST" << " that SHOULD NOT HAPPEN" << std::endl;
 		return ;
 	}
-
 	it->second.left += c_buffer;
+	while (it->second.left.size() >= 2 && it->second.left[0] == '\r' && it->second.left[1] == '\n')
+		it->second.left = it->second.left.substr(2, it->second.left.size());
 	if (it->second.stage == 0)
 		g_parser.analyse_header(it->second);
 	else if (it->second.stage == 1)
 		g_parser.analyse_body(it->second);
-	g_logger.fd << g_logger.get_timestamp() << "We are done parsing the req from ccosk: " << csock << std::endl;
-
 }
 
 std::string		&webserv::get_root() { return (_root); }
