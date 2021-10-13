@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 14:56:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/11 15:34:00 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/13 10:59:25 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,6 @@ std::string         response::generate_error_body(std::string & message) {
 //     }
 // }
 
-
 std::string         response::generate_autoindex_body(request & req) {
     std::string & path = req.conf->path_to_target;
     std::string body_response = "<html><head><title>" + path + "</title></head>\n<body>\n<h1>";
@@ -160,11 +159,14 @@ std::string         response::generate_autoindex_body(request & req) {
     DIR *d;
     struct dirent *dir;
     d = opendir(path.c_str());
-    body_response += "AUTOINDEXING<br>\n";
+    body_response += "AUTOINDEXING<br>\n<table style=\"border-collapse: collapse; width: 100%;\" border=\"3\"><tbody>";
+
     if (d) {
         while ((dir = readdir(d)) != NULL) {
-            body_response += "<a href=\"";
             std::string file_name(dir->d_name);
+			if (file_name == ".")
+				continue;
+            body_response += "<tr><td style=\"width: 100%;\"><a href=\"";
 			body_response += req.request_target;
 			if (req.request_target[req.request_target.size() - 1] != '/')
                 body_response += "/";
@@ -172,11 +174,11 @@ std::string         response::generate_autoindex_body(request & req) {
             if (is_directory(file_name) && file_name[file_name.size() - 1] != '/')
                 body_response += "/";
             body_response += "\">";
-            body_response += dir->d_name + std::string("</a><br>\n");
+            body_response += dir->d_name + std::string("</a><br></td></tr>\n");
         }
     closedir(d);
     }
-    body_response += "</h1></center>\n<hr><center>webserv/1\n</body>\n</html>";
+    body_response += "</tbody></table</h1></center>\n<hr><center>webserv/1\n</body>\n</html>";
     body_response += "\r\n";
     return (body_response);
 }

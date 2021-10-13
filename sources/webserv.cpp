@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/11 18:26:11 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/13 14:19:36 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,6 @@ void	request::response_request() {
 		g_logger.fd << g_logger.get_timestamp() << "We are going to respond a request with code : " << code_to_send << std::endl;
 	 	std::string header = response::generate_header(*this);
 	 	send_header(csock, header);
-		header_is_sent = true;
 	}
 	if (header_is_sent == true) {
 		send_body();
@@ -410,13 +409,14 @@ void	webserv::control_time_out(void) {
 	std::list<int>	sock_to_close;
 
 	for (std::map<int, std::time_t>::iterator it = _timeout.begin(); it != _timeout.end(); it++) {
-		if (t - it->second >= TIMEOUT)
-		{ //ajouter une securite si nous sommes en epollout : ne pas fermer le csock;
+		if (t - it->second >= TIMEOUT) {
 			std::map<int, request>::iterator it_req = _requests.find(it->first);
-			if (it_req == _requests.end())
+			if (it_req == _requests.end()) {
 				sock_to_close.push_back(it->first);
+				g_logger.fd << g_logger.get_timestamp() << "We can't find matching request to csock:" << csock << "that SHOULD NOT HAPPEN" << std::endl;
+			}
 			else if (it_req->second.stage != ENDED_REQUEST)
-				sock_to_close.push_back(it->first);		
+				sock_to_close.push_back(it->first);
 		}
 	}
 	for (std::list<int>::iterator it = sock_to_close.begin(); it != sock_to_close.end(); it++)  {

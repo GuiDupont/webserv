@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/06 17:32:18 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/13 15:07:20 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <map>
 # include <set>
 
+# define MAX_BODY_SIZE 2_000_000_000;
+# define MBYTE_TO_BYTE_MULT 1_000_000;
 typedef int unknown;
 class vHost;
 class request;
@@ -55,11 +57,7 @@ class config {
 		std::string									path_info;
 		bool										cgi_activated;
 		std::string									script_name;
-		
 
-		
-		
-	
 		config(request & req);
 		config();
 

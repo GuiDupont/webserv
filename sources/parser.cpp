@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/11 18:18:51 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/13 12:43:08 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,7 +301,7 @@ void	webserv_parser::analyse_body(request &req) {
 
 	g_logger.fd << g_logger.get_timestamp() + "We are parsing body from ccosk: " << req.csock << std::endl;// analyse_body(it->second); // a faire
 
-	if (req.header_fields.find("Content-Length") == req.header_fields.end() && !is_chunked(req)) {
+	if (req.header_fields.find("content-length") == req.header_fields.end() && !is_chunked(req)) {
 		req.set_request_to_ended();
 		if (req.left.size() != 0)
 			req.left.clear();
@@ -393,8 +393,8 @@ void	webserv_parser::analyse_body(request &req) {
 			}
 		}
 	}
-	else if (req.header_fields.find("Content-Length") != req.header_fields.end()) {
-		size_t length = std::atoi(req.header_fields.find("Content-Length")->second.c_str());
+	else if (req.header_fields.find("content-length") != req.header_fields.end()) {
+		size_t length = std::atoi(req.header_fields.find("content-length")->second.c_str());
 		req.body_request += req.left;
 		req.left.clear();
 		if (req.body_request.size() > req.conf->client_max_body_size) {
@@ -459,7 +459,10 @@ void	webserv_parser::analyse_header(request &req) { // fix : empty lines should 
 				return ;
 			}
 			header_field = std::pair<std::string, std::string>(header_field_raw.substr(0, semi_colon_index), 
-			header_field_raw.substr(semi_colon_index + 1, header_field_raw.size() - semi_colon_index));
+			header_field_raw.substr(semi_colon_index + 1, header_field_raw.size() - semi_colon_index)); 
+			for (std::string::iterator it = header_field.first.begin(); it != header_field.first.end(); it++) {
+				*it = std::tolower(*it);
+			}
 			header_field.second = trims(header_field.second, " \t");
 			if (!header_field.first.size() || !header_field.second.size() 
 			|| header_field.first[header_field.first.size() - 1] == '\t'
@@ -479,15 +482,15 @@ void	webserv_parser::analyse_header(request &req) { // fix : empty lines should 
 			}
 			req.header_fields.insert(header_field);
 		}
-		if (req.header_fields.find("Host") == req.header_fields.end()) {
+		if (req.header_fields.find("host") == req.header_fields.end()) {
 			g_logger.fd << g_logger.get_timestamp() << "Pb de Host sur csock : " << req.csock << std::endl;
 			req.code_to_send = 400;
 			req.set_request_to_ended();
 			req.conf = new config(req);
 			return ;
 		}
-		if (req.header_fields.find("Content-Length") != req.header_fields.end()) {
-			if (is_valid_content_length(req.header_fields.find("Content-Length")->second) == 0) {
+		if (req.header_fields.find("content-length") != req.header_fields.end()) {
+			if (is_valid_content_length(req.header_fields.find("content-length")->second) == 0) {
 				req.code_to_send = 400;
 				req.set_request_to_ended();
 				req.conf = new config(req);
@@ -495,8 +498,8 @@ void	webserv_parser::analyse_header(request &req) { // fix : empty lines should 
 				return ;
 			}
 		}
-		if (req.header_fields.find("Trailer") != req.header_fields.end()) {
-			req.param_trailer(req.header_fields.find("Trailer")->second);
+		if (req.header_fields.find("trailer") != req.header_fields.end()) {
+			req.param_trailer(req.header_fields.find("trailer")->second);
 		}
 		req.left = req.left.substr(index, req.left.size() - index);
 		req.stage = 1;

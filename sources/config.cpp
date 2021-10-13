@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/11 12:39:33 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/13 15:07:51 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ config::config(request & request) : validity_checked(false), return_activated(fa
 	int first = 1;
 	vHost chosen = get_associated_vhost(request);
 	put_vhost_and_location_in_config(chosen, request);
-	client_max_body_size *= 1000000;
+	if (client_max_body_size <= 0 || client_max_body_size > MAX_BODY_SIZE)
+		client_max_body_size = MAX_BODY_SIZE; 
+	else
+		client_max_body_size *= MBYTE_TO_BYTE_MULT;
 	set_cgi_params(request);
 	std::cout << g_logger.get_timestamp() << *this << std::endl;
 	
