@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:07:25 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/13 11:37:07 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/13 16:30:23 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,12 @@ class request {
 		response							*resp;
 		CGI									*cgi;
 		bool								close_csock;
-		bool								request_with_body;
 		bool								body_is_sent;
 		bool								header_is_sent;
 		int									body_fd;
 		size_t								body_written_cgi;
 		std::string							body_response;
-		int									amount_sent;
+		size_t									amount_sent;
 
 		friend std::ostream & operator<<(std::ostream & o,const request & r);
 		

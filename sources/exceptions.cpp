@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exceptions.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:36:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/13 14:26:00 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/13 16:32:54 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,5 +109,5 @@ const char* duplicate_location::what() const throw() {
 }
 
 const char* port_already_used::what() const throw() {
-	return ("Impossible to bind to port, it's might be used by another program. If you just closed webserv wait a few seconds");
+	return ("Impossible to bind to port, it's might be used by another program.");
 }

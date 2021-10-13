@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/13 12:29:39 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/13 16:31:05 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,14 @@ request::~request() {
 	cgi = NULL;
 }
 
-request::request() : stage(0), next_chunk(-1), nb_trailer_to_received(0), code_to_send(0), close_csock(false), conf(NULL), resp(NULL), cgi(NULL),
-					 header_is_sent(false), body_is_sent(false), body_fd(-1), body_written_cgi(0), amount_sent(0) {}
+request::request() : next_chunk(-1), nb_trailer_to_received(0), code_to_send(0), stage(0), conf(NULL), resp(NULL), cgi(NULL),
+					close_csock(false), body_is_sent(false), header_is_sent(false), body_fd(-1), body_written_cgi(0), amount_sent(0) {}
 
-request::request(int csock) :	stage(0), csock(csock), next_chunk(-1), nb_trailer_to_received(0), 
-								code_to_send(0), close_csock(false), conf(NULL), resp(NULL), cgi(NULL),
-								header_is_sent(false), body_is_sent(false), body_fd(-1), body_written_cgi(0), amount_sent(0) {}
+request::request(int csock) :	next_chunk(-1), nb_trailer_to_received(0), code_to_send(0), csock(csock), stage(0), conf(NULL), resp(NULL), cgi(NULL),
+					close_csock(false), body_is_sent(false), header_is_sent(false), body_fd(-1), body_written_cgi(0), amount_sent(0) {}
 
-request::request(int csock, std::string left) : stage(0), csock(csock), left(left), next_chunk(-1),
-												nb_trailer_to_received(0), code_to_send(0), close_csock(false),
-												conf(NULL), resp(NULL), cgi(NULL), header_is_sent(false), body_is_sent(false), 
-												body_fd(-1), body_written_cgi(0), amount_sent(0) {}
+request::request(int csock, std::string left) : left(left), next_chunk(-1), nb_trailer_to_received(0), code_to_send(0), csock(csock), stage(0), conf(NULL), resp(NULL), cgi(NULL),
+					close_csock(false), body_is_sent(false), header_is_sent(false), body_fd(-1), body_written_cgi(0), amount_sent(0) {}
 
 void	request::send_header(int csock, std::string & header) {
 	int ret = send(csock, header.c_str(), header.size(), 0);
@@ -173,6 +170,9 @@ static int		unlink_or_rmdir(const char *fpath, const struct stat *sb, int tflag,
 	std::string path(fpath);
 	int status;
 
+	(void)sb;
+	(void)tflag;
+	(void)ftwbuf;
 	if (is_directory(path))
 		status = rmdir(fpath);
 	else
@@ -192,8 +192,7 @@ void	request::delete_directory(std::string & path, request & req) {
 
 void	request::delete_file(std::string & path, request & req) {
 	std::cout << " We are about to delete " << path << std::endl;
-	int status = unlink(path.c_str());
-	
+	unlink(path.c_str());
 	req.code_to_send = 204;
 	req.body_response = response::generate_error_body(g_webserv.status_code.find(req.code_to_send)->second);
 	req.conf->local_actions_done = true;

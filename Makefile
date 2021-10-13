@@ -6,7 +6,7 @@
 #    By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/07 11:26:53 by gdupont           #+#    #+#              #
-#    Updated: 2021/10/07 15:40:46 by ade-garr         ###   ########.fr        #
+#    Updated: 2021/10/13 16:31:32 by ade-garr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,8 @@ NAME = webserv
 CXX = /usr/bin/clang++
 
 FLAGS = 
-#-Wall -Wextra -Werror
+# -Wall -Wextra -Werror
+
 INCLUDES = ./includes/
 
 PATH_SRCS = sources

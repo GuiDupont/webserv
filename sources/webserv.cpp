@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/13 16:12:49 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/13 16:16:25 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void	webserv::wait_for_connection() {
 }
 
 void	webserv::accept_new_client(int sock) {
-	struct epoll_event ev;
 	SOCKADDR_IN csin;
 	socklen_t crecsize = sizeof(csin);
 	SOCKET csock = accept(sock, (SOCKADDR*)&csin, &crecsize);

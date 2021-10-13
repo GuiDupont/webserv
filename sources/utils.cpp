@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/13 16:13:30 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/13 16:18:50 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ bool		ft_string_has_whitespace(const std::string & s)
 int count_words(std::string &line) {
 
 	int count = 0;
-	int i;
+	size_t i;
 
 	for (i = 0; i < line.size(); i++) {
 		if (isspace(line[i]) != 0) {}
@@ -132,7 +132,7 @@ void	param_socket_server(vHost &host) {
 std::string get_word(std::string & line, int &start_index, std::string delim) {
 	if (line.size() == 0 || !line[start_index])
 		return ("");
-	int delim_index = line.find(delim, start_index);
+	size_t delim_index = line.find(delim, start_index);
 	if (delim_index == std::string::npos)
 		return ("");
 	std::string word = line.substr(start_index, delim_index - start_index);
@@ -194,7 +194,6 @@ bool	is_field_content(std::string & s) {
 
 static int size_dest(long n)
 {
-	char	*dest;
 	int		count = 1;
 
 	if (n < 0)
@@ -266,6 +265,7 @@ bool	is_valid_request_target(std::string line) {
 }
 
 void	stop_program_sigint(int signum) {
+	(void)signum;
 	std::set<int> csock;
 	std::set<int> sock;
 	g_logger.fd << g_logger.get_timestamp() << " We are about to quit" << std::endl;
@@ -588,7 +588,7 @@ bool   can_I_write_in_fd(int fd) {
 	struct epoll_event* _revents = g_webserv.get_revents();
 	int nsfd					= g_webserv.nsfd;
 
-	for (size_t i = 0; i < nsfd; i++) {
+	for (int i = 0; i < nsfd; i++) {
 		if (_revents[i].data.fd == fd && _revents[i].events & EPOLLOUT)
 			return true;
 	}

@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 17:55:12 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/07 19:12:41 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/13 16:19:45 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 size_t g_line;
 
 location::location(std::ifstream & config_file, std::string & line, vHost & host) 
-		: _client_max_body_size(-1), _disable_methods(0), _auto_index(false),
+		: _client_max_body_size(-1), _auto_index(false), _disable_methods(0),
 		_root(host.get_root()), _cgi_dir("cgi_dir") {
 	
 	int i = go_to_next_word(line, 0);
