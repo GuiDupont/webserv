@@ -1,4 +1,4 @@
-- mettre une secu sur l URL rentree (moins de 5000 caracteres ?) -> quelle erreur renvoyer ? Alex
+- mettre une secu sur l URL rentree (moins de 5000 caracteres ?) -> DONE
 - potentiellement rework la logique a cause des POST de grand fichiers (surchage de heap si tout est mis dans la string body) // Guillaume
 - gerer les cas des lignes vides avant new requete Alex
 - rajouter la fonction pour forcer l utilisation des sockets ?  Alex
