@@ -1,12 +1,1 @@
-- mettre une secu sur l URL rentree (moins de 5000 caracteres ?) -> quelle erreur renvoyer ? Alex
-- potentiellement rework la logique a cause des POST de grand fichiers (surchage de heap si tout est mis dans la string body) // Guillaume
-- gerer les cas des lignes vides avant new requete Alex
-- rajouter la fonction pour forcer l utilisation des sockets ?  Alex
-- vérifier si tout fonctionne pour HTTP 1.1/1.0 (impact sur CGI)  
-- faire une vérification de la longueur du body à write / content length / cgi suivant les /r/n Guillaume
-- verifier les fins de reponses envoyees : pas de \r\n a la fin? Guillaume
-- parametrer un client max body size au minimum guillaume
-- fix write_body_inside_file function, make it non blocking Guillaume
-- timeout general ? a voir 
-- secure l envoi du GET d un fichier local (check EOF?) -> Guillaume
-- majuscule minuscule dans les header fields
+- Guillaume doit me sucer
