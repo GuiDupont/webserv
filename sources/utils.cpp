@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/11 18:50:30 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/13 14:24:52 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,8 @@ void	param_socket_server(vHost &host) {
 			close(sock);
 			sock = g_webserv.get_sock_by_matching_host_ip(std::pair< std::string, size_t> (*it));
 			if (sock == -1)
-				// throw (port_already_used());
-				;
+				throw (port_already_used());
+				// ;
 			else
 				host.map_sock_to_hostport(sock, *it);
 		}
@@ -506,7 +506,7 @@ bool	is_valid_content_length(std::string val) {
 
 bool is_chunked(request &req) {
 
-	std::map<std::string, std::string>::iterator it = req.header_fields.find("Transfer-Encoding");
+	std::map<std::string, std::string>::iterator it = req.header_fields.find("transfer-encoding");
 	if (it == req.header_fields.end())
 		return (0);
 	int index = find_word(it->second, "chunked");

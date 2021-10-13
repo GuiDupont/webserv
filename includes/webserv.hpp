@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/11 16:44:41 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/13 11:53:29 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@
 
 # define TIMEOUT 50
 
-# define SEND_SPEED 10000
+# define SEND_SPEED 10
 
 # define REVENT_SIZE 64
 

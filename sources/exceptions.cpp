@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:36:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/21 15:41:16 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/13 14:26:00 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,5 +109,5 @@ const char* duplicate_location::what() const throw() {
 }
 
 const char* port_already_used::what() const throw() {
-	return ("Impossible to bind to port, it's might be used by another program");
+	return ("Impossible to bind to port, it's might be used by another program. If you just closed webserv wait a few seconds");
 }
