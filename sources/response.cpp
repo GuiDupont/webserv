@@ -77,6 +77,7 @@ long            response::get_content_length(request & req) { // make sure it's 
         return req.body_response.size();
     long file_size = get_file_size(req.conf->path_to_target);
     if (file_size == -1) {
+        g_logger.fd << "Issue with file content length\n";
         req.code_to_send = 500;
         req.body_response = response::generate_error_body(g_webserv.status_code.find(req.code_to_send)->second);
         return req.body_response.size();
@@ -113,6 +114,7 @@ std::string         response::generate_header(request & req) {
 std::string         response::get_status_line(request & req) {
     std::map<int, std::string>::iterator it = g_webserv.status_code.find(req.code_to_send);
     if (it == g_webserv.status_code.end()) {
+        g_logger.fd << "status code unknown\n";
         req.code_to_send = 500;
         req.close_csock = true;
     }

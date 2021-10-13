@@ -1,1 +1,1 @@
-- Guillaume doit me sucer
+- mauvais cgi_dir , actualiser plusieurs fois, probeme avec sanitize

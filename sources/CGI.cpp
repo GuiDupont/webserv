@@ -230,6 +230,7 @@ void request::handle_CGI() {
 		if (can_I_read_from_fd(cgi->pipefd[0]) == true) {
 			ret = read(cgi->pipefd[0], buf, SEND_SPEED);
 			if (ret == -1) {
+				g_logger.fd << "I couldn't read from pipe cgi\n";
 				close_csock = true;
 				code_to_send = 500;
 				close(cgi->pipefd[0]);

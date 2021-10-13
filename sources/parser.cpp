@@ -524,6 +524,7 @@ void webserv_parser::parse_cgi_body_response(request &req) {
 	size_t end_of_hf = req.body_response.find("\r\n\r\n");
 	if (end_of_hf == std::string::npos) {
 		req.close_csock = true;
+		g_logger.fd << "CGI didnt send \\r\\n\\r\\n, he sent :\n" << req.body_response;
 		req.code_to_send = 500;
 		req.conf->cgi_activated = false;
 		return ;
