@@ -119,7 +119,8 @@ void	param_socket_server(vHost &host) {
 			g_logger.fd << g_logger.get_timestamp() << LOG_LISTEN_SSOCK << sock << std::endl;
 			host.map_sock_to_hostport(sock, *it);
 			static struct epoll_event ev;
-			ev.events = EPOLLIN | EPOLLET;
+			// ev.events = EPOLLIN | EPOLLET;
+			ev.events = EPOLLIN;
 			ev.data.fd = sock;
 			if (epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_ADD, sock, &ev) != 0)
 				throw (epoll_ctl_add_error());

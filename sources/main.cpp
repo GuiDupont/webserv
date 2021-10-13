@@ -22,7 +22,7 @@ logger			g_logger("logs/log"); // to fix
 
 int main(int ac, char **av) {
 	signal(SIGINT, stop_program_sigint);
-	signal(SIGPIPE, SIG_IGN);
+	// signal(SIGPIPE, SIG_IGN);
 	if (ac > 2) {
 		std::cout << "Error argument\n" << std::endl;
 		return (1);

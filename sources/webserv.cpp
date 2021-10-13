@@ -444,8 +444,8 @@ void	webserv::clean_csock_from_server(int csock) {
 	}
 	epoll_ctl(_epfd, EPOLL_CTL_DEL, csock, NULL);
 	// fsync(csock);
+	// shutdown(csock, SHUT_RDWR);
 	close(csock);
-	// shutdown(csock, 0);
 }
 
 webserv::webserv(void)	{ }
