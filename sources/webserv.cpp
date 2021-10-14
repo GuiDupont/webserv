@@ -72,8 +72,11 @@ void	webserv::accept_new_client(int sock) {
 void	webserv::answer_to_request(int csock) {
 //	g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on csock: " << csock << std::endl;
 
+	if (ft_is_static_fd(csock)) {
+		g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on static fd: " << csock << std::endl;
+		return ;
+	}
 	request & req = g_webserv._requests.find(csock)->second;
-
 	if (req.conf->validity_checked == false) {
 		req.control_config_validity();
 		if (req.code_to_send != 0 && req.code_to_send != 200 && req.code_to_send != 204) {

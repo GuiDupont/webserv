@@ -216,7 +216,16 @@ void request::handle_CGI() {
 		if (can_I_write_in_fd(cgi->pipefd_post[1]) == false)
 			return ;
 		ret = write(cgi->pipefd_post[1], towrite.c_str(), towrite.size());
+		if (ret == -1) {
+			g_logger.fd << g_logger.get_timestamp() << "Couldn't write on pipe CGI\n";
+			code_to_send = 500;
+			close_csock = true;
+			conf->local_actions_done = true;
+			close(cgi->pipefd[0]);
+			close(cgi->pipefd_post[1]);
+		}
 		body_written_cgi += ret;
+		g_logger.fd << g_logger.get_timestamp() << "I wrote " << ret << " bytes from: " << towrite << "\n";
 		if (body_written_cgi == body_request.size()) {
 			close(cgi->pipefd_post[1]);
 			g_logger.fd << g_logger.get_timestamp() << "I am father and I am done writing content to the CGI.\n";
