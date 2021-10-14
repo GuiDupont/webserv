@@ -241,7 +241,7 @@ void request::handle_CGI() {
 			buf[ret] = '\0';
 			body_response += buf;
 		}
-		else if (WIFEXITED(cgi->pid_status) == true) {
+		else if (is_EPOLLHUP(cgi->pipefd[0]) == true) {
 			close(cgi->pipefd[0]);
 			webserv_parser::parse_cgi_body_response(*this);
 			conf->local_actions_done = true;

@@ -85,10 +85,6 @@ void                            add_fd_epollin_to_pool(int fd);
 void                            add_fd_epollout_to_pool(int fd);
 bool                            can_I_read_from_fd(int fd);
 bool                            can_I_write_in_fd(int fd);
-
-
-
-
-
+bool                            is_EPOLLHUP(int fd);
 
 #endif

@@ -610,3 +610,17 @@ bool   can_I_read_from_fd(int fd) {
 	//g_logger.fd << g_logger.get_timestamp() << "fd " << fd << " is not ready for reading" << std::endl;
 	return false;
 }
+
+bool is_EPOLLHUP(int fd) {
+	struct epoll_event* _revents = g_webserv.get_revents();
+	int nsfd					= g_webserv.nsfd;
+
+	for (int i = 0; i < nsfd; i++) {
+		if (_revents[i].data.fd == fd && _revents[i].events & EPOLLHUP) {
+			g_logger.fd << g_logger.get_timestamp() << "fd " << fd << " has EPOLLHUP" << std::endl;
+			return true;
+		}
+	}
+	//g_logger.fd << g_logger.get_timestamp() << "fd " << fd << " is not ready for reading" << std::endl;
+	return false;
+}
