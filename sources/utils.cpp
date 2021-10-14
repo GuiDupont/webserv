@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/13 16:18:50 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/14 17:43:22 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -611,16 +611,8 @@ bool   can_I_read_from_fd(int fd) {
 	return false;
 }
 
-bool is_EPOLLHUP(int fd) {
-	struct epoll_event* _revents = g_webserv.get_revents();
-	int nsfd					= g_webserv.nsfd;
-
-	for (int i = 0; i < nsfd; i++) {
-		if (_revents[i].data.fd == fd && _revents[i].events & EPOLLHUP) {
-			g_logger.fd << g_logger.get_timestamp() << "fd " << fd << " has EPOLLHUP" << std::endl;
-			return true;
-		}
-	}
-	//g_logger.fd << g_logger.get_timestamp() << "fd " << fd << " is not ready for reading" << std::endl;
-	return false;
+void   remove_last_char_str(std::string & str) {
+	if (str.empty())
+		return ;
+	str = str.substr(0, str.size() - 1);
 }

@@ -30,19 +30,8 @@ void	webserv::wait_for_connection() {
 	{
 		control_time_out();
 		nsfd = epoll_wait(this->_epfd, _revents, 64, 0);
-		if (nsfd) {
+		if (nsfd)
 			g_logger.fd << g_logger.get_timestamp() << LOG_EPOLL_EVENT << nsfd << std::endl;
-			// for (int i = 0; i < nsfd; i++) {
-			// 	if (_revents[i].events & EPOLLIN)
-			// 		g_logger.fd << g_logger.get_timestamp() << "POLLIN on sock :" << _revents[i].data.fd << std::endl;
-			// 	if (_revents[i].events & EPOLLOUT)
-			// 		g_logger.fd << g_logger.get_timestamp() << "POLLOUT on sock :" << _revents[i].data.fd << std::endl;
-			// 	if (_revents[i].events & EPOLLERR)
-			// 		g_logger.fd << g_logger.get_timestamp() << "POLLERR on sock :" << _revents[i].data.fd << std::endl;
-			// 	if (_revents[i].events & EPOLLHUP)
-			// 		g_logger.fd << g_logger.get_timestamp() << "POLLHUP on sock :" << _revents[i].data.fd << std::endl;
-			// }
-		}
 		else if (nsfd == -1)
 			g_logger.fd << g_logger.get_timestamp() << LOG_ISSUE_EPOLL_WAIT + std::string(strerror(errno)) << std::endl;
 		else if (true_one_time_per_x_secondes(4))
@@ -188,7 +177,7 @@ void	request::handle_standard_response() {
 	}
 }
 
-webserv::webserv(const std::string & path_config) : _client_max_body_size(-1), _stop(false) {
+webserv::webserv(const std::string & path_config) : _client_max_body_size(-1) {
 	std::ifstream	config_file;
 	std::string		all_file;
 	

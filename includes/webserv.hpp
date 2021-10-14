@@ -71,8 +71,8 @@ class webserv {
 
 	public:
 		std::map<int, std::string>					status_code;
-		std::set<int>								static_fds;
 		std::map<int, request>						_requests;
+		std::set<int>								static_fds;
 		int											nsfd;
 
 

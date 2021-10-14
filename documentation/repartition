@@ -1,7 +1,0 @@
-Guillaume: htons, htonl, ntohs, ntohl,
-select, poll, epoll (epoll_create, epoll_ctl,
-epoll_wait), kqueue (kqueue, kevent)
-
-Alex: htons, htonl, ntohs, ntohl,
-select, poll, epoll (epoll_create, epoll_ctl,
-epoll_wait), kqueue (kqueue, kevent)

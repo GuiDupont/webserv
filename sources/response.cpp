@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 14:56:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/13 10:59:25 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/14 16:32:48 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ long            response::get_content_length(request & req) { // make sure it's 
         return req.body_response.size();
     long file_size = get_file_size(req.conf->path_to_target);
     if (file_size == -1) {
-        g_logger.fd << "Issue with file content length\n";
         req.code_to_send = 500;
         req.body_response = response::generate_error_body(g_webserv.status_code.find(req.code_to_send)->second);
         return req.body_response.size();
@@ -114,7 +113,6 @@ std::string         response::generate_header(request & req) {
 std::string         response::get_status_line(request & req) {
     std::map<int, std::string>::iterator it = g_webserv.status_code.find(req.code_to_send);
     if (it == g_webserv.status_code.end()) {
-        g_logger.fd << "status code unknown\n";
         req.code_to_send = 500;
         req.close_csock = true;
     }
@@ -133,26 +131,6 @@ std::string         response::generate_error_body(std::string & message) {
     body_response += "\r\n";
     return (body_response);
 }
-
-// std::string response::generate_body_as_string_from_file(std::string & path) {
-//     int fd = open(path.c_str(), O_RDONLY);
-//     std::string body;
-// 	if (fd == -1) {
-// 		g_logger.fd << g_logger.get_timestamp() << "Issue while opening -"  << path <<  "- . Error: " << strerror(errno) << std::endl; // end special cases ?
-// 		return (body);
-// 	}
-//     char buff[SEND_SPEED];
-//     int amount_read;
-//     while (1) {
-//         amount_read = read(fd, buff, SEND_SPEED);
-//         buff[amount_read] = '\0';
-//         body += buff;
-//         if (amount_read < SEND_SPEED) {
-//             close(fd);
-//             return (body);
-//         }
-//     }
-// }
 
 std::string         response::generate_autoindex_body(request & req) {
     std::string & path = req.conf->path_to_target;

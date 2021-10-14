@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/13 15:07:51 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/14 17:49:14 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@ config::config(request & request) : validity_checked(false), return_activated(fa
 		method = POST;
 	else if (request.method == "DELETE")
 		method = DELETE;
+	request.host_name = request.header_fields.find("host")->second;
 	client_max_body_size = (g_webserv._client_max_body_size  == -1 ? 0: g_webserv._client_max_body_size);
-	_error_pages = g_webserv._error_pages;
 	_upload_pass = g_webserv._upload_pass;
 	_root = g_webserv._root;
 	_cgi_dir = g_webserv._cgi_dir;
 	_request_target = request.request_target;
 	code = request.code_to_send;
-
+	_error_pages = g_webserv._error_pages;
 	int first = 1;
 	vHost chosen = get_associated_vhost(request);
 	put_vhost_and_location_in_config(chosen, request);
@@ -39,7 +39,9 @@ config::config(request & request) : validity_checked(false), return_activated(fa
 		client_max_body_size *= MBYTE_TO_BYTE_MULT;
 	set_cgi_params(request);
 	std::cout << g_logger.get_timestamp() << *this << std::endl;
-	
+	for (std::map< int, std::string >::iterator it = g_webserv._error_pages.begin(); it != g_webserv._error_pages.end(); it++) {
+		_error_pages.insert(*it);
+	}
 }
 
 static size_t get_cgi_ext_pos(const std::string & target) {
@@ -70,6 +72,15 @@ size_t	config::get_query_index(const std::string & target, size_t index) {
 	return (index_query);
 }
 
+static void remove_upload_pass(std::string & target, const std::string & upload_pass, const std::string & root) {
+	if (upload_pass.empty() || upload_pass == "\\" )
+		return ;
+	std::string first_part = target.substr(0, root.size());
+	std::string second_part = target.substr(root.size() + upload_pass.size(), target.size() - (root.size() + upload_pass.size()));
+	target = from_two_str_to_path(first_part, second_part);
+}
+
+
 void	config::set_cgi_params(request & req) {
 	std::string &target = path_to_target;
 	g_logger.fd << g_logger.get_timestamp() << "Setting CGI params" << std::endl;
@@ -99,14 +110,14 @@ void	config::set_cgi_params(request & req) {
 	size_t begin_of_script_name = _root.size();
 	script_name = target.substr(begin_of_script_name, target.size() - begin_of_script_name);
 	script_name = from_two_str_to_path(_location, script_name);
+	remove_upload_pass(target, _upload_pass, _root);
 }
+
 
 void	config::put_vhost_and_location_in_config(vHost & host, request & request) {
 	host_port = *host._host_port.begin();
 	if (host.get_client_max_body_size() != -1)
 		client_max_body_size = host.get_client_max_body_size();
-	if (!host.get_error_pages().empty())
-		_error_pages = host.get_error_pages();
 	if (!host.get_root().empty())
 		_root = host.get_root();	
 	if (!_server_name.size() && host.get_server_names().size())
@@ -120,9 +131,7 @@ void	config::put_vhost_and_location_in_config(vHost & host, request & request) {
 		if (!it->second.get_error_pages().empty())
 			_error_pages = it->second.get_error_pages();
 		if (!it->second.get_upload_pass().empty())
-			_upload_pass = it->second.get_upload_pass();
-		else
-			_upload_pass = _root;
+			_upload_pass = it->second.get_upload_pass();	
 		_location = it->second.get_location();
 		if (!it->second.get_root().empty())
 			_root = it->second.get_root();
@@ -131,8 +140,11 @@ void	config::put_vhost_and_location_in_config(vHost & host, request & request) {
 		_return = it->second.get_return();
 		cgi_ext = it->second.get_cgi_ext();
 		_cgi_dir = it->second.get_cgi_dir();
-
-		return ;
+	}
+	if (!_upload_pass.empty() && _upload_pass[_upload_pass.size() - 1] == '/')
+			remove_last_char_str(_upload_pass);
+	for (std::map< int, std::string >::iterator it = host._error_pages.begin(); it != host._error_pages.end(); it++) {
+		_error_pages.insert(*it);
 	}
 }
 
@@ -196,8 +208,7 @@ vHost & config::get_associated_vhost(request & request) {
 				chosen = &(*it);;
 				first = 0;
 			}
-			if (it->get_server_names().find(request.host_name) 
-					!= it->get_server_names().end()) {
+			if (it->get_server_names().find(request.host_name)	!= it->get_server_names().end()) {
 				_server_name = request.host_name;
 				chosen = &(*it);
 				break ;

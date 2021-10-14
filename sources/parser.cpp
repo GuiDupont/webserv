@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/13 16:13:47 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/14 16:53:36 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -501,7 +501,6 @@ void	webserv_parser::analyse_header(request &req) { // fix : empty lines should 
 				req.code_to_send = 400;
 				req.set_request_to_ended();
 				req.conf = new config(req);
-						
 				return ;
 			}
 		}
@@ -524,7 +523,6 @@ void webserv_parser::parse_cgi_body_response(request &req) {
 	size_t end_of_hf = req.body_response.find("\r\n\r\n");
 	if (end_of_hf == std::string::npos) {
 		req.close_csock = true;
-		g_logger.fd << "CGI didnt send \\r\\n\\r\\n, he sent :\n" << req.body_response;
 		req.code_to_send = 500;
 		req.conf->cgi_activated = false;
 		return ;

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:42:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/13 12:18:08 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/14 17:52:29 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,20 @@ webserv_parser	g_parser;
 logger			g_logger("logs/log"); // to fix
 
 
+static void remove_upload_pass(std::string & target, const std::string & upload_pass, const std::string & root) {
+	if (upload_pass.empty() || upload_pass == "/" )
+		return ;
+	std::string first_part = target.substr(0, root.size());
+	std::string second_part = target.substr(root.size() + upload_pass.size(), target.size() - (root.size() + upload_pass.size()));
+	target = from_two_str_to_path(first_part, second_part);
+}
+
+
 
 int main(int ac, char **av) {
 	signal(SIGINT, stop_program_sigint);
 	signal(SIGPIPE, SIG_IGN);
+
 	if (ac > 2) {
 		std::cout << "Error argument\n" << std::endl;
 		return (1);
