@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/14 17:49:14 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/15 12:22:00 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void	config::set_cgi_params(request & req) {
 	cgi_activated = true;
 	size_t begin_of_script_name = _root.size();
 	script_name = target.substr(begin_of_script_name, target.size() - begin_of_script_name);
-	script_name = from_two_str_to_path(_location, script_name);
+	script_name = from_two_str_to_path(location_name, script_name);
 	remove_upload_pass(target, _upload_pass, _root);
 }
 
@@ -122,7 +122,7 @@ void	config::put_vhost_and_location_in_config(vHost & host, request & request) {
 		_root = host.get_root();	
 	if (!_server_name.size() && host.get_server_names().size())
 		_server_name = *host.get_server_names().begin();
-	std::map< std::string, location >::const_iterator it = get_most_accurate_location(host);
+	std::map< std::string, class location >::const_iterator it = get_most_accurate_location(host);
 	if (it != host.get_locations().end()) {
 		if (it->second.get_client_max_body_size() != -1)
 			client_max_body_size = it->second.get_client_max_body_size();
@@ -132,7 +132,7 @@ void	config::put_vhost_and_location_in_config(vHost & host, request & request) {
 			_error_pages = it->second.get_error_pages();
 		if (!it->second.get_upload_pass().empty())
 			_upload_pass = it->second.get_upload_pass();	
-		_location = it->second.get_location();
+		location_name = it->second.get_location_name();
 		if (!it->second.get_root().empty())
 			_root = it->second.get_root();
 		_index = it->second.get_index();
@@ -148,16 +148,16 @@ void	config::put_vhost_and_location_in_config(vHost & host, request & request) {
 	}
 }
 
-std::string		config::update_path_to_target_with_root(const location & location) {
+std::string		config::update_path_to_target_with_root(const class location & location) {
 	if (_root.empty())
 		return ("");
 
 	std::string path_to_target; 
-	int index_after_location = _request_target.find(_location, 0) + _location.size();
+	int index_after_location = _request_target.find(location_name, 0) + location_name.size();
 	std::string end_of_path = _request_target.substr(index_after_location, _request_target.size() - index_after_location);
 	if (method & GET) {
 		path_to_target = from_two_str_to_path(_root, end_of_path);
-		if (is_directory(path_to_target))
+		if (is_directory(path_to_target) && are_to_path_equals(location.get_location_name(), _request_target))
 			path_to_target = from_two_str_to_path(path_to_target, _index);
 	}
 	else if (method & POST) {
@@ -173,7 +173,7 @@ std::ostream & operator<<(std::ostream & o, const config & c)
 {
 	o << "HERE IS THE CONFIGURATION WE SET UP" << std::endl;
 	o << "Server name: " << c._server_name << std::endl;
-	o << "Location: " << c._location << std::endl;
+	o << "Location: " << c.location_name << std::endl;
 	o << "Auto_index: " << c._auto_index << std::endl;
 	o << "Client_max_body_size: " << c.client_max_body_size << std::endl;
 	o << "Upload_pass: " << c._upload_pass << std::endl;
@@ -222,7 +222,7 @@ vHost & config::get_associated_vhost(request & request) {
 
 std::map< std::string, location >::const_iterator config::get_most_accurate_location(vHost & host) {
 	std::string most_precise_location;
-	std::map< std::string, location >::const_iterator it = host.get_locations().begin();
+	std::map< std::string, class location >::const_iterator it = host.get_locations().begin();
 	for (; it != host.get_locations().end(); it++) {
 		std::string begin_ofrequest_target = _request_target.substr(0, it->first.size());
 		if (begin_ofrequest_target == it->first && begin_ofrequest_target.size() > most_precise_location.size()) {	

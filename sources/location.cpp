@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 17:55:12 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/13 16:19:45 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/15 12:17:46 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ location::location(std::ifstream & config_file, std::string & line, vHost & host
 	std::string opening_bracket = get_word(line, i);
 	if (opening_bracket != "{")
 		throw (bad_location_declaration());
-	_location = path;
+	location_name = path;
 	std::string	first_word;
 	while (1) {
 		std::getline(config_file, line, '\n');
@@ -69,8 +69,8 @@ location::location(std::ifstream & config_file, std::string & line, vHost & host
 	
 }
 
-std::string  const	& location::get_location() const {
-	return (this->_location);
+std::string  const	& location::get_location_name() const {
+	return (this->location_name);
 }
 
 int										const		& location::get_client_max_body_size() const {

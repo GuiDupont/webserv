@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 11:18:29 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/09/28 14:58:20 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/15 12:18:00 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ vHost::vHost(std::ifstream &config_file, std::string &line) : _client_max_body_s
 			_root = g_parser.parse_one_word(line);
 		else if (first_word == "location") {
 			location loc = location(config_file, line, *this);
-			if (!_locations.insert(std::pair<std::string, location>(loc.get_location(), loc)).second)
+			if (!_locations.insert(std::pair<std::string, location>(loc.get_location_name(), loc)).second)
 				throw (duplicate_location());
 		}
 		else if (first_word == "}")

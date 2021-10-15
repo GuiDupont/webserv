@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   location.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/07 19:12:29 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/15 12:17:22 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ class location {
 		location() ;
 		location(std::ifstream & config_file, std::string & line, vHost & vhost);
 
-		std::string	const									& get_location() const;
+		std::string	const									& get_location_name() const;
 		int			const									& get_client_max_body_size() const;
 		bool		const									& get_auto_index() const;
 		size_t		const									& get_disable_methods() const;
@@ -55,7 +55,7 @@ class location {
 		std::string 									_index;
 		std::pair<int, std::string>						_return;
 		std::set< std::string >							_cgi_ext;
-		std::string 									_location;
+		std::string 									location_name;
 		std::string										_cgi_dir;
 };
 

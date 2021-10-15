@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/13 16:32:01 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/15 12:14:22 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ class config {
 		std::pair<std::string, size_t>				host_port;
 		bool										return_activated;
 		std::set< std::string >						cgi_ext;
-		std::string 								_location;
+		std::string 								location_name;
 		std::string									path_to_target;
 		int											code;
 		bool										validity_checked;
@@ -62,8 +62,8 @@ class config {
 		config();
 
 		void							put_vhost_and_location_in_config(vHost & host, request & conf);
-		std::map< std::string, location >::const_iterator get_most_accurate_location(vHost & host);
-		std::string						update_path_to_target_with_root(const location & location);
+		std::map< std::string, class location >::const_iterator get_most_accurate_location(vHost & host);
+		std::string						update_path_to_target_with_root(const class location & location);
 		vHost						&	get_associated_vhost(request & request);
 		void							set_cgi_params(request & request);
 		size_t							get_query_index(const std::string & target, size_t index);
