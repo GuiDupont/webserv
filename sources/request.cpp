@@ -30,11 +30,6 @@ std::ostream & operator<<(std::ostream & o,const request & r)
 request::~request() {
 	if (body_fd != -1)
 		close(body_fd);
-	if (conf && conf->cgi_activated == true && cgi) {
-		erase_static_fd_from_request(cgi->pipefd[0]);
-		if (method == "POST")
-			erase_static_fd_from_request(cgi->pipefd_post[1]);
-	}
 	delete conf;
 	conf = NULL;
 	delete resp;
@@ -161,7 +156,10 @@ void	request::write_body_inside_file() {  // to fix !!!!
 
 void	request::erase_static_fd_from_request(int fd) {
 	g_webserv.static_fds.erase(fd);
-	epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_DEL, fd, NULL);
+	int ret = epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_DEL, fd, NULL);
+	// g_logger.fd << g_logger.get_timestamp() << "ret from epoll_ctl = " << ret << std::endl;
+	if (ret == -1)
+		g_logger.fd << g_logger.get_timestamp() << "epoll_ctl failed " << errno << std::endl;
 }
 
 //////////////////////////////////////////////////* DELETE */////////////////////////////////////////////////////////////
