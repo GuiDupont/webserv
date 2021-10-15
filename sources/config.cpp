@@ -157,7 +157,7 @@ std::string		config::update_path_to_target_with_root(const class location & loca
 	std::string end_of_path = _request_target.substr(index_after_location, _request_target.size() - index_after_location);
 	if (method & GET) {
 		path_to_target = from_two_str_to_path(_root, end_of_path);
-		if (is_directory(path_to_target) && are_to_path_equals(location.get_location_name(), _request_target))
+		if (is_directory(path_to_target) && are_two_path_equals(location.get_location_name(), _request_target))
 			path_to_target = from_two_str_to_path(path_to_target, _index);
 	}
 	else if (method & POST) {

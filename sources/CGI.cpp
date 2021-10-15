@@ -256,9 +256,9 @@ void request::handle_CGI() {
 			body_response += buf;
 		}
 		else if (is_EPOLLHUP(cgi->pipefd[0]) == true) {
-			ret = read(cgi->pipefd[0], buf, SEND_SPEED);
-			buf[ret] = '\0';
-			g_logger.fd << g_logger.get_timestamp() << "I rode " << ret << " bytes: " << buf << "\n";
+			// ret = read(cgi->pipefd[0], buf, SEND_SPEED);
+			// buf[ret] = '\0';
+			// g_logger.fd << g_logger.get_timestamp() << "I rode " << ret << " bytes: " << buf << "\n";
 			erase_static_fd_from_request(cgi->pipefd[0]);
 			close(cgi->pipefd[0]);
 			webserv_parser::parse_cgi_body_response(*this);

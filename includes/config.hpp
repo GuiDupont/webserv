@@ -23,7 +23,7 @@
 # include <set>
 
 # define MAX_BODY_SIZE 2000000000
-# define MBYTE_TO_BYTE_MULT 1000000
+# define MBYTE_TO_BYTE_MULT 1 // a changer
 typedef int unknown;
 class vHost;
 class request;

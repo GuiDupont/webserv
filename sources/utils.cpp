@@ -709,7 +709,7 @@ void remove_last_char_str(std::string &str)
 	str = str.substr(0, str.size() - 1);
 }
 
-bool are_to_path_equals(const std::string &path1, const std::string &path2)
+bool are_two_path_equals(const std::string &path1, const std::string &path2)
 {
 	if (path1 == path2)
 		return (true);
@@ -729,4 +729,18 @@ bool are_to_path_equals(const std::string &path1, const std::string &path2)
 	if (copy1 == copy2)
 		return (true);
 	return (false);
+}
+
+bool is_EPOLLHUP(int fd) {
+	struct epoll_event* _revents = g_webserv.get_revents();
+	int nsfd					= g_webserv.nsfd;
+
+	for (int i = 0; i < nsfd; i++) {
+		if (_revents[i].data.fd == fd && _revents[i].events & EPOLLHUP) {
+			g_logger.fd << g_logger.get_timestamp() << "fd " << fd << " has EPOLLHUP" << std::endl;
+			return true;
+		}
+	}
+	//g_logger.fd << g_logger.get_timestamp() << "fd " << fd << " is not ready for reading" << std::endl;
+	return false;
 }

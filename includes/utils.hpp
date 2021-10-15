@@ -86,11 +86,7 @@ void                            add_fd_epollout_to_pool(int fd);
 bool                            can_I_read_from_fd(int fd);
 bool                            can_I_write_in_fd(int fd);
 void                            remove_last_char_str(std::string & str);
-bool                            are_to_path_equals(const std::string & path1, const std::string & path2);
-
-
-
-
-
+bool                            are_two_path_equals(const std::string & path1, const std::string & path2);
+bool                            is_EPOLLHUP(int fd);
 
 #endif
