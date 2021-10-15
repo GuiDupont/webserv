@@ -48,7 +48,7 @@
 
 # define TIMEOUT 50
 
-# define SEND_SPEED 10
+# define SEND_SPEED 10000
 
 # define REVENT_SIZE 64
 

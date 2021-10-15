@@ -208,7 +208,9 @@ void request::handle_CGI() {
 			code_to_send = 500;
 			close_csock = true;
 			conf->local_actions_done = true;
+			erase_static_fd_from_request(cgi->pipefd[0]);
 			close(cgi->pipefd[0]);
+			erase_static_fd_from_request(cgi->pipefd_post[1]);
 			close(cgi->pipefd_post[1]);
 			return ;
 		}
@@ -221,12 +223,15 @@ void request::handle_CGI() {
 			code_to_send = 500;
 			close_csock = true;
 			conf->local_actions_done = true;
+			erase_static_fd_from_request(cgi->pipefd[0]);
 			close(cgi->pipefd[0]);
+			erase_static_fd_from_request(cgi->pipefd_post[1]);
 			close(cgi->pipefd_post[1]);
 		}
 		body_written_cgi += ret;
 		g_logger.fd << g_logger.get_timestamp() << "I wrote " << ret << " bytes from: " << towrite << "\n";
 		if (body_written_cgi == body_request.size()) {
+			erase_static_fd_from_request(cgi->pipefd_post[1]);
 			close(cgi->pipefd_post[1]);
 			g_logger.fd << g_logger.get_timestamp() << "I am father and I am done writing content to the CGI.\n";
 			cgi->setCgi_stage("READFROM");
@@ -242,6 +247,7 @@ void request::handle_CGI() {
 				g_logger.fd << "I couldn't read from pipe cgi\n";
 				close_csock = true;
 				code_to_send = 500;
+				erase_static_fd_from_request(cgi->pipefd[0]);
 				close(cgi->pipefd[0]);
 				conf->cgi_activated = false;
 				conf->local_actions_done = true;
@@ -251,6 +257,10 @@ void request::handle_CGI() {
 			body_response += buf;
 		}
 		else if (is_EPOLLHUP(cgi->pipefd[0]) == true) {
+			ret = read(cgi->pipefd[0], buf, SEND_SPEED);
+			buf[ret] = '\0';
+			g_logger.fd << g_logger.get_timestamp() << "I rode " << ret << " bytes: " << buf << "\n";
+			erase_static_fd_from_request(cgi->pipefd[0]);
 			close(cgi->pipefd[0]);
 			webserv_parser::parse_cgi_body_response(*this);
 			conf->local_actions_done = true;
@@ -264,6 +274,7 @@ bool request::child_exited_badly() {
 		code_to_send = 500;
 		conf->cgi_activated = false;
 		close_csock = true;
+		erase_static_fd_from_request(cgi->pipefd[0]);
 		close(cgi->pipefd[0]);
 		return (true);
 	}
