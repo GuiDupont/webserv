@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/14 17:43:22 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/15 11:30:20 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -379,9 +379,6 @@ bool	is_directory(std::string & path) {
 			return (true);
 		return (false);
 		}
-	// else {
-	// 	g_logger.fd << g_logger.get_timestamp() << "Stat on " << path << " provides this error " << strerror(errno) << std::endl; 
-	// }
 	return (false);
 }
 
@@ -422,8 +419,21 @@ std::string				from_two_str_to_path(const std::string & str1, const std::string 
 }
 
 bool					test_path_get(request & req) {
+	DIR *d;
 	std::string path = req.conf->path_to_target;
+
 	if (is_directory(path)) {
+    	d = opendir(path.c_str());
+		if (!d) {
+			if (errno == EACCES)
+				req.code_to_send = 403;
+			else if (errno == ENOENT)
+				req.code_to_send = 404;
+			else
+				req.code_to_send = 400;
+			return (false);
+		}
+		free(d);
 		if (req.conf->_auto_index == false)
 			req.body_response = " ";
 		else
@@ -449,6 +459,17 @@ bool					test_path_get(request & req) {
 bool					test_path_delete(request & req) {
 	std::string path = req.conf->path_to_target;
 	if (is_directory(path)) {
+		d = opendir(path.c_str());
+		if (!d) {
+			if (errno == EACCES)
+				req.code_to_send = 403;
+			else if (errno == ENOENT)
+				req.code_to_send = 404;
+			else
+				req.code_to_send = 400;
+			return (false);
+		}
+		free(d);
 		return (true);
 	}
 	int fd = open(path.c_str(), O_RDONLY);
