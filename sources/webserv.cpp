@@ -6,7 +6,7 @@
 /*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/13 16:16:25 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/17 20:03:15 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,15 @@ void	webserv::accept_new_client(int sock) {
 }
 
 void	webserv::answer_to_request(int csock) {
-//	g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on csock: " << csock << std::endl;
+	g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on csock: " << csock << std::endl;
 
 	if (ft_is_static_fd(csock)) {
 		g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on static fd: " << csock << std::endl;
 		return ;
 	}
+	g_logger.fd << g_logger.get_timestamp() << "csock is not static" << std::endl;
 	request & req = g_webserv._requests.find(csock)->second;
+	req.csock = csock; // a faire lors de la creation de la requete
 	if (req.conf->validity_checked == false) {
 		req.control_config_validity();
 		if (req.code_to_send != 0 && req.code_to_send != 200 && req.code_to_send != 204) {
@@ -180,7 +182,7 @@ void	request::handle_standard_response() {
 	}
 }
 
-webserv::webserv(const std::string & path_config) : _client_max_body_size(-1) {
+webserv::webserv(const std::string & path_config) : _client_max_body_size(-1), _stop(false) {
 	std::ifstream	config_file;
 	std::string		all_file;
 	
@@ -306,9 +308,11 @@ struct epoll_event				*webserv::get_revents(){
 bool	webserv::ft_is_static_fd(int fd) {
 	std::set<int>::iterator it	= static_fds.begin();
 
-	for (; it != static_fds.end(); it++)
+	for (; it != static_fds.end(); it++) {
+		g_logger.fd << g_logger.get_timestamp() << "checking if " << fd << " is equal to static fd " << *it << std::endl;
 		if (fd == *it)
 			return true;
+	}
 	return false;
 }
 

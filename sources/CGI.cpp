@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 15:34:17 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/11 17:24:57 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/17 19:57:03 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,9 @@ void	cgi_father_post(request & req) {
 	g_webserv.static_fds.insert(req.cgi->pipefd[0]);
 	add_fd_epollout_to_pool(req.cgi->pipefd_post[1]);
 	g_webserv.static_fds.insert(req.cgi->pipefd_post[1]);
+	for (std::set<int>::iterator it = g_webserv.static_fds.begin(); it != g_webserv.static_fds.end(); it++) {
+		g_logger.fd << g_logger.get_timestamp() << *it << " is on the set" << std::endl;
+	}
 }
 
 

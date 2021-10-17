@@ -1,0 +1,2 @@
+- modifier l 'endroit du param csock de la requete
+- solution pour segfault : mettre une liste de static fd à fermer

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/15 12:14:22 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/17 19:06:04 by ade-garr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include <set>
 
 # define MAX_BODY_SIZE 2000000000
-# define MBYTE_TO_BYTE_MULT 1 // a changer
+# define MBYTE_TO_BYTE_MULT 1000000 // a changer
 typedef int unknown;
 class vHost;
 class request;
