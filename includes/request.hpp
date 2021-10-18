@@ -95,7 +95,6 @@ class request {
 		void	initiate_CGI_POST();
 		void	read_and_send_from_CGI();
 		void	read_first_line_cgi();
-		void	erase_static_fd_from_request(int fd);
 		void	handle_standard_response();
 		bool 	child_exited_badly();
 

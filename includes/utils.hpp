@@ -88,5 +88,7 @@ bool                            can_I_write_in_fd(int fd);
 void                            remove_last_char_str(std::string & str);
 bool                            are_two_path_equals(const std::string & path1, const std::string & path2);
 bool                            is_EPOLLHUP(int fd);
+void                            erase_static_fd_from_request(int fd);
+
 
 #endif

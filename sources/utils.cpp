@@ -744,3 +744,11 @@ bool is_EPOLLHUP(int fd) {
 	//g_logger.fd << g_logger.get_timestamp() << "fd " << fd << " is not ready for reading" << std::endl;
 	return false;
 }
+
+void	erase_static_fd_from_request(int fd) {
+	g_webserv.static_fds.erase(fd);
+	int ret = epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_DEL, fd, NULL);
+	// g_logger.fd << g_logger.get_timestamp() << "ret from epoll_ctl = " << ret << std::endl;
+	if (ret == -1)
+		g_logger.fd << g_logger.get_timestamp() << "epoll_ctl failed " << errno << std::endl;
+}

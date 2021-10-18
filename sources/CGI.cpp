@@ -213,8 +213,7 @@ void request::handle_CGI() {
 			conf->local_actions_done = true;
 			erase_static_fd_from_request(cgi->pipefd[0]);
 			close(cgi->pipefd[0]);
-			erase_static_fd_from_request(cgi->pipefd_post[1]);
-			close(cgi->pipefd_post[1]);
+			g_webserv.static_fds_to_close.insert(cgi->pipefd_post[1]);
 			return ;
 		}
 		std::string towrite = body_request.substr(body_written_cgi, SEND_SPEED);
@@ -228,14 +227,12 @@ void request::handle_CGI() {
 			conf->local_actions_done = true;
 			erase_static_fd_from_request(cgi->pipefd[0]);
 			close(cgi->pipefd[0]);
-			erase_static_fd_from_request(cgi->pipefd_post[1]);
-			close(cgi->pipefd_post[1]);
+			g_webserv.static_fds_to_close.insert(cgi->pipefd_post[1]);
 		}
 		body_written_cgi += ret;
 		g_logger.fd << g_logger.get_timestamp() << "I wrote " << ret << " bytes from: " << towrite << "\n";
 		if (body_written_cgi == body_request.size()) {
-			erase_static_fd_from_request(cgi->pipefd_post[1]);
-			close(cgi->pipefd_post[1]);
+			g_webserv.static_fds_to_close.insert(cgi->pipefd_post[1]);
 			g_logger.fd << g_logger.get_timestamp() << "I am father and I am done writing content to the CGI.\n";
 			cgi->setCgi_stage("READFROM");
 		}

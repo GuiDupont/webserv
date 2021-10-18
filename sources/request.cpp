@@ -154,14 +154,6 @@ void	request::write_body_inside_file() {  // to fix !!!!
 	conf->local_actions_done = true;
 }
 
-void	request::erase_static_fd_from_request(int fd) {
-	g_webserv.static_fds.erase(fd);
-	int ret = epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_DEL, fd, NULL);
-	// g_logger.fd << g_logger.get_timestamp() << "ret from epoll_ctl = " << ret << std::endl;
-	if (ret == -1)
-		g_logger.fd << g_logger.get_timestamp() << "epoll_ctl failed " << errno << std::endl;
-}
-
 //////////////////////////////////////////////////* DELETE */////////////////////////////////////////////////////////////
 
 static int		unlink_or_rmdir(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf) {

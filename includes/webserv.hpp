@@ -73,6 +73,7 @@ class webserv {
 		std::map<int, std::string>					status_code;
 		std::map<int, request>						_requests;
 		std::set<int>								static_fds;
+		std::set<int>								static_fds_to_close;
 		int											nsfd;
 
 
@@ -87,7 +88,7 @@ class webserv {
 		int											_epfd;
 		std::map<int, std::time_t>					_timeout;												
 		bool										_stop;
-		struct epoll_event							*_revents;									
+		struct epoll_event							*_revents;
 		
 	public:
 		webserv(const std::string & path_config);
@@ -112,6 +113,7 @@ class webserv {
 
 		bool	ft_is_ssock(int fd);
 		bool	ft_is_static_fd(int fd);
+		bool	ft_is_static_fd_to_close(int fd);
 		void	ft_add_csock_to_vhost(int sock, int csock);
 		int		get_sock_by_matching_host_ip(std::pair< std::string, size_t> host_port);
 		void	display_sock();

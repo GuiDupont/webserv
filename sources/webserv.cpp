@@ -62,12 +62,16 @@ void	webserv::answer_to_request(int csock) {
 	g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on csock: " << csock << std::endl;
 
 	if (ft_is_static_fd(csock)) {
+		if (ft_is_static_fd_to_close(csock)) {
+			erase_static_fd_from_request(csock);
+			close(csock);
+			static_fds_to_close.erase(csock);
+		}
 		g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on static fd: " << csock << std::endl;
 		return ;
 	}
 	g_logger.fd << g_logger.get_timestamp() << "csock is not static" << std::endl;
 	request & req = g_webserv._requests.find(csock)->second;
-	req.csock = csock; // a faire lors de la creation de la requete
 	if (req.conf->validity_checked == false) {
 		req.control_config_validity();
 		if (req.code_to_send != 0 && req.code_to_send != 200 && req.code_to_send != 204) {
@@ -316,6 +320,16 @@ bool	webserv::ft_is_static_fd(int fd) {
 	return false;
 }
 
+bool	webserv::ft_is_static_fd_to_close(int fd) {
+	std::set<int>::iterator it	= static_fds_to_close.begin();
+
+	for (; it != static_fds_to_close.end(); it++) {
+		g_logger.fd << g_logger.get_timestamp() << "checking if " << fd << " is equal to static fd " << *it << std::endl;
+		if (fd == *it)
+			return true;
+	}
+	return false;
+}
 
 void	request::set_request_to_ended() {
 
