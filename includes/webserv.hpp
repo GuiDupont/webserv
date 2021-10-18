@@ -86,8 +86,7 @@ class webserv {
 		std::string 								_root;
 		std::string									_cgi_dir;
 		int											_epfd;
-		std::map<int, std::time_t>					_timeout;												
-		bool										_stop;
+		std::map<int, std::time_t>					_timeout;
 		struct epoll_event							*_revents;
 		
 	public:
@@ -102,9 +101,6 @@ class webserv {
 		std::list<vHost>					&get_vhosts() ;
 		std::string							&get_root();
 		std::map< int, std::string > const	&get_error_pages() const;
-		
-		const bool							&get_stop() const;
-		void								set_stop(bool);
 
 		void	wait_for_connection();
 		void	handle_new_client(int ssock, SOCKADDR* csin, socklen_t* crecsize);

@@ -1,1 +1,0 @@
-- solution pour segfault : mettre une liste de static fd à fermer

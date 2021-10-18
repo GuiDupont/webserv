@@ -300,7 +300,6 @@ void stop_program_sigint(int signum)
 	std::set<int> csock;
 	std::set<int> sock;
 	g_logger.fd << g_logger.get_timestamp() << " We are about to quit" << std::endl;
-	g_webserv.set_stop(true);
 	for (std::list<vHost>::iterator it = g_webserv.get_vhosts().begin(); it != g_webserv.get_vhosts().end(); it++)
 	{
 		for (std::set<int>::iterator it_csock = it->get_csock_list().begin(); it_csock != it->get_csock_list().end(); it_csock++)

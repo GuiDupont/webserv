@@ -37,9 +37,9 @@ void	webserv::wait_for_connection() {
 		else if (true_one_time_per_x_secondes(4))
 			g_logger.fd << g_logger.get_timestamp() << "No events" << std::endl;
 		for (int i = 0; i < nsfd; i++) {
-			if (_revents[i].events & EPOLLIN && ft_is_ssock(_revents[i].data.fd) && _stop == false)
+			if (_revents[i].events & EPOLLIN && ft_is_ssock(_revents[i].data.fd))
 				accept_new_client(_revents[i].data.fd);
-			else if (_revents[i].events & EPOLLIN && (!ft_is_ssock(_revents[i].data.fd)) && _stop == false)
+			else if (_revents[i].events & EPOLLIN && (!ft_is_ssock(_revents[i].data.fd)))
 				read_from_csock(_revents[i].data.fd);
 			else if (_revents[i].events & EPOLLOUT && (!ft_is_ssock(_revents[i].data.fd)))
 				answer_to_request(_revents[i].data.fd);
@@ -201,7 +201,7 @@ void	request::handle_standard_response() {
 	}
 }
 
-webserv::webserv(const std::string & path_config) : _client_max_body_size(-1), _stop(false) {
+webserv::webserv(const std::string & path_config) : _client_max_body_size(-1) {
 	std::ifstream	config_file;
 	std::string		all_file;
 	
@@ -260,10 +260,6 @@ void webserv::read_from_csock(int csock) {
 }
 
 std::string		&webserv::get_root() { return (_root); }
-
-const bool		&webserv::get_stop() const { return (_stop); }
-
-void			webserv::set_stop(bool value) { _stop = value; }
 
 std::map< int, std::string > const	& webserv::get_error_pages() const {
 	return (this->_error_pages);
