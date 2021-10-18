@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/14 16:58:51 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/18 12:14:59 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,16 @@ void	request::send_header(int csock, std::string & header) {
 }
 
 void	request::send_body() {
+	g_logger.fd << g_logger.get_timestamp() << "Before sending body on csock " << csock << std::endl;
+
 	if (body_response.empty() == false)
 		send_body_from_str();
 	else if (method == "GET")
 		send_body_from_file();
-	else
+	else {
 		body_is_sent = true;
+	}
+	
 }
 
 void	request::send_body_from_str() {
@@ -96,26 +100,18 @@ void	request::send_body_from_str() {
 void	request::send_body_from_file() {
 	int amount_read;
 	int amount_sent;
-
 	char buff[SEND_SPEED + 1];
-
-	g_logger.fd << g_logger.get_timestamp() << "We are trying to send body from file: -" << conf->path_to_target.c_str() << std::endl;
 
 	if (body_fd == -1) {
 		body_fd = open(conf->path_to_target.c_str(), O_RDONLY);
 		if (body_fd == -1) {
 			g_logger.fd << g_logger.get_timestamp() << "Issue while opening -" << conf->path_to_target.c_str() << "- file on csock " << csock << ". Error: " << strerror(errno) << std::endl; // end special cases ?
-			body_is_sent = true; // a check ce qu'on fait plutot envoyer une erreur 500
+			body_is_sent = true;
 			close_csock = true;
 			return ;
 		}
-		g_logger.fd << g_logger.get_timestamp() << "We opened file -" << conf->path_to_target.c_str() << "- file on fd " << body_fd << std::endl; // end special cases ?
 	}
-	
-	g_logger.fd << g_logger.get_timestamp() << "We are going to read : " << conf->path_to_target << std::endl;
 	amount_read = read(body_fd, buff, SEND_SPEED);
-	g_logger.fd << g_logger.get_timestamp() << "We are done reading : " << conf->path_to_target << std::endl;
-
 	if (amount_read == -1 ) {
 		g_logger.fd << g_logger.get_timestamp() << "Issue while reading body from file " << conf->path_to_target << ". Error: " << strerror(errno) << std::endl;
 		body_is_sent = true;
@@ -129,10 +125,7 @@ void	request::send_body_from_file() {
 		return ;
 	}
 	buff[amount_read] = '\0';
-	g_logger.fd << g_logger.get_timestamp() << "We are going to send : " << conf->path_to_target << std::endl;
 	amount_sent = send(csock, buff, amount_read, 0);
-	g_logger.fd << g_logger.get_timestamp() << "We are going to send : " << conf->path_to_target << std::endl;
-
 	if (amount_sent == -1) {
 		g_logger.fd << g_logger.get_timestamp() << "Issue while sending body from file " << conf->path_to_target << " to: " << csock << ". Error: " << strerror(errno) << std::endl;
 		body_is_sent = true;
@@ -144,6 +137,8 @@ void	request::send_body_from_file() {
 // SIMPLE POST :
 
 void	request::write_body_inside_file() {  // to fix !!!!
+	g_logger.fd << g_logger.get_timestamp() << "We are going to create :" << conf->path_to_target.c_str();
+
 	std::ofstream file(conf->path_to_target.c_str());
 	if (file.is_open() == false) {
 		g_logger.fd << g_logger.get_timestamp() << "Can't open :" << conf->path_to_target.c_str();

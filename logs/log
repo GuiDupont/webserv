@@ -1,271 +1,260 @@
-16h25m14s: ------BEGINNING OF THE PROGRAM-------
-16h25m14s: Config successful
-16h25m14s: Epoll create successful			 | epfd  = 6
-16h25m14s: Ssock created           			 | ssock = 7
-16h25m14s: Ssock added to Epoll    			 | ssock = 7
-16h25m14s: Epoll is waiting for connection
-16h25m18s: No events
-16h25m22s: No events
-16h25m23s: Epoll noticed new events     	| nb    = 1
-16h25m23s: We accepted a new client from ssock 7, new csock is = 8
-16h25m23s: We added 8 to the pool looking, for Epollin.
-16h25m26s: No events
-16h25m30s: No events
-16h25m34s: No events
-16h25m38s: No events
-16h25m39s: Epoll noticed new events     	| nb    = 1
-16h25m39s: Epoll_wait identified an EPOLLIN on csock: 8
-16h25m39s: New request has been created from csock: 8
-16h25m39s: We are parsing header from ccosk: 8
-16h25m42s: No events
-16h25m44s: Epoll noticed new events     	| nb    = 1
-16h25m44s: Epoll_wait identified an EPOLLIN on csock: 8
-16h25m44s: We are parsing header from ccosk: 8
-16h25m46s: No events
-16h25m50s: No events
-16h25m51s: Epoll noticed new events     	| nb    = 1
-16h25m51s: Epoll_wait identified an EPOLLIN on csock: 8
-16h25m51s: We are parsing header from ccosk: 8
-16h25m54s: No events
-16h25m54s: Epoll noticed new events     	| nb    = 1
-16h25m54s: Epoll_wait identified an EPOLLIN on csock: 8
-16h25m54s: We are parsing header from ccosk: 8
-16h25m55s: Epoll noticed new events     	| nb    = 1
-16h25m55s: Epoll_wait identified an EPOLLIN on csock: 8
-16h25m55s: We are parsing header from ccosk: 8
-16h25m56s: Epoll noticed new events     	| nb    = 1
-16h25m56s: Epoll_wait identified an EPOLLIN on csock: 8
-16h25m56s: We are parsing header from ccosk: 8
-16h25m56s: Setting CGI params
-16h25m56s: Epoll noticed new events     	| nb    = 1
-16h25m56s: We identified following code: 400for csock 8
-16h25m56s: We are going to respond a request with code : 400
-16h25m56s: We just sent an header on csock: 8
-16h25m56s: Before sending on csock 8
-16h25m56s: After sending on csock 8
-16h25m56s: Body sending is done on csock : 8
-16h25m56s: We are going to delete csock 8
-16h25m58s: No events
-16h26m2s: No events
-16h26m6s: No events
-16h26m8s: Epoll noticed new events     	| nb    = 1
-16h26m8s: We accepted a new client from ssock 7, new csock is = 8
-16h26m8s: We added 8 to the pool looking, for Epollin.
-16h26m10s: No events
-16h26m14s: No events
-16h26m18s: No events
-16h26m19s: Epoll noticed new events     	| nb    = 1
-16h26m19s: Epoll_wait identified an EPOLLIN on csock: 8
-16h26m19s: New request has been created from csock: 8
-16h26m19s: We are parsing header from ccosk: 8
-16h26m22s: No events
-16h26m23s: Epoll noticed new events     	| nb    = 1
-16h26m23s: Epoll_wait identified an EPOLLIN on csock: 8
-16h26m23s: We are parsing header from ccosk: 8
-16h26m26s: No events
-16h26m27s: Epoll noticed new events     	| nb    = 1
-16h26m27s: Epoll_wait identified an EPOLLIN on csock: 8
-16h26m27s: We are parsing header from ccosk: 8
-16h26m27s: Setting CGI params
-16h26m27s: We are done parsing header from ccosk: 8
-16h26m27s: We are parsing body from ccosk: 8
-16h26m30s: No events
-16h26m34s: No events
-16h26m38s: No events
-16h26m42s: No events
-16h26m44s: Epoll noticed new events     	| nb    = 1
-16h26m44s: Epoll_wait identified an EPOLLIN on csock: 8
-16h26m44s: We are parsing body from ccosk: 8
-16h26m46s: No events
-16h26m50s: No events
-16h26m53s: Epoll noticed new events     	| nb    = 1
-16h26m53s: Epoll_wait identified an EPOLLIN on csock: 8
-16h26m53s: We are parsing body from ccosk: 8
-16h26m53s: Epoll noticed new events     	| nb    = 1
-16h26m53s: We identified following code: 413for csock 8
-16h26m53s: We are going to respond a request with code : 413
-16h26m53s: We just sent an header on csock: 8
-16h26m53s: Before sending on csock 8
-16h26m53s: After sending on csock 8
-16h26m53s: Body sending is done on csock : 8
-16h26m53s: We are going to delete csock 8
-16h26m54s: No events
-16h26m58s: No events
-16h27m2s: No events
-16h27m6s: No events
-16h27m10s: No events
-16h27m14s: No events
-16h27m18s: No events
-16h27m22s: No events
-16h27m26s: No events
-16h27m30s: No events
-16h27m34s: No events
-16h27m38s: No events
-16h27m42s: No events
-16h27m46s: No events
-16h27m50s: No events
-16h27m53s: Epoll noticed new events     	| nb    = 1
-16h27m53s: We accepted a new client from ssock 7, new csock is = 8
-16h27m53s: We added 8 to the pool looking, for Epollin.
-16h27m53s: Epoll noticed new events     	| nb    = 1
-16h27m53s: Epoll_wait identified an EPOLLIN on csock: 8
-16h27m53s: New request has been created from csock: 8
-16h27m53s: We are parsing header from ccosk: 8
-16h27m54s: No events
-16h27m58s: No events
-16h27m59s: Epoll noticed new events     	| nb    = 1
-16h27m59s: Epoll_wait identified an EPOLLIN on csock: 8
-16h27m59s: We are parsing header from ccosk: 8
-16h28m0s: Epoll noticed new events     	| nb    = 1
-16h28m0s: Epoll_wait identified an EPOLLIN on csock: 8
-16h28m0s: We are parsing header from ccosk: 8
-16h28m0s: Setting CGI params
-16h28m0s: We are done parsing header from ccosk: 8
-16h28m0s: We are parsing body from ccosk: 8
-16h28m2s: No events
-16h28m6s: No events
-16h28m10s: No events
-16h28m11s: Epoll noticed new events     	| nb    = 1
-16h28m11s: Epoll_wait identified an EPOLLIN on csock: 8
-16h28m11s: We are parsing body from ccosk: 8
-16h28m11s: Epoll noticed new events     	| nb    = 1
-16h28m11s: We identified following code: 413for csock 8
-16h28m11s: We are going to respond a request with code : 413
-16h28m11s: We just sent an header on csock: 8
-16h28m11s: Before sending on csock 8
-16h28m11s: After sending on csock 8
-16h28m11s: Body sending is done on csock : 8
-16h28m11s: We are going to delete csock 8
-16h28m14s: No events
-16h28m18s: No events
-16h28m22s: No events
-16h28m26s: No events
-16h28m30s: No events
-16h28m34s: No events
-16h28m38s: No events
-16h28m42s: No events
-16h28m46s: No events
-16h28m50s: No events
-16h28m54s: No events
-16h28m58s: No events
-16h29m2s: No events
-16h29m6s: No events
-16h29m10s: No events
-16h29m14s: No events
-16h29m18s: No events
-16h29m22s: No events
-16h29m26s: No events
-16h29m30s: No events
-16h29m34s: No events
-16h29m38s: No events
-16h29m42s: No events
-16h29m46s: No events
-16h29m50s: No events
-16h29m54s: No events
-16h29m58s: No events
-16h30m2s: No events
-16h30m6s: No events
-16h30m10s: No events
-16h30m14s: No events
-16h30m18s: No events
-16h30m22s: No events
-16h30m26s: No events
-16h30m30s: No events
-16h30m34s: No events
-16h30m38s: No events
-16h30m42s: No events
-16h30m46s: No events
-16h30m50s: No events
-16h30m54s: No events
-16h30m58s: No events
-16h31m2s: No events
-16h31m6s: No events
-16h31m10s: No events
-16h31m14s: No events
-16h31m18s: No events
-16h31m22s: No events
-16h31m26s: No events
-16h31m30s: No events
-16h31m34s: No events
-16h31m38s: No events
-16h31m42s: No events
-16h31m46s: No events
-16h31m50s: No events
-16h31m54s: No events
-16h31m58s: No events
-16h32m2s: No events
-16h32m6s: No events
-16h32m10s: No events
-16h32m14s: No events
-16h32m18s: No events
-16h32m22s: No events
-16h32m26s: No events
-16h32m30s: No events
-16h32m34s: No events
-16h32m38s: No events
-16h32m42s: No events
-16h32m46s: No events
-16h32m50s: No events
-16h32m54s: No events
-16h32m58s: No events
-16h33m2s: No events
-16h33m6s: No events
-16h33m10s: No events
-16h33m14s: No events
-16h33m18s: No events
-16h33m22s: No events
-16h33m26s: No events
-16h33m30s: No events
-16h33m34s: No events
-16h33m38s: No events
-16h33m42s: No events
-16h33m46s: No events
-16h33m50s: No events
-16h33m54s: No events
-16h33m58s: No events
-16h34m2s: No events
-16h34m6s: No events
-16h34m10s: No events
-16h34m14s: No events
-16h34m18s: No events
-16h34m22s: No events
-16h34m26s: No events
-16h34m30s: No events
-16h34m34s: No events
-16h34m38s: No events
-16h34m42s: No events
-16h34m46s: No events
-16h34m50s: No events
-16h34m54s: No events
-16h34m58s: No events
-16h35m2s: No events
-16h35m6s: No events
-16h35m10s: No events
-16h35m14s: No events
-16h35m18s: No events
-16h35m22s: No events
-16h35m26s: No events
-16h35m30s: No events
-16h35m34s: No events
-16h35m38s: No events
-16h35m42s: No events
-16h35m46s: No events
-16h35m50s: No events
-16h35m54s: No events
-16h35m58s: No events
-16h36m2s: No events
-16h36m6s: No events
-16h36m10s: No events
-16h36m14s: No events
-16h36m18s: No events
-16h36m22s: No events
-16h36m26s: No events
-16h36m30s: No events
-16h36m34s: No events
-16h36m38s: No events
-16h36m42s: No events
-16h36m46s: No events
-16h36m50s: No events
-16h36m51s:  We are about to quit
-16h36m51s:  cssock is closed: 7
-16h36m51s:  EPFD is closed: 6
+12h14m23s: ------BEGINNING OF THE PROGRAM-------
+12h14m23s: Config successful
+12h14m23s: Epoll create successful			 | epfd  = 4
+12h14m23s: Ssock created           			 | ssock = 5
+12h14m23s: Ssock added to Epoll    			 | ssock = 5
+12h14m23s: Ssock created           			 | ssock = 6
+12h14m23s: Ssock added to Epoll    			 | ssock = 6
+12h14m23s: Ssock created           			 | ssock = 7
+12h14m23s: Ssock added to Epoll    			 | ssock = 7
+12h14m23s: Ssock created           			 | ssock = 8
+12h14m23s: Ssock added to Epoll    			 | ssock = 8
+12h14m23s: Epoll is waiting for connection
+12h14m24s: Epoll noticed new events     	| nb    = 1
+12h14m24s: We accepted a new client from ssock 5, new csock is = 9
+12h14m24s: We added 9 to the pool looking, for Epollin.
+12h14m24s: Epoll noticed new events     	| nb    = 1
+12h14m24s: We accepted a new client from ssock 5, new csock is = 10
+12h14m24s: We added 10 to the pool looking, for Epollin.
+12h14m24s: Epoll noticed new events     	| nb    = 1
+12h14m24s: Epoll_wait identified an EPOLLIN on csock: 9
+12h14m24s: New request has been created from csock: 9
+12h14m24s: We are parsing header from ccosk: 9
+12h14m24s: Setting CGI params
+12h14m24s: We are done parsing header from ccosk: 9
+12h14m24s: We are parsing body from ccosk: 9
+12h14m24s: Epoll noticed new events     	| nb    = 1
+12h14m24s: about to do local actions
+12h14m24s: We are going to respond a request with code : 200
+12h14m24s: We just sent an header on csock: 9
+12h14m24s: Before sending body on csock 9
+12h14m24s: Epoll noticed new events     	| nb    = 1
+12h14m24s: Before sending body on csock 9
+12h14m24s: We are done sending body from file /mnt/nfs/homes/gdupont/Desktop/webserv/www/upload/newfile. Error: Success
+12h14m27s: No events
+12h14m31s: No events
+12h14m35s: No events
+12h14m39s: No events
+12h14m43s: No events
+12h14m47s: No events
+12h14m51s: No events
+12h14m55s: No events
+12h14m59s: No events
+12h15m3s: No events
+12h15m7s: No events
+12h15m11s: No events
+12h15m14s: TIMEOUT, we closed csock : 9
+12h15m14s: We are going to delete csock 9
+12h15m14s: TIMEOUT, we closed csock : 10
+12h15m14s: We are going to delete csock 10
+12h15m15s: No events
+12h15m19s: No events
+12h15m23s: No events
+12h15m27s: No events
+12h15m31s: No events
+12h15m35s: No events
+12h15m39s: No events
+12h15m43s: No events
+12h15m47s: No events
+12h15m51s: No events
+12h15m55s: No events
+12h15m59s: No events
+12h16m3s: No events
+12h16m7s: No events
+12h16m11s: No events
+12h16m15s: No events
+12h16m19s: No events
+12h16m23s: No events
+12h16m27s: No events
+12h16m31s: No events
+12h16m35s: No events
+12h16m39s: No events
+12h16m43s: No events
+12h16m47s: No events
+12h16m51s: No events
+12h16m55s: No events
+12h16m59s: No events
+12h17m3s: No events
+12h17m7s: No events
+12h17m11s: No events
+12h17m15s: No events
+12h17m19s: No events
+12h17m23s: No events
+12h17m27s: No events
+12h17m31s: No events
+12h17m35s: No events
+12h17m39s: No events
+12h17m43s: No events
+12h17m47s: No events
+12h17m51s: No events
+12h17m55s: No events
+12h17m59s: No events
+12h18m3s: No events
+12h18m4s: Epoll noticed new events     	| nb    = 1
+12h18m4s: We accepted a new client from ssock 5, new csock is = 9
+12h18m4s: We added 9 to the pool looking, for Epollin.
+12h18m4s: Epoll noticed new events     	| nb    = 1
+12h18m4s: We accepted a new client from ssock 5, new csock is = 10
+12h18m4s: We added 10 to the pool looking, for Epollin.
+12h18m4s: Epoll noticed new events     	| nb    = 1
+12h18m4s: Epoll_wait identified an EPOLLIN on csock: 9
+12h18m4s: New request has been created from csock: 9
+12h18m4s: We are parsing header from ccosk: 9
+12h18m4s: Setting CGI params
+12h18m4s: We are done parsing header from ccosk: 9
+12h18m4s: We are parsing body from ccosk: 9
+12h18m4s: Epoll noticed new events     	| nb    = 1
+12h18m4s: about to do local actions
+12h18m4s: about to do post
+12h18m4s: We are going to create :/mnt/nfs/homes/gdupont/Desktop/webserv/www/upload/newfile12h18m4s: We are going to respond a request with code : 200
+12h18m4s: We just sent an header on csock: 9
+12h18m4s: Before sending body on csock 9
+12h18m4s: Epoll noticed new events     	| nb    = 1
+12h18m4s: Before sending body on csock 9
+12h18m4s: We are done sending body from file /mnt/nfs/homes/gdupont/Desktop/webserv/www/upload/newfile. Error: Success
+12h18m7s: No events
+12h18m11s: No events
+12h18m15s: No events
+12h18m19s: No events
+12h18m23s: No events
+12h18m27s: No events
+12h18m31s: No events
+12h18m35s: No events
+12h18m39s: No events
+12h18m43s: No events
+12h18m47s: No events
+12h18m51s: No events
+12h18m54s: TIMEOUT, we closed csock : 9
+12h18m54s: We are going to delete csock 9
+12h18m54s: TIMEOUT, we closed csock : 10
+12h18m54s: We are going to delete csock 10
+12h18m55s: No events
+12h18m59s: No events
+12h19m3s: No events
+12h19m7s: No events
+12h19m11s: No events
+12h19m15s: No events
+12h19m19s: No events
+12h19m23s: No events
+12h19m27s: No events
+12h19m31s: No events
+12h19m35s: No events
+12h19m39s: No events
+12h19m43s: No events
+12h19m47s: No events
+12h19m51s: No events
+12h19m55s: No events
+12h19m59s: No events
+12h20m3s: No events
+12h20m7s: No events
+12h20m11s: No events
+12h20m15s: No events
+12h20m19s: No events
+12h20m23s: No events
+12h20m27s: No events
+12h20m31s: No events
+12h20m35s: No events
+12h20m39s: No events
+12h20m43s: No events
+12h20m47s: No events
+12h20m51s: No events
+12h20m55s: No events
+12h20m59s: No events
+12h21m3s: No events
+12h21m7s: No events
+12h21m11s: No events
+12h21m15s: No events
+12h21m19s: No events
+12h21m23s: No events
+12h21m27s: No events
+12h21m31s: No events
+12h21m35s: No events
+12h21m39s: No events
+12h21m43s: No events
+12h21m47s: No events
+12h21m51s: No events
+12h21m55s: No events
+12h21m59s: No events
+12h22m3s: No events
+12h22m7s: No events
+12h22m11s: No events
+12h22m15s: No events
+12h22m19s: No events
+12h22m23s: No events
+12h22m27s: No events
+12h22m31s: No events
+12h22m35s: No events
+12h22m39s: No events
+12h22m43s: No events
+12h22m47s: No events
+12h22m51s: No events
+12h22m55s: No events
+12h22m59s: No events
+12h23m3s: No events
+12h23m7s: No events
+12h23m11s: No events
+12h23m15s: No events
+12h23m19s: No events
+12h23m23s: No events
+12h23m27s: No events
+12h23m31s: No events
+12h23m35s: No events
+12h23m39s: No events
+12h23m43s: No events
+12h23m47s: No events
+12h23m51s: No events
+12h23m55s: No events
+12h23m59s: No events
+12h24m3s: No events
+12h24m7s: No events
+12h24m11s: No events
+12h24m15s: No events
+12h24m19s: No events
+12h24m23s: No events
+12h24m27s: No events
+12h24m31s: No events
+12h24m35s: No events
+12h24m39s: No events
+12h24m43s: No events
+12h24m47s: No events
+12h24m51s: No events
+12h24m55s: No events
+12h24m59s: No events
+12h25m3s: No events
+12h25m7s: No events
+12h25m11s: No events
+12h25m15s: No events
+12h25m19s: No events
+12h25m23s: No events
+12h25m27s: No events
+12h25m31s: No events
+12h25m35s: No events
+12h25m39s: No events
+12h25m43s: No events
+12h25m47s: No events
+12h25m51s: No events
+12h25m55s: No events
+12h25m59s: No events
+12h26m3s: No events
+12h26m7s: No events
+12h26m11s: No events
+12h26m15s: No events
+12h26m19s: No events
+12h26m23s: No events
+12h26m27s: No events
+12h26m31s: No events
+12h26m35s: No events
+12h26m39s: No events
+12h26m43s: No events
+12h26m47s: No events
+12h26m51s: No events
+12h26m55s: No events
+12h26m59s: No events
+12h27m3s: No events
+12h27m7s: No events
+12h27m7s:  We are about to quit
+12h27m7s:  cssock is closed: 5
+12h27m7s:  cssock is closed: 6
+12h27m7s:  cssock is closed: 7
+12h27m7s:  cssock is closed: 8
+12h27m7s:  EPFD is closed: 4
