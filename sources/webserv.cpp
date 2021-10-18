@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/18 12:39:33 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/18 12:53:38 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void	request::control_config_validity() {
 }
 
 void	request::update_code_and_body() {
-	if (code_to_send != 0 && code_to_send != 200 && code_to_send != 204) { // dod some test to see if it is good
+	if (code_to_send != 0 && code_to_send != 200 && code_to_send != 204 || (code_to_send == 200 && method == "POST")) { // dod some test to see if it is good
 		g_logger.fd << g_logger.get_timestamp() << "We identified following code: " << code_to_send << "for csock " << csock << std::endl;
 		conf->local_actions_done = true;
 		close_csock = true;
