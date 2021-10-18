@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/17 20:03:15 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/18 12:39:33 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,8 @@ void	request::do_local_actions() {
 }
 
 void	request::handle_standard_response() {
+	g_logger.fd << g_logger.get_timestamp() << "about to do local actions" << std::endl;
+
 	if (conf->method & GET) {
 		conf->local_actions_done = true;
 		code_to_send = 200;
@@ -181,6 +183,8 @@ void	request::handle_standard_response() {
 		
 	}
 	else if (conf->method & POST) {
+		g_logger.fd << g_logger.get_timestamp() << "about to do post" << std::endl;
+
 		write_body_inside_file();
 		code_to_send = 200;			
 	}
@@ -254,57 +258,6 @@ std::map< int, std::string > const	& webserv::get_error_pages() const {
 	return (this->_error_pages);
 }
 
-void	webserv::insert_status_code() {
-
-	status_code.insert(std::make_pair(100, "100 Continue"));
-	status_code.insert(std::make_pair(101, "101 Switching Protocols"));
-
-	status_code.insert(std::make_pair(200, "200 OK"));
-	status_code.insert(std::make_pair(201, "201 Created"));
-	status_code.insert(std::make_pair(202, "202 Accepted"));
-	status_code.insert(std::make_pair(203, "203 Non-Authoritative Information"));
-	status_code.insert(std::make_pair(204, "204 No Content"));
-	status_code.insert(std::make_pair(205, "205 Reset Content"));
-	status_code.insert(std::make_pair(206, "206 Partial Content"));
-
-	status_code.insert(std::make_pair(300, "300 Multiple Choices"));
-	status_code.insert(std::make_pair(301, "301 Moved Permanently"));
-	status_code.insert(std::make_pair(302, "302 Found"));
-	status_code.insert(std::make_pair(303, "303 See Other"));
-	status_code.insert(std::make_pair(304, "304 Not Modified"));
-	status_code.insert(std::make_pair(305, "305 Use Proxy"));
-
-	status_code.insert(std::make_pair(307, "307 Temporary Redirect"));
-
-	status_code.insert(std::make_pair(400, "400 Bad Request"));
-	status_code.insert(std::make_pair(401, "401 Unauthorized"));
-	status_code.insert(std::make_pair(402, "402 Payment Required"));
-	status_code.insert(std::make_pair(403, "403 Forbidden"));
-	status_code.insert(std::make_pair(404, "404 Not Found"));
-	status_code.insert(std::make_pair(405, "405 Method Not Allowed"));
-	status_code.insert(std::make_pair(406, "406 Not Acceptable"));
-	status_code.insert(std::make_pair(407, "407 Proxy Authentication Required"));
-	status_code.insert(std::make_pair(408, "408 Request Timeout"));
-	status_code.insert(std::make_pair(409, "409 Conflict"));
-	status_code.insert(std::make_pair(410, "410 Gone"));
-	status_code.insert(std::make_pair(411, "411 Length Required"));
-	status_code.insert(std::make_pair(412, "412 Precondition Failed"));
-	status_code.insert(std::make_pair(413, "413 Payload Too Large"));
-	status_code.insert(std::make_pair(414, "414 URI Too Long"));
-	status_code.insert(std::make_pair(415, "415 Unsupported Media Type"));
-	status_code.insert(std::make_pair(416, "416 Range Not Satisfiable"));
-	status_code.insert(std::make_pair(417, "417 Expectation Failed"));
-
-	status_code.insert(std::make_pair(426, "426 Upgrade Required"));
-
-	status_code.insert(std::make_pair(500, "500 Internal Server Error"));
-	status_code.insert(std::make_pair(501, "501 Not Implemented"));
-	status_code.insert(std::make_pair(502, "502 Bad Gateway"));
-	status_code.insert(std::make_pair(503, "503 Service Unavailable"));
-	status_code.insert(std::make_pair(504, "504 Gateway Timeout"));
-	status_code.insert(std::make_pair(505, "505 HTTP Version Not Supported"));
-}
-
 struct epoll_event				*webserv::get_revents(){
 	return (_revents);
 }	
@@ -341,7 +294,6 @@ void	request::set_request_to_ended() {
 	if (epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_MOD, csock, &ev) == -1) // check return
 		g_logger.fd << g_logger.get_timestamp() << "We had an issue with EPOLL CTL, trying to chg a csock associated event. errno :" << errno << ": " << strerror(errno) << std::endl; // add an exception
 }
-
 
 bool 	webserv::is_new_request(int fd) {
 
@@ -498,4 +450,56 @@ void		webserv::set_config(std::ifstream & config_file) {
 	}
 	if (this->_vhosts.empty() == 1)
 		throw (no_port_associated()); // changer par la suite par une vraie exception pour vhost, comme recommande par Guillaume.
+}
+
+
+void	webserv::insert_status_code() {
+
+	status_code.insert(std::make_pair(100, "100 Continue"));
+	status_code.insert(std::make_pair(101, "101 Switching Protocols"));
+
+	status_code.insert(std::make_pair(200, "200 OK"));
+	status_code.insert(std::make_pair(201, "201 Created"));
+	status_code.insert(std::make_pair(202, "202 Accepted"));
+	status_code.insert(std::make_pair(203, "203 Non-Authoritative Information"));
+	status_code.insert(std::make_pair(204, "204 No Content"));
+	status_code.insert(std::make_pair(205, "205 Reset Content"));
+	status_code.insert(std::make_pair(206, "206 Partial Content"));
+
+	status_code.insert(std::make_pair(300, "300 Multiple Choices"));
+	status_code.insert(std::make_pair(301, "301 Moved Permanently"));
+	status_code.insert(std::make_pair(302, "302 Found"));
+	status_code.insert(std::make_pair(303, "303 See Other"));
+	status_code.insert(std::make_pair(304, "304 Not Modified"));
+	status_code.insert(std::make_pair(305, "305 Use Proxy"));
+
+	status_code.insert(std::make_pair(307, "307 Temporary Redirect"));
+
+	status_code.insert(std::make_pair(400, "400 Bad Request"));
+	status_code.insert(std::make_pair(401, "401 Unauthorized"));
+	status_code.insert(std::make_pair(402, "402 Payment Required"));
+	status_code.insert(std::make_pair(403, "403 Forbidden"));
+	status_code.insert(std::make_pair(404, "404 Not Found"));
+	status_code.insert(std::make_pair(405, "405 Method Not Allowed"));
+	status_code.insert(std::make_pair(406, "406 Not Acceptable"));
+	status_code.insert(std::make_pair(407, "407 Proxy Authentication Required"));
+	status_code.insert(std::make_pair(408, "408 Request Timeout"));
+	status_code.insert(std::make_pair(409, "409 Conflict"));
+	status_code.insert(std::make_pair(410, "410 Gone"));
+	status_code.insert(std::make_pair(411, "411 Length Required"));
+	status_code.insert(std::make_pair(412, "412 Precondition Failed"));
+	status_code.insert(std::make_pair(413, "413 Payload Too Large"));
+	status_code.insert(std::make_pair(414, "414 URI Too Long"));
+	status_code.insert(std::make_pair(415, "415 Unsupported Media Type"));
+	status_code.insert(std::make_pair(416, "416 Range Not Satisfiable"));
+	status_code.insert(std::make_pair(417, "417 Expectation Failed"));
+
+	status_code.insert(std::make_pair(426, "426 Upgrade Required"));
+
+	status_code.insert(std::make_pair(500, "500 Internal Server Error"));
+	status_code.insert(std::make_pair(501, "501 Not Implemented"));
+	status_code.insert(std::make_pair(502, "502 Bad Gateway"));
+	status_code.insert(std::make_pair(503, "503 Service Unavailable"));
+	status_code.insert(std::make_pair(504, "504 Gateway Timeout"));
+	status_code.insert(std::make_pair(505, "505 HTTP Version Not Supported"));
 }

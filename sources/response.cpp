@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 14:56:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/14 16:32:48 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/18 12:36:11 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,8 @@ std::string         response::generate_header(request & req) {
     else if (req.method == "DELETE") {
         ;
     }
-    else if (req.method == "POST" ) {
-        ;
+    else if (req.method == "POST") {
+        ;//header += get_content_length_header(get_content_length(req));
     }
     header += "\r\n";
     return (header);
@@ -132,8 +132,7 @@ std::string         response::generate_error_body(std::string & message) {
     return (body_response);
 }
 
-std::string         response::generate_autoindex_body(request & req) {
-    std::string & path = req.conf->path_to_target;
+std::string         response::generate_autoindex_body(std::string & path, std::string & request_target) {
     std::string body_response = "<html><head><title>" + path + "</title></head>\n<body>\n<h1>";
    
     DIR *d;
@@ -147,8 +146,8 @@ std::string         response::generate_autoindex_body(request & req) {
 			if (file_name == ".")
 				continue;
             body_response += "<tr><td style=\"width: 100%;\"><a href=\"";
-			body_response += req.request_target;
-			if (req.request_target[req.request_target.size() - 1] != '/')
+			body_response += request_target;
+			if (request_target[request_target.size() - 1] != '/')
                 body_response += "/";
             body_response += dir->d_name;
             if (is_directory(file_name) && file_name[file_name.size() - 1] != '/')

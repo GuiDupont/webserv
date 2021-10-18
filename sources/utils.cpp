@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/15 12:34:05 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/18 12:37:22 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -480,7 +480,7 @@ bool test_path_get(request &req)
 		if (req.conf->_auto_index == false)
 			req.body_response = " ";
 		else
-			req.body_response = response::generate_autoindex_body(req);
+			req.body_response = response::generate_autoindex_body(req.conf->path_to_target, req.request_target);
 		return (false);
 	}
 	int fd = open(path.c_str(), O_WRONLY);
