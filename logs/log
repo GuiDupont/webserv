@@ -1,41 +1,197 @@
-20h3m24s: ------BEGINNING OF THE PROGRAM-------
-20h3m24s: Config successful
-20h3m24s: Epoll create successful			 | epfd  = 4
-20h3m24s: Ssock created           			 | ssock = 5
-20h3m24s: Ssock added to Epoll    			 | ssock = 5
-20h3m24s: Epoll is waiting for connection
-20h3m26s: Epoll noticed new events     	| nb    = 1
-20h3m26s: We accepted a new client from ssock 5, new csock is = 6
-20h3m26s: We added 6 to the pool looking, for Epollin.
-20h3m26s: Epoll noticed new events     	| nb    = 1
-20h3m26s: We accepted a new client from ssock 5, new csock is = 7
-20h3m26s: We added 7 to the pool looking, for Epollin.
-20h3m28s: No events
-20h3m28s: Epoll noticed new events     	| nb    = 1
-20h3m28s: Epoll_wait identified an EPOLLIN on csock: 6
-20h3m28s: New request has been created from csock: 6
-20h3m28s: We are parsing header from ccosk: 6
-20h3m28s: Setting CGI params
-20h3m28s: We are done parsing header from ccosk: 6
-20h3m28s: We are parsing body from ccosk: 6
-20h3m28s: Epoll noticed new events     	| nb    = 1
-20h3m28s: Epoll_wait identified an EPOLLOUT on csock: 6
-20h3m28s: csock is not static
-20h3m28s: We are about to handle a CGI request
-20h3m28s: We added 8 to the pool looking, for Epollin.
-20h3m28s: We added 11 to the pool looking, for Epollout.
-20h3m28s: 8 is on the set
-20h3m28s: 11 is on the set
-20h3m28s: We are done initiating the CGI
-20h3m28s: Epoll noticed new events     	| nb    = 2
-20h3m28s: Epoll_wait identified an EPOLLOUT on csock: 6
-20h3m28s: checking if 6 is equal to static fd 8
-20h3m28s: checking if 6 is equal to static fd 11
-20h3m28s: csock is not static
-20h3m28s: We are about to handle a CGI request
-20h3m28s: Only in POST| I am going to send the content CGI via a pipe 
-20h3m28s: I wrote 41 bytes from: firstname=aaa&lastname=bbb&submit=Envoyer
-20h3m28s: I am father and I am done writing content to the CGI.
-20h3m28s: Epoll_wait identified an EPOLLOUT on csock: 11
-20h3m28s: checking if 11 is equal to static fd 8
-20h3m28s: csock is not static
+12h53m42s: ------BEGINNING OF THE PROGRAM-------
+12h53m42s: Config successful
+12h53m42s: Epoll create successful			 | epfd  = 4
+12h53m42s: Ssock created           			 | ssock = 5
+12h53m42s: Ssock added to Epoll    			 | ssock = 5
+12h53m42s: Ssock created           			 | ssock = 6
+12h53m42s: Ssock added to Epoll    			 | ssock = 6
+12h53m42s: Ssock created           			 | ssock = 7
+12h53m42s: Ssock added to Epoll    			 | ssock = 7
+12h53m42s: Ssock created           			 | ssock = 8
+12h53m42s: Ssock added to Epoll    			 | ssock = 8
+12h53m42s: Epoll is waiting for connection
+12h53m46s: No events
+12h53m47s: Epoll noticed new events     	| nb    = 1
+12h53m47s: We accepted a new client from ssock 5, new csock is = 9
+12h53m47s: We added 9 to the pool looking, for Epollin.
+12h53m47s: Epoll noticed new events     	| nb    = 1
+12h53m47s: We accepted a new client from ssock 5, new csock is = 10
+12h53m47s: We added 10 to the pool looking, for Epollin.
+12h53m47s: Epoll noticed new events     	| nb    = 1
+12h53m47s: Epoll_wait identified an EPOLLIN on csock: 9
+12h53m47s: New request has been created from csock: 9
+12h53m47s: We are parsing header from ccosk: 9
+12h53m47s: Setting CGI params
+12h53m47s: We are done parsing header from ccosk: 9
+12h53m47s: We are parsing body from ccosk: 9
+12h53m47s: Epoll noticed new events     	| nb    = 1
+12h53m47s: Epoll_wait identified an EPOLLOUT on csock: 9
+12h53m47s: csock is not static
+12h53m47s: about to do local actions
+12h53m47s: We are going to respond a request with code : 200
+12h53m47s: Headr sent on csock: 9
+12h53m47s: Sending body from str 
+12h53m47s: After sending on csock 9
+12h53m47s: Body sending is done on csock : 9
+12h53m49s: Epoll noticed new events     	| nb    = 1
+12h53m49s: Epoll_wait identified an EPOLLIN on csock: 9
+12h53m49s: New request has been created from csock: 9
+12h53m49s: We are parsing header from ccosk: 9
+12h53m49s: Setting CGI params
+12h53m49s: We are done parsing header from ccosk: 9
+12h53m49s: We are parsing body from ccosk: 9
+12h53m49s: Epoll noticed new events     	| nb    = 1
+12h53m49s: Epoll_wait identified an EPOLLOUT on csock: 9
+12h53m49s: csock is not static
+12h53m49s: about to do local actions
+12h53m49s: We are going to respond a request with code : 200
+12h53m49s: Headr sent on csock: 9
+12h53m49s: Epoll noticed new events     	| nb    = 1
+12h53m49s: Epoll_wait identified an EPOLLOUT on csock: 9
+12h53m49s: csock is not static
+12h53m49s: Sending body from /mnt/nfs/homes/gdupont/Desktop/webserv/www/upload/upload_file.html. Error: No such file or directory
+12h53m50s: No events
+12h53m54s: No events
+12h53m54s: Epoll noticed new events     	| nb    = 1
+12h53m54s: Epoll_wait identified an EPOLLIN on csock: 9
+12h53m54s: New request has been created from csock: 9
+12h53m54s: We are parsing header from ccosk: 9
+12h53m54s: Setting CGI params
+12h53m54s: We are done parsing header from ccosk: 9
+12h53m54s: We are parsing body from ccosk: 9
+12h53m54s: Epoll noticed new events     	| nb    = 1
+12h53m54s: Epoll_wait identified an EPOLLOUT on csock: 9
+12h53m54s: csock is not static
+12h53m54s: about to do local actions
+12h53m54s: about to do post
+12h53m54s: We are going to create :/mnt/nfs/homes/gdupont/Desktop/webserv/www/upload/newfile
+12h53m54s: We identified following code: 200for csock 9
+12h53m54s: We are going to respond a request with code : 200
+12h53m54s: Headr sent on csock: 9
+12h53m54s: Sending body from str 
+12h53m54s: After sending on csock 9
+12h53m54s: Body sending is done on csock : 9
+12h53m54s: We are going to delete csock 9
+12h53m57s: Epoll noticed new events     	| nb    = 1
+12h53m57s: We accepted a new client from ssock 5, new csock is = 9
+12h53m57s: We added 9 to the pool looking, for Epollin.
+12h53m58s: No events
+12h54m1s: Epoll noticed new events     	| nb    = 1
+12h54m1s: Epoll_wait identified an EPOLLIN on csock: 10
+12h54m1s: New request has been created from csock: 10
+12h54m1s: We are parsing header from ccosk: 10
+12h54m1s: Setting CGI params
+12h54m1s: We are done parsing header from ccosk: 10
+12h54m1s: We are parsing body from ccosk: 10
+12h54m1s: Epoll noticed new events     	| nb    = 1
+12h54m1s: Epoll_wait identified an EPOLLOUT on csock: 10
+12h54m1s: csock is not static
+12h54m1s: about to do local actions
+12h54m1s: We are going to respond a request with code : 200
+12h54m1s: Headr sent on csock: 10
+12h54m1s: Sending body from str 
+12h54m1s: After sending on csock 10
+12h54m1s: Body sending is done on csock : 10
+12h54m2s: No events
+12h54m3s: Epoll noticed new events     	| nb    = 1
+12h54m3s: Epoll_wait identified an EPOLLIN on csock: 10
+12h54m3s: New request has been created from csock: 10
+12h54m3s: We are parsing header from ccosk: 10
+12h54m3s: Setting CGI params
+12h54m3s: We are done parsing header from ccosk: 10
+12h54m3s: We are parsing body from ccosk: 10
+12h54m3s: Epoll noticed new events     	| nb    = 1
+12h54m3s: Epoll_wait identified an EPOLLOUT on csock: 10
+12h54m3s: csock is not static
+12h54m3s: about to do local actions
+12h54m3s: We are going to respond a request with code : 200
+12h54m3s: Headr sent on csock: 10
+12h54m3s: Epoll noticed new events     	| nb    = 1
+12h54m3s: Epoll_wait identified an EPOLLOUT on csock: 10
+12h54m3s: csock is not static
+12h54m3s: Sending body from /mnt/nfs/homes/gdupont/Desktop/webserv/www/upload/newfile. Error: No such file or directory
+12h54m5s: Epoll noticed new events     	| nb    = 1
+12h54m5s: Epoll_wait identified an EPOLLIN on csock: 10
+12h54m5s: New request has been created from csock: 10
+12h54m5s: We are parsing header from ccosk: 10
+12h54m5s: Setting CGI params
+12h54m5s: We are done parsing header from ccosk: 10
+12h54m5s: We are parsing body from ccosk: 10
+12h54m5s: Epoll noticed new events     	| nb    = 1
+12h54m5s: Epoll_wait identified an EPOLLOUT on csock: 10
+12h54m5s: csock is not static
+12h54m5s: about to do local actions
+12h54m5s: We are going to respond a request with code : 200
+12h54m5s: Headr sent on csock: 10
+12h54m5s: Epoll noticed new events     	| nb    = 1
+12h54m5s: Epoll_wait identified an EPOLLOUT on csock: 10
+12h54m5s: csock is not static
+12h54m5s: Sending body from /mnt/nfs/homes/gdupont/Desktop/webserv/www/upload/upload_file.html. Error: No such file or directory
+12h54m6s: No events
+12h54m10s: No events
+12h54m10s: Epoll noticed new events     	| nb    = 1
+12h54m10s: Epoll_wait identified an EPOLLIN on csock: 10
+12h54m10s: New request has been created from csock: 10
+12h54m10s: We are parsing header from ccosk: 10
+12h54m10s: Setting CGI params
+12h54m10s: We are done parsing header from ccosk: 10
+12h54m10s: We are parsing body from ccosk: 10
+12h54m10s: Epoll noticed new events     	| nb    = 1
+12h54m10s: Epoll_wait identified an EPOLLOUT on csock: 10
+12h54m10s: csock is not static
+12h54m10s: about to do local actions
+12h54m10s: about to do post
+12h54m10s: We are going to create :/mnt/nfs/homes/gdupont/Desktop/webserv/www/upload/newfile
+12h54m10s: We identified following code: 200for csock 10
+12h54m10s: We are going to respond a request with code : 200
+12h54m10s: Headr sent on csock: 10
+12h54m10s: Sending body from str 
+12h54m10s: After sending on csock 10
+12h54m10s: Body sending is done on csock : 10
+12h54m10s: We are going to delete csock 10
+12h54m13s: Epoll noticed new events     	| nb    = 1
+12h54m13s: We accepted a new client from ssock 5, new csock is = 10
+12h54m13s: We added 10 to the pool looking, for Epollin.
+12h54m14s: No events
+12h54m15s: Epoll noticed new events     	| nb    = 1
+12h54m15s: Epoll_wait identified an EPOLLIN on csock: 9
+12h54m15s: New request has been created from csock: 9
+12h54m15s: We are parsing header from ccosk: 9
+12h54m15s: Setting CGI params
+12h54m15s: We are done parsing header from ccosk: 9
+12h54m15s: We are parsing body from ccosk: 9
+12h54m15s: Epoll noticed new events     	| nb    = 1
+12h54m15s: Epoll_wait identified an EPOLLOUT on csock: 9
+12h54m15s: csock is not static
+12h54m15s: about to do local actions
+12h54m15s: We are going to respond a request with code : 200
+12h54m15s: Headr sent on csock: 9
+12h54m15s: Epoll noticed new events     	| nb    = 1
+12h54m15s: Epoll_wait identified an EPOLLOUT on csock: 9
+12h54m15s: csock is not static
+12h54m15s: Sending body from /mnt/nfs/homes/gdupont/Desktop/webserv/www/upload/newfile. Error: No such file or directory
+12h54m18s: No events
+12h54m22s: No events
+12h54m26s: No events
+12h54m30s: No events
+12h54m34s: No events
+12h54m38s: No events
+12h54m42s: No events
+12h54m46s: No events
+12h54m49s: Epoll noticed new events     	| nb    = 1
+12h54m49s: Epoll_wait identified an EPOLLIN on csock: 10
+12h54m49s: New request has been created from csock: 10
+12h54m49s: While using recv on csock 10 we received : 0
+12h54m49s: We are going to delete csock 10
+12h54m49s: Epoll noticed new events     	| nb    = 1
+12h54m49s: Epoll_wait identified an EPOLLIN on csock: 9
+12h54m49s: New request has been created from csock: 9
+12h54m49s: While using recv on csock 9 we received : 0
+12h54m49s: We are going to delete csock 9
+12h54m50s: No events
+12h54m50s:  We are about to quit
+12h54m50s:  cssock is closed: 5
+12h54m50s:  cssock is closed: 6
+12h54m50s:  cssock is closed: 7
+12h54m50s:  cssock is closed: 8
+12h54m50s:  EPFD is closed: 4
