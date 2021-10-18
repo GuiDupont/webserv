@@ -97,14 +97,14 @@ std::string         response::generate_header(request & req) {
     header += get_server_header();
     header += get_date_header();
     add_special_header(req, header);
-    if (req.method == "GET" || req.conf->cgi_activated == true) {
+    if (req.method == "GET") {
         header += get_content_length_header(get_content_length(req));
     }
     else if (req.method == "DELETE") {
         ;
     }
     else if (req.method == "POST") {
-        ;//header += get_content_length_header(get_content_length(req));
+        header += get_content_length_header(get_content_length(req));
     }
     header += "\r\n";
     return (header);

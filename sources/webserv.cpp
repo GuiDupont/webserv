@@ -60,9 +60,9 @@ void	webserv::accept_new_client(int sock) {
 
 void	webserv::answer_to_request(int csock) {
 	g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on csock: " << csock << std::endl;
-
 	if (ft_is_static_fd(csock)) {
 		if (ft_is_static_fd_to_close(csock)) {
+			g_logger.fd << g_logger.get_timestamp() << "I will close a static fd :" << csock << std::endl;
 			erase_static_fd_from_request(csock);
 			close(csock);
 			static_fds_to_close.erase(csock);
@@ -72,6 +72,7 @@ void	webserv::answer_to_request(int csock) {
 	}
 	g_logger.fd << g_logger.get_timestamp() << "csock is not static" << std::endl;
 	request & req = g_webserv._requests.find(csock)->second;
+	g_logger.fd << g_logger.get_timestamp() << "Body request : " << req.body_request << std::endl;
 	if (req.conf->validity_checked == false) {
 		req.control_config_validity();
 		if (req.code_to_send != 0 && req.code_to_send != 200 && req.code_to_send != 204) {
@@ -116,10 +117,20 @@ void	request::control_config_validity() {
 }
 
 void	request::update_code_and_body() {
-	if (code_to_send != 0 && code_to_send != 200 && code_to_send != 204 || (code_to_send == 200 && method == "POST")) { // dod some test to see if it is good
+	if (code_to_send != 0 && code_to_send != 200 && code_to_send != 204) { // dod some test to see if it is good
 		g_logger.fd << g_logger.get_timestamp() << "We identified following code: " << code_to_send << "for csock " << csock << std::endl;
 		conf->local_actions_done = true;
 		close_csock = true;
+		std::map< int, std::string>::iterator it;
+		if ((it = conf->_error_pages.find(code_to_send)) != conf->_error_pages.end()) {
+			if (is_valid_file(it->second)) {
+				conf->path_to_target = it->second;	
+				return ;
+			}
+		}
+		body_response = response::generate_error_body(g_webserv.status_code.find(code_to_send)->second);
+	}
+	if (code_to_send == 200 && body_response.empty() && method == "POST") {
 		std::map< int, std::string>::iterator it;
 		if ((it = conf->_error_pages.find(code_to_send)) != conf->_error_pages.end()) {
 			if (is_valid_file(it->second)) {

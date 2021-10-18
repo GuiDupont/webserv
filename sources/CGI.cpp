@@ -374,8 +374,8 @@ void	CGI::param_CONTENT_TYPE(request &req) {
 	if (req.method == "GET")
 		this->CONTENT_TYPE = "CONTENT_TYPE=";
 	else {
-		if (req.header_fields.find("Content-Type") != req.header_fields.end())
-			this->CONTENT_TYPE = "CONTENT_TYPE=" + req.header_fields.find("Content-Type")->second;
+		if (req.header_fields.find("content-type") != req.header_fields.end())
+			this->CONTENT_TYPE = "CONTENT_TYPE=" + req.header_fields.find("content-type")->second;
 		else
 			this->CONTENT_TYPE = "CONTENT_TYPE=";
 	}

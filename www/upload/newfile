@@ -1,69 +1,22 @@
-------WebKitFormBoundaryeYGO3pMJbLaQTa8m
-Content-Disposition: form-data; name="new_file"; filename="index.php"
-Content-Type: application/x-php
+------WebKitFormBoundaryeysAvNy9nqXBA4WE
+Content-Disposition: form-data; name="new_file"; filename="install.sh"
+Content-Type: application/x-shellscript
 
-<?PHP
- if (isset($_POST ["file"]))
- {
-   $FileName = $File = $_POST ["file"];
- }
- else
- {
-   $FileName = "";
- }
-?>
-
-<HTML>
-<BODY BGCOLOR=#FFFFFF>
-
-<FORM ACTION=/cgi-bin/cgiwrap/username/Example.php METHOD=POST>
-
-<P>Enter FileName:
-<?PHP
-  echo " <INPUT TYPE=TEXT NAME=file VALUE=\"$FileName\" SIZE=75>\n";
-?>
-<P><BR><P>
-<INPUT TYPE=SUBMIT VALUE="Show Me!">
-
-</FORM>
-
-<P><BR><P>
-<P><BR><P>
-<P><BR><P>
-
-<?PHP
- if (isset($File))
- {
-   $Handle = @fopen ($File, "r"); // '@' suppresses external errors
-
-   if ($Handle)
-   {
-     $FileText = fread ($Handle, 10000); // Read up to 10,000 Bytes
-
-     fclose ($Handle);
-
-     // Fix HTML tags that may be there
-
-     $SafeText1 = str_replace ("&", "&amp;", $FileText);
-     $SafeText2 = str_replace ("<", "&lt;", $SafeText1);
-     $SafeText  = str_replace (">", "&gt;", $SafeText2);
-
-     // Now it is safe to display it
-
-     echo " <H2 ALIGN=CENTER>File: $File</H2>\n";
-
-     echo "<PRE>\n";
-     echo $SafeText;
-     echo "</PRE>\n";
-   }
-   else
-   {
-     echo " <H3>Error: File '$File' is not accessible.</H3>\n";
-   }
- }
-?>
-
-</BODY>
-</HTML>
-
-------WebKitFormBoundaryeYGO3pMJbLaQTa8m--
+sudo apt-get install zsh vim emacs curl gcc clang-9 lldb llvm valgrind php-cli php-curl php-gd php-intl php-json php-mbstring php-xml php-zip php-mysql php-pgsql g++ as31 nasm ruby ruby-bundler ruby-dev build-essential mysql-server sqlite3 postgresql docker.io qemu-kvm virtualbox virtualbox-qt virtualbox-dkms libx11-dev x11proto-core-dev libxt-dev libxext-dev libbsd-dev terminator nasm freeglut3 libncurses5-dev glmark2 cmake nginx docker-compose python3-pip python-pip redis && 
+curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl && 
+curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl && 
+chmod +x ./kubectl && 
+sudo mv ./kubectl /usr/local/bin/kubectl && 
+curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && 
+chmod +x minikube && 
+sudo mkdir -p /usr/local/bin/ && 
+sudo install minikube /usr/local/bin/ && 
+sudo usermod -aG docker salty && 
+newgrp docker && 
+sudo add-apt-repository ppa:/longsleep/golang-backports && 
+sudo apt update && 
+sudo apt install golang-go && 
+wget -qO- https://deb.nodesource.com/setup_13.x | sudo -E bash - && 
+sudo apt install -y nodejs && 
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+------WebKitFormBoundaryeysAvNy9nqXBA4WE--
