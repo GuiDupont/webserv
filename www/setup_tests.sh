@@ -7,4 +7,4 @@ echo "<html><head><title style=\"color:tomato;\" >THAT SHOULD NOT HAPPEN</title>
 <hr><center style=\"color:tomato;\" >THAT SHOULD NOT HAPPEN</center>
 </body>
 </html>" > files/file_no_access_rights.html
-
+chmod 000 files/file_no_access_rights.html
