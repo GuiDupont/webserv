@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/18 12:53:38 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 13:10:47 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void webserv::set_hosts() {
 	for (; it != _vhosts.end(); it++) {
 		param_socket_server(*it);
 	}
-	//epoll get ready to accept
 }
 
 void	webserv::wait_for_connection() {
@@ -30,11 +29,11 @@ void	webserv::wait_for_connection() {
 	{
 		control_time_out();
 		nsfd = epoll_wait(this->_epfd, _revents, 64, 0);
-		if (nsfd)
-			g_logger.fd << g_logger.get_timestamp() << LOG_EPOLL_EVENT << nsfd << std::endl;
-		else if (nsfd == -1)
+		// if (nsfd)
+		// 	g_logger.fd << g_logger.get_timestamp() << LOG_EPOLL_EVENT << nsfd << std::endl;
+		if (nsfd == -1)
 			g_logger.fd << g_logger.get_timestamp() << LOG_ISSUE_EPOLL_WAIT + std::string(strerror(errno)) << std::endl;
-		else if (true_one_time_per_x_secondes(4))
+		else if (nsfd == 0 && true_one_time_per_x_secondes(4))
 			g_logger.fd << g_logger.get_timestamp() << "No events" << std::endl;
 		for (int i = 0; i < nsfd; i++) {
 			if (_revents[i].events & EPOLLIN && ft_is_ssock(_revents[i].data.fd))
@@ -59,27 +58,26 @@ void	webserv::accept_new_client(int sock) {
 }
 
 void	webserv::answer_to_request(int csock) {
-	g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on csock: " << csock << std::endl;
+	// g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on csock: " << csock << std::endl;
 	if (ft_is_static_fd(csock)) {
 		if (ft_is_static_fd_to_close(csock)) {
-			g_logger.fd << g_logger.get_timestamp() << "I will close a static fd :" << csock << std::endl;
+			// g_logger.fd << g_logger.get_timestamp() << "I will close a static fd :" << csock << std::endl;
 			erase_static_fd_from_request(csock);
 			close(csock);
 			static_fds_to_close.erase(csock);
 		}
-		g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on static fd: " << csock << std::endl;
+		// g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLOUT on static fd: " << csock << std::endl;
 		return ;
 	}
-	g_logger.fd << g_logger.get_timestamp() << "csock is not static" << std::endl;
+	// g_logger.fd << g_logger.get_timestamp() << "csock is not static" << std::endl;
 	request & req = g_webserv._requests.find(csock)->second;
-	g_logger.fd << g_logger.get_timestamp() << "Body request : " << req.body_request << std::endl;
+	// g_logger.fd << g_logger.get_timestamp() << "Body request : " << req.body_request << std::endl;
 	if (req.conf->validity_checked == false) {
 		req.control_config_validity();
 		if (req.code_to_send != 0 && req.code_to_send != 200 && req.code_to_send != 204) {
 			req.conf->local_actions_done = true;
 			req.conf->cgi_activated = false;
 		}
-		//req.update_code_and_body();
 	}
 	if (req.conf->local_actions_done == false)
 		req.do_local_actions();
@@ -95,7 +93,7 @@ void	webserv::answer_to_request(int csock) {
 			ev.events = EPOLLIN;
 			ev.data.fd = csock;
 			if (epoll_ctl(_epfd, EPOLL_CTL_MOD, csock, &ev) == -1)
-				g_logger.fd << g_logger.get_timestamp() << " " << errno << " " << strerror(errno) << std::endl; // add an exception
+				g_logger.fd << g_logger.get_timestamp() << "Error with epoll_ctl THAT SHOULD NOT HAPPEN " << errno << " : " << strerror(errno) << std::endl;
 		}
 	}
 }
@@ -112,13 +110,11 @@ void	request::control_config_validity() {
 		test_path_delete(*this);
 	else if (conf->method & POST)
 		test_path_post(*this);
-
-	// g_logger.fd << g_logger.get_timestamp() << " at the end of control config validity : " << conf->local_actions_done << std::endl;
 }
 
 void	request::update_code_and_body() {
-	if (code_to_send != 0 && code_to_send != 200 && code_to_send != 204) { // dod some test to see if it is good
-		g_logger.fd << g_logger.get_timestamp() << "We identified following code: " << code_to_send << "for csock " << csock << std::endl;
+	if (code_to_send != 0 && code_to_send != 200 && code_to_send != 204) {
+		// g_logger.fd << g_logger.get_timestamp() << "We identified following code: " << code_to_send << "for csock " << csock << std::endl;
 		conf->local_actions_done = true;
 		close_csock = true;
 		std::map< int, std::string>::iterator it;
@@ -179,7 +175,7 @@ void	request::do_local_actions() {
 }
 
 void	request::handle_standard_response() {
-	g_logger.fd << g_logger.get_timestamp() << "about to do local actions" << std::endl;
+	// g_logger.fd << g_logger.get_timestamp() << "about to do local actions" << std::endl;
 
 	if (conf->method & GET) {
 		conf->local_actions_done = true;
@@ -194,7 +190,7 @@ void	request::handle_standard_response() {
 		
 	}
 	else if (conf->method & POST) {
-		g_logger.fd << g_logger.get_timestamp() << "about to do post" << std::endl;
+		// g_logger.fd << g_logger.get_timestamp() << "about to do post" << std::endl;
 
 		write_body_inside_file();
 		code_to_send = 200;			
@@ -224,10 +220,10 @@ void webserv::read_from_csock(int csock) {
 	std::map<int, request>::iterator it;
 
 	if (ft_is_static_fd(csock)) {
-		g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLIN on static fd: " << csock << std::endl;
+		// g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLIN on static fd: " << csock << std::endl;
 		return ;
 	}
-	g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLIN on csock: " << csock << std::endl;
+	// g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLIN on csock: " << csock << std::endl;
 	if (is_new_request(csock) == true) {
 		g_logger.fd << g_logger.get_timestamp() << "New request has been created from csock: " + ft_itos(csock) << std::endl;
 		_requests.insert(std::pair<int, request>(csock, request(csock)));
@@ -239,7 +235,7 @@ void webserv::read_from_csock(int csock) {
 		return ;
 	}
 	if (ret == 0) {
-		g_logger.fd << g_logger.get_timestamp() << "While using recv on csock " << csock << " we received : 0" <<  std::endl;
+		// g_logger.fd << g_logger.get_timestamp() << "While using recv on csock " << csock << " we received : 0" <<  std::endl;
 		clean_csock_from_server(csock);
 		return ;
 	}
@@ -273,7 +269,7 @@ bool	webserv::ft_is_static_fd(int fd) {
 	std::set<int>::iterator it	= static_fds.begin();
 
 	for (; it != static_fds.end(); it++) {
-		g_logger.fd << g_logger.get_timestamp() << "checking if " << fd << " is equal to static fd " << *it << std::endl;
+		// g_logger.fd << g_logger.get_timestamp() << "checking if " << fd << " is equal to static fd " << *it << std::endl;
 		if (fd == *it)
 			return true;
 	}
@@ -284,7 +280,7 @@ bool	webserv::ft_is_static_fd_to_close(int fd) {
 	std::set<int>::iterator it	= static_fds_to_close.begin();
 
 	for (; it != static_fds_to_close.end(); it++) {
-		g_logger.fd << g_logger.get_timestamp() << "checking if " << fd << " is equal to static fd " << *it << std::endl;
+		// g_logger.fd << g_logger.get_timestamp() << "checking if " << fd << " is equal to static fd " << *it << std::endl;
 		if (fd == *it)
 			return true;
 	}
@@ -298,8 +294,8 @@ void	request::set_request_to_ended() {
 	stage = ENDED_REQUEST;
 	ev.events = EPOLLOUT;
 	ev.data.fd = csock;
-	if (epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_MOD, csock, &ev) == -1) // check return
-		g_logger.fd << g_logger.get_timestamp() << "We had an issue with EPOLL CTL, trying to chg a csock associated event. errno :" << errno << ": " << strerror(errno) << std::endl; // add an exception
+	if (epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_MOD, csock, &ev) == -1)
+		g_logger.fd << g_logger.get_timestamp() << "Issue with EPOLL CTL, trying to chg a csock associated event. errno :" << errno << ": " << strerror(errno) << std::endl;
 }
 
 bool 	webserv::is_new_request(int fd) {
@@ -310,8 +306,6 @@ bool 	webserv::is_new_request(int fd) {
 				return (false);
 		}
 	}
-	// if (_requests.find(fd) != _requests.end())
-	// 	return (true);
 	return (true);
 }
 
@@ -343,12 +337,6 @@ bool	webserv::ft_is_ssock(int fd) {
 				return (true);
 		}
 	}
-
-	// std::set<vHost>::iterator it = this->_vhosts.begin();
-	// for (; it_sock != it->get_sock_list().end(); it_sock++) {
-	// 		if (fd == it_sock->first)
-	// 			return (true);
-	// 	}
 	return (false);
 }
 
@@ -393,13 +381,13 @@ void	webserv::control_time_out(void) {
 		}
 	}
 	for (std::list<int>::iterator it = sock_to_close.begin(); it != sock_to_close.end(); it++)  {
-		g_logger.fd << g_logger.get_timestamp() << "TIMEOUT, we closed csock : " << *it << std::endl;
+		g_logger.fd << g_logger.get_timestamp() << "TIMEOUT | we closed csock : " << *it << std::endl;
 		clean_csock_from_server(*it);
 	}
 }
 
 void	webserv::clean_csock_from_server(int csock) {
-	g_logger.fd << g_logger.get_timestamp() << "We are going to delete csock " << csock << std::endl;
+	g_logger.fd << g_logger.get_timestamp() << "Erasing csock " << csock << std::endl;
 
 	_requests.erase(csock);
 	_timeout.erase(csock);
@@ -449,14 +437,14 @@ void		webserv::set_config(std::ifstream & config_file) {
 		else if (first_word == "}")
 			;
 		else if (first_word.size() != 0) {
-			if (first_word[0] == '{') 	// 123 : ascii value for {, it fixes issue at compilation with '{'
+			if (first_word[0] == '{')
 				throw (bad_brackets_conf());
 			else
 				throw (bad_directive());
 		}
 	}
 	if (this->_vhosts.empty() == 1)
-		throw (no_port_associated()); // changer par la suite par une vraie exception pour vhost, comme recommande par Guillaume.
+		throw (no_port_associated());
 }
 
 

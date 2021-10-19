@@ -6,16 +6,16 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/15 12:22:00 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 14:14:12 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "config.hpp"
 
 
-config::config(void) :  validity_checked(true), return_activated(false), local_actions_done(false), cgi_activated(false) { }
+config::config(void) :  return_activated(false), validity_checked(true), local_actions_done(false), cgi_activated(false) { }
 
-config::config(request & request) : validity_checked(false), return_activated(false), local_actions_done(false), cgi_activated(false) {
+config::config(request & request) : return_activated(false), validity_checked(false),  local_actions_done(false), cgi_activated(false) {
 	if (request.method == "GET")
 		method = GET;
 	else if (request.method == "POST")
@@ -30,18 +30,15 @@ config::config(request & request) : validity_checked(false), return_activated(fa
 	_request_target = request.request_target;
 	code = request.code_to_send;
 	_error_pages = g_webserv._error_pages;
-	int first = 1;
 	vHost chosen = get_associated_vhost(request);
-	put_vhost_and_location_in_config(chosen, request);
+	put_vhost_and_location_in_config(chosen);
 	if (client_max_body_size <= 0 || client_max_body_size > MAX_BODY_SIZE)
-		client_max_body_size = MAX_BODY_SIZE; 
-	else
-		client_max_body_size *= MBYTE_TO_BYTE_MULT;
+		client_max_body_size = MAX_BODY_SIZE;
 	set_cgi_params(request);
-	std::cout << g_logger.get_timestamp() << *this << std::endl;
 	for (std::map< int, std::string >::iterator it = g_webserv._error_pages.begin(); it != g_webserv._error_pages.end(); it++) {
 		_error_pages.insert(*it);
 	}
+	std::cout << *this;
 }
 
 static size_t get_cgi_ext_pos(const std::string & target) {
@@ -83,7 +80,6 @@ static void remove_upload_pass(std::string & target, const std::string & upload_
 
 void	config::set_cgi_params(request & req) {
 	std::string &target = path_to_target;
-	g_logger.fd << g_logger.get_timestamp() << "Setting CGI params" << std::endl;
 
 	size_t begin_cgi_ext = 0;
 	size_t first_diez = target.find_first_of("#", 0);
@@ -114,7 +110,7 @@ void	config::set_cgi_params(request & req) {
 }
 
 
-void	config::put_vhost_and_location_in_config(vHost & host, request & request) {
+void	config::put_vhost_and_location_in_config(vHost & host) {
 	host_port = *host._host_port.begin();
 	if (host.get_client_max_body_size() != -1)
 		client_max_body_size = host.get_client_max_body_size();
@@ -193,8 +189,6 @@ std::ostream & operator<<(std::ostream & o, const config & c)
 	o << "Query string: " << c.query_string << std::endl;
 	o << "Path info: " << c.path_info << std::endl;
 	o << "Script name: " << c.script_name << std::endl;
-
-	
 	return (o);
 }
 

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 11:18:29 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/15 12:18:00 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 13:00:00 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ vHost::vHost(std::ifstream &config_file, std::string &line) : _client_max_body_s
 		else if (first_word == "}")
 			break ;
 		else if (first_word.size() != 0) {
-			if (first_word[0] == 123) 				// ascii value for {, it fixes issue at compilation with '{'
+			if (first_word[0] == '{')
 				throw (bad_brackets_conf());
 			else
 				throw (bad_directive());

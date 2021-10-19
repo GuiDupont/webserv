@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+         #
+#    By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/07 11:26:53 by gdupont           #+#    #+#              #
-#    Updated: 2021/10/13 16:31:32 by ade-garr         ###   ########.fr        #
+#    Updated: 2021/10/19 10:52:35 by gdupont          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,7 @@ NAME = webserv
 # CXX = /usr/lib/llvm-12/bin/clang++
 CXX = /usr/bin/clang++
 
-FLAGS = 
-# -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror
 
 INCLUDES = ./includes/
 

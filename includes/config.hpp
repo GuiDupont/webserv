@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/17 19:06:04 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/19 14:19:11 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include <set>
 
 # define MAX_BODY_SIZE 2000000000
-# define MBYTE_TO_BYTE_MULT 1000000 // a changer
+
 typedef int unknown;
 class vHost;
 class request;
@@ -34,7 +34,7 @@ class config {
 	public:
 		std::string									_server_name;
 		bool										_auto_index;
-		long										client_max_body_size;
+		long long									client_max_body_size;
 		std::map< int, std::string >				_error_pages;
 		std::string									_upload_pass;
 		std::string 								_root;
@@ -61,7 +61,7 @@ class config {
 		config(request & req);
 		config();
 
-		void							put_vhost_and_location_in_config(vHost & host, request & conf);
+		void							put_vhost_and_location_in_config(vHost & host);
 		std::map< std::string, class location >::const_iterator get_most_accurate_location(vHost & host);
 		std::string						update_path_to_target_with_root(const class location & location);
 		vHost						&	get_associated_vhost(request & request);

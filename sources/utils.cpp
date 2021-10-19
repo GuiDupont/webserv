@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/18 12:37:22 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 13:12:40 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,23 +65,19 @@ int count_words(std::string &line)
 	int count = 0;
 	size_t i;
 
-	for (i = 0; i < line.size(); i++)
-	{
+	for (i = 0; i < line.size(); i++) {
 		if (isspace(line[i]) != 0)
-		{
-		}
-		else
-		{
+			;
+		else {
 			count++;
 			for (; i < line.size() && isspace(line[i]) == 0; i++)
-			{
-			}
+				;
 		}
 	}
 	return (count);
 }
 
-std::string get_word(std::string line, int i)
+std::string get_word(std::string line, size_t i)
 {
 	return (line.substr(i, line.find_first_of(WHITESPACE, i) - i));
 }
@@ -125,7 +121,7 @@ void param_socket_server(vHost &host)
 		}
 		else if (sock_err == SOCKET_ERROR && errno == EADDRINUSE)
 		{
-			// close(sock);
+
 			sock = g_webserv.get_sock_by_matching_host_ip(std::pair<std::string, size_t>(*it));
 			if (sock == -1)
 				throw(port_already_used());
@@ -134,7 +130,7 @@ void param_socket_server(vHost &host)
 		}
 		else
 		{
-			sock_err = listen(sock, 100); // 5 ? quel chiffre mettre ??
+			sock_err = listen(sock, 100);
 			if (sock_err == SOCKET_ERROR)
 			{
 				close(sock);
@@ -152,7 +148,7 @@ void param_socket_server(vHost &host)
 	}
 }
 
-std::string get_word(std::string &line, int &start_index, std::string delim)
+std::string get_word(std::string &line, size_t &start_index, std::string delim)
 {
 	if (line.size() == 0 || !line[start_index])
 		return ("");
@@ -265,17 +261,14 @@ bool is_valid_request_target(std::string line)
 	int position = 0;
 	size_t tmp;
 
-	for (int i = 0; line[i];)
-	{
+	for (int i = 0; line[i];) {
 		if (line[i] == '/')
 			i++;
-		else if (line.substr(i, 3) == "../")
-		{
+		else if (line.substr(i, 3) == "../") {
 			position--;
 			i += 3;
 		}
-		else if (line.substr(i, 2) == ".." && !line[i + 2])
-		{
+		else if (line.substr(i, 2) == ".." && !line[i + 2]) {
 			position--;
 			i += 2;
 		}
@@ -283,8 +276,7 @@ bool is_valid_request_target(std::string line)
 			i = line.size();
 		else if (line.substr(i, 2) == "./")
 			i = tmp;
-		else
-		{
+		else {
 			i = tmp;
 			position++;
 		}
@@ -300,28 +292,23 @@ void stop_program_sigint(int signum)
 	std::set<int> csock;
 	std::set<int> sock;
 	g_logger.fd << g_logger.get_timestamp() << " We are about to quit" << std::endl;
-	for (std::list<vHost>::iterator it = g_webserv.get_vhosts().begin(); it != g_webserv.get_vhosts().end(); it++)
-	{
+	for (std::list<vHost>::iterator it = g_webserv.get_vhosts().begin(); it != g_webserv.get_vhosts().end(); it++) {
 		for (std::set<int>::iterator it_csock = it->get_csock_list().begin(); it_csock != it->get_csock_list().end(); it_csock++)
 			csock.insert(*it_csock);
 		for (std::map<int, std::pair<std::string, size_t> >::iterator it_sock = it->get_sock_list().begin(); it_sock != it->get_sock_list().end(); it_sock++)
-		{
 			sock.insert(it_sock->first);
-		}
 	}
-	for (std::set<int>::iterator it = csock.begin(); it != csock.end(); it++)
-	{
-
-		!close(*it) ? g_logger.fd << g_logger.get_timestamp() << " csock is closed: " << *it << std::endl : g_logger.fd << g_logger.get_timestamp() << " csock not closed: " << *it << " error: " << strerror(errno) << std::endl;
+	for (std::set<int>::iterator it = csock.begin(); it != csock.end(); it++) {
+		close(*it);
+		// ? g_logger.fd << g_logger.get_timestamp() << " csock is closed: " << *it << std::endl : g_logger.fd << g_logger.get_timestamp() << " csock not closed: " << *it << " error: " << strerror(errno) << std::endl;
 	}
-	for (std::set<int>::iterator it = sock.begin(); it != sock.end(); it++)
-	{
-		!close(*it) ? g_logger.fd << g_logger.get_timestamp() << " cssock is closed: " << *it << std::endl : g_logger.fd << g_logger.get_timestamp() << " ssock not closed: " << *it << " error: " << strerror(errno) << std::endl;
-		;
+	for (std::set<int>::iterator it = sock.begin(); it != sock.end(); it++) {
+		close(*it); 
+		//? g_logger.fd << g_logger.get_timestamp() << " cssock is closed: " << *it << std::endl : g_logger.fd << g_logger.get_timestamp() << " ssock not closed: " << *it << " error: " << strerror(errno) << std::endl;
 	}
 
-	!close(g_webserv.get_epfd()) ? g_logger.fd << g_logger.get_timestamp() << " EPFD is closed: " << g_webserv.get_epfd() << std::endl : g_logger.fd << g_logger.get_timestamp() << " EPFD not closed: " << g_webserv.get_epfd() << " error: " << strerror(errno) << std::endl;
-	;
+	close(g_webserv.get_epfd());
+	// ? g_logger.fd << g_logger.get_timestamp() << " EPFD is closed: " << g_webserv.get_epfd() << std::endl : g_logger.fd << g_logger.get_timestamp() << " EPFD not closed: " << g_webserv.get_epfd() << " error: " << strerror(errno) << std::endl;
 	g_logger.fd.close();
 	free(g_webserv.get_revents());
 	exit(1);
@@ -485,7 +472,7 @@ bool test_path_get(request &req)
 	int fd = open(path.c_str(), O_WRONLY);
 	if (fd == -1)
 	{
-		g_logger.fd << g_logger.get_timestamp() << "can't open " << path << " - because : " << strerror(errno) << errno << std::endl;
+		g_logger.fd << g_logger.get_timestamp() << "can't open " << path << " - because : " << strerror(errno) << " " << errno << std::endl;
 		if (errno == EACCES)
 			req.code_to_send = 403;
 		else if (errno == ENOENT || errno == ENOTDIR)
@@ -543,7 +530,7 @@ bool test_path_post(request &req)
 	if (is_directory(path))
 	{
 		req.code_to_send = 400;
-		g_logger.fd << g_logger.get_timestamp() << "You can't POST a directory" << std::endl;
+		// g_logger.fd << g_logger.get_timestamp() << "You can't POST a directory" << std::endl;
 		return (false);
 	}
 	int fd = open(path.c_str(), O_WRONLY | O_CREAT, S_IRWXU | S_IRGRP | S_IROTH);
@@ -654,8 +641,8 @@ void add_fd_epollin_to_pool(int fd)
 	ev.data.fd = fd;
 	if (epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_ADD, fd, &ev) == -1)
 		g_logger.fd << g_logger.get_timestamp() << "We had an issue with EPOLL CTL, trying to add " << fd << " to the pool. errno :" << errno << ": " << strerror(errno) << std::endl;
-	else
-		g_logger.fd << g_logger.get_timestamp() << "We added " << fd << " to the pool looking, for Epollin." << std::endl;
+	// else
+	// 	g_logger.fd << g_logger.get_timestamp() << "We added " << fd << " to the pool looking, for Epollin." << std::endl;
 }
 
 void add_fd_epollout_to_pool(int fd)
@@ -665,8 +652,6 @@ void add_fd_epollout_to_pool(int fd)
 	ev.data.fd = fd;
 	if (epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_ADD, fd, &ev) == -1)
 		g_logger.fd << g_logger.get_timestamp() << "We had an issue with EPOLL CTL EPOLLOUT, trying to add " << fd << " to the pool. errno :" << errno << ": " << strerror(errno) << std::endl; // add an exception
-	else
-		g_logger.fd << g_logger.get_timestamp() << "We added " << fd << " to the pool looking, for Epollout." << std::endl;
 }
 
 bool can_I_write_in_fd(int fd)
@@ -679,7 +664,6 @@ bool can_I_write_in_fd(int fd)
 		if (_revents[i].data.fd == fd && _revents[i].events & EPOLLOUT)
 			return true;
 	}
-	g_logger.fd << g_logger.get_timestamp() << "fd " << fd << "id not ready for writing" << std::endl;
 
 	return false;
 }
@@ -693,11 +677,9 @@ bool can_I_read_from_fd(int fd)
 	{
 		if (_revents[i].data.fd == fd && _revents[i].events & EPOLLIN)
 		{
-			g_logger.fd << g_logger.get_timestamp() << "fd " << fd << " is ready for reading" << std::endl;
 			return true;
 		}
 	}
-	//g_logger.fd << g_logger.get_timestamp() << "fd " << fd << " is not ready for reading" << std::endl;
 	return false;
 }
 
@@ -740,14 +722,12 @@ bool is_EPOLLHUP(int fd) {
 			return true;
 		}
 	}
-	//g_logger.fd << g_logger.get_timestamp() << "fd " << fd << " is not ready for reading" << std::endl;
 	return false;
 }
 
 void	erase_static_fd_from_request(int fd) {
 	g_webserv.static_fds.erase(fd);
 	int ret = epoll_ctl(g_webserv.get_epfd(), EPOLL_CTL_DEL, fd, NULL);
-	// g_logger.fd << g_logger.get_timestamp() << "ret from epoll_ctl = " << ret << std::endl;
 	if (ret == -1)
 		g_logger.fd << g_logger.get_timestamp() << "epoll_ctl failed " << errno << std::endl;
 }

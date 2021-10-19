@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:42:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/14 17:52:29 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 12:48:15 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,6 @@
 webserv			g_webserv;
 webserv_parser	g_parser;
 logger			g_logger("logs/log"); // to fix
-
-
-static void remove_upload_pass(std::string & target, const std::string & upload_pass, const std::string & root) {
-	if (upload_pass.empty() || upload_pass == "/" )
-		return ;
-	std::string first_part = target.substr(0, root.size());
-	std::string second_part = target.substr(root.size() + upload_pass.size(), target.size() - (root.size() + upload_pass.size()));
-	target = from_two_str_to_path(first_part, second_part);
-}
 
 
 
@@ -44,7 +35,6 @@ int main(int ac, char **av) {
 	catch (std::exception & e) {
 		std::cout << e.what() << g_line << std::endl;
 		return (1);
-		//rajouter une ligne pour l'exception bad_nb_arg
 	}
 	try {
 		g_webserv.set_hosts();
@@ -54,5 +44,4 @@ int main(int ac, char **av) {
 		std::cout << e.what() << std::endl;
 	}
 	stop_program_sigint(1);
-	// quitter proprement
 }

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/14 16:53:36 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 14:19:00 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,20 +99,13 @@ size_t		webserv_parser::parse_disabled_methods(std::string & line) {
 std::string	webserv_parser::parse_one_word(std::string & line) {
 	int i = go_to_next_word(line, 0);
 	if (!line[i])
-		throw (empty_declaration());// change with empty 
+		throw (empty_declaration());
 	std::string path = get_word(line, i);
 	i = go_to_next_word(line, i);
 	if (line[i])
-		throw (bad_nb_argument("")); // change with wrong nb_arg
+		throw (bad_nb_argument(""));
 	return (path);
 }
-
-// std::string webserv_parser::parse_root(std::string & line) {
-// 	std::string temp = parse_one_word(line);
-// 	if (temp[0] != '/')
-// 		temp = "/" + temp;
-// 	return (temp);
-// }
 
 bool	webserv_parser::parse_auto_index(std::string & line) {
 	int i = go_to_next_word(line, 0);
@@ -127,7 +120,7 @@ bool	webserv_parser::parse_auto_index(std::string & line) {
 	if (on_off == "off")
 		return false;
 	else
-		throw (bad_auto_index_value()); //change with wrong nb argument
+		throw (bad_auto_index_value());
 }
 
 void	webserv_parser::parse_cgi_extension(std::set< std::string > & cgi_ext, std::string & line) {
@@ -207,7 +200,7 @@ void	webserv_parser::parse_listen(std::string &line, vHost &host) {
 	int i = go_to_next_word(line, 0);
 	std::string str = get_word(line, i);
 	if (is_ip(str) == 1) {
-		addr = parse_ip(str, host);
+		addr = parse_ip(str);
 		str = str.substr(str.find(':', 0) + 1, (str.size() - str.find(':', 0) + 1));
 	}
 	reti = regcomp(&regex, "^[0-9]\\{0,5\\}$", 0);
@@ -232,7 +225,7 @@ std::string webserv_parser::parse_upload_pass(std::string &line) {
 	return (str);
 }
 
-std::string	webserv_parser::parse_ip(std::string str, vHost &host) {
+std::string	webserv_parser::parse_ip(std::string str) {
 
         regex_t regex;
         int reti;
@@ -253,7 +246,7 @@ std::string	webserv_parser::parse_ip(std::string str, vHost &host) {
 void 		webserv_parser::check_server_line(std::string &line) {
 
 	std::string	sd_word;
-	int	i;
+	size_t	i;
 
 	if (count_words(line) != 2)
 		throw (bad_nb_argument("server"));
@@ -297,9 +290,9 @@ std::pair<std::string, std::string> webserv_parser::get_header_begin_body(int cs
 void	webserv_parser::analyse_body(request &req) {
 
 	std::string substr;
-	int index = 0;
+	size_t index = 0;
 
-	g_logger.fd << g_logger.get_timestamp() + "We are parsing body from ccosk: " << req.csock << std::endl;// analyse_body(it->second); // a faire
+	g_logger.fd << g_logger.get_timestamp() << "We are parsing body from ccosk: " << req.csock << std::endl;
 
 	if (req.header_fields.find("content-length") == req.header_fields.end() && !is_chunked(req)) {
 		req.set_request_to_ended();
@@ -309,7 +302,7 @@ void	webserv_parser::analyse_body(request &req) {
 	else if (is_chunked(req)) {
 		while (req.left.empty() != 1) {
 			if (req.next_chunk > -1) {
-				if (req.left.size() < req.next_chunk + 2)
+				if (static_cast<int>(req.left.size()) < req.next_chunk + 2)
 					break;
 				else {
 					if (req.next_chunk == 0) {
@@ -327,7 +320,7 @@ void	webserv_parser::analyse_body(request &req) {
 					}
 					else {
 						req.body_request += req.left.substr(0, req.next_chunk);
-						if (req.body_request.size() > req.conf->client_max_body_size) {
+						if (static_cast<int>(req.body_request.size()) > req.conf->client_max_body_size) {
 								req.code_to_send = 413;
 								req.set_request_to_ended();
 								return ;
@@ -397,7 +390,7 @@ void	webserv_parser::analyse_body(request &req) {
 		size_t length = std::atoi(req.header_fields.find("content-length")->second.c_str());
 		req.body_request += req.left;
 		req.left.clear();
-		if (req.body_request.size() > req.conf->client_max_body_size) {
+		if (static_cast<int>(req.body_request.size()) > req.conf->client_max_body_size) {
 			req.code_to_send = 413;
 			req.set_request_to_ended();
 			return ;
@@ -410,10 +403,10 @@ void	webserv_parser::analyse_body(request &req) {
 	}
 }
 
-void	webserv_parser::analyse_header(request &req) { // fix : empty lines should not be an issue
-	g_logger.fd << g_logger.get_timestamp() + "We are parsing header from ccosk: " << req.csock << std::endl;// analyse_body(it->second); // a faire
+void	webserv_parser::analyse_header(request &req) {
+	// g_logger.fd << g_logger.get_timestamp() << "We are parsing header from ccosk: " << req.csock << std::endl;
 	if (req.left.find(std::string("\r\n\r\n"), 0) != std::string::npos) {
-		int index = 0;
+		size_t index = 0;
 		std::string request_line = req.left.substr(0, req.left.find(std::string("\r\n")));
 		if (request_line.size() > 8000) {
 			req.code_to_send = 400;
@@ -452,7 +445,7 @@ void	webserv_parser::analyse_header(request &req) { // fix : empty lines should 
 			req.conf = new config(req);
 			return ;
 		}
-		while (index < req.left.size()) // parsing headerffields
+		while (index < req.left.size())
 		{
 			std::pair<std::string, std::string> header_field;
 			std::string header_field_raw = get_word(req.left, index, std::string("\r\n"));
@@ -510,7 +503,6 @@ void	webserv_parser::analyse_header(request &req) { // fix : empty lines should 
 		req.left = req.left.substr(index, req.left.size() - index);
 		req.stage = 1;
 		req.conf = new config(req);
-		g_logger.fd << g_logger.get_timestamp() << "We are done parsing header from ccosk: " << req.csock << std::endl;// analyse_body(it->second); // a faire
 		analyse_body(req);
 	}
 }

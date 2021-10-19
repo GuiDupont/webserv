@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/18 12:51:19 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 12:52:36 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,16 @@ request::~request() {
 }
 
 request::request() : next_chunk(-1), nb_trailer_to_received(0), code_to_send(0), stage(0), conf(NULL), resp(NULL), cgi(NULL),
-					close_csock(false), body_is_sent(false), header_is_sent(false), body_fd(-1), body_written_cgi(0), amount_sent(0) {}
+					close_csock(false), body_is_sent(false), header_is_sent(false), body_fd(-1), body_written_cgi(0), amount_sent(0), amount_copied(0),
+					post_file_fd(-1) {}
 
 request::request(int csock) :	next_chunk(-1), nb_trailer_to_received(0), code_to_send(0), csock(csock), stage(0), conf(NULL), resp(NULL), cgi(NULL),
-					close_csock(false), body_is_sent(false), header_is_sent(false), body_fd(-1), body_written_cgi(0), amount_sent(0) {}
+					close_csock(false), body_is_sent(false), header_is_sent(false), body_fd(-1), body_written_cgi(0), amount_sent(0), amount_copied(0),
+					post_file_fd(-1) {}
 
 request::request(int csock, std::string left) : left(left), next_chunk(-1), nb_trailer_to_received(0), code_to_send(0), csock(csock), stage(0), conf(NULL), resp(NULL), cgi(NULL),
-					close_csock(false), body_is_sent(false), header_is_sent(false), body_fd(-1), body_written_cgi(0), amount_sent(0) {}
+					close_csock(false), body_is_sent(false), header_is_sent(false), body_fd(-1), body_written_cgi(0), amount_sent(0), amount_copied(0),
+					post_file_fd(-1) {}
 
 void	request::send_header(int csock, std::string & header) {
 	int ret = send(csock, header.c_str(), header.size(), 0);
@@ -56,7 +59,6 @@ void	request::send_header(int csock, std::string & header) {
 		close_csock = true;
 		return ;
 	}
-	g_logger.fd << g_logger.get_timestamp() << "Headr sent on csock: " << csock << std::endl;
 }
 
 void	request::send_body() {
@@ -66,7 +68,6 @@ void	request::send_body() {
 	else if (method == "GET")
 		send_body_from_file();
 	else {
-		g_logger.fd << g_logger.get_timestamp() << "We won't send  body " << std::endl;	
 		body_is_sent = true;
 	}
 	
@@ -75,14 +76,12 @@ void	request::send_body() {
 void	request::send_body_from_str() {
 	int amount_to_send;
 	int just_sent;
-	g_logger.fd << g_logger.get_timestamp() << "Sending body from str " << std::endl;
 
 	amount_to_send = SEND_SPEED < (body_response.size() - amount_sent) ? SEND_SPEED : body_response.size() - amount_sent;
 	
 	std::string to_send = body_response.substr(amount_sent, amount_to_send);
 
 	just_sent = send(csock, to_send.c_str(), amount_to_send, 0);
-	g_logger.fd << g_logger.get_timestamp() << "After sending on csock " << csock << std::endl;
 	if (just_sent == -1) {
 		g_logger.fd << g_logger.get_timestamp() << "Issue while sending body on csock " << csock << ". Error: " << strerror(errno) << std::endl;
 		body_is_sent = true;
@@ -120,7 +119,6 @@ void	request::send_body_from_file() {
 		return ;
 	}
 	else if (amount_read == 0) {
-		g_logger.fd << g_logger.get_timestamp() << "Sending body from " << conf->path_to_target << ". Error: " << strerror(errno) << std::endl;
 		body_is_sent = true;
 		return ;
 	}
@@ -136,17 +134,29 @@ void	request::send_body_from_file() {
 
 // SIMPLE POST :
 
-void	request::write_body_inside_file() {  // to fix !!!!
-	g_logger.fd << g_logger.get_timestamp() << "We are going to create :" << conf->path_to_target.c_str() << std::endl;
-
-	std::ofstream file(conf->path_to_target.c_str());
-	if (file.is_open() == false) {
-		g_logger.fd << g_logger.get_timestamp() << "Can't open :" << conf->path_to_target.c_str();
-		return ;
+void	request::write_body_inside_file() {
+	if (post_file_fd == -1) {
+		post_file_fd = open(conf->path_to_target.c_str(), O_RDONLY | O_CREAT);
+		if (post_file_fd == -1) {
+			g_logger.fd << g_logger.get_timestamp() << "Can't open :" << conf->path_to_target.c_str();
+			conf->local_actions_done = true;
+			code_to_send = 500;
+			close_csock = true;
+			return ;
+		}
 	}
-	file << body_request;
-	file.close();
-	conf->local_actions_done = true;
+	size_t amount_to_copy = body_request.size() - amount_copied < SEND_SPEED ? body_request.size() - amount_copied : SEND_SPEED;
+	std::string tmp = body_request.substr(amount_copied, amount_to_copy);
+	if (write(post_file_fd, tmp.c_str(), tmp.size()) == -1) {
+		conf->local_actions_done = true;
+		close_csock = true;
+		close(post_file_fd);
+	}
+	amount_copied += amount_to_copy;
+	if (amount_copied == body_request.size()) {
+		close(post_file_fd);
+		conf->local_actions_done = true;
+	}
 }
 
 //////////////////////////////////////////////////* DELETE */////////////////////////////////////////////////////////////
@@ -168,7 +178,6 @@ static int		unlink_or_rmdir(const char *fpath, const struct stat *sb, int tflag,
 }
 				
 void	request::delete_directory(std::string & path, request & req) {
-	std::cout << " We are about to delete " << path << std::endl;
 	nftw(path.c_str(), unlink_or_rmdir, 30, FTW_DEPTH);
 	req.code_to_send = 204;
 	req.body_response = response::generate_error_body(g_webserv.status_code.find(req.code_to_send)->second);
@@ -176,7 +185,6 @@ void	request::delete_directory(std::string & path, request & req) {
 }
 
 void	request::delete_file(std::string & path, request & req) {
-	std::cout << " We are about to delete " << path << std::endl;
 	unlink(path.c_str());
 	req.code_to_send = 204;
 	req.body_response = response::generate_error_body(g_webserv.status_code.find(req.code_to_send)->second);

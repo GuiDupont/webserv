@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:07:25 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/13 16:30:23 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/19 12:26:05 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,11 @@
 # include <string>
 # include <map>
 # include <list>
+# include <fstream>
 # include <iostream>
 # include <fcntl.h>
 # include <unistd.h>
+
 
 # define HDER_REQUEST 0
 # define BDY_REQUEST 1
@@ -61,7 +63,9 @@ class request {
 		int									body_fd;
 		size_t								body_written_cgi;
 		std::string							body_response;
-		size_t									amount_sent;
+		size_t								amount_sent;
+		size_t								amount_copied;
+		int									post_file_fd;					
 
 		friend std::ostream & operator<<(std::ostream & o,const request & r);
 		

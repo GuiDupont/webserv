@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:10 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/11 17:33:36 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 10:54:19 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ class webserv_parser {
 		std::string 						parse_server_name(std::string &line);
 		void								parse_listen(std::string &line, vHost &host);
 		std::string 						parse_upload_pass(std::string &line);
-		std::string							parse_ip(std::string str, vHost &host);
+		std::string							parse_ip(std::string str);
 		void 								check_server_line(std::string &line);
 		void								analyse_header(request &req);
 		void								analyse_body(request &req);

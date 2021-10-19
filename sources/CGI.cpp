@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 15:34:17 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/17 19:57:03 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/19 12:57:19 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void clear_second_pipe_post(request & req) {
 
 void clear_first_pipe_post(request & req) {
 	g_logger.fd << g_logger.get_timestamp() << "The 1ST pipe for POST didn't work\n";
-	req.code_to_send = 500; // a voir/tester avec suite du programme
+	req.code_to_send = 500;
 	req.conf->local_actions_done = true;
 	req.close_csock = true;
 }
@@ -91,18 +91,13 @@ void cgi_child_post(request & req) {
 void cgi_child_get(request & req) {
 	int ret;
 	char *arg2[] = {(char *)req.conf->_cgi_dir.c_str(), (char *)req.conf->path_to_target.c_str(), NULL};
-
-	g_logger.fd << g_logger.get_timestamp() << "I am child and I am about to execve CGI\n";
 	close(req.cgi->pipefd[0]);
 	dup2(req.cgi->pipefd[1], 1);
 	close(req.cgi->pipefd[1]);
 	
-	g_logger.fd << g_logger.get_timestamp() << "Child is about to execute CGI with execve" << std::endl;
 	ret = execve(req.conf->_cgi_dir.c_str(), arg2, req.cgi->getenv());
-	g_logger.fd << g_logger.get_timestamp() << "I am child and execve returned :" << ret << std::endl;
 	if (ret == -1)
 		exit(1);
-	g_logger.fd << g_logger.get_timestamp() << "I am child and THIS SHOULD NOT HAPPEN\n";
 }
 
 void	cgi_father_get(request & req) {
@@ -110,11 +105,10 @@ void	cgi_father_get(request & req) {
 	close(req.cgi->pipefd[1]);	
 	waitpid(req.cgi->pid, &req.cgi->pid_status, WNOHANG);
 	if (WIFEXITED(req.cgi->pid_status) == true && WEXITSTATUS(req.cgi->pid_status) != 0) {
-		req.code_to_send = 500; // a voir/tester avec suite du programme
+		req.code_to_send = 500;
 		req.conf->local_actions_done = true;
 		req.close_csock = true;
 		close(req.cgi->pipefd[0]);
-		g_logger.fd << g_logger.get_timestamp() << "I am father and child " << req.cgi->pid << " exited with " << req.cgi->pid_status << std::endl;
 		return ;
 	}
 	add_fd_epollin_to_pool(req.cgi->pipefd[0]);
@@ -139,15 +133,13 @@ void	cgi_father_post(request & req) {
 	g_webserv.static_fds.insert(req.cgi->pipefd[0]);
 	add_fd_epollout_to_pool(req.cgi->pipefd_post[1]);
 	g_webserv.static_fds.insert(req.cgi->pipefd_post[1]);
-	for (std::set<int>::iterator it = g_webserv.static_fds.begin(); it != g_webserv.static_fds.end(); it++) {
-		g_logger.fd << g_logger.get_timestamp() << *it << " is on the set" << std::endl;
-	}
 }
+
 
 
 void	clear_pipe_get(request & req) {
 	g_logger.fd << g_logger.get_timestamp() << "The pipe didn't work\n";
-	req.code_to_send = 500; // a voir/tester avec suite du programme
+	req.code_to_send = 500;
 	req.conf->local_actions_done = true;
 	req.close_csock = true;
 }
@@ -162,9 +154,9 @@ void request::initiate_CGI_GET() {
 	if (cgi->pid == -1) 
 		return (clear_fork_get(*this));
 
-	if (cgi->pid == 0) //(fils)
+	if (cgi->pid == 0)
 		cgi_child_get(*this);
-	if (cgi->pid != 0) //(daron)
+	if (cgi->pid != 0)
 		cgi_father_get(*this);
 }
 
@@ -183,9 +175,9 @@ void request::initiate_CGI_POST() {
 	if (cgi->pid == -1)
 		return clear_fork_post(*this);
 
-	if (cgi->pid == 0) //(fils)
+	if (cgi->pid == 0)
 		cgi_child_post(*this);
-	if (cgi->pid != 0) //(daron)
+	if (cgi->pid != 0)
 		cgi_father_post(*this);
 }
 
@@ -201,10 +193,8 @@ void request::handle_CGI() {
 			initiate_CGI_GET();
 		if (method == "POST")
 			initiate_CGI_POST();
-		g_logger.fd << g_logger.get_timestamp() << "We are done initiating the CGI\n";
 	}
 	else if (this->cgi->getCgi_stage() == "WRITEIN") {
-		g_logger.fd << g_logger.get_timestamp() << "Only in POST| I am going to send the content CGI via a pipe \n";
 		waitpid(cgi->pid, &cgi->pid_status, WNOHANG);
 		if (WIFEXITED(cgi->pid_status) == true && WEXITSTATUS(cgi->pid_status) != 0) {
 			g_logger.fd << g_logger.get_timestamp() << "The child exited with an error\n";
@@ -230,10 +220,8 @@ void request::handle_CGI() {
 			g_webserv.static_fds_to_close.insert(cgi->pipefd_post[1]);
 		}
 		body_written_cgi += ret;
-		g_logger.fd << g_logger.get_timestamp() << "I wrote " << ret << " bytes from: " << towrite << "\n";
 		if (body_written_cgi == body_request.size()) {
 			g_webserv.static_fds_to_close.insert(cgi->pipefd_post[1]);
-			g_logger.fd << g_logger.get_timestamp() << "I am father and I am done writing content to the CGI.\n";
 			cgi->setCgi_stage("READFROM");
 		}
 	}
@@ -256,9 +244,6 @@ void request::handle_CGI() {
 			body_response += buf;
 		}
 		else if (is_EPOLLHUP(cgi->pipefd[0]) == true) {
-			// ret = read(cgi->pipefd[0], buf, SEND_SPEED);
-			// buf[ret] = '\0';
-			// g_logger.fd << g_logger.get_timestamp() << "I rode " << ret << " bytes: " << buf << "\n";
 			erase_static_fd_from_request(cgi->pipefd[0]);
 			close(cgi->pipefd[0]);
 			webserv_parser::parse_cgi_body_response(*this);
