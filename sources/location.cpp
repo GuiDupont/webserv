@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 17:55:12 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/19 12:44:08 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 15:20:31 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ location::location(std::ifstream & config_file, std::string & line, vHost & host
 	std::string opening_bracket = get_word(line, i);
 	if (opening_bracket != "{")
 		throw (bad_location_declaration());
-	location_name = path;
+	_location_name = path;
 	std::string	first_word;
 	while (1) {
 		std::getline(config_file, line, '\n');
@@ -43,7 +43,7 @@ location::location(std::ifstream & config_file, std::string & line, vHost & host
 		else if (first_word == "cgi_ext")
 			g_parser.parse_cgi_extension(_cgi_ext, line);
 		else if (first_word == "return")
-			_return = g_parser.parse_return(line);
+			_return_pair = g_parser.parse_return(line);
 		else if (first_word == "root")
 			_root = g_parser.parse_one_word(line);
 		else if (first_word == "upload_pass")
@@ -68,7 +68,7 @@ location::location(std::ifstream & config_file, std::string & line, vHost & host
 }
 
 std::string  const	& location::get_location_name() const {
-	return (this->location_name);
+	return (this->_location_name);
 }
 
 int										const		& location::get_client_max_body_size() const {
@@ -100,7 +100,7 @@ std::string 							const		& location::get_index() const {
 }
 
 std::pair<int, std::string> 			const		& location::get_return() const {
-	return (this->_return);
+	return (this->_return_pair);
 }
 
 std::set< std::string >					const		& location::get_cgi_ext() const {

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:23:26 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/29 17:16:58 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 15:38:22 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 logger::logger(std::string file) {
     this->fd.open(file.c_str(), std::ifstream::in | std::ifstream::trunc);
     if (!fd.is_open())
-		std::cout << "not open\n";
+		std::cout << "Log file not open : " << strerror(errno) << std::endl;
 }
 
 logger::~logger() {

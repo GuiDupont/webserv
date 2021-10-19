@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 15:24:01 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/21 10:24:23 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 15:22:08 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ class logger {
 
     public:
         logger(std::string file = "/logs/log");
-        // logger();
         ~logger();
 
 

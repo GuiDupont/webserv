@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:10 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/19 10:54:19 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 15:24:21 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ class vHost;
 # define tchar "!#$%&'*+-.^_`|~/"
 
 class webserv_parser {
-	private:
-
 	public:
 	
 		bool								check_brackets(const std::string & config);
@@ -55,11 +53,6 @@ class webserv_parser {
 		static void							parse_cgi_body_response(request &req);
 		void								cancel_double_dots_in_request_target(std::string & target);
 
-		// std::string							parse_root(std::string & line); to delete
-
-
-		std::pair<std::string, std::string> get_header_begin_body(int csock); // a supprimer ?? (ancienne fonction pour avoir le bdy)
-		// void								parse_header(std::string & header, request & n_request);
 };
 
 

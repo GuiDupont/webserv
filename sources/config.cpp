@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/19 14:14:12 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 15:34:18 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,19 @@ config::config(request & request) : return_activated(false), validity_checked(fa
 		method = DELETE;
 	request.host_name = request.header_fields.find("host")->second;
 	client_max_body_size = (g_webserv._client_max_body_size  == -1 ? 0: g_webserv._client_max_body_size);
-	_upload_pass = g_webserv._upload_pass;
-	_root = g_webserv._root;
-	_cgi_dir = g_webserv._cgi_dir;
-	_request_target = request.request_target;
+	upload_pass = g_webserv._upload_pass;
+	root = g_webserv._root;
+	cgi_dir = g_webserv._cgi_dir;
+	request_target = request.request_target;
 	code = request.code_to_send;
-	_error_pages = g_webserv._error_pages;
+	error_pages = g_webserv._error_pages;
 	vHost chosen = get_associated_vhost(request);
 	put_vhost_and_location_in_config(chosen);
 	if (client_max_body_size <= 0 || client_max_body_size > MAX_BODY_SIZE)
 		client_max_body_size = MAX_BODY_SIZE;
 	set_cgi_params(request);
 	for (std::map< int, std::string >::iterator it = g_webserv._error_pages.begin(); it != g_webserv._error_pages.end(); it++) {
-		_error_pages.insert(*it);
+		error_pages.insert(*it);
 	}
 	std::cout << *this;
 }
@@ -46,12 +46,12 @@ static size_t get_cgi_ext_pos(const std::string & target) {
 	size_t start_cgi_ext = 0;
 
 	while (1) {
-		start_cgi_ext = target.find(CGI_EXT, start_search);
+		start_cgi_ext = target.find(".php", start_search);
 		if (start_cgi_ext == std::string::npos)
 			return (start_cgi_ext);
 		else
 		{
-			start_search = start_cgi_ext + strlen(CGI_EXT);
+			start_search = start_cgi_ext + strlen(".php");
 			std::string candidate = target.substr(0, start_search);
 			if (is_file(candidate) || is_symlink(candidate))
 				return (start_search);
@@ -90,23 +90,23 @@ void	config::set_cgi_params(request & req) {
 	if (query_index != target.size())
 		query_string = target.substr(query_index + 1, target.size() - (query_index + 1));
 	target = target.substr(0, query_index);
-	if (begin_cgi_ext == std::string::npos || cgi_ext.find(CGI_EXT) == cgi_ext.end() || method & DELETE
+	if (begin_cgi_ext == std::string::npos || cgi_ext.find(".php") == cgi_ext.end() || method & DELETE
 		|| req.code_to_send != 0)
 		return;
 	size_t path_info_index = 0;
 	if (begin_cgi_ext == std::string::npos)
-		path_info_index = _root.size();
+		path_info_index = root.size();
 	else
 		path_info_index = begin_cgi_ext;
 	path_info = target.substr(path_info_index, target.size() - path_info_index);
 	if (path_info.empty() != true)
-		path_info = from_two_str_to_path(_root, path_info);
+		path_info = from_two_str_to_path(root, path_info);
 	target = target.substr(0, path_info_index);
 	cgi_activated = true;
-	size_t begin_of_script_name = _root.size();
+	size_t begin_of_script_name = root.size();
 	script_name = target.substr(begin_of_script_name, target.size() - begin_of_script_name);
 	script_name = from_two_str_to_path(location_name, script_name);
-	remove_upload_pass(target, _upload_pass, _root);
+	remove_upload_pass(target, upload_pass, root);
 }
 
 
@@ -115,76 +115,76 @@ void	config::put_vhost_and_location_in_config(vHost & host) {
 	if (host.get_client_max_body_size() != -1)
 		client_max_body_size = host.get_client_max_body_size();
 	if (!host.get_root().empty())
-		_root = host.get_root();	
-	if (!_server_name.size() && host.get_server_names().size())
-		_server_name = *host.get_server_names().begin();
+		root = host.get_root();	
+	if (!server_name.size() && host.get_server_names().size())
+		server_name = *host.get_server_names().begin();
 	std::map< std::string, class location >::const_iterator it = get_most_accurate_location(host);
 	if (it != host.get_locations().end()) {
 		if (it->second.get_client_max_body_size() != -1)
 			client_max_body_size = it->second.get_client_max_body_size();
-		_auto_index = it->second.get_auto_index();
-		_disable_methods = it->second.get_disable_methods(); 
+		auto_index = it->second.get_auto_index();
+		disable_methods = it->second.get_disable_methods(); 
 		if (!it->second.get_error_pages().empty())
-			_error_pages = it->second.get_error_pages();
+			error_pages = it->second.get_error_pages();
 		if (!it->second.get_upload_pass().empty())
-			_upload_pass = it->second.get_upload_pass();	
+			upload_pass = it->second.get_upload_pass();	
 		location_name = it->second.get_location_name();
 		if (!it->second.get_root().empty())
-			_root = it->second.get_root();
-		_index = it->second.get_index();
+			root = it->second.get_root();
+		index = it->second.get_index();
 		path_to_target = update_path_to_target_with_root(it->second);
-		_return = it->second.get_return();
+		return_pair = it->second.get_return();
 		cgi_ext = it->second.get_cgi_ext();
-		_cgi_dir = it->second.get_cgi_dir();
+		cgi_dir = it->second.get_cgi_dir();
 	}
-	if (!_upload_pass.empty() && _upload_pass[_upload_pass.size() - 1] == '/')
-			remove_last_char_str(_upload_pass);
+	if (!upload_pass.empty() && upload_pass[upload_pass.size() - 1] == '/')
+			remove_last_char_str(upload_pass);
 	for (std::map< int, std::string >::iterator it = host._error_pages.begin(); it != host._error_pages.end(); it++) {
-		_error_pages.insert(*it);
+		error_pages.insert(*it);
 	}
 }
 
 std::string		config::update_path_to_target_with_root(const class location & location) {
-	if (_root.empty())
+	if (root.empty())
 		return ("");
 
 	std::string path_to_target; 
-	int index_after_location = _request_target.find(location_name, 0) + location_name.size();
-	std::string end_of_path = _request_target.substr(index_after_location, _request_target.size() - index_after_location);
+	int index_after_location = request_target.find(location_name, 0) + location_name.size();
+	std::string end_of_path = request_target.substr(index_after_location, request_target.size() - index_after_location);
 	if (method & GET) {
-		path_to_target = from_two_str_to_path(_root, end_of_path);
-		if (is_directory(path_to_target) && are_two_path_equals(location.get_location_name(), _request_target))
-			path_to_target = from_two_str_to_path(path_to_target, _index);
+		path_to_target = from_two_str_to_path(root, end_of_path);
+		if (is_directory(path_to_target) && are_two_path_equals(location.get_location_name(), request_target))
+			path_to_target = from_two_str_to_path(path_to_target, index);
 	}
 	else if (method & POST) {
-		path_to_target = from_two_str_to_path(_root, _upload_pass);
+		path_to_target = from_two_str_to_path(root, upload_pass);
 		path_to_target = from_two_str_to_path(path_to_target, end_of_path);
 	}
 	else if (method & DELETE)
-		path_to_target = from_two_str_to_path(_root, end_of_path);
+		path_to_target = from_two_str_to_path(root, end_of_path);
 	return (path_to_target);
 }
 
 std::ostream & operator<<(std::ostream & o, const config & c)
 {
 	o << "HERE IS THE CONFIGURATION WE SET UP" << std::endl;
-	o << "Server name: " << c._server_name << std::endl;
+	o << "Server name: " << c.server_name << std::endl;
 	o << "Location: " << c.location_name << std::endl;
-	o << "Auto_index: " << c._auto_index << std::endl;
+	o << "Auto_index: " << c.auto_index << std::endl;
 	o << "Client_max_body_size: " << c.client_max_body_size << std::endl;
-	o << "Upload_pass: " << c._upload_pass << std::endl;
-	o << "Root: " << c._root << std::endl;
-	o << "CGI_dir: " << c._cgi_dir << std::endl;
+	o << "Upload_pass: " << c.upload_pass << std::endl;
+	o << "Root: " << c.root << std::endl;
+	o << "CGI_dir: " << c.cgi_dir << std::endl;
 	for (std::set<std::string>::const_iterator it = c.cgi_ext.begin(); it != c.cgi_ext.end(); it++)
 		o << "CGI ext : " << *it << std::endl;
-	o << "Index: " << c._index << std::endl;
-	for (std::map< int, std::string >::const_iterator it = c._error_pages.begin(); it != c._error_pages.end(); it++)
+	o << "Index: " << c.index << std::endl;
+	for (std::map< int, std::string >::const_iterator it = c.error_pages.begin(); it != c.error_pages.end(); it++)
 		o << "Error " << it->first << " | page :" << it->second << std::endl;
-	for (std::map<std::string, std::string>::const_iterator it = c._header_fields.begin(); it != c._header_fields.end(); it++)
+	for (std::map<std::string, std::string>::const_iterator it = c.header_fields.begin(); it != c.header_fields.end(); it++)
 		o << "Header " << it->first << " | value :" << it->second << std::endl;
-	o << "Return: " << c._return.first << " | Link :" << c._return.second << std::endl;
+	o << "Return: " << c.return_pair.first << " | Link :" << c.return_pair.second << std::endl;
 	o << "Method: " << ((c.method == GET) ? "GET" : (c.method == POST) ? "POST" : "DELETE") << std::endl;
-	o << "Request_target: " << c._request_target << std::endl;
+	o << "Request_target: " << c.request_target << std::endl;
 	o << "Final target: " << c.path_to_target << std::endl;
 	o << "Query string: " << c.query_string << std::endl;
 	o << "Path info: " << c.path_info << std::endl;
@@ -203,7 +203,7 @@ vHost & config::get_associated_vhost(request & request) {
 				first = 0;
 			}
 			if (it->get_server_names().find(request.host_name)	!= it->get_server_names().end()) {
-				_server_name = request.host_name;
+				server_name = request.host_name;
 				chosen = &(*it);
 				break ;
 			}
@@ -218,7 +218,7 @@ std::map< std::string, location >::const_iterator config::get_most_accurate_loca
 	std::string most_precise_location;
 	std::map< std::string, class location >::const_iterator it = host.get_locations().begin();
 	for (; it != host.get_locations().end(); it++) {
-		std::string begin_ofrequest_target = _request_target.substr(0, it->first.size());
+		std::string begin_ofrequest_target = request_target.substr(0, it->first.size());
 		if (begin_ofrequest_target == it->first && begin_ofrequest_target.size() > most_precise_location.size()) {	
 			most_precise_location = begin_ofrequest_target;
 		}

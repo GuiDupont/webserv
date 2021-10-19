@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:07:25 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/19 12:26:05 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 15:25:21 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@
 # include <iostream>
 # include <fcntl.h>
 # include <unistd.h>
-
 
 # define HDER_REQUEST 0
 # define BDY_REQUEST 1
@@ -65,12 +64,8 @@ class request {
 		std::string							body_response;
 		size_t								amount_sent;
 		size_t								amount_copied;
-		int									post_file_fd;					
-
-		friend std::ostream & operator<<(std::ostream & o,const request & r);
+		int									post_file_fd;
 		
-    public:
-
 		request(int csock);
 		request(int csock, std::string left);
 		request();
@@ -102,11 +97,7 @@ class request {
 		void	handle_standard_response();
 		bool 	child_exited_badly();
 
-
-
-
+		friend std::ostream & operator<<(std::ostream & o,const request & r);
 };
-
-
 
 #endif

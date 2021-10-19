@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 14:56:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/18 12:36:11 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 15:14:06 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,9 +164,9 @@ std::string         response::generate_autoindex_body(std::string & path, std::s
 
 std::string         response::add_special_header(request & req, std::string & header) {
     if (req.conf->return_activated)
-        header += response::get_return_location_header(req.conf->_return.second);
+        header += response::get_return_location_header(req.conf->return_pair.second);
     else if (req.code_to_send == 405)
-       header += response::get_allowed_functions_header(req.conf->_disable_methods);
+       header += response::get_allowed_functions_header(req.conf->disable_methods);
 	else if (req.conf->cgi_activated == true)
 		header += req.cgi->cgi_header_fields;
     return (header);

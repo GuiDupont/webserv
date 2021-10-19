@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 16:02:01 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/08 11:09:10 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 15:27:42 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ public:
 	std::set<std::string> 								& get_server_names();
 	int	const											& get_client_max_body_size() const;
 	std::string	const									& get_root() const;
-	
-
 
 	void 			map_sock_to_hostport(int sock, std::pair< std::string, size_t> host_port);
 	size_t 			setMax() const;

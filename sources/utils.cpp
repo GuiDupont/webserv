@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/19 13:12:40 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 15:35:40 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -321,14 +321,11 @@ static int ft_retraitement(const char *str, int i, const char *base, int z)
 	int m;
 
 	l = 0;
-	while (str[i] != '\0')
-	{
+	while (str[i] != '\0') {
 		j = 0;
 		m = 0;
-		while (base[j] != '\0')
-		{
-			if (str[i] == base[j])
-			{
+		while (base[j] != '\0') {
+			if (str[i] == base[j]) {
 				l = l * z + j; // le retraitement a lieu ici
 				m = 1;
 			}
@@ -463,7 +460,7 @@ bool test_path_get(request &req)
 			return (false);
 		}
 		free(d);
-		if (req.conf->_auto_index == false)
+		if (req.conf->auto_index == false)
 			req.body_response = " ";
 		else
 			req.body_response = response::generate_autoindex_body(req.conf->path_to_target, req.request_target);

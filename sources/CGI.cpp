@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 15:34:17 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/19 12:57:19 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 14:57:56 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,20 +82,20 @@ void cgi_child_post(request & req) {
 	close(req.cgi->pipefd_post[1]);
 	dup2(req.cgi->pipefd_post[0], 0);
 	close(req.cgi->pipefd_post[0]);
-	char *arg2[] = {(char *)req.conf->_cgi_dir.c_str(), (char *)req.conf->path_to_target.c_str(), NULL};
-	ret = execve(req.conf->_cgi_dir.c_str(), arg2, req.cgi->getenv());
+	char *arg2[] = {(char *)req.conf->cgi_dir.c_str(), (char *)req.conf->path_to_target.c_str(), NULL};
+	ret = execve(req.conf->cgi_dir.c_str(), arg2, req.cgi->getenv());
 	if (ret == -1)
 		exit(1);
 }
 
 void cgi_child_get(request & req) {
 	int ret;
-	char *arg2[] = {(char *)req.conf->_cgi_dir.c_str(), (char *)req.conf->path_to_target.c_str(), NULL};
+	char *arg2[] = {(char *)req.conf->cgi_dir.c_str(), (char *)req.conf->path_to_target.c_str(), NULL};
 	close(req.cgi->pipefd[0]);
 	dup2(req.cgi->pipefd[1], 1);
 	close(req.cgi->pipefd[1]);
 	
-	ret = execve(req.conf->_cgi_dir.c_str(), arg2, req.cgi->getenv());
+	ret = execve(req.conf->cgi_dir.c_str(), arg2, req.cgi->getenv());
 	if (ret == -1)
 		exit(1);
 }

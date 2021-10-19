@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 14:51:32 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/18 12:36:50 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 15:25:55 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,11 @@ class request;
 
 class response {
     public:
+	
         response(request & request);
     
-
-
     public:
-        std::string     status_line;
 
-    
-    public:
-    
         static std::string					get_allowed_functions_header(size_t & disabled_method);
         static std::string					get_last_time_modified_header(std::string path);
 		static std::string					get_date_header();
@@ -53,6 +48,9 @@ class response {
 		static std::string					generate_autoindex_body(std::string & path, std::string & request_target);
 		static std::string         			add_special_header(request & req, std::string & header);
 
+    public:
+
+        std::string     status_line;
 };
 
 # endif

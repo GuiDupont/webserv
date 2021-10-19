@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/09 12:51:13 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/19 10:57:34 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 15:26:17 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@
 # include <stdlib.h>
 # include <stdint.h>
 
-# define INVALID_SOCKET -1 // a bouger ?
-# define SOCKET_ERROR -1 // a bouger ?
+# define INVALID_SOCKET -1
+# define SOCKET_ERROR -1
 
-typedef int SOCKET; // a bouger ?
-typedef struct sockaddr_in SOCKADDR_IN; // a bouger ?
-typedef struct sockaddr SOCKADDR; // a bouger ?
+typedef int SOCKET;
+typedef struct sockaddr_in SOCKADDR_IN;
+typedef struct sockaddr SOCKADDR;
 
 class vHost;
 class request;
@@ -56,7 +56,6 @@ bool                            ft_string_has_whitespace(const std::string & s);
 int     						count_words(std::string &line);
 std::string 					get_word(std::string line, size_t i);
 std::string 					get_word(std::string & line, size_t &i, std::string delim);
-
 bool							is_ip(std::string str);
 void							param_socket_server(vHost &host);
 std::string                     trims(std::string line, std::string chars);

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:03:24 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/19 14:19:00 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 15:23:58 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,35 +257,6 @@ void 		webserv_parser::check_server_line(std::string &line) {
 	if (sd_word != "{")
 		throw bad_server_declaration();
 }
-
-std::pair<std::string, std::string> webserv_parser::get_header_begin_body(int csock) { // a supprimer ?? (ancienne fonction pour avoir le bdy)
-	std::string big_buffer;
-
-	char c_buffer[1025];
-	int ret;
-	size_t end_header_index = 0;
-	int last_index = 3;
-
-	while (1)
-	{
-		ret = recv(csock, c_buffer, 1024, 0);
-		if (ret < 0)
-		{
-			g_logger.fd << g_logger.get_timestamp() << "While parsing header on csock " << csock << " | " << errno << " " << strerror(errno) << std::endl;
-			return (std::pair<std::string, std::string>("", ""));
-		}
-		c_buffer[ret] = '\0';
-		big_buffer += c_buffer;
-		if ((end_header_index = big_buffer.find("\r\n\r\n", last_index - 3)) != std::string::npos)
-		{
-			return (std::pair<std::string, std::string>(big_buffer.substr(0, end_header_index + 4), 
-			big_buffer.substr(end_header_index + 4, big_buffer.size() - (end_header_index + 4))));
-		}
-		last_index = (big_buffer.size() - 1 > 3) ? big_buffer.size() - 1 : 3;
-	}
-	return (std::pair<std::string, std::string>("", ""));
-}
-
 
 void	webserv_parser::analyse_body(request &req) {
 

@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/15 12:17:22 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 15:20:01 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ class location {
 		std::string										_upload_pass;
 		std::string 									_root;
 		std::string 									_index;
-		std::pair<int, std::string>						_return;
+		std::pair<int, std::string>						_return_pair;
 		std::set< std::string >							_cgi_ext;
-		std::string 									location_name;
+		std::string 									_location_name;
 		std::string										_cgi_dir;
 };
 

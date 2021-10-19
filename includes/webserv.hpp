@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:58:31 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/19 14:23:45 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 15:34:41 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,7 @@
 # include <sys/socket.h>
 # include <stdio.h>
 
-
 # define WHITESPACE " \t\n\v\f\r"
-
-# define CGI_EXT ".php"
 
 # define GET 1
 # define POST 2
@@ -56,27 +53,23 @@ class vHost;
 class request;
 class response;
 
-typedef int unknown;
 extern class webserv_parser g_parser;
 extern class logger g_logger;
 
-typedef int SOCKET; // a bouger ?
-typedef struct sockaddr_in SOCKADDR_IN; // a bouger ?
-typedef struct sockaddr SOCKADDR; // a bouger ?
+typedef struct sockaddr SOCKADDR;
 
 
 class webserv {
+	
 	friend class webserv_parser;
 	friend class config;
 
 	public:
 		std::map<int, std::string>					status_code;
-		std::map<int, request>						_requests;
+		std::map<int, request>						requests;
 		std::set<int>								static_fds;
 		std::set<int>								static_fds_to_close;
 		int											nsfd;
-
-
 
 	private:
 		std::list<vHost> 							_vhosts;

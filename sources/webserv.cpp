@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/19 13:10:47 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 15:31:31 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	webserv::answer_to_request(int csock) {
 		return ;
 	}
 	// g_logger.fd << g_logger.get_timestamp() << "csock is not static" << std::endl;
-	request & req = g_webserv._requests.find(csock)->second;
+	request & req = g_webserv.requests.find(csock)->second;
 	// g_logger.fd << g_logger.get_timestamp() << "Body request : " << req.body_request << std::endl;
 	if (req.conf->validity_checked == false) {
 		req.control_config_validity();
@@ -88,7 +88,7 @@ void	webserv::answer_to_request(int csock) {
 		if (req.close_csock == true)
 			g_webserv.clean_csock_from_server(csock); 
 		else {
-			_requests.erase(csock);
+			requests.erase(csock);
 			struct epoll_event ev;
 			ev.events = EPOLLIN;
 			ev.data.fd = csock;
@@ -118,7 +118,7 @@ void	request::update_code_and_body() {
 		conf->local_actions_done = true;
 		close_csock = true;
 		std::map< int, std::string>::iterator it;
-		if ((it = conf->_error_pages.find(code_to_send)) != conf->_error_pages.end()) {
+		if ((it = conf->error_pages.find(code_to_send)) != conf->error_pages.end()) {
 			if (is_valid_file(it->second)) {
 				conf->path_to_target = it->second;	
 				return ;
@@ -128,7 +128,7 @@ void	request::update_code_and_body() {
 	}
 	if (code_to_send == 200 && body_response.empty() && method == "POST") {
 		std::map< int, std::string>::iterator it;
-		if ((it = conf->_error_pages.find(code_to_send)) != conf->_error_pages.end()) {
+		if ((it = conf->error_pages.find(code_to_send)) != conf->error_pages.end()) {
 			if (is_valid_file(it->second)) {
 				conf->path_to_target = it->second;	
 				return ;
@@ -139,13 +139,13 @@ void	request::update_code_and_body() {
 }
 
 bool	request::common_validity_check() {
-	if (conf->method & conf->_disable_methods) {
+	if (conf->method & conf->disable_methods) {
 		code_to_send = 405;
 		conf->cgi_activated = false;
 		return (false);
 	}
-	else if (conf->_return.second.empty() == false) {
-		code_to_send = conf->_return.first;
+	else if (conf->return_pair.second.empty() == false) {
+		code_to_send = conf->return_pair.first;
 		conf->return_activated = true;
 		conf->cgi_activated = false;
 		return (false);
@@ -226,7 +226,7 @@ void webserv::read_from_csock(int csock) {
 	// g_logger.fd << g_logger.get_timestamp() << "Epoll_wait identified an EPOLLIN on csock: " << csock << std::endl;
 	if (is_new_request(csock) == true) {
 		g_logger.fd << g_logger.get_timestamp() << "New request has been created from csock: " + ft_itos(csock) << std::endl;
-		_requests.insert(std::pair<int, request>(csock, request(csock)));
+		requests.insert(std::pair<int, request>(csock, request(csock)));
 	}
 	ret = recv(csock, c_buffer, SEND_SPEED, 0);
 	if (ret < 0) {
@@ -241,8 +241,8 @@ void webserv::read_from_csock(int csock) {
 	}
 	_timeout.find(csock)->second = std::time(0);
 	c_buffer[ret] = '\0';
-	it = _requests.find(csock);   // && it->second.stage != ENDED_REQUEST
-	if (it == _requests.end()) {
+	it = requests.find(csock);   // && it->second.stage != ENDED_REQUEST
+	if (it == requests.end()) {
 		g_logger.fd << g_logger.get_timestamp() << "We can't match " << csock << " to any VHOST" << " that SHOULD NOT HAPPEN" << std::endl;
 		return ;
 	}
@@ -300,7 +300,7 @@ void	request::set_request_to_ended() {
 
 bool 	webserv::is_new_request(int fd) {
 
-	for (std::map<int, request>::iterator it = _requests.begin(); it != _requests.end(); it++) {
+	for (std::map<int, request>::iterator it = requests.begin(); it != requests.end(); it++) {
 		if (it->first == fd) {
 			if (it->second.stage != ENDED_REQUEST)
 				return (false);
@@ -310,7 +310,7 @@ bool 	webserv::is_new_request(int fd) {
 }
 
 bool	webserv::is_pending_request(int csock) {
-	if (_requests.find(csock) != _requests.end())
+	if (requests.find(csock) != requests.end())
 		return (true);
 	return (false);
 }
@@ -372,8 +372,8 @@ void	webserv::control_time_out(void) {
 
 	for (std::map<int, std::time_t>::iterator it = _timeout.begin(); it != _timeout.end(); it++) {
 		if (t - it->second >= TIMEOUT) {
-			std::map<int, request>::iterator it_req = _requests.find(it->first);
-			if (it_req == _requests.end()) {
+			std::map<int, request>::iterator it_req = requests.find(it->first);
+			if (it_req == requests.end()) {
 				sock_to_close.push_back(it->first);
 			}
 			else if (it_req->second.stage != ENDED_REQUEST)
@@ -389,7 +389,7 @@ void	webserv::control_time_out(void) {
 void	webserv::clean_csock_from_server(int csock) {
 	g_logger.fd << g_logger.get_timestamp() << "Erasing csock " << csock << std::endl;
 
-	_requests.erase(csock);
+	requests.erase(csock);
 	_timeout.erase(csock);
 	for (std::list<vHost>::iterator it_vhost = _vhosts.begin(); it_vhost != _vhosts.end(); it_vhost++)
 	{

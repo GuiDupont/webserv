@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:46:48 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/19 14:19:11 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 15:11:34 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,19 @@ class location;
 class config {
 
 	public:
-		std::string									_server_name;
-		bool										_auto_index;
+		std::string									server_name;
+		bool										auto_index;
 		long long									client_max_body_size;
-		std::map< int, std::string >				_error_pages;
-		std::string									_upload_pass;
-		std::string 								_root;
-		std::string									_cgi_dir;
-		std::string 								_index;
-		size_t										_disable_methods;
+		std::map< int, std::string >				error_pages;
+		std::string									upload_pass;
+		std::string 								root;
+		std::string									cgi_dir;
+		std::string 								index;
+		size_t										disable_methods;
 		size_t										method;
-		std::string									_request_target;
-		std::map<std::string, std::string>			_header_fields;
-		std::pair<int, std::string>					_return;
+		std::string									request_target;
+		std::map<std::string, std::string>			header_fields;
+		std::pair<int, std::string>					return_pair;
 		std::pair<std::string, size_t>				host_port;
 		bool										return_activated;
 		std::set< std::string >						cgi_ext;
@@ -67,14 +67,6 @@ class config {
 		vHost						&	get_associated_vhost(request & request);
 		void							set_cgi_params(request & request);
 		size_t							get_query_index(const std::string & target, size_t index);
-
-
-
-	private:
-
-
-
-	public:
 
 		friend std::ostream & operator<<(std::ostream & o, const config & c);
 
