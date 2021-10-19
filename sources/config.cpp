@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:46:46 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/19 15:34:18 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 15:54:02 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ config::config(request & request) : return_activated(false), validity_checked(fa
 	for (std::map< int, std::string >::iterator it = g_webserv._error_pages.begin(); it != g_webserv._error_pages.end(); it++) {
 		error_pages.insert(*it);
 	}
-	std::cout << *this;
+	// std::cout << *this;
 }
 
 static size_t get_cgi_ext_pos(const std::string & target) {

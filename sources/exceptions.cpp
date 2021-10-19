@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exceptions.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-garr <ade-garr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:36:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/13 16:32:54 by ade-garr         ###   ########.fr       */
+/*   Updated: 2021/10/19 16:04:19 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,4 +110,8 @@ const char* duplicate_location::what() const throw() {
 
 const char* port_already_used::what() const throw() {
 	return ("Impossible to bind to port, it's might be used by another program.");
+}
+
+const char* config_is_dir::what() const throw() {
+	return ("Config file should not be a directory. Ignore following int: ");
 }

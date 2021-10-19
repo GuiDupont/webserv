@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 15:42:44 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/19 12:48:15 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 15:54:51 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int main(int ac, char **av) {
 	}
 	try {
 		g_webserv.set_hosts();
+		std::cout << "Webserv is running" << std::endl;
 		g_webserv.wait_for_connection();
 	}
 	catch (std::exception & e) {

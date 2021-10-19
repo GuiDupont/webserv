@@ -1,13 +1,1 @@
-15h38m31s: ------BEGINNING OF THE PROGRAM-------
-15h38m31s: Config successful
-15h38m31s: Epoll create successful			 | epfd  = 4
-15h38m31s: Ssock created           			 | ssock = 5
-15h38m31s: Ssock added to Epoll    			 | ssock = 5
-15h38m31s: Ssock created           			 | ssock = 6
-15h38m31s: Ssock added to Epoll    			 | ssock = 6
-15h38m31s: Ssock created           			 | ssock = 7
-15h38m31s: Ssock added to Epoll    			 | ssock = 7
-15h38m31s: Ssock created           			 | ssock = 8
-15h38m31s: Ssock added to Epoll    			 | ssock = 8
-15h38m31s: Epoll is waiting for connection
-15h38m33s:  We are about to quit
+16h2m40s: ------BEGINNING OF THE PROGRAM-------

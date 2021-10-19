@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/07 17:22:58 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/19 15:35:40 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 16:02:19 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,6 +311,7 @@ void stop_program_sigint(int signum)
 	// ? g_logger.fd << g_logger.get_timestamp() << " EPFD is closed: " << g_webserv.get_epfd() << std::endl : g_logger.fd << g_logger.get_timestamp() << " EPFD not closed: " << g_webserv.get_epfd() << " error: " << strerror(errno) << std::endl;
 	g_logger.fd.close();
 	free(g_webserv.get_revents());
+	std::cout << std::endl << "Webserv is exiting" << std::endl;
 	exit(1);
 }
 
@@ -389,7 +390,7 @@ int ft_atoi_base(const char *str, const char *base)
 	return (k);
 }
 
-bool is_directory(std::string &path)
+bool is_directory(const std::string &path)
 {
 	struct stat s;
 	if (stat(path.c_str(), &s) == 0)

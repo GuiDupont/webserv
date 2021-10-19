@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:09:27 by gdupont           #+#    #+#             */
-/*   Updated: 2021/09/21 15:41:41 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 16:01:15 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,9 @@ class port_already_used : public std::exception {
 		virtual const char* what() const throw();
 };
 
-
+class config_is_dir : public std::exception {
+	public:
+		virtual const char* what() const throw();
+};
 
 #endif

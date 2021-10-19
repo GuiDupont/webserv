@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/06 14:15:08 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/19 15:31:31 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/19 16:01:57 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,8 @@ webserv::webserv(const std::string & path_config) : _client_max_body_size(-1) {
 	std::ifstream	config_file;
 	std::string		all_file;
 	
+	if (is_directory(path_config))
+		throw (config_is_dir());
 	config_file.open(path_config.c_str(), std::ios_base::in);
 	if (!config_file.is_open())
 		throw (config_file_not_open());
