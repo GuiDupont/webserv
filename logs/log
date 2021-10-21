@@ -1,1 +1,287 @@
-16h7m20s: ------BEGINNING OF THE PROGRAM-------
+10h29m37s: ------BEGINNING OF THE PROGRAM-------
+10h29m37s: Config successful
+10h29m37s: Epoll create successful			 | epfd  = 4
+10h29m37s: Ssock created           			 | ssock = 5
+10h29m37s: Ssock added to Epoll    			 | ssock = 5
+10h29m37s: Ssock created           			 | ssock = 6
+10h29m37s: Ssock added to Epoll    			 | ssock = 6
+10h29m37s: Ssock created           			 | ssock = 7
+10h29m37s: Ssock added to Epoll    			 | ssock = 7
+10h29m37s: Ssock created           			 | ssock = 8
+10h29m37s: Ssock added to Epoll    			 | ssock = 8
+10h29m37s: Epoll is waiting for connection
+10h29m41s: No events
+10h29m45s: No events
+10h29m49s: No events
+10h29m53s: No events
+10h29m57s: No events
+10h30m1s: No events
+10h30m5s: No events
+10h30m9s: No events
+10h30m13s: No events
+10h30m17s: No events
+10h30m21s: No events
+10h30m25s: No events
+10h30m29s: No events
+10h30m33s: No events
+10h30m37s: No events
+10h30m41s: No events
+10h30m45s: No events
+10h30m49s: No events
+10h30m53s: No events
+10h30m57s: No events
+10h31m1s: No events
+10h31m5s: No events
+10h31m9s: No events
+10h31m13s: No events
+10h31m17s: No events
+10h31m21s: No events
+10h31m25s: No events
+10h31m29s: No events
+10h31m33s: No events
+10h31m37s: No events
+10h31m41s: No events
+10h31m45s: No events
+10h31m49s: No events
+10h31m53s: No events
+10h31m57s: No events
+10h32m1s: No events
+10h32m5s: No events
+10h32m9s: No events
+10h32m13s: No events
+10h32m17s: No events
+10h32m21s: No events
+10h32m25s: No events
+10h32m29s: No events
+10h32m33s: No events
+10h32m37s: No events
+10h32m41s: No events
+10h32m45s: No events
+10h32m49s: No events
+10h32m53s: No events
+10h32m57s: No events
+10h33m1s: No events
+10h33m5s: No events
+10h33m9s: No events
+10h33m13s: No events
+10h33m17s: No events
+10h33m21s: No events
+10h33m25s: No events
+10h33m29s: No events
+10h33m33s: No events
+10h33m37s: No events
+10h33m41s: No events
+10h33m45s: No events
+10h33m49s: No events
+10h33m53s: No events
+10h33m57s: No events
+10h34m1s: No events
+10h34m5s: No events
+10h34m9s: No events
+10h34m13s: No events
+10h34m17s: No events
+10h34m21s: No events
+10h34m25s: No events
+10h34m29s: No events
+10h34m33s: No events
+10h34m37s: No events
+10h34m41s: No events
+10h34m45s: No events
+10h34m49s: No events
+10h34m53s: No events
+10h34m57s: No events
+10h35m1s: No events
+10h35m5s: No events
+10h35m9s: No events
+10h35m13s: No events
+10h35m17s: No events
+10h35m21s: No events
+10h35m25s: No events
+10h35m29s: No events
+10h35m33s: No events
+10h35m37s: No events
+10h35m41s: No events
+10h35m45s: No events
+10h35m49s: No events
+10h35m53s: No events
+10h35m57s: No events
+10h36m1s: No events
+10h36m5s: No events
+10h36m9s: No events
+10h36m13s: No events
+10h36m17s: No events
+10h36m21s: No events
+10h36m25s: No events
+10h36m29s: No events
+10h36m33s: No events
+10h36m36s: We accepted a new client from ssock 5, new csock is = 9
+10h36m36s: We accepted a new client from ssock 5, new csock is = 10
+10h36m36s: New request has been created from csock: 9
+10h36m36s: We are parsing body from ccosk: 9
+10h36m36s: We are going to respond a request with code : 200
+10h36m36s: Body sending is done on csock : 9
+10h36m37s: No events
+10h36m41s: No events
+10h36m43s: New request has been created from csock: 9
+10h36m43s: We are parsing body from ccosk: 9
+10h36m43s: We are going to respond a request with code : 200
+10h36m45s: No events
+10h36m47s: New request has been created from csock: 9
+10h36m47s: We are parsing body from ccosk: 9
+10h36m47s: We are going to respond a request with code : 405
+10h36m47s: Body sending is done on csock : 9
+10h36m47s: Erasing csock 9
+10h36m48s: We accepted a new client from ssock 5, new csock is = 9
+10h36m49s: No events
+10h36m49s: New request has been created from csock: 10
+10h36m49s: We are parsing body from ccosk: 10
+10h36m49s: We are going to respond a request with code : 200
+10h36m49s: Body sending is done on csock : 10
+10h36m51s: New request has been created from csock: 10
+10h36m51s: We are parsing body from ccosk: 10
+10h36m51s: We are going to respond a request with code : 200
+10h36m51s: Body sending is done on csock : 10
+10h36m51s: New request has been created from csock: 10
+10h36m51s: We are parsing body from ccosk: 10
+10h36m51s: We are going to respond a request with code : 200
+10h36m53s: No events
+10h36m53s: New request has been created from csock: 10
+10h36m53s: We are parsing body from ccosk: 10
+10h36m53s: We are going to respond a request with code : 200
+10h36m57s: No events
+10h36m59s: New request has been created from csock: 10
+10h36m59s: We are parsing body from ccosk: 10
+10h36m59s: We are going to respond a request with code : 200
+10h36m59s: Body sending is done on csock : 10
+10h37m1s: No events
+10h37m3s: New request has been created from csock: 10
+10h37m3s: We are parsing body from ccosk: 10
+10h37m3s: We are going to respond a request with code : 200
+10h37m5s: No events
+10h37m8s: New request has been created from csock: 10
+10h37m8s: We are parsing body from ccosk: 10
+10h37m8s: We are going to respond a request with code : 200
+10h37m8s: New request has been created from csock: 10
+10h37m8s: We are parsing body from ccosk: 10
+10h37m8s: We are going to respond a request with code : 200
+10h37m8s: New request has been created from csock: 9
+10h37m8s: We are parsing body from ccosk: 9
+10h37m8s: We accepted a new client from ssock 5, new csock is = 15
+10h37m8s: We are going to respond a request with code : 200
+10h37m8s: New request has been created from csock: 15
+10h37m8s: We are parsing body from ccosk: 15
+10h37m8s: We are going to respond a request with code : 200
+10h37m9s: No events
+10h37m13s: No events
+10h37m17s: No events
+10h37m21s: No events
+10h37m25s: No events
+10h37m29s: No events
+10h37m32s: New request has been created from csock: 15
+10h37m32s: We are parsing body from ccosk: 15
+10h37m32s: We are going to respond a request with code : 200
+10h37m32s: Body sending is done on csock : 15
+10h37m33s: No events
+10h37m34s: New request has been created from csock: 15
+10h37m34s: We are parsing body from ccosk: 15
+10h37m34s: We are going to respond a request with code : 200
+10h37m37s: No events
+10h37m38s: New request has been created from csock: 15
+10h37m38s: We are parsing body from ccosk: 15
+10h37m38s: We are going to respond a request with code : 200
+10h37m38s: Body sending is done on csock : 15
+10h37m41s: No events
+10h37m45s: No events
+10h37m49s: No events
+10h37m53s: No events
+10h37m57s: No events
+10h37m58s: TIMEOUT | we closed csock : 9
+10h37m58s: Erasing csock 9
+10h37m58s: TIMEOUT | we closed csock : 10
+10h37m58s: Erasing csock 10
+10h38m1s: No events
+10h38m5s: No events
+10h38m9s: No events
+10h38m13s: No events
+10h38m17s: No events
+10h38m21s: No events
+10h38m25s: No events
+10h38m28s: TIMEOUT | we closed csock : 15
+10h38m28s: Erasing csock 15
+10h38m29s: No events
+10h38m33s: No events
+10h38m37s: No events
+10h38m41s: No events
+10h38m45s: No events
+10h38m47s: We accepted a new client from ssock 5, new csock is = 9
+10h38m47s: We accepted a new client from ssock 5, new csock is = 10
+10h38m47s: New request has been created from csock: 9
+10h38m47s: We are parsing body from ccosk: 9
+10h38m47s: We are going to respond a request with code : 200
+10h38m47s: Body sending is done on csock : 9
+10h38m48s: New request has been created from csock: 9
+10h38m48s: We are parsing body from ccosk: 9
+10h38m48s: We are going to respond a request with code : 200
+10h38m49s: No events
+10h38m51s: New request has been created from csock: 9
+10h38m51s: We are parsing body from ccosk: 9
+10h38m51s: We are going to respond a request with code : 200
+10h38m51s: New request has been created from csock: 9
+10h38m51s: We are parsing body from ccosk: 9
+10h38m51s: We are going to respond a request with code : 200
+10h38m51s: We accepted a new client from ssock 5, new csock is = 18
+10h38m51s: New request has been created from csock: 10
+10h38m51s: We are parsing body from ccosk: 10
+10h38m51s: New request has been created from csock: 18
+10h38m51s: We are parsing body from ccosk: 18
+10h38m51s: We are going to respond a request with code : 200
+10h38m51s: We are going to respond a request with code : 200
+10h38m53s: No events
+10h38m53s: New request has been created from csock: 18
+10h38m53s: We are parsing body from ccosk: 18
+10h38m53s: We are going to respond a request with code : 200
+10h38m53s: New request has been created from csock: 18
+10h38m53s: We are parsing body from ccosk: 18
+10h38m53s: We are going to respond a request with code : 200
+10h38m53s: New request has been created from csock: 10
+10h38m53s: We are parsing body from ccosk: 10
+10h38m53s: New request has been created from csock: 9
+10h38m53s: We are parsing body from ccosk: 9
+10h38m53s: We are going to respond a request with code : 200
+10h38m53s: We are going to respond a request with code : 200
+10h38m56s: New request has been created from csock: 9
+10h38m56s: We are parsing body from ccosk: 9
+10h38m56s: We are going to respond a request with code : 200
+10h38m57s: No events
+10h39m1s: No events
+10h39m1s: New request has been created from csock: 9
+10h39m1s: We are parsing body from ccosk: 9
+10h39m1s: We are going to respond a request with code : 200
+10h39m1s: Body sending is done on csock : 9
+10h39m3s: New request has been created from csock: 9
+10h39m3s: We are parsing body from ccosk: 9
+10h39m3s: We are going to respond a request with code : 200
+10h39m5s: No events
+10h39m5s: New request has been created from csock: 9
+10h39m5s: We are parsing body from ccosk: 9
+10h39m5s: We are going to respond a request with code : 200
+10h39m5s: Body sending is done on csock : 9
+10h39m7s: New request has been created from csock: 9
+10h39m7s: We are parsing body from ccosk: 9
+10h39m7s: We are going to respond a request with code : 200
+10h39m9s: No events
+10h39m13s: No events
+10h39m17s: No events
+10h39m21s: No events
+10h39m25s: No events
+10h39m29s: No events
+10h39m33s: No events
+10h39m37s: No events
+10h39m41s: No events
+10h39m43s: TIMEOUT | we closed csock : 10
+10h39m43s: Erasing csock 10
+10h39m43s: TIMEOUT | we closed csock : 18
+10h39m43s: Erasing csock 18
+10h39m45s: No events
+10h39m49s: No events
+10h39m49s:  We are about to quit

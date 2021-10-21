@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 15:34:17 by ade-garr          #+#    #+#             */
-/*   Updated: 2021/10/19 14:57:56 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/21 10:25:53 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,14 @@ void clear_first_pipe_post(request & req) {
 void cgi_child_post(request & req) {
 	int ret;
 	close(req.cgi->pipefd[0]);
-	dup2(req.cgi->pipefd[1], 1);
+	ret = dup2(req.cgi->pipefd[1], 1);
+	if (ret == -1)
+		exit (1);
 	close(req.cgi->pipefd[1]);
 	close(req.cgi->pipefd_post[1]);
-	dup2(req.cgi->pipefd_post[0], 0);
+	ret = dup2(req.cgi->pipefd_post[0], 0);
+	if (ret == -1)
+		exit (1);
 	close(req.cgi->pipefd_post[0]);
 	char *arg2[] = {(char *)req.conf->cgi_dir.c_str(), (char *)req.conf->path_to_target.c_str(), NULL};
 	ret = execve(req.conf->cgi_dir.c_str(), arg2, req.cgi->getenv());
@@ -92,7 +96,9 @@ void cgi_child_get(request & req) {
 	int ret;
 	char *arg2[] = {(char *)req.conf->cgi_dir.c_str(), (char *)req.conf->path_to_target.c_str(), NULL};
 	close(req.cgi->pipefd[0]);
-	dup2(req.cgi->pipefd[1], 1);
+	ret = dup2(req.cgi->pipefd[1], 1);
+	if (ret == -1)
+		exit(1);
 	close(req.cgi->pipefd[1]);
 	
 	ret = execve(req.conf->cgi_dir.c_str(), arg2, req.cgi->getenv());
@@ -220,7 +226,9 @@ void request::handle_CGI() {
 			g_webserv.static_fds_to_close.insert(cgi->pipefd_post[1]);
 		}
 		body_written_cgi += ret;
-		if (body_written_cgi == body_request.size()) {
+		if (body_written_cgi == body_request.size() || ret == 0) {
+			if (ret == 0)
+				g_logger.fd << g_logger.get_timestamp() << "ret == 0 pour un cgi !!!!!!!!!\n";
 			g_webserv.static_fds_to_close.insert(cgi->pipefd_post[1]);
 			cgi->setCgi_stage("READFROM");
 		}
@@ -240,8 +248,15 @@ void request::handle_CGI() {
 				conf->local_actions_done = true;
 				return ;
 			}
-			buf[ret] = '\0';
-			body_response += buf;
+			else {
+				buf[ret] = '\0';
+				body_response += buf;
+				if (ret == 0) {
+					erase_static_fd_from_request(cgi->pipefd[0]);
+					close(cgi->pipefd[0]);
+					conf->local_actions_done = true;
+				}
+			}
 		}
 		else if (is_EPOLLHUP(cgi->pipefd[0]) == true) {
 			erase_static_fd_from_request(cgi->pipefd[0]);

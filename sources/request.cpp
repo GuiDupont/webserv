@@ -6,7 +6,7 @@
 /*   By: gdupont <gdupont@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:06:41 by gdupont           #+#    #+#             */
-/*   Updated: 2021/10/19 12:52:36 by gdupont          ###   ########.fr       */
+/*   Updated: 2021/10/21 10:10:15 by gdupont          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,13 +128,16 @@ void	request::send_body_from_file() {
 		g_logger.fd << g_logger.get_timestamp() << "Issue while sending body from file " << conf->path_to_target << " to: " << csock << ". Error: " << strerror(errno) << std::endl;
 		body_is_sent = true;
 		close_csock = true;
-		return ;
 	}
+	else if (amount_sent == 0)
+		body_is_sent = true;
+	
 }
 
 // SIMPLE POST :
 
 void	request::write_body_inside_file() {
+	int ret;
 	if (post_file_fd == -1) {
 		post_file_fd = open(conf->path_to_target.c_str(), O_RDONLY | O_CREAT);
 		if (post_file_fd == -1) {
@@ -147,13 +150,15 @@ void	request::write_body_inside_file() {
 	}
 	size_t amount_to_copy = body_request.size() - amount_copied < SEND_SPEED ? body_request.size() - amount_copied : SEND_SPEED;
 	std::string tmp = body_request.substr(amount_copied, amount_to_copy);
-	if (write(post_file_fd, tmp.c_str(), tmp.size()) == -1) {
+	if ((ret = write(post_file_fd, tmp.c_str(), tmp.size())) == -1) {
 		conf->local_actions_done = true;
 		close_csock = true;
 		close(post_file_fd);
 	}
 	amount_copied += amount_to_copy;
-	if (amount_copied == body_request.size()) {
+	if (amount_copied == body_request.size() || ret == 0) {
+		if (ret == 0)
+			g_logger.fd << g_logger.get_timestamp() << "ret == 0 pour un write body inside file !!!!!!!!!\n";
 		close(post_file_fd);
 		conf->local_actions_done = true;
 	}
