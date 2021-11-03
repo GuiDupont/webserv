@@ -60,9 +60,9 @@ config::config(request & request) : return_activated(false), validity_checked(fa
 	for (std::map< int, std::string >::iterator it = g_webserv._error_pages.begin(); it != g_webserv._error_pages.end(); it++) {
 		error_pages.insert(*it);
 	}
-	while (method == POST && file_exists(path_to_target) && is_file(path_to_target))
+	while (method == POST && cgi_activated == false && file_exists(path_to_target) && is_file(path_to_target))
 		change_upload_file_name(path_to_target);
-	std::cout << *this << std::endl;
+	// std::cout << *this << std::endl;
 }
 
 

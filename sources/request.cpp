@@ -138,7 +138,6 @@ void	request::send_body_from_file() {
 
 void	request::write_body_inside_file() {
 	int ret;
-	std::cout <<  "about to write file: " << body_request;
 	if (post_file_fd == -1) {
 		post_file_fd = open(conf->path_to_target.c_str(), O_WRONLY | O_CREAT);
 		if (post_file_fd == -1) {
@@ -164,6 +163,8 @@ void	request::write_body_inside_file() {
 		close(post_file_fd);
 		conf->local_actions_done = true;
 		code_to_send = 201;
+		// code_to_send = 200;
+
 	}
 }
 
