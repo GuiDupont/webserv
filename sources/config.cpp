@@ -13,6 +13,28 @@
 #include "config.hpp"
 
 
+inline bool file_exists (const std::string& name) {
+  struct stat buffer;   
+  return (stat (name.c_str(), &buffer) == 0); 
+}
+
+void	change_upload_file_name(std::string & path_to_target) {
+	
+	size_t last_dot = path_to_target.rfind(".", path_to_target.size());
+	if (last_dot == std::string::npos)
+		path_to_target += ".1";
+	else {
+		std::string last_extension = path_to_target.substr(last_dot + 1, path_to_target.size());
+		if (ft_string_is_digit(last_extension) == false)
+			path_to_target += ".1";
+		else {
+			std::string new_path_to_target = path_to_target.substr(0, last_dot + 1);
+			new_path_to_target += ft_itos(atoi(last_extension.c_str()) + 1);
+			path_to_target = new_path_to_target;
+		}
+	}
+}
+
 config::config(void) :  return_activated(false), validity_checked(true), local_actions_done(false), cgi_activated(false) { }
 
 config::config(request & request) : return_activated(false), validity_checked(false),  local_actions_done(false), cgi_activated(false) {
@@ -38,8 +60,11 @@ config::config(request & request) : return_activated(false), validity_checked(fa
 	for (std::map< int, std::string >::iterator it = g_webserv._error_pages.begin(); it != g_webserv._error_pages.end(); it++) {
 		error_pages.insert(*it);
 	}
-	// std::cout << *this;
+	while (method == POST && file_exists(path_to_target) && is_file(path_to_target))
+		change_upload_file_name(path_to_target);
+	std::cout << *this << std::endl;
 }
+
 
 static size_t get_cgi_ext_pos(const std::string & target) {
 	size_t start_search = 0;

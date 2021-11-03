@@ -113,7 +113,7 @@ void	request::control_config_validity() {
 }
 
 void	request::update_code_and_body() {
-	if (code_to_send != 0 && code_to_send != 200 && code_to_send != 204) {
+	if (code_to_send != 0 && code_to_send != 200 && code_to_send != 204 && code_to_send != 201) {
 		// g_logger.fd << g_logger.get_timestamp() << "We identified following code: " << code_to_send << "for csock " << csock << std::endl;
 		conf->local_actions_done = true;
 		close_csock = true;
@@ -126,7 +126,7 @@ void	request::update_code_and_body() {
 		}
 		body_response = response::generate_error_body(g_webserv.status_code.find(code_to_send)->second);
 	}
-	if (code_to_send == 200 && body_response.empty() && method == "POST") {
+	if (code_to_send == 201 && body_response.empty() && method == "POST") {
 		std::map< int, std::string>::iterator it;
 		if ((it = conf->error_pages.find(code_to_send)) != conf->error_pages.end()) {
 			if (is_valid_file(it->second)) {
@@ -193,7 +193,7 @@ void	request::handle_standard_response() {
 		// g_logger.fd << g_logger.get_timestamp() << "about to do post" << std::endl;
 
 		write_body_inside_file();
-		code_to_send = 200;			
+		//code_to_send = 200;			
 	}
 }
 

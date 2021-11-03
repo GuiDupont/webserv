@@ -138,8 +138,9 @@ void	request::send_body_from_file() {
 
 void	request::write_body_inside_file() {
 	int ret;
+	std::cout <<  "about to write file: " << body_request;
 	if (post_file_fd == -1) {
-		post_file_fd = open(conf->path_to_target.c_str(), O_RDONLY | O_CREAT);
+		post_file_fd = open(conf->path_to_target.c_str(), O_WRONLY | O_CREAT);
 		if (post_file_fd == -1) {
 			g_logger.fd << g_logger.get_timestamp() << "Can't open :" << conf->path_to_target.c_str();
 			conf->local_actions_done = true;
@@ -151,6 +152,7 @@ void	request::write_body_inside_file() {
 	size_t amount_to_copy = body_request.size() - amount_copied < SEND_SPEED ? body_request.size() - amount_copied : SEND_SPEED;
 	std::string tmp = body_request.substr(amount_copied, amount_to_copy);
 	if ((ret = write(post_file_fd, tmp.c_str(), tmp.size())) == -1) {
+		code_to_send = 500;
 		conf->local_actions_done = true;
 		close_csock = true;
 		close(post_file_fd);
@@ -161,6 +163,7 @@ void	request::write_body_inside_file() {
 			g_logger.fd << g_logger.get_timestamp() << "ret == 0 pour un write body inside file !!!!!!!!!\n";
 		close(post_file_fd);
 		conf->local_actions_done = true;
+		code_to_send = 201;
 	}
 }
 
